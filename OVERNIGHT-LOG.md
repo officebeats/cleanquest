@@ -47,6 +47,17 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Decisions: suite never speaks (muted) and never fetches (demo paths only); test entries cleaned up; no big fixes started.
 - Blockers: none.
 
+## ROUND 2 R3 — Spectator readability — 23:35/23:38 — DONE
+- Implemented: spectator type-size + contrast pass (live indicator 9px floor to 12px with 12px dot; column headings 9px to 11px in brighter muted tone; row border alpha 0.16 to 0.28; score cells 15px to 16px floor); rank/names already large, untouched.
+- Evidence: Orca-browser spectator view computed styles — live 12.7px, headings 11.6px at 10.9:1 contrast (AAA), rank 25px, names 26px, scores 21px, 4 rows rendered.
+- Decisions: small targeted bump only; repaired two blocks my first edit pass damaged (verified by probe, no visual change beyond intent).
+- Blockers: none.
+
+## ROUND 2 SUMMARY — 23:38 — ALL DONE
+- R1 DONE (human host voice, 4 moments, clips-first, no Meta TTS exists) · R2 DONE (7 personas all PASS, records-screen nav bug fixed in-chunk) · R3 DONE (spectator AAA contrast, distance sizes verified).
+- Final verification: self-test 6/6 PASS · banned-term grep zero hits · tree clean, all commits pushed.
+- Needs Ernesto: Meta key (verifies cloud verdict voice + transcription), Baseten key (verifies Spark Open path). Nothing else.
+
 ## CHUNK E — Daily swipe deck — 22:42/22:49 — DONE
 - Implemented: deck.js static data (22 real-work cards: surface/product/technique, right-call vs the miss + why note each, zero API calls); deck screen with category/text/progress/streak, tap buttons + touch-swipe (>=60px), instant right/wrong feedback with auto-advance, day streak in localStorage (increments once per calendar day); new window.SWIPE_DECK-free lexical reference (const scripts don't attach to window).
 - Evidence: headless E1 22 cards, 0 malformed; E2 full 10-card playthrough, streak 1 then stays 1 on replay, deck closes; self-test 6/6 PASS; manual Orca-browser deck open, card render, correct+wrong answers show feedback and advance.

@@ -1476,14 +1476,13 @@ h3 {
   align-items: center;
   gap: 10px;
   color: var(--muted-bright);
-  font-size: clamp(9px, 1vw, 14px);
-  font-weight: 900;
+  font-size: clamp(12px, 1.2vw, 16px);
   letter-spacing: 0.1em;
 }
 
 .spectator-live i {
-  width: 9px;
-  height: 9px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--green);
   box-shadow: 0 0 14px var(--green);
@@ -1500,8 +1499,8 @@ h3 {
 
 .spectator-column-headings {
   padding: 0 24px 12px;
-  color: var(--muted);
-  font-size: clamp(9px, 1vw, 14px);
+  color: var(--muted-bright);
+  font-size: clamp(11px, 1.1vw, 15px);
   font-weight: 950;
   letter-spacing: 0.12em;
 }
@@ -1514,7 +1513,7 @@ h3 {
 .spectator-row {
   min-height: 92px;
   padding: 16px 24px;
-  border: 1px solid rgba(72, 222, 255, 0.16);
+  border: 1px solid rgba(72, 222, 255, 0.28);
   border-radius: 18px;
   background: rgba(8, 27, 43, 0.72);
   backdrop-filter: blur(14px);
@@ -1536,9 +1535,9 @@ h3 {
 }
 
 .spectator-row .quality,
-.spectator-row .time,
-.spectator-row .style {
-  font-size: clamp(15px, 2vw, 28px);
+.spectator-row .style,
+.spectator-row .time {
+  font-size: clamp(16px, 2vw, 28px);
 }
 
 @media (max-width: 620px) {
