@@ -535,6 +535,32 @@
             <small data-i18n="nameOptional">Optional — Player will be used by default.</small>
           </div>
 
+          <div class="identity-panel hologram-card">
+            <span data-i18n="voiceNoteTitle">VOICE NOTE</span>
+            <div class="settings-row">
+              <button
+                id="voiceRecordButton"
+                class="secondary-button"
+                type="button"
+                data-i18n="voiceRecord"
+              >
+                RECORD NOTE
+              </button>
+              <button
+                id="voiceStopButton"
+                class="secondary-button hidden"
+                type="button"
+                data-i18n="voiceStop"
+              >
+                STOP
+              </button>
+            </div>
+            <audio id="voiceNoteAudio" class="voice-audio hidden" controls></audio>
+            <small id="voiceNoteStatus" class="fine-print" data-i18n="voiceNoteHint">
+              Optional — attach a spoken note to this result.
+            </small>
+          </div>
+
           <button
             id="resultsContinue"
             class="primary-button"
@@ -579,6 +605,54 @@
           data-i18n="returnHome"
         >
           RETURN HOME
+          </button>
+
+          <button
+            id="viewRecordsButton"
+            class="secondary-button"
+            type="button"
+            data-i18n="viewRecords"
+          >
+            VIEW RECORDS
+          </button>
+      </div>
+    </section>
+
+    <!-- RECORDS -->
+    <section id="recordsScreen" class="screen">
+      <div class="content">
+        <div class="eyebrow" data-i18n="recordsTitle">INSPECTION LOG</div>
+        <h2 data-i18n="recordsTitle">INSPECTION LOG</h2>
+
+        <div id="inspectionLogList" class="provider-log"></div>
+        <small id="inspectionLogEmpty" data-i18n="recordsEmpty">No inspection records yet.</small>
+
+        <div class="settings-row">
+          <button
+            id="inspectionExportJson"
+            class="secondary-button"
+            type="button"
+            data-i18n="exportJson"
+          >
+            EXPORT JSON
+          </button>
+          <button
+            id="inspectionExportCsv"
+            class="secondary-button"
+            type="button"
+            data-i18n="exportCsv"
+          >
+            EXPORT CSV
+          </button>
+        </div>
+
+        <button
+          id="recordsDone"
+          class="primary-button"
+          type="button"
+          data-i18n="settingsDone"
+        >
+          DONE
         </button>
       </div>
     </section>

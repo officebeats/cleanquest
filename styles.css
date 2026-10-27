@@ -2053,3 +2053,16 @@ h3 {
   border: 1px solid var(--warning);
   color: var(--warning);
 }
+.voice-audio {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.inspection-group {
+  margin-top: 10px;
+}
+
+.inspection-site {
+  display: block;
+  margin-top: 6px;
+}

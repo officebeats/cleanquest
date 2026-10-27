@@ -47,6 +47,8 @@ const CONFIG = {
     maxEdgePx: 768,
     jpegQuality: 0.82,
     minSurfaceConfidence: 0.6,
+    asrEndpoint: "https://api.meta.ai/v1/asr/transcribe",
+    asrModel: "muse-voice-transcribe-1.0",
     baseten: {
       endpoint: "https://inference.baseten.co/v1/chat/completions",
       model: "meta-models/muse-spark-open-1026"
@@ -192,6 +194,19 @@ const translations = {
 
     muteVoice: "Mute voice narration",
     unmuteVoice: "Unmute voice narration",
+    voiceRecordFailed: "Couldn't access the microphone.",
+    voiceNoteTitle: "VOICE NOTE",
+    voiceRecord: "RECORD NOTE",
+    voiceStop: "STOP",
+    voiceNoteHint: "Optional — attach a spoken note to this result.",
+    voiceTranscribing: "Transcribing…",
+    voiceNotTranscribed: "Not transcribed — audio note attached.",
+    viewRecords: "VIEW RECORDS",
+    recordsTitle: "INSPECTION LOG",
+    recordsEmpty: "No inspection records yet.",
+    exportJson: "EXPORT JSON",
+    exportCsv: "EXPORT CSV",
+    locationNotShared: "Location not shared",
     settingsProvider: "Inference provider",
     providerLogTitle: "PROVIDER RUN LOG",
     emptyLog: "No runs logged yet.",
@@ -345,6 +360,19 @@ const translations = {
 
     muteVoice: "Silenciar narración",
     unmuteVoice: "Activar narración",
+    voiceRecordFailed: "No se pudo acceder al micrófono.",
+    voiceNoteTitle: "NOTA DE VOZ",
+    voiceRecord: "GRABAR NOTA",
+    voiceStop: "DETENER",
+    voiceNoteHint: "Opcional — adjunta una nota de voz a este resultado.",
+    voiceTranscribing: "Transcribiendo…",
+    voiceNotTranscribed: "Sin transcribir — nota de audio adjunta.",
+    viewRecords: "VER REGISTROS",
+    recordsTitle: "REGISTRO DE INSPECCIÓN",
+    recordsEmpty: "Aún no hay registros de inspección.",
+    exportJson: "EXPORTAR JSON",
+    exportCsv: "EXPORTAR CSV",
+    locationNotShared: "Ubicación no compartida",
     settingsProvider: "Proveedor de inferencia",
     providerLogTitle: "REGISTRO DE EJECUCIONES",
     emptyLog: "Aún no hay ejecuciones registradas.",
@@ -498,6 +526,19 @@ const translations = {
 
     muteVoice: "Wycisz narrację",
     unmuteVoice: "Włącz narrację",
+    voiceRecordFailed: "Nie można uzyskać dostępu do mikrofonu.",
+    voiceNoteTitle: "NOTATKA GŁOSOWA",
+    voiceRecord: "NAGRAJ NOTATKĘ",
+    voiceStop: "STOP",
+    voiceNoteHint: "Opcjonalnie — dołącz notatkę głosową do tego wyniku.",
+    voiceTranscribing: "Transkrybowanie…",
+    voiceNotTranscribed: "Nie transkrybowano — załączono notatkę audio.",
+    viewRecords: "ZOBACZ WPISY",
+    recordsTitle: "DZIENNIK INSPEKCJI",
+    recordsEmpty: "Brak wpisów inspekcji.",
+    exportJson: "EKSPORTUJ JSON",
+    exportCsv: "EKSPORTUJ CSV",
+    locationNotShared: "Nie udostępniono lokalizacji",
     settingsProvider: "Dostawca wnioskowania",
     providerLogTitle: "DZIENNIK URUCHOMIEŃ",
     emptyLog: "Brak zarejestrowanych uruchomień.",
@@ -591,6 +632,10 @@ const state = {
   latestScore: null,
   result: null,
   latestRunId: null,
+  recordsReturn: "welcome",
+  voiceNote: null,
+  recorder: null,
+  recordChunks: [],
   settingsReturn: "welcome",
 
   selfTest: {
@@ -682,6 +727,16 @@ const els = {
   poseThumbnail: document.getElementById("poseThumbnail"),
 
   playerName: document.getElementById("playerName"),
+  voiceRecordButton: document.getElementById("voiceRecordButton"),
+  voiceStopButton: document.getElementById("voiceStopButton"),
+  voiceNoteAudio: document.getElementById("voiceNoteAudio"),
+  voiceNoteStatus: document.getElementById("voiceNoteStatus"),
+  viewRecordsButton: document.getElementById("viewRecordsButton"),
+  inspectionLogList: document.getElementById("inspectionLogList"),
+  inspectionLogEmpty: document.getElementById("inspectionLogEmpty"),
+  inspectionExportJson: document.getElementById("inspectionExportJson"),
+  inspectionExportCsv: document.getElementById("inspectionExportCsv"),
+  recordsDone: document.getElementById("recordsDone"),
   leaderboardList: document.getElementById("leaderboardList"),
 
   selfTestPanel: document.getElementById("selfTestPanel"),
@@ -1108,6 +1163,11 @@ function handleBack() {
 
   if (state.screen === "settings") {
     closeSettings();
+    return;
+  }
+
+  if (state.screen === "records") {
+    closeRecords();
     return;
   }
 
@@ -2222,6 +2282,8 @@ async function analyzeChallenge() {
   const after = state.captures.after;
 
   let aiResult;
+
+  resetVoiceNote();
 
   if (
     state.demoMode ||
@@ -4021,6 +4083,461 @@ function saveLeaderboard(entries) {
   } catch {}
 }
 
+const INSPECTION_LOG_KEY = "cleanquest.inspection-log";
+
+function resetVoiceNote() {
+  try {
+    if (state.voiceNote?.audioUrl) URL.revokeObjectURL(state.voiceNote.audioUrl);
+  } catch {}
+
+  if (state.recorder && state.recorder.state !== "inactive") {
+    try {
+      state.recorder.stop();
+    } catch {}
+  }
+
+  state.voiceNote = null;
+  state.recorder = null;
+  state.recordChunks = [];
+
+  if (els.voiceNoteAudio) {
+    els.voiceNoteAudio.removeAttribute("src");
+    els.voiceNoteAudio.classList.add("hidden");
+  }
+
+  els.voiceRecordButton?.classList.remove("hidden");
+  els.voiceStopButton?.classList.add("hidden");
+
+  if (els.voiceNoteStatus) {
+    els.voiceNoteStatus.textContent = t("voiceNoteHint");
+  }
+}
+
+async function startVoiceNote() {
+  if (state.recorder && state.recorder.state !== "inactive") return;
+  if (!navigator.mediaDevices?.getUserMedia) {
+    if (els.voiceNoteStatus) {
+      els.voiceNoteStatus.textContent = t("voiceRecordFailed");
+    }
+    return;
+  }
+
+  try {
+    const stream = await Promise.race([
+      navigator.mediaDevices.getUserMedia({ audio: true }),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("mic-timeout")), 10000)
+      )
+    ]);
+    const recorder = new MediaRecorder(stream);
+    state.recordChunks = [];
+
+    recorder.ondataavailable = (event) => {
+      if (event.data?.size) state.recordChunks.push(event.data);
+    };
+    recorder.onstop = () => {
+      stream.getTracks().forEach((track) => track.stop());
+      void finishVoiceNote();
+    };
+
+    state.recorder = recorder;
+    recorder.start();
+    els.voiceRecordButton?.classList.add("hidden");
+    els.voiceStopButton?.classList.remove("hidden");
+  } catch {
+    if (els.voiceNoteStatus) {
+      els.voiceNoteStatus.textContent = t("voiceRecordFailed");
+    }
+  }
+}
+
+function stopVoiceNote() {
+  try {
+    state.recorder?.stop();
+  } catch {}
+
+  els.voiceStopButton?.classList.add("hidden");
+}
+
+function encodeWavPCM16(samples, sampleRate) {
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const view = new DataView(buffer);
+  const writeString = (offset, text) => {
+    for (let i = 0; i < text.length; i++) {
+      view.setUint8(offset + i, text.charCodeAt(i));
+    }
+  };
+
+  writeString(0, "RIFF");
+  view.setUint32(4, 36 + samples.length * 2, true);
+  writeString(8, "WAVE");
+  writeString(12, "fmt ");
+  view.setUint32(16, 16, true);
+  view.setUint16(20, 1, true);
+  view.setUint16(22, 1, true);
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true);
+  view.setUint16(32, 2, true);
+  view.setUint16(34, 16, true);
+  writeString(36, "data");
+  view.setUint32(40, samples.length * 2, true);
+
+  for (let i = 0; i < samples.length; i++) {
+    const clamped = Math.max(-1, Math.min(1, samples[i]));
+    view.setInt16(44 + i * 2, clamped < 0 ? clamped * 0x8000 : clamped * 0x7FFF, true);
+  }
+
+  return new Blob([buffer], { type: "audio/wav" });
+}
+
+async function voiceBlobToWav(blob) {
+  const arrayBuffer = await blob.arrayBuffer();
+  const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextClass || !arrayBuffer.byteLength) return null;
+
+  const context = new AudioContextClass();
+
+  try {
+    const decoded = await context.decodeAudioData(arrayBuffer.slice(0));
+    if (!decoded.length || !decoded.numberOfChannels) return null;
+
+    const targetRate = 16000;
+    const targetLength = Math.max(
+      1,
+      Math.ceil((decoded.length * targetRate) / (decoded.sampleRate || targetRate))
+    );
+    const offline = new OfflineAudioContext(1, targetLength, targetRate);
+    const mono = offline.createBuffer(1, decoded.length, decoded.sampleRate);
+    const out = mono.getChannelData(0);
+
+    for (let channel = 0; channel < decoded.numberOfChannels; channel++) {
+      const data = decoded.getChannelData(channel);
+      for (let i = 0; i < decoded.length; i++) {
+        out[i] = (out[i] || 0) + data[i] / decoded.numberOfChannels;
+      }
+    }
+
+    const source = offline.createBufferSource();
+    source.buffer = mono;
+    source.connect(offline.destination);
+    source.start(0);
+    const rendered = await offline.startRendering();
+    return encodeWavPCM16(rendered.getChannelData(0), targetRate);
+  } catch {
+    return null;
+  } finally {
+    try {
+      await context.close();
+    } catch {}
+  }
+}
+
+async function transcribeVoiceNote(blob) {
+  try {
+    const settings = loadCloudSettings();
+    if (!settings.metaKey) return null;
+
+    const wav = await voiceBlobToWav(blob);
+    if (!wav) return null;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(
+      () => controller.abort(),
+      CONFIG.cloud.timeoutMs
+    );
+
+    let response;
+
+    try {
+      const form = new FormData();
+      form.append(
+        "request",
+        JSON.stringify({
+          mode: "PUSH_TO_TALK",
+          model: CONFIG.cloud.asrModel,
+          audioEncoding: "WAV"
+        })
+      );
+      form.append("audio", wav, "note.wav");
+      const sessionId = `cleanquest-${Date.now().toString(36)}`;
+      response = await fetch(
+        `${CONFIG.cloud.asrEndpoint}?sessionId=${encodeURIComponent(sessionId)}`,
+        {
+          method: "POST",
+          headers: { Authorization: `Bearer ${settings.metaKey}` },
+          body: form,
+          signal: controller.signal
+        }
+      );
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (!response || !response.ok) return null;
+
+    const data = await response.json().catch(() => null);
+    const turns = Array.isArray(data?.turns)
+      ? data.turns.map((turn) => turn?.transcript).filter(Boolean).join(" ")
+      : "";
+    const text =
+      (typeof data?.transcript === "string" && data.transcript) || turns || null;
+    return text && text.trim() ? text.trim() : null;
+  } catch {
+    return null;
+  }
+}
+
+async function finishVoiceNote() {
+  els.voiceRecordButton?.classList.remove("hidden");
+
+  const blob = new Blob(state.recordChunks, {
+    type: state.recorder?.mimeType || "audio/webm"
+  });
+  state.recordChunks = [];
+  state.recorder = null;
+
+  if (!blob.size) return;
+
+  const audioUrl = URL.createObjectURL(blob);
+  state.voiceNote = { audioUrl, blob, text: null, transcribed: false };
+
+  if (els.voiceNoteAudio) {
+    els.voiceNoteAudio.src = audioUrl;
+    els.voiceNoteAudio.classList.remove("hidden");
+  }
+
+  if (els.voiceNoteStatus) {
+    els.voiceNoteStatus.textContent = t("voiceTranscribing");
+  }
+
+  const text = await transcribeVoiceNote(blob);
+
+  if (state.voiceNote && state.voiceNote.audioUrl === audioUrl) {
+    state.voiceNote.text = text;
+    state.voiceNote.transcribed = !!text;
+
+    if (els.voiceNoteStatus) {
+      els.voiceNoteStatus.textContent = text || t("voiceNotTranscribed");
+    }
+  }
+}
+
+function loadInspectionLog() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(INSPECTION_LOG_KEY));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function locationKey(where) {
+  if (!where?.shared) return "not-shared";
+  return `${Number(where.lat).toFixed(3)},${Number(where.lon).toFixed(3)}`;
+}
+
+function requestLocation() {
+  return new Promise((resolve) => {
+    if (!("geolocation" in navigator)) {
+      resolve({ shared: false });
+      return;
+    }
+
+    let done = false;
+    const finish = (value) => {
+      if (!done) {
+        done = true;
+        resolve(value);
+      }
+    };
+    const timer = setTimeout(() => finish({ shared: false }), 8000);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        clearTimeout(timer);
+        finish({
+          shared: true,
+          lat: position.coords.latitude,
+          lon: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        });
+      },
+      () => {
+        clearTimeout(timer);
+        finish({ shared: false });
+      },
+      { enableHighAccuracy: false, timeout: 7000, maximumAge: 60000 }
+    );
+  });
+}
+
+async function recordInspection(name, entry) {
+  try {
+    const where = await requestLocation();
+    const verified = state.latestScore?.verified;
+    const record = {
+      id: entry?.id || state.latestRunId || `run-${Date.now()}`,
+      who: name,
+      when: new Date().toISOString(),
+      where,
+      scores: {
+        cleanliness: Number.isFinite(state.latestScore?.cleanliness)
+          ? state.latestScore.cleanliness
+          : null,
+        overall: verified?.status === "verified" ? verified.overall : null,
+        verdict: verified?.status === "verified" ? verified.verdict : null,
+        style: state.latestScore?.styleScore ?? null
+      },
+      provider: verified?.provider || loadCloudSettings().provider || "meta",
+      model: verified?.model || null,
+      note: {
+        text: state.voiceNote?.text || null,
+        transcribed: !!state.voiceNote?.transcribed,
+        hasAudio: !!state.voiceNote?.audioUrl
+      }
+    };
+
+    const records = loadInspectionLog();
+    records.push(record);
+    while (records.length > 200) records.shift();
+
+    try {
+      localStorage.setItem(INSPECTION_LOG_KEY, JSON.stringify(records));
+    } catch {}
+
+    renderInspectionLog();
+    return record;
+  } catch {
+    return null;
+  }
+}
+
+function renderInspectionLog() {
+  const list = els.inspectionLogList;
+  if (!list) return;
+
+  list.innerHTML = "";
+  const records = loadInspectionLog().slice().reverse();
+  els.inspectionLogEmpty?.classList.toggle("hidden", records.length > 0);
+
+  const groups = new Map();
+  records.forEach((record) => {
+    const key = locationKey(record.where);
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(record);
+  });
+
+  groups.forEach((items, key) => {
+    const group = document.createElement("div");
+    group.className = "inspection-group";
+
+    const head = document.createElement("strong");
+    head.className = "inspection-site";
+    head.textContent =
+      key === "not-shared" ? t("locationNotShared") : `Site ${key}`;
+    group.append(head);
+
+    items.forEach((record) => {
+      const row = document.createElement("div");
+      row.className = "provider-log-row";
+
+      const main = document.createElement("span");
+      const stamp = String(record.when || "").slice(0, 16).replace("T", " ");
+      const clean = Number.isFinite(Number(record.scores?.cleanliness))
+        ? ` · ${Number(record.scores.cleanliness)}%`
+        : "";
+      main.textContent = `${record.who || "?"} · ${stamp}${clean}`;
+
+      const meta = document.createElement("small");
+      const note = record.note?.text
+        ? ` · “${record.note.text.slice(0, 60)}”`
+        : record.note?.hasAudio
+          ? ` · ${t("voiceNotTranscribed")}`
+          : "";
+      meta.textContent = `${record.provider || "meta"}${note}`;
+
+      row.append(main, meta);
+      group.append(row);
+    });
+
+    list.append(group);
+  });
+}
+
+function inspectionRecordToRow(record) {
+  const where = record.where?.shared
+    ? [record.where.lat, record.where.lon, record.where.accuracy ?? ""]
+    : ["", "", ""];
+  const cells = [
+    record.id || "",
+    record.who || "",
+    record.when || "",
+    record.where?.shared ? "shared" : "not-shared",
+    ...where,
+    record.scores?.cleanliness ?? "",
+    record.scores?.overall ?? "",
+    record.scores?.verdict ?? "",
+    record.scores?.style ?? "",
+    record.provider || "",
+    record.model || "",
+    record.note?.text || "",
+    record.note?.transcribed ? "yes" : "no",
+    record.note?.hasAudio ? "yes" : "no"
+  ];
+  return cells
+    .map((cell) => `"${String(cell).replace(/"/g, '""')}"`)
+    .join(",");
+}
+
+function buildInspectionCsv(records) {
+  const header = [
+    "id", "who", "when", "location", "lat", "lon", "accuracy",
+    "cleanliness", "verified_overall", "verdict", "style",
+    "provider", "model", "note_text", "transcribed", "has_audio"
+  ];
+  return [header.join(","), ...records.map(inspectionRecordToRow)].join("\n");
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function exportInspectionJson() {
+  downloadBlob(
+    new Blob([JSON.stringify(loadInspectionLog(), null, 2)], {
+      type: "application/json"
+    }),
+    "cleanquest-inspection-log.json"
+  );
+}
+
+function exportInspectionCsv() {
+  downloadBlob(
+    new Blob([buildInspectionCsv(loadInspectionLog())], { type: "text/csv" }),
+    "cleanquest-inspection-log.csv"
+  );
+}
+
+function openRecords() {
+  if (state.screen !== "records") {
+    state.recordsReturn = state.screen;
+  }
+
+  renderInspectionLog();
+  navigateTo("records");
+}
+
+function closeRecords() {
+  navigateTo(state.recordsReturn || "welcome");
+}
+
 function saveCompletedRun() {
   if (!state.latestScore) return null;
 
@@ -4059,6 +4576,8 @@ function saveCompletedRun() {
   }
 
   saveLeaderboard(entries);
+
+  void recordInspection(name, entry);
 
   return entry;
 }
@@ -5168,6 +5687,30 @@ function bindEvents() {
 
   if (els.providerLogExport) {
     els.providerLogExport.addEventListener("click", exportProviderLog);
+  }
+
+  if (els.voiceRecordButton) {
+    els.voiceRecordButton.addEventListener("click", startVoiceNote);
+  }
+
+  if (els.voiceStopButton) {
+    els.voiceStopButton.addEventListener("click", stopVoiceNote);
+  }
+
+  if (els.viewRecordsButton) {
+    els.viewRecordsButton.addEventListener("click", openRecords);
+  }
+
+  if (els.recordsDone) {
+    els.recordsDone.addEventListener("click", closeRecords);
+  }
+
+  if (els.inspectionExportJson) {
+    els.inspectionExportJson.addEventListener("click", exportInspectionJson);
+  }
+
+  if (els.inspectionExportCsv) {
+    els.inspectionExportCsv.addEventListener("click", exportInspectionCsv);
   }
 
   [els.setupVideo, els.timerVideo].forEach(
