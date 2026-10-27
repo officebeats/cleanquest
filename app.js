@@ -17,8 +17,8 @@ const CONFIG = {
   },
 
   voice: {
-    rate: 1.1,
-    pitch: 1.15,
+    rate: 1.0,
+    pitch: 1.0,
     volume: 1
   },
 
@@ -194,6 +194,7 @@ const translations = {
 
     muteVoice: "Mute voice narration",
     unmuteVoice: "Unmute voice narration",
+    hostVoiceTitle: "HOST VOICE",
     viewDeck: "DAILY DECK",
     deckTitle: "DAILY DECK",
     deckRight: "RIGHT CALL ▶",
@@ -369,6 +370,7 @@ const translations = {
 
     muteVoice: "Silenciar narración",
     unmuteVoice: "Activar narración",
+    hostVoiceTitle: "VOZ DEL ANFITRIÓN",
     viewDeck: "MAZO DIARIO",
     deckTitle: "MAZO DIARIO",
     deckRight: "ACIERTA ▶",
@@ -544,6 +546,7 @@ const translations = {
 
     muteVoice: "Wycisz narrację",
     unmuteVoice: "Włącz narrację",
+    hostVoiceTitle: "GŁOS PROWADZĄCEGO",
     viewDeck: "DZIENNA TALIA",
     deckTitle: "DZIENNA TALIA",
     deckRight: "DOBRZE ▶",
@@ -600,6 +603,7 @@ const query = new URLSearchParams(window.location.search);
 const DEBUG_MODE = query.get("debug") === "1";
 const SPECTATOR_MODE = query.get("spectator") === "1";
 const SELFTEST_MODE = query.get("selftest") === "1";
+const VOICE_TEST_MODE = query.get("voice-test") === "1";
 
 const state = {
   screen: "welcome",
@@ -788,6 +792,8 @@ const els = {
   providerLogList: document.getElementById("providerLogList"),
   providerLogEmpty: document.getElementById("providerLogEmpty"),
   providerLogExport: document.getElementById("providerLogExport"),
+  voiceNameList: document.getElementById("voiceNameList"),
+  voiceTestButtons: document.getElementById("voiceTestButtons"),
 
   settingsButton: document.getElementById("settingsButton"),
   metaApiKey: document.getElementById("metaApiKey"),
@@ -890,10 +896,36 @@ function loadVoices() {
   try {
     state.voice.voices = window.speechSynthesis.getVoices() || [];
     state.voice.selectedVoice = chooseVoice(state.language);
+    renderVoiceNames();
   } catch {
     state.voice.voices = [];
     state.voice.selectedVoice = null;
   }
+}
+
+function renderVoiceNames() {
+  if (VOICE_TEST_MODE && els.voiceTestButtons) {
+    els.voiceTestButtons.classList.remove("hidden");
+  }
+
+  const list = els.voiceNameList;
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  ["en", "es", "pl"].forEach((lang) => {
+    const row = document.createElement("div");
+    row.className = "provider-log-row";
+
+    const label = document.createElement("span");
+    label.textContent = lang.toUpperCase();
+
+    const name = document.createElement("small");
+    name.textContent = voiceNameFor(lang) || "—";
+
+    row.append(label, name);
+    list.append(row);
+  });
 }
 
 function chooseVoice(language) {
@@ -949,13 +981,14 @@ function createUtterance(text, options = {}) {
 
   state.voice.selectedVoice = chooseVoice(state.language);
 
-  if (state.voice.selectedVoice) {
-    utterance.voice = state.voice.selectedVoice;
+  const voice = options.voice || state.voice.selectedVoice;
+  if (voice) {
+    utterance.voice = voice;
   }
 
   utterance.lang = getSpeechLanguage();
-  utterance.rate = options.rate ?? 1.04;
-  utterance.pitch = options.pitch ?? 1.08;
+  utterance.rate = options.rate ?? 1.0;
+  utterance.pitch = options.pitch ?? 1.0;
   utterance.volume = CONFIG.voice.volume;
 
   return utterance;
@@ -1064,6 +1097,209 @@ function speakText(text, options = {}) {
   attempt(false);
 }
 
+const HOST_LINES = {
+  en: {
+    start: ["Let's go... time to shine!", "Game on... show that room who's boss!", "Cameras up... let's see it sparkle!", "Alright, champ... make it count!", "Clock's ticking... you've got this!", "Time to work... nice and quick!", "Let's do this... clean and mean!", "Ready... set... shine!", "Your room... your stage... go!", "Deep breath... let's clean!", "Showtime... grab that cloth!", "Ninety seconds... make 'em count!", "Let's roll... spotless is the goal!", "Game face on... here we go!", "Time to hustle... you've trained for this!", "Okay, star... own that room!", "Let's make it gleam... starting now!", "Quick feet... sharp eyes... go!", "The clock is live... do your thing!", "No pressure... just shine!", "Here we go... clean machine!", "Lights, camera... clean!", "Your ninety seconds... start now!", "Let's get it... looking fresh!"],
+    mid: ["Halfway... looking good!", "Nice pace... keep it up!", "Forty-five down... stay sharp!", "Looking smooth... don't stop!", "Halfway mark... you've got this!", "Good rhythm... keep rolling!", "Strong start... finish stronger!", "Keep moving... looking great!", "Halfway home... push through!", "Smooth moves... keep 'em coming!", "Right on track... stay with it!", "Looking clean already... wow!", "Halfway... no slowing down!", "Great energy... keep it going!", "You're flying... keep at it!", "Halfway point... looking sharp!", "Steady now... almost there!", "Beautiful pace... hold it!", "Keep that energy... looking good!", "Halfway... the room believes in you!", "Smooth and steady... nice!", "Looking like a pro... keep going!", "Halfway... finish loud!", "Great hustle... keep shining!"],
+    finish: ["Time! ... step back and admire!", "And... done! Beautiful work!", "That's it... hands up, champ!", "Clock's out... gorgeous!", "Finished! ... take a bow!", "Time's up... what a run!", "Done and dusted... literally!", "Stop the clock... stunning!", "That's a wrap... well played!", "Time! ... look at that shine!", "All done... give yourself credit!", "Ninety seconds... nailed it!", "And stop... fantastic job!", "Complete! ... room's glowing!", "Time called... you delivered!", "Done! ... that's how it's done!", "Whistle blows... great run!", "Finished strong... love to see it!", "That's time... absolute star!", "Clock stops... crowd goes wild!", "All finished... take it in!", "Done deal... sparkling result!", "Time! ... chef's kiss!", "Complete... you made it look easy!"],
+    pass: ["Pass! That room is gleaming!", "Certified fresh... beautiful!", "Pass with style... well earned!", "That's a pass... gorgeous work!", "Stamp it... sparkling clean!", "Pass! ... the judges are smiling!", "Top marks... enjoy it!", "A clear pass... take the win!", "Pass! ... what a transformation!", "Verified and victorious... yes!", "That's the standard... pass!", "Pass! ... room looks brand new!", "Gold star... fully earned!", "Pass with flying colors... wow!", "Clean bill... beautifully done!", "That's a pass... own it!", "Scoreboard loves it... pass!", "Pass! ... picture-perfect clean!", "Nailed the benchmark... pass!", "Victory lap... you passed!", "Pass! ... simply stunning!", "The room approves... pass!", "Flawless finish... that's a pass!", "Pass! ... remember this feeling!"],
+    retry: ["So close... one more run?", "Not quite... you've got another in you!", "Missed it... shake it off, go again!", "Almost there... run it back!", "No shame... champions retry!", "Just short... next one's yours!", "Ooh, close... let's go again!", "Not this time... you'll get it!", "So near... one more try?", "Dust yourself off... retry!", "Almost had it... again!", "Close call... show 'em more!", "Not yet... but you're close!", "Retry time... I believe in you!", "Missed the mark... reload and go!", "One more... you've got this!", "Close... but no cigar yet!", "Almost... dig a little deeper!", "Not quite... the room's waiting!", "Retry... make it count!", "So close... feel that fire?", "Next run's the one... go!", "Missed... but what heart!", "Again... cleaner and meaner!"]
+  },
+  es: {
+    start: ["¡Vamos... a brillar!", "¡Juego en marcha... demuestra quién manda!", "Cámaras listas... ¡que se vea el brillo!", "Muy bien, campeón... ¡haz que cuente!", "El reloj corre... ¡tú puedes!", "A trabajar... ¡rápido y bien!", "Vamos allá... ¡limpio y veloz!", "Listos... ¡a brillar!", "Tu sala... tu escenario... ¡ya!", "Respira hondo... ¡a limpiar!", "¡Es la hora... agarra el paño!", "Noventa segundos... ¡que valgan!", "En marcha... ¡el objetivo es impecable!", "Cara de juego... ¡allá vamos!", "A darle... ¡para esto entrenaste!", "Muy bien, estrella... ¡esa sala es tuya!", "Hagamos que brille... ¡ya mismo!", "Pies rápidos... ojo agudo... ¡ya!", "El reloj vive... ¡haz lo tuyo!", "Sin presión... ¡solo brilla!", "Allá vamos... ¡máquina de limpiar!", "Luces, cámara... ¡limpieza!", "Tus noventa segundos... ¡empiezan ya!", "Vamos... ¡con todo!"],
+    mid: ["¡Mitad... vas muy bien!", "Buen ritmo... ¡sigue así!", "Mitad pasada... ¡sigue firme!", "Se ve fluido... ¡no pares!", "Mitad del reto... ¡tú puedes!", "Buen ritmo... ¡sigue rodando!", "Gran inicio... ¡termina más fuerte!", "Sigue moviéndote... ¡se ve genial!", "Mitad del camino... ¡empuja!", "Movimientos suaves... ¡sigue!", "Vas perfecto... ¡no te detengas!", "Ya se ve limpio... ¡guau!", "Mitad... ¡sin bajar el ritmo!", "Gran energía... ¡sigue!", "Vas volando... ¡dale!", "Punto medio... ¡te ves firme!", "Tranquilo... ¡ya casi!", "Ritmo hermoso... ¡aguanta!", "Mantén la energía... ¡vas bien!", "Mitad... ¡la sala cree en ti!", "Suave y firme... ¡bonito!", "Como profesional... ¡sigue!", "Mitad... ¡termina en alto!", "Gran esfuerzo... ¡sigue brillando!"],
+    finish: ["¡Tiempo!... ¡admira tu obra!", "¡Y... listo! ¡Hermoso trabajo!", "¡Eso es... manos arriba, campeón!", "Se acabó... ¡precioso!", "¡Terminado!... ¡haz reverencia!", "¡Se acabó el tiempo... qué carrera!", "Listo y pulido... ¡literal!", "Para el reloj... ¡impresionante!", "Fin del juego... ¡bien jugado!", "¡Tiempo!... ¡mira ese brillo!", "Todo listo... ¡date el crédito!", "Noventa segundos... ¡clavado!", "Y paramos... ¡trabajo fantástico!", "¡Completo!... ¡la sala brilla!", "Tiempo cumplido... ¡cumpliste!", "¡Listo!... ¡así se hace!", "Suena el silbato... ¡gran carrera!", "Cierre fuerte... ¡da gusto verlo!", "Eso es tiempo... ¡estrella total!", "Reloj parado... ¡el público enloquece!", "Todo terminado... ¡disfrútalo!", "Trato hecho... ¡resultado brillante!", "¡Tiempo!... ¡beso de chef!", "Completo... ¡lo haces ver fácil!"],
+    pass: ["¡Pasa! ¡Esa sala reluce!", "Frescura total... ¡hermoso!", "Pasa con estilo... ¡bien ganado!", "Eso pasa... ¡trabajo precioso!", "Sello puesto... ¡limpio total!", "¡Pasa!... ¡los jueces sonríen!", "Nota máxima... ¡disfrútalo!", "Pase claro... ¡llévate el triunfo!", "¡Pasa!... ¡qué transformación!", "Verificado y victorioso... ¡sí!", "Ese es el nivel... ¡pasa!", "¡Pasa!... ¡la sala parece nueva!", "Estrella de oro... ¡merecida!", "Pasa con honores... ¡guau!", "Cuenta limpia... ¡hermoso trabajo!", "Eso pasa... ¡hazlo tuyo!", "Al marcador le encanta... ¡pasa!", "¡Pasa!... ¡limpieza de foto!", "Clavaste la marca... ¡pasa!", "Vuelta de honor... ¡pasaste!", "¡Pasa!... ¡simplemente increíble!", "La sala aprueba... ¡pasa!", "Final impecable... ¡eso pasa!", "¡Pasa!... ¡recuerda este momento!"],
+    retry: ["Tan cerca... ¿otra carrera?", "Casi... ¡tienes otra en ti!", "Falló... ¡sacúdete y repite!", "Casi lo logras... ¡de nuevo!", "Sin vergüenza... ¡los campeones repiten!", "Por poco... ¡la próxima es tuya!", "Uy, cerca... ¡vamos otra vez!", "Esta vez no... ¡lo lograrás!", "Tan cerca... ¿un intento más?", "Sacúdete el polvo... ¡repite!", "Casi lo tenías... ¡otra vez!", "Llamada cerrada... ¡muestra más!", "Todavía no... pero estás cerca...", "Hora de repetir... ¡creo en ti!", "Falló la marca... ¡recarga y ve!", "Una más... ¡tú puedes!", "Cerca... pero aún no...", "Casi... ¡escarba más hondo!", "Aún no... ¡la sala espera!", "Repite... ¡que cuente!", "Tan cerca... ¿sientes el fuego?", "La próxima es la buena... ¡ve!", "Falló... ¡pero qué corazón!", "Otra vez... ¡más limpio y veloz!"]
+  },
+  pl: {
+    start: ["No to... czas błyszczeć!", "Gra trwa... pokaż, kto tu rządzi!", "Kamery gotowe... niech widać blask!", "Dobra, mistrzu... niech się liczy!", "Zegar tyka... dasz radę!", "Do pracy... szybko i dobrze!", "No to... czysto i sprawnie!", "Gotowi... do blasku!", "Twój pokój... twoja scena... start!", "Głęboki oddech... sprzątamy!", "Showtime... łap za ścierkę!", "Dziewięćdziesiąt sekund... wykorzystaj je!", "Zaczynamy... cel to perfekcja!", "Mina gracza... jedziemy!", "Do boju... po to trenowałeś!", "Dobra, gwiazdo... ten pokój jest twój!", "Niech błyszczy... już teraz!", "Szybkie nogi... bystre oko... start!", "Zegar żyje... rób swoje!", "Bez presji... po prostu błyszcz!", "Jedziemy... maszyno czystości!", "Światła, kamera... sprzątanie!", "Twoje dziewięćdziesiąt sekund... start!", "Dawaj... pełną parą!"],
+    mid: ["Połowa... idzie świetnie!", "Dobre tempo... tak trzymaj!", "Połowa za nami... trzymaj formę!", "Płynnie idzie... nie stawaj!", "Połowa wyzwania... dasz radę!", "Dobre tempo... jedź dalej!", "Mocny start... mocniejszy finisz!", "Ruszaj się... wygląda super!", "Półmetek... ciśnij!", "Płynne ruchy... dawaj dalej!", "Idealnie... nie zatrzymuj się!", "Już czysto... wow!", "Połowa... bez zwalniania!", "Świetna energia... tak trzymaj!", "Lecisz... dawaj!", "Półmetek... wyglądasz mocno!", "Spokojnie... już prawie!", "Piękne tempo... wytrzymaj!", "Trzymaj energię... dobrze idzie!", "Połowa... pokój w ciebie wierzy!", "Gładko i równo... ładnie!", "Jak zawodowiec... jedź dalej!", "Połowa... finisz z hukiem!", "Świetna robota... błyszcz dalej!"],
+    finish: ["Czas!... podziwiaj dzieło!", "I... gotowe! Piękna robota!", "To jest... ręce w górę, mistrzu!", "Koniec... przepięknie!", "Ukończone!... ukłoń się!", "Czas minął... co za występ!", "Gotowe i czyste... dosłownie!", "Stop zegar... imponujące!", "Koniec gry... ładnie zagrane!", "Czas!... spójrz na ten blask!", "Wszystko gotowe... bądź dumny!", "Dziewięćdziesiąt sekund... idealnie!", "I stop... fantastyczna robota!", "Ukończone!... pokój lśni!", "Czas minął... dowiozłeś!", "Gotowe!... tak się to robi!", "Gwizdek... świetny występ!", "Mocny finisz... miło patrzeć!", "To jest czas... prawdziwa gwiazda!", "Zegar staje... tłum szaleje!", "Wszystko skończone... naciesz się!", "Umowa stoi... błyszczący wynik!", "Czas!... miodzio!", "Ukończone... robisz to z łatwością!"],
+    pass: ["Zaliczone! Ten pokój lśni!", "Pełna świeżość... przepięknie!", "Zaliczone ze stylem... zasłużenie!", "To przechodzi... śliczna robota!", "Przybijam... idealna czystość!", "Zaliczone!... sędziowie się uśmiechają!", "Najwyższa nota... ciesz się!", "Jasne zaliczenie... bierz wygraną!", "Zaliczone!... co za zmiana!", "Zweryfikowane i zwycięskie... tak!", "To jest poziom... zaliczone!", "Zaliczone!... pokój jak nowy!", "Złota gwiazdka... zasłużona!", "Zaliczone z honorem... wow!", "Czyste konto... piękna robota!", "To przechodzi... weź to sobie!", "Tablica to kocha... zaliczone!", "Zaliczone!... czystość ze zdjęcia!", "Wbiłeś benchmark... zaliczone!", "Runda honorowa... zaliczyłeś!", "Zaliczone!... po prostu cudnie!", "Pokój zatwierdza... zaliczone!", "Perfekcyjny finisz... to zaliczone!", "Zaliczone!... zapamiętaj tę chwilę!"],
+    retry: ["Tak blisko... jeszcze jeden bieg?", "Prawie... masz w sobie kolejny!", "Nie wyszło... otrzep się i jeszcze raz!", "Prawie się udało... jeszcze raz!", "Bez wstydu... mistrzowie powtarzają!", "O włos... następny będzie twój!", "Uff, blisko... dawaj jeszcze raz!", "Tym razem nie... uda ci się!", "Tak blisko... jeszcze jedna próba?", "Otrzep kurz... powtórz!", "Prawie miałeś... jeszcze raz!", "Rzut oka... pokaż więcej!", "Jeszcze nie... ale jesteś blisko...", "Czas na powtórkę... wierzę w ciebie!", "Nie ta marka... ładuj i leć!", "Jeszcze raz... dasz radę!", "Blisko... ale jeszcze nie...", "Prawie... kopnij głębiej!", "Jeszcze nie... pokój czeka!", "Powtórz... niech się liczy!", "Tak blisko... czujesz ogień?", "Następny będzie ten... leć!", "Nie wyszło... ale co za serce!", "Jeszcze raz... czyściej i ostrzej!"]
+  }
+};
+
+const usedHostLines = {};
+
+function resetHostLineHistory() {
+  Object.keys(usedHostLines).forEach((key) => {
+    delete usedHostLines[key];
+  });
+}
+
+function prosodyJitter(text, amount) {
+  let hash = 0;
+  const str = String(text);
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash * 31 + str.charCodeAt(i)) | 0;
+  }
+  const unit = (Math.abs(hash) % 1000) / 1000;
+  return (unit * 2 - 1) * amount;
+}
+
+const HOST_PROSODY = {
+  start: { rate: 1.0, pitch: 1.0 },
+  mid: { rate: 1.0, pitch: 1.0 },
+  finish: { rate: 1.03, pitch: 1.05 },
+  pass: { rate: 0.95, pitch: 0.97 },
+  retry: { rate: 0.95, pitch: 0.97 }
+};
+
+const CLIPS_MANIFEST = {
+  version: 1,
+  clips: {
+    "en:start-00": "mock"
+  }
+};
+
+function hostLineId(index) {
+  return String(index).padStart(2, "0");
+}
+
+function clipUrlFor(lang, beat, id) {
+  return `assets/audio/${lang}/${beat}-${id}.mp3`;
+}
+
+function clipStatus(lang, beat, id) {
+  const entry = CLIPS_MANIFEST.clips[`${lang}:${beat}-${id}`];
+  if (entry === "mock" || entry === "available") return entry;
+  return "missing";
+}
+
+function pickHostLine(beat, language) {
+  const lang = HOST_LINES[language] ? language : "en";
+  const pool = (HOST_LINES[lang] && HOST_LINES[lang][beat]) || HOST_LINES.en[beat] || [];
+  if (!pool.length) return { id: "00", text: "" };
+
+  const key = `${lang}:${beat}`;
+  let used = usedHostLines[key];
+  if (!used || used.length >= pool.length) {
+    used = usedHostLines[key] = [];
+  }
+
+  const remaining = pool.map((_, index) => index).filter((index) => !used.includes(index));
+  const pick = remaining[Math.floor(Math.random() * remaining.length)];
+  used.push(pick);
+
+  return { id: hostLineId(pick), text: pool[pick] };
+}
+
+function voiceNameFor(language) {
+  try {
+    const voice = chooseVoice(language);
+    return voice ? String(voice.name || voice.lang || "") : "";
+  } catch {
+    return "";
+  }
+}
+
+function selectedVoiceNames() {
+  return {
+    en: voiceNameFor("en"),
+    es: voiceNameFor("es"),
+    pl: voiceNameFor("pl")
+  };
+}
+
+let sharedAudioContext = null;
+
+function unlockAudio() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    sharedAudioContext = sharedAudioContext || new AudioContextClass();
+    if (sharedAudioContext.state === "suspended") {
+      sharedAudioContext.resume().catch(() => {});
+    }
+  } catch {}
+}
+
+function playHostClip(url, fallbackText, prosody) {
+  try {
+    const audio = new Audio(url);
+
+    audio.onended = () => {
+      try {
+        URL.revokeObjectURL(audio.src);
+      } catch {}
+    };
+
+    audio.onerror = () => {
+      speakText(fallbackText, prosody);
+    };
+
+    const played = audio.play();
+    if (played && typeof played.catch === "function") {
+      played.catch(() => speakText(fallbackText, prosody));
+    }
+  } catch {
+    speakText(fallbackText, prosody);
+  }
+}
+
+function speakHost(beat, overrideText) {
+  if (!state.voice.available || state.voice.muted) {
+    state.voice.lastPath = "muted";
+    return;
+  }
+
+  const base = HOST_PROSODY[beat] || HOST_PROSODY.start;
+
+  if (overrideText) {
+    state.voice.lastPath = "dynamic";
+    speakText(overrideText, {
+      rate: base.rate + prosodyJitter(overrideText, 0.03),
+      pitch: base.pitch + prosodyJitter(`${overrideText}:p`, 0.03)
+    });
+    return;
+  }
+
+  const line = pickHostLine(beat, state.language);
+  if (!line.text) return;
+
+  const status = clipStatus(state.language, beat, line.id);
+
+  if (status === "mock") {
+    state.voice.lastPath = "mock";
+    speakText(line.text, {
+      rate: base.rate + prosodyJitter(line.text, 0.03),
+      pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
+    });
+    return;
+  }
+
+  if (status === "available") {
+    state.voice.lastPath = "clip";
+    playHostClip(clipUrlFor(state.language, beat, line.id), line.text, {
+      rate: base.rate + prosodyJitter(line.text, 0.03),
+      pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
+    });
+    return;
+  }
+
+  state.voice.lastPath = "synth";
+  speakText(line.text, {
+    rate: base.rate + prosodyJitter(line.text, 0.03),
+    pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
+  });
+}
+
+function speakSample(language) {
+  const line = pickHostLine("start", language);
+  if (!line.text) return;
+
+  let voice;
+  try {
+    voice = chooseVoice(language) || undefined;
+  } catch {
+    voice = undefined;
+  }
+
+  speakText(line.text, { rate: 1.0, pitch: 1.0, voice });
+}
+
 function speakSequence(texts) {
   if (!state.voice.available || state.voice.muted) return;
   const queue = texts.filter(Boolean);
@@ -1088,24 +1324,35 @@ function speakChallengeInstructions() {
 }
 
 function announceTime(secondsRemaining) {
-  const seconds = Math.ceil(secondsRemaining);
-
-  if (seconds === 60) speakInstruction("voice60");
-  else if (seconds === 45) speakInstruction("voiceHalfway");
-  else if (seconds === 30) speakInstruction("voice30");
-  else if (seconds === 10) speakInstruction("voice10");
-  else if (seconds <= 0) speakInstruction("voiceTimeComplete");
+  if (Math.ceil(secondsRemaining) === 45) {
+    speakHost("mid");
+  }
 }
 
 function announceResultSummary() {
+  announceGameVerdict();
+}
+
+function announceGameVerdict() {
   if (!state.result) return;
 
-  speakText(
-    state.result.ai?.scorable === false
-      ? "Challenge complete. I need a better look at the station, so let's rescan."
-      : `Challenge complete! Visual clean score: ${state.result.ai.cleanliness} percent. Nice work!`,
-    { rate: 1.02, pitch: 1.07 }
-  );
+  const ai = state.result.ai;
+  const finish = pickHostLine("finish", state.language);
+  let verdictText = pickHostLine("pass", state.language);
+  let prosody = HOST_PROSODY.pass;
+
+  if (ai?.scorable === false) {
+    verdictText = pickHostLine("retry", state.language);
+    prosody = HOST_PROSODY.retry;
+  } else if (ai?.verified?.hypeLine) {
+    verdictText = ai.verified.hypeLine;
+  }
+
+  const text = `${finish} ${verdictText}`;
+  speakText(text, {
+    rate: prosody.rate + prosodyJitter(text, 0.03),
+    pitch: prosody.pitch + prosodyJitter(text + ":p", 0.03)
+  });
 }
 
 function announceStyleScore(score) {
@@ -1136,12 +1383,6 @@ function toggleMute() {
   updateMuteButton();
   if (!state.voice.muted) {
     playAnnouncerCue();
-    if (state.screen === "instructions") speakChallengeInstructions();
-    else speakText(state.language === "es"
-      ? "¡El presentador está listo!"
-      : state.language === "pl"
-        ? "Prowadząca jest gotowa!"
-        : "Your announcer is ready!");
   }
 }
 
@@ -1798,7 +2039,6 @@ function activateDemoMode() {
   resetCaptures();
   updateCameraUI();
 
-  speakInstruction("voiceDemoMode");
   navigateTo("timer");
 }
 
@@ -2114,7 +2354,7 @@ function updateTimer() {
 }
 
 function checkTimeAnnouncement(previousMs, currentMs) {
-  [60, 45, 30, 10].forEach((seconds) => {
+  [45].forEach((seconds) => {
     if (state.timer.announcements[seconds]) return;
 
     const threshold = seconds * 1000;
@@ -2137,10 +2377,7 @@ function finishTimerAtLimit() {
     state.timer.intervalId = null;
   }
 
-  if (!state.timer.announcements.complete) {
-    state.timer.announcements.complete = true;
-    announceTime(0);
-  }
+  state.timer.announcements.complete = true;
 
   playTone(720, 0.12);
   setTimeout(() => playTone(920, 0.16), 130);
@@ -2221,6 +2458,8 @@ function formatTimer(milliseconds) {
 }
 
 async function handleStartPause() {
+  unlockAudio();
+
   if (state.timer.running) {
     pauseTimer();
     playTone(420, 0.07);
@@ -2248,7 +2487,7 @@ async function handleStartPause() {
     setTimeout(() => playTone(820, 0.08), 90);
 
     startTimer();
-    speakInstruction("voiceBegin");
+    speakHost("start");
     return;
   }
 
@@ -2950,6 +3189,7 @@ function openSettings() {
   refreshSettingsInputs();
   els.settingsSavedNote?.classList.add("hidden");
   renderProviderLog();
+  renderVoiceNames();
   navigateTo("settings");
 }
 
@@ -3979,7 +4219,6 @@ async function runVictoryPose() {
   els.poseStatus.textContent =
     t("poseAnalyzing");
 
-  speakInstruction("voicePosePrompt");
 
   let styleScore = 7.5;
 
@@ -4048,7 +4287,7 @@ async function runVictoryPose() {
       `${styleScore.toFixed(1)} / 10`;
 
     updateSavedRunStyleScore(styleScore);
-    announceStyleScore(styleScore);
+
 
     state.pose.running = false;
     els.poseButton.disabled = false;
@@ -5717,9 +5956,9 @@ function bindEvents() {
   els.welcomeContinue.addEventListener(
     "click",
     () => {
+      unlockAudio();
       playAnnouncerCue();
       navigateTo("instructions");
-      speakChallengeInstructions();
     }
   );
 
@@ -5871,6 +6110,14 @@ function bindEvents() {
 
   if (els.viewDeckButton) {
     els.viewDeckButton.addEventListener("click", openDeck);
+
+  document
+    .querySelectorAll("[data-voice-sample]")
+    .forEach((button) => {
+      button.addEventListener("click", () => {
+        speakSample(button.dataset.voiceSample);
+      });
+    });
   }
 
   if (els.deckLeft) {
@@ -6015,6 +6262,17 @@ window.cleaningChallenge = {
   announceResultSummary,
   announceStyleScore,
   toggleMute,
+  pickHostLine,
+  speakHost,
+  speakSample,
+  prosodyJitter,
+  voiceNameFor,
+  selectedVoiceNames,
+  resetHostLineHistory,
+  clipUrlFor,
+  clipStatus,
+  HOST_LINES,
+  usedHostLines,
 
   requestCamera,
   ensureCameraReady,
