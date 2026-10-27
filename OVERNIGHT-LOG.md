@@ -38,3 +38,16 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Evidence: headless E1 22 cards, 0 malformed; E2 full 10-card playthrough, streak 1 then stays 1 on replay, deck closes; self-test 6/6 PASS; manual Orca-browser deck open, card render, correct+wrong answers show feedback and advance.
 - Decisions: vanilla static data file loaded before app.js, no build step; two real bugs caught by acceptance and fixed (lexical SWIPE_DECK reference, dropped DECK_DAILY_COUNT const).
 - Blockers: none.
+
+## CHUNK F — Pages deploy + README — 22:49/23:02 — DONE
+- Implemented: GitHub Pages enabled via API (main branch, root); README rewritten (what it is, three beneficiaries, game flow, zero-context inspection explanation, run instructions, live URL, tech); "powered by Muse at scale" exactly once in intro; README banned-term grep zero.
+- Evidence: gh pages create returned html_url https://officebeats.github.io/cleanquest/ source main:/; phrase count 1; README grep zero; 3 build checks over 10 min all "built" + HTTP 200; served title CleanQuest, app.js and deck.js both 200.
+- Decisions: none.
+- Blockers: none.
+
+## OVERNIGHT SUMMARY — 23:05 — ALL CHUNKS DONE
+- Chunks: A DONE · B DONE · C DONE · D DONE · E DONE · F DONE. No PARKED, no BLOCKED.
+- Final verification: self-test 6/6 PASS; banned-term grep zero hits across all files; tree clean; 7 commits on main, all pushed.
+- Pages: https://officebeats.github.io/cleanquest/ live (built + HTTP 200 x3, serves CleanQuest with app.js and deck.js 200).
+- Needs a live key to verify: enter Meta Model API key in Settings UI (verifies Chunks A + B + D transcription), Baseten key (verifies Chunk C live path; MOCK entries expected until then). Everything else verified keyless tonight.
+- Deviations logged during the night: (1) SAM mask rasters not decoded — boxes only (needs unapproved npm package); (2) Baseten uses system role vs Meta developer role (widest compatibility); (3) spec file missing — followed chunk definitions in the build prompt.
