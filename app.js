@@ -596,7 +596,8 @@ const screens = [
   "results",
   "leaderboard",
   "settings",
-  "deck"
+  "deck",
+  "records"
 ];
 
 const query = new URLSearchParams(window.location.search);
@@ -4827,6 +4828,22 @@ function loadStreak() {
   return { count: 0, lastDay: "" };
 }
 
+function bumpStreakIfNewDay() {
+  const streak = loadStreak();
+  const today = todayKey();
+
+  if (streak.lastDay === today) return streak;
+
+  streak.count += 1;
+  streak.lastDay = today;
+
+  try {
+    localStorage.setItem(STREAK_KEY, JSON.stringify(streak));
+  } catch {}
+
+  return streak;
+}
+
 function buildDailyDeck() {
   const source = (typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK))
     ? SWIPE_DECK
@@ -4875,18 +4892,10 @@ function renderDeck() {
   els.deckDone?.classList.toggle("hidden", !finished);
 
   if (finished) {
-    const today = todayKey();
-    if (streak.lastDay !== today) {
-      streak.count += 1;
-      streak.lastDay = today;
+    const streak = bumpStreakIfNewDay();
 
-      try {
-        localStorage.setItem(STREAK_KEY, JSON.stringify(streak));
-      } catch {}
-
-      if (els.deckStreak) {
-        els.deckStreak.textContent = t("deckStreak", { n: streak.count });
-      }
+    if (els.deckStreak) {
+      els.deckStreak.textContent = t("deckStreak", { n: streak.count });
     }
 
     if (els.deckFeedback) {
@@ -5445,6 +5454,145 @@ async function runSelfTestPosePipeline(
   return landmarks?.length
     ? computeStyleScore(landmarks)
     : 7.5;
+}
+
+async function runPersonaSuite() {
+  const results = [];
+  const push = (id, label, ok, detail, friction) => {
+    results.push({
+      id,
+      label,
+      status: ok ? "pass" : "fail",
+      detail: detail || "",
+      friction: friction || ""
+    });
+  };
+
+  const savedLang = state.language;
+  const savedDemo = state.demoMode;
+  const savedMuted = state.voice.muted;
+  const savedName = els.playerName ? els.playerName.value : "";
+  state.voice.muted = true;
+
+  try {
+    localStorage.removeItem(CLOUD_SETTINGS_KEY);
+  } catch {}
+
+  try {
+    setLanguage("es");
+    activateDemoMode();
+    navigateTo("camera");
+    await completeChallenge();
+    const spanish = document.documentElement.lang === "es"
+      && t("acceptChallenge") === "ACEPTAR EL RETO";
+    const done = state.screen === "results"
+      && state.latestScore
+      && els.offlineScoreNote
+      && !els.offlineScoreNote.classList.contains("hidden");
+    push(
+      "maria",
+      "Maria — Spanish, first-time, camera denied",
+      spanish && done,
+      `screen=${state.screen} lang=${document.documentElement.lang} score=${state.latestScore?.cleanliness ?? state.latestScore?.simulated}`,
+      "Demo entry relies on the camera failing first; a denied camera shows the error card before the demo path engages."
+    );
+  } catch (error) {
+    push("maria", "Maria — Spanish, first-time, camera denied", false, String(error?.message || error), "Crashed before reaching results.");
+  }
+
+  try {
+    if (els.playerName) els.playerName.value = "Dana";
+    const entry = saveCompletedRun();
+    const entryId = entry && entry.id;
+    const deadline = Date.now() + 15000;
+    while (Date.now() < deadline) {
+      try {
+        if (entryId && loadInspectionLog().some((record) => record.id === entryId)) break;
+      } catch {}
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    }
+    openRecords();
+    const rows = els.inspectionLogList
+      ? els.inspectionLogList.querySelectorAll(".provider-log-row").length
+      : 0;
+    let exported = false;
+    try {
+      const json = JSON.stringify(loadInspectionLog());
+      const csv = buildInspectionCsv(loadInspectionLog());
+      exported = json.length > 2 && csv.split("\n").length > 1;
+    } catch {}
+    const ok = !!entry && state.screen === "records" && rows > 0 && exported;
+    push(
+      "dana",
+      "Dana — business owner, inspection log + exports",
+      ok,
+      `rows=${rows} exported=${exported} where=${entry ? "saved" : "missing"}`,
+      "Record groups sort newest-first under one location header; multi-site owners get no per-site totals."
+    );
+    try {
+      saveLeaderboard(loadLeaderboard().filter((item) => item.id !== (entry && entry.id)));
+      const kept = loadInspectionLog().filter((record) => record.id !== (entry && entry.id));
+      localStorage.setItem(INSPECTION_LOG_KEY, JSON.stringify(kept));
+    } catch {}
+  } catch (error) {
+    push("dana", "Dana — business owner, inspection log + exports", false, String(error?.message || error), "Crashed while saving or rendering records.");
+  }
+
+  try {
+    renderSpectatorLeaderboard();
+    const rows = els.spectatorLeaderboardList
+      ? els.spectatorLeaderboardList.querySelectorAll("*").length
+      : 0;
+    const readable = rows > 0
+      && String(els.spectatorLeaderboardList.textContent || "").trim().length > 0;
+    push(
+      "judge",
+      "Judge — no camera, no keys, spectator readable",
+      readable,
+      `nodes=${rows}`,
+      "Spectator view mirrors the local board only; remote multi-player boards are not in this build."
+    );
+  } catch (error) {
+    push("judge", "Judge — no camera, no keys, spectator readable", false, String(error?.message || error), "Spectator render threw.");
+  }
+
+  try {
+    const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+    try {
+      localStorage.setItem(STREAK_KEY, JSON.stringify({ count: 3, lastDay: yesterday }));
+      const seeded = loadLeaderboard();
+      seeded.push({ id: "persona-e-seed", name: "Returner", cleanliness: 90, timeMs: 60000, styleScore: 8, timestamp: new Date().toISOString() });
+      saveLeaderboard(seeded);
+    } catch {}
+    const kept = loadStreak().count === 3
+      && loadLeaderboard().some((item) => item.id === "persona-e-seed");
+    const first = bumpStreakIfNewDay();
+    const second = bumpStreakIfNewDay();
+    const once = first.count === 4 && second.count === 4;
+    push(
+      "returning",
+      "Returning player — streak + board persist, once-per-day",
+      kept && once,
+      `streak=${second.count} persisted=${kept}`,
+      "Streak label only updates on deck completion, not on game completion."
+    );
+    try {
+      saveLeaderboard(loadLeaderboard().filter((item) => item.id !== "persona-e-seed"));
+      localStorage.removeItem(STREAK_KEY);
+    } catch {}
+  } catch (error) {
+    push("returning", "Returning player — streak + board persist, once-per-day", false, String(error?.message || error), "Persistence round-trip threw.");
+  }
+
+  try {
+    setLanguage(savedLang);
+  } catch {}
+  state.demoMode = savedDemo;
+  state.voice.muted = savedMuted;
+  if (els.playerName) els.playerName.value = savedName;
+  navigateTo("welcome");
+
+  return results;
 }
 
 async function runSelfTest() {
@@ -6307,5 +6455,6 @@ window.cleaningChallenge = {
   renderSpectatorLeaderboard,
 
   runSelfTest,
+  runPersonaSuite,
   copySelfTestReport
 };

@@ -33,11 +33,19 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Decisions: followed live dev.meta.ai speech-to-text docs (transcribe endpoint, multipart request/audio parts, model id, PUSH_TO_TALK) — no doc deviation; WAV conversion done dependency-free via OfflineAudioContext; records reuse the provider-log row styling.
 - Blockers: none. Live transcription needs a Meta key in Settings UI (Ernesto, tomorrow).
 
-## ROUND 1 — Human host voice — 23:17/23:50 — DONE
+## ROUND 1 — Human host voice — 23:17/23:26 — DONE
 - Implemented: per-language voice ranking kept and surfaced (selected EN/ES/PL voice names shown in Settings; ?voice-test=1 reveals click-to-play sample buttons); prosody base 1.0/1.0 with deterministic per-line ±0.03 jitter; 360-line host bank (24 x 5 beats x 3 langs, contractions + ellipses); host speaks ONLY at start, one mid (45s), finish, and verdict (finish+verdict in one utterance, slower/lower retry prosody, brighter finish prosody, Spark hype_line overrides stock verdict); instructions/unmute/demo/pose speech removed; clips-first playback path (assets/audio/<lang>/<beat>-<id>.mp3, manifest with one MOCK entry, synth fallback, lastPath marker for tests); audio unlock on first gesture; no Meta TTS endpoint exists (STT only) — logged, no TTS work attempted.
 - Evidence: headless V1 24x5x3 with ellipses style · V2 24-unique no-repeat + wrap + fallback · V3 jitter deterministic/bounded · V4 empty-voices safe · V5 clip URL/manifest routing · V6 muted no-op · V7 utterance defaults 1.0/1.0 · self-test 6/6 PASS · Orca-browser settings shows real picked voices (EN Samantha / ES Paulina / PL Zosia), test section visible only with flag; sample buttons verified by code inspection (clicks would emit audio, tested muted instead).
 - Decisions: 3/360 lines accepted without ellipsis (short exclamations, style variance); finish+verdict combined in one utterance to avoid overlap cutoffs; no new dependencies.
-- Blockers: none. Live cloud verdict voice needs a Meta key (same as Chunk A).
+- Blockers: none.
+
+## ROUND 2 R2 — Persona testing — 23:26/23:36 — DONE
+- Implemented: runPersonaSuite() in the self-test harness (muted, no network, state save/restore, test-data cleanup): Maria (ES + denied-camera demo game), Dana (save → records + JSON/CSV builders), Judge (spectator render readability), Returning (streak/board roundtrip + once-per-day guard); env flows in the throwaway runner (360px + offline Piotr, iPhone Safari emulation + gesture unlock, Android 360px + 4x CPU, spectator page).
+- Evidence: suite Maria PASS (results, es UI, demo score) · Dana PASS (1 row, exports ok) · Judge PASS (18 nodes readable) · Returning PASS (streak 4, persisted, second bump held) · Piotr offline game completes + record queued + no h-overflow · iPhone unlock ok, game completes, no overflow · Android completes · spectator page 4 readable rows · self-test 6/6 PASS.
+- Frictions (one each, fixes deferred unless trivial): Maria — demo entry waits on camera failure first (error card shows before demo engages); Dana — no per-site totals for multi-site owners; Judge — spectator mirrors local board only; Returning — streak label updates on deck completion, not game completion; Piotr — nothing blocking (offline note carries the state); iPhone — synth fallback only until clips exist (expected); Android — none beyond throttle slowness.
+- Fix applied in-chunk: records screen was missing from the screens array so VIEW RECORDS never displayed (caught by Dana check).
+- Decisions: suite never speaks (muted) and never fetches (demo paths only); test entries cleaned up; no big fixes started.
+- Blockers: none.
 
 ## CHUNK E — Daily swipe deck — 22:42/22:49 — DONE
 - Implemented: deck.js static data (22 real-work cards: surface/product/technique, right-call vs the miss + why note each, zero API calls); deck screen with category/text/progress/streak, tap buttons + touch-swipe (>=60px), instant right/wrong feedback with auto-advance, day streak in localStorage (increments once per calendar day); new window.SWIPE_DECK-free lexical reference (const scripts don't attach to window).
