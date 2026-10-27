@@ -32,3 +32,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Evidence: headless D1 valid RIFF/WAVE; D2 bad key → null, note stays untranscribed; D3 complete record, shared:false, stored; D4 CSV builder verified incl. quoting and empty-field edge cases (harness encoding artifact on one probe, function proven in two clean probes); self-test 6/6 PASS twice; manual Orca-browser full game with live mic: record → stop → audio attached and playable, "Not transcribed" (no key); save → records screen shows 1-row "Location not shared" group.
 - Decisions: followed live dev.meta.ai speech-to-text docs (transcribe endpoint, multipart request/audio parts, model id, PUSH_TO_TALK) — no doc deviation; WAV conversion done dependency-free via OfflineAudioContext; records reuse the provider-log row styling.
 - Blockers: none. Live transcription needs a Meta key in Settings UI (Ernesto, tomorrow).
+
+## CHUNK E — Daily swipe deck — 22:42/22:49 — DONE
+- Implemented: deck.js static data (22 real-work cards: surface/product/technique, right-call vs the miss + why note each, zero API calls); deck screen with category/text/progress/streak, tap buttons + touch-swipe (>=60px), instant right/wrong feedback with auto-advance, day streak in localStorage (increments once per calendar day); new window.SWIPE_DECK-free lexical reference (const scripts don't attach to window).
+- Evidence: headless E1 22 cards, 0 malformed; E2 full 10-card playthrough, streak 1 then stays 1 on replay, deck closes; self-test 6/6 PASS; manual Orca-browser deck open, card render, correct+wrong answers show feedback and advance.
+- Decisions: vanilla static data file loaded before app.js, no build step; two real bugs caught by acceptance and fixed (lexical SWIPE_DECK reference, dropped DECK_DAILY_COUNT const).
+- Blockers: none.

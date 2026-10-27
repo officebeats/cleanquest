@@ -194,6 +194,15 @@ const translations = {
 
     muteVoice: "Mute voice narration",
     unmuteVoice: "Unmute voice narration",
+    viewDeck: "DAILY DECK",
+    deckTitle: "DAILY DECK",
+    deckRight: "RIGHT CALL ▶",
+    deckMiss: "◀ MISS",
+    deckCorrect: "Correct call.",
+    deckWrong: "That's the miss.",
+    deckComplete: "Deck complete for today.",
+    deckStreak: "Day streak: {n}",
+    deckCardOf: "Card {i} of {n}",
     voiceRecordFailed: "Couldn't access the microphone.",
     voiceNoteTitle: "VOICE NOTE",
     voiceRecord: "RECORD NOTE",
@@ -360,6 +369,15 @@ const translations = {
 
     muteVoice: "Silenciar narración",
     unmuteVoice: "Activar narración",
+    viewDeck: "MAZO DIARIO",
+    deckTitle: "MAZO DIARIO",
+    deckRight: "ACIERTA ▶",
+    deckMiss: "◀ FALLO",
+    deckCorrect: "Buena decisión.",
+    deckWrong: "Ese es el fallo.",
+    deckComplete: "Mazo completo por hoy.",
+    deckStreak: "Racha: {n} días",
+    deckCardOf: "Tarjeta {i} de {n}",
     voiceRecordFailed: "No se pudo acceder al micrófono.",
     voiceNoteTitle: "NOTA DE VOZ",
     voiceRecord: "GRABAR NOTA",
@@ -526,6 +544,15 @@ const translations = {
 
     muteVoice: "Wycisz narrację",
     unmuteVoice: "Włącz narrację",
+    viewDeck: "DZIENNA TALIA",
+    deckTitle: "DZIENNA TALIA",
+    deckRight: "DOBRZE ▶",
+    deckMiss: "◀ BŁĄD",
+    deckCorrect: "Dobra decyzja.",
+    deckWrong: "To jest błąd.",
+    deckComplete: "Talia na dziś ukończona.",
+    deckStreak: "Seria: {n} dni",
+    deckCardOf: "Karta {i} z {n}",
     voiceRecordFailed: "Nie można uzyskać dostępu do mikrofonu.",
     voiceNoteTitle: "NOTATKA GŁOSOWA",
     voiceRecord: "NAGRAJ NOTATKĘ",
@@ -565,7 +592,8 @@ const screens = [
   "timer",
   "results",
   "leaderboard",
-  "settings"
+  "settings",
+  "deck"
 ];
 
 const query = new URLSearchParams(window.location.search);
@@ -632,6 +660,8 @@ const state = {
   latestScore: null,
   result: null,
   latestRunId: null,
+  deckReturn: "welcome",
+  deck: null,
   recordsReturn: "welcome",
   voiceNote: null,
   recorder: null,
@@ -737,6 +767,16 @@ const els = {
   inspectionExportJson: document.getElementById("inspectionExportJson"),
   inspectionExportCsv: document.getElementById("inspectionExportCsv"),
   recordsDone: document.getElementById("recordsDone"),
+  viewDeckButton: document.getElementById("viewDeckButton"),
+  deckStreak: document.getElementById("deckStreak"),
+  deckCard: document.getElementById("deckCard"),
+  deckCategory: document.getElementById("deckCategory"),
+  deckText: document.getElementById("deckText"),
+  deckProgress: document.getElementById("deckProgress"),
+  deckFeedback: document.getElementById("deckFeedback"),
+  deckLeft: document.getElementById("deckLeft"),
+  deckRight: document.getElementById("deckRight"),
+  deckDone: document.getElementById("deckDone"),
   leaderboardList: document.getElementById("leaderboardList"),
 
   selfTestPanel: document.getElementById("selfTestPanel"),
@@ -1168,6 +1208,11 @@ function handleBack() {
 
   if (state.screen === "records") {
     closeRecords();
+    return;
+  }
+
+  if (state.screen === "deck") {
+    closeDeck();
     return;
   }
 
@@ -4525,6 +4570,129 @@ function exportInspectionCsv() {
   );
 }
 
+const DECK_DAILY_COUNT = 10;
+const STREAK_KEY = "cleanquest.streak";
+
+function todayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function loadStreak() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STREAK_KEY));
+    if (parsed && Number.isFinite(Number(parsed.count))) {
+      return { count: Number(parsed.count), lastDay: typeof parsed.lastDay === "string" ? parsed.lastDay : "" };
+    }
+  } catch {}
+
+  return { count: 0, lastDay: "" };
+}
+
+function buildDailyDeck() {
+  const source = (typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK))
+    ? SWIPE_DECK
+    : [];
+  if (!source.length) return [];
+
+  const day = Math.floor(Date.now() / 86400000);
+  const start = day % source.length;
+  const order = [];
+
+  for (let i = 0; i < Math.min(DECK_DAILY_COUNT, source.length); i++) {
+    order.push(source[(start + i) % source.length]);
+  }
+
+  return order;
+}
+
+function openDeck() {
+  if (state.screen !== "deck") {
+    state.deckReturn = state.screen;
+  }
+
+  state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false };
+  navigateTo("deck");
+  renderDeck();
+}
+
+function closeDeck() {
+  state.deck = null;
+  navigateTo(state.deckReturn || "welcome");
+}
+
+function renderDeck() {
+  const streak = loadStreak();
+  if (els.deckStreak) {
+    els.deckStreak.textContent = t("deckStreak", { n: streak.count });
+  }
+
+  const deck = state.deck;
+  if (!deck || !deck.order.length) return;
+
+  const finished = deck.index >= deck.order.length;
+  els.deckCard?.classList.toggle("hidden", finished);
+  els.deckLeft?.classList.toggle("hidden", finished);
+  els.deckRight?.classList.toggle("hidden", finished);
+  els.deckDone?.classList.toggle("hidden", !finished);
+
+  if (finished) {
+    const today = todayKey();
+    if (streak.lastDay !== today) {
+      streak.count += 1;
+      streak.lastDay = today;
+
+      try {
+        localStorage.setItem(STREAK_KEY, JSON.stringify(streak));
+      } catch {}
+
+      if (els.deckStreak) {
+        els.deckStreak.textContent = t("deckStreak", { n: streak.count });
+      }
+    }
+
+    if (els.deckFeedback) {
+      els.deckFeedback.textContent = `${t("deckComplete")} ${t("deckStreak", { n: streak.count })}`;
+      els.deckFeedback.className = "deck-feedback is-correct";
+    }
+
+    return;
+  }
+
+  const card = deck.order[deck.index];
+  if (els.deckCategory) els.deckCategory.textContent = String(card.category || "").toUpperCase();
+  if (els.deckText) els.deckText.textContent = card.text;
+  if (els.deckProgress) {
+    els.deckProgress.textContent = t("deckCardOf", { i: deck.index + 1, n: deck.order.length });
+  }
+  if (els.deckFeedback) {
+    els.deckFeedback.textContent = "";
+    els.deckFeedback.className = "deck-feedback";
+  }
+}
+
+function answerDeck(pick) {
+  const deck = state.deck;
+  if (!deck || deck.locked || deck.index >= deck.order.length) return;
+
+  const card = deck.order[deck.index];
+  const hit = pick === card.answer;
+  deck.locked = true;
+
+  if (hit) deck.correct += 1;
+
+  if (els.deckFeedback) {
+    els.deckFeedback.textContent = `${hit ? t("deckCorrect") : t("deckWrong")} ${card.why || ""}`;
+    els.deckFeedback.className = `deck-feedback ${hit ? "is-correct" : "is-wrong"}`;
+  }
+
+  setTimeout(() => {
+    if (state.deck !== deck) return;
+    deck.index += 1;
+    deck.locked = false;
+    renderDeck();
+  }, 1400);
+}
+
 function openRecords() {
   if (state.screen !== "records") {
     state.recordsReturn = state.screen;
@@ -5699,6 +5867,38 @@ function bindEvents() {
 
   if (els.viewRecordsButton) {
     els.viewRecordsButton.addEventListener("click", openRecords);
+  }
+
+  if (els.viewDeckButton) {
+    els.viewDeckButton.addEventListener("click", openDeck);
+  }
+
+  if (els.deckLeft) {
+    els.deckLeft.addEventListener("click", () => answerDeck("miss"));
+  }
+
+  if (els.deckRight) {
+    els.deckRight.addEventListener("click", () => answerDeck("right"));
+  }
+
+  if (els.deckCard) {
+    let deckTouchX = null;
+    els.deckCard.addEventListener("touchstart", (event) => {
+      const touch = event.changedTouches?.[0];
+      deckTouchX = touch ? touch.clientX : null;
+    }, { passive: true });
+    els.deckCard.addEventListener("touchend", (event) => {
+      const touch = event.changedTouches?.[0];
+      if (deckTouchX === null || !touch) return;
+      const delta = touch.clientX - deckTouchX;
+      deckTouchX = null;
+      if (delta <= -60) answerDeck("miss");
+      else if (delta >= 60) answerDeck("right");
+    });
+  }
+
+  if (els.deckDone) {
+    els.deckDone.addEventListener("click", closeDeck);
   }
 
   if (els.recordsDone) {

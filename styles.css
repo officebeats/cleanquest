@@ -2066,3 +2066,26 @@ h3 {
   display: block;
   margin-top: 6px;
 }
+.deck-card {
+  margin-top: 14px;
+  text-align: left;
+  touch-action: pan-y;
+}
+
+.deck-card p {
+  font-size: 1.1em;
+  margin: 8px 0;
+}
+
+.deck-feedback {
+  min-height: 3em;
+  margin: 10px 0 0;
+}
+
+.deck-feedback.is-correct {
+  color: var(--success);
+}
+
+.deck-feedback.is-wrong {
+  color: var(--warning);
+}

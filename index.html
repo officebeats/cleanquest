@@ -85,6 +85,15 @@
           ACCEPT THE CHALLENGE
         </button>
 
+        <button
+          id="viewDeckButton"
+          class="secondary-button hero-button"
+          type="button"
+          data-i18n="viewDeck"
+        >
+          DAILY DECK
+        </button>
+
         <section id="selfTestPanel" class="selftest-panel hidden" aria-live="polite">
           <button id="runSelfTestButton" class="selftest-run-button" type="button" data-i18n="runSelfTest">
             RUN SELF-TEST
@@ -755,6 +764,51 @@
         </button>
       </div>
     </section>
+    <!-- DECK -->
+    <section id="deckScreen" class="screen">
+      <div class="content">
+        <div class="eyebrow" data-i18n="deckTitle">DAILY DECK</div>
+        <h2 data-i18n="deckTitle">DAILY DECK</h2>
+
+        <p id="deckStreak" class="fine-print"></p>
+
+        <div id="deckCard" class="deck-card hologram-card">
+          <div class="section-label" id="deckCategory">SURFACE</div>
+          <p id="deckText"></p>
+          <p id="deckProgress" class="fine-print"></p>
+        </div>
+
+        <p id="deckFeedback" class="deck-feedback"></p>
+
+        <div class="settings-row">
+          <button
+            id="deckLeft"
+            class="secondary-button"
+            type="button"
+            data-i18n="deckMiss"
+          >
+            ◀ MISS
+          </button>
+          <button
+            id="deckRight"
+            class="secondary-button"
+            type="button"
+            data-i18n="deckRight"
+          >
+            RIGHT CALL ▶
+          </button>
+        </div>
+
+        <button
+          id="deckDone"
+          class="primary-button hidden"
+          type="button"
+          data-i18n="settingsDone"
+        >
+          DONE
+        </button>
+      </div>
+    </section>
   </main>
 
   <!-- SPECTATOR MODE -->
@@ -786,6 +840,7 @@
     </div>
   </section>
 
+  <script src="deck.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
