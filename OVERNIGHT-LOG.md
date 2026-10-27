@@ -66,6 +66,12 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Advisor guidance applied: EN-first clip generation then ES/PL; single arbiter merge for the 3-writer audio plan before any install; wire audio behind existing manifest/fallback with self-test+personas after each wiring step; park game-event SFX first if time runs short; keep G6/G7/G5 in Round 5.
 - Advisor past-call review: agreed SAM boxes-only, finish+verdict single utterance, records-screen nav fix.
 
+## ROUND 2.5 — Audio plan: research — 23:45/23:55 — DONE
+- Implemented: 3 parallel research agents (TTS tooling, SFX design, script inventory) fanned out; arbiter-merged single-writer docs/AUDIO-PLAN.md (ranked TTS table + winner/runner-up + install commands, synth-first SFX plan with CC0 sources + size budget + platform notes, full EN/ES/PL scripts + trims + numbers/glue + SFX slots, naming + manifest scheme + record priority).
+- Evidence: TTSResearch + SFXDesign + ScriptInventory all completed; plan grep zero hits (one banned voice-model name caught and removed pre-commit); phrase count still exactly 1.
+- Decisions: single arbiter-merged file, no 3-writer conflicts; Piper wins (only PL-native + trivial Apple Silicon install + commercial-safe render-to-MP3 workflow); full 767-file library scoped, EN-first recording per advisor; SFX synth-first 0 bytes, CC0 only where verified.
+- Blockers: none. Next: install winner, EN-first generation, wiring, re-test (all with volume muted, file inspection only).
+
 ## CHUNK E — Daily swipe deck — 22:42/22:49 — DONE
 - Implemented: deck.js static data (22 real-work cards: surface/product/technique, right-call vs the miss + why note each, zero API calls); deck screen with category/text/progress/streak, tap buttons + touch-swipe (>=60px), instant right/wrong feedback with auto-advance, day streak in localStorage (increments once per calendar day); new window.SWIPE_DECK-free lexical reference (const scripts don't attach to window).
 - Evidence: headless E1 22 cards, 0 malformed; E2 full 10-card playthrough, streak 1 then stays 1 on replay, deck closes; self-test 6/6 PASS; manual Orca-browser deck open, card render, correct+wrong answers show feedback and advance.
