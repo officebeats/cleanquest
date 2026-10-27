@@ -33,9 +33,17 @@ Meta Model API = Muse Spark scorecards + SAM 3.1 overlays + transcription;
 Baseten = Spark Open second provider behind toggle, every run in exportable log.
 
 ## Code anchors
-- `app.js` — everything. `HOST_LINES` = host script lines; audio manifest
+- `app.js` — everything. `HOST_LINES` = host script lines (5 legacy beats only:
+  `start`, `mid`, `finish`, `pass`, `retry`); audio manifest
   `{"version":1,"clips":{"<lang>:<beat>-<nn>":"available"|"mock"}}` — unlisted IDs
-  fall back to synth/TTS, so new clips need no code changes.
+  fall back to synth/TTS. That no-code-change rule holds ONLY for
+  `speakHost("start"|"mid")`, which checks `CLIPS_MANIFEST`.
+  ⚠️ `announceGameVerdict()` (app.js:1438) builds a combined `finish + verdict`
+  string via `buildVerdictText()` and calls `speakText()` directly — bypassing
+  `speakHost()` and the manifest. Verdict clips (pass tiers, retry tiers,
+  hurry-final) and all v1/v2 beats (`pass-big`, `pass-close`, etc.) need
+  WIRING in `app.js` too, not just MP3s — per AUDIO-PLAN.md §5
+  ("generate library → SFX set → wire → re-test").
 - `deck.js` — 22 static training cards (no `window.SWIPE_DECK`; lexical const).
 - `docs/AUDIO-PLAN.md` — full audio spec: engine picks, scripts, naming
   `assets/audio/<lang>/<beat>-<nn>.mp3`, record priority, SFX plan.
