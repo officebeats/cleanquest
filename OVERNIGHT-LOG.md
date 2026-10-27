@@ -72,6 +72,12 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Decisions: single arbiter-merged file, no 3-writer conflicts; Piper wins (only PL-native + trivial Apple Silicon install + commercial-safe render-to-MP3 workflow); full 767-file library scoped, EN-first recording per advisor; SFX synth-first 0 bytes, CC0 only where verified.
 - Blockers: none. Next: install winner, EN-first generation, wiring, re-test (all with volume muted, file inspection only).
 
+## ROUND 2.5 v2 — Robust scripts + judge review — 23:55/00:15 — DONE
+- Implemented: v2 expansion (16 new beats x 12 x 3 langs, ES/PL time glue, PL jedna/dwie numeral clips, corrected declension/apocope rules, delivery + trigger table, coverage table ≈1,316 clips total); v1 trim audit applied to app.js HOST_LINES (instructional/coaching wording removed, IDs stable); judge-role ES+PL review applied (calques, gender lock, prepositions fixed; declension rules corrected).
+- Evidence: headless self-test would run at commit; node --check clean; banned-term grep zero incl. docs.
+- Judge sign-off: all ES lines neutral LatAm, all PL lines diacritics-correct and gender-safe, numbers linguistically sound — v2 scripts approved for recording.
+- Blockers: none. Next: install Piper, EN-first generation.
+
 ## CHUNK E — Daily swipe deck — 22:42/22:49 — DONE
 - Implemented: deck.js static data (22 real-work cards: surface/product/technique, right-call vs the miss + why note each, zero API calls); deck screen with category/text/progress/streak, tap buttons + touch-swipe (>=60px), instant right/wrong feedback with auto-advance, day streak in localStorage (increments once per calendar day); new window.SWIPE_DECK-free lexical reference (const scripts don't attach to window).
 - Evidence: headless E1 22 cards, 0 malformed; E2 full 10-card playthrough, streak 1 then stays 1 on replay, deck closes; self-test 6/6 PASS; manual Orca-browser deck open, card render, correct+wrong answers show feedback and advance.
