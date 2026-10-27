@@ -2024,3 +2024,32 @@ h3 {
 .detection-box.sam-box {
   border-style: dashed;
 }
+.provider-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.provider-log {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.provider-log-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  padding: 6px 0;
+  border-top: 1px solid var(--border);
+}
+
+.provider-mock-chip {
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--warning);
+  color: var(--warning);
+}

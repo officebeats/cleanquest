@@ -643,6 +643,34 @@
           </small>
         </div>
 
+        <div class="identity-panel hologram-card">
+          <span data-i18n="settingsProvider">Inference provider</span>
+          <label class="provider-option">
+            <input type="radio" name="inferenceProvider" value="meta" checked />
+            <span>Meta Model API</span>
+          </label>
+          <label class="provider-option">
+            <input type="radio" name="inferenceProvider" value="baseten" />
+            <span>Baseten (Spark Open)</span>
+          </label>
+        </div>
+
+        <div class="identity-panel hologram-card">
+          <span data-i18n="providerLogTitle">PROVIDER RUN LOG</span>
+          <div id="providerLogList" class="provider-log"></div>
+          <small id="providerLogEmpty" data-i18n="emptyLog">No runs logged yet.</small>
+          <div class="settings-row">
+            <button
+              id="providerLogExport"
+              class="secondary-button"
+              type="button"
+              data-i18n="exportLog"
+            >
+              EXPORT LOG (JSON)
+            </button>
+          </div>
+        </div>
+
         <button
           id="settingsDone"
           class="primary-button"

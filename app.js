@@ -47,6 +47,10 @@ const CONFIG = {
     maxEdgePx: 768,
     jpegQuality: 0.82,
     minSurfaceConfidence: 0.6,
+    baseten: {
+      endpoint: "https://inference.baseten.co/v1/chat/completions",
+      model: "meta-models/muse-spark-open-1026"
+    },
     samEndpoint: "https://api.meta.ai/v1/responses",
     samModel: "sam-3.1"
   }
@@ -188,6 +192,10 @@ const translations = {
 
     muteVoice: "Mute voice narration",
     unmuteVoice: "Unmute voice narration",
+    settingsProvider: "Inference provider",
+    providerLogTitle: "PROVIDER RUN LOG",
+    emptyLog: "No runs logged yet.",
+    exportLog: "EXPORT LOG (JSON)",
     settingsTitle: "SETTINGS",
     settingsMetaKey: "Meta Model API key",
     settingsBasetenKey: "Baseten API key",
@@ -337,6 +345,10 @@ const translations = {
 
     muteVoice: "Silenciar narración",
     unmuteVoice: "Activar narración",
+    settingsProvider: "Proveedor de inferencia",
+    providerLogTitle: "REGISTRO DE EJECUCIONES",
+    emptyLog: "Aún no hay ejecuciones registradas.",
+    exportLog: "EXPORTAR REGISTRO (JSON)",
     settingsTitle: "AJUSTES",
     settingsMetaKey: "Clave de Meta Model API",
     settingsBasetenKey: "Clave API de Baseten",
@@ -486,6 +498,10 @@ const translations = {
 
     muteVoice: "Wycisz narrację",
     unmuteVoice: "Włącz narrację",
+    settingsProvider: "Dostawca wnioskowania",
+    providerLogTitle: "DZIENNIK URUCHOMIEŃ",
+    emptyLog: "Brak zarejestrowanych uruchomień.",
+    exportLog: "EKSPORTUJ DZIENNIK (JSON)",
     settingsTitle: "USTAWIENIA",
     settingsMetaKey: "Klucz Meta Model API",
     settingsBasetenKey: "Klucz API Baseten",
@@ -674,6 +690,9 @@ const els = {
   selfTestSummary: document.getElementById("selfTestSummary"),
   selfTestChecklist: document.getElementById("selfTestChecklist"),
   copySelfTestReport: document.getElementById("copySelfTestReport"),
+  providerLogList: document.getElementById("providerLogList"),
+  providerLogEmpty: document.getElementById("providerLogEmpty"),
+  providerLogExport: document.getElementById("providerLogExport"),
 
   settingsButton: document.getElementById("settingsButton"),
   metaApiKey: document.getElementById("metaApiKey"),
@@ -2785,7 +2804,7 @@ const VERIFIED_SURFACES = new Set([
 ]);
 
 function loadCloudSettings() {
-  const empty = { metaKey: "", basetenKey: "" };
+  const empty = { metaKey: "", basetenKey: "", provider: "meta" };
 
   try {
     const raw = localStorage.getItem(CLOUD_SETTINGS_KEY);
@@ -2795,7 +2814,8 @@ function loadCloudSettings() {
 
     return {
       metaKey: typeof parsed.metaKey === "string" ? parsed.metaKey : "",
-      basetenKey: typeof parsed.basetenKey === "string" ? parsed.basetenKey : ""
+      basetenKey: typeof parsed.basetenKey === "string" ? parsed.basetenKey : "",
+      provider: parsed.provider === "baseten" ? "baseten" : "meta"
     };
   } catch {
     return empty;
@@ -2807,6 +2827,12 @@ function refreshSettingsInputs() {
 
   if (els.metaApiKey) els.metaApiKey.value = settings.metaKey;
   if (els.basetenApiKey) els.basetenApiKey.value = settings.basetenKey;
+
+  document
+    .querySelectorAll('input[name="inferenceProvider"]')
+    .forEach((radio) => {
+      radio.checked = radio.value === settings.provider;
+    });
 }
 
 function openSettings() {
@@ -2816,6 +2842,7 @@ function openSettings() {
 
   refreshSettingsInputs();
   els.settingsSavedNote?.classList.add("hidden");
+  renderProviderLog();
   navigateTo("settings");
 }
 
@@ -2826,7 +2853,10 @@ function closeSettings() {
 function saveSettingsKeys() {
   const next = {
     metaKey: els.metaApiKey?.value.trim() || "",
-    basetenKey: els.basetenApiKey?.value.trim() || ""
+    basetenKey: els.basetenApiKey?.value.trim() || "",
+    provider: document.querySelector('input[name="inferenceProvider"]:checked')?.value === "baseten"
+      ? "baseten"
+      : "meta"
   };
 
   try {
@@ -2946,6 +2976,98 @@ function sanitizeScorecard(parsed) {
   };
 }
 
+const PROVIDER_LOG_KEY = "cleanquest.provider-log";
+
+function loadProviderLog() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(PROVIDER_LOG_KEY));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function appendProviderLog(entry) {
+  try {
+    const entries = loadProviderLog();
+    entries.push({ ...entry, when: new Date().toISOString() });
+    while (entries.length > 100) entries.shift();
+    localStorage.setItem(PROVIDER_LOG_KEY, JSON.stringify(entries));
+  } catch {}
+
+  renderProviderLog();
+}
+
+function renderProviderLog() {
+  const list = els.providerLogList;
+  if (!list) return;
+
+  list.innerHTML = "";
+  const entries = loadProviderLog().slice().reverse().slice(0, 20);
+  els.providerLogEmpty?.classList.toggle("hidden", entries.length > 0);
+
+  entries.forEach((entry) => {
+    const row = document.createElement("div");
+    row.className = "provider-log-row";
+
+    const main = document.createElement("span");
+    const score = Number.isFinite(Number(entry.overall))
+      ? ` · ${Number(entry.overall)}%`
+      : "";
+    main.textContent = `${entry.provider} · ${entry.status}${score}`;
+
+    const meta = document.createElement("small");
+    const stamp = String(entry.when || "").slice(0, 16).replace("T", " ");
+    meta.textContent = `${stamp} · ${entry.model || ""}`;
+
+    row.append(main, meta);
+
+    if (entry.mock) {
+      const chip = document.createElement("strong");
+      chip.className = "provider-mock-chip";
+      chip.textContent = "MOCK";
+      row.append(chip);
+    }
+
+    list.append(row);
+  });
+}
+
+function exportProviderLog() {
+  const blob = new Blob(
+    [JSON.stringify(loadProviderLog(), null, 2)],
+    { type: "application/json" }
+  );
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "cleanquest-provider-log.json";
+  document.body.append(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function getScorecardTarget(settings) {
+  if (settings.provider === "baseten") {
+    return {
+      provider: "baseten",
+      url: CONFIG.cloud.baseten.endpoint,
+      model: CONFIG.cloud.baseten.model,
+      key: settings.basetenKey,
+      role: "system"
+    };
+  }
+
+  return {
+    provider: "meta",
+    url: CONFIG.cloud.endpoint,
+    model: CONFIG.cloud.model,
+    key: settings.metaKey,
+    role: "developer"
+  };
+}
+
 async function getVerifiedScore(aiResult, before, after) {
   const offline = { status: "offline" };
 
@@ -2959,7 +3081,35 @@ async function getVerifiedScore(aiResult, before, after) {
     }
 
     const settings = loadCloudSettings();
-    if (!settings.metaKey) return offline;
+    const target = getScorecardTarget(settings);
+
+    if (!target.key) {
+      if (target.provider === "baseten") {
+        const mock = {
+          status: "mock",
+          provider: target.provider,
+          model: target.model,
+          mock: true
+        };
+        appendProviderLog({
+          provider: target.provider,
+          model: target.model,
+          status: "mock",
+          overall: null,
+          mock: true
+        });
+        return mock;
+      }
+
+      appendProviderLog({
+        provider: target.provider,
+        model: target.model,
+        status: "offline",
+        overall: null,
+        mock: false
+      });
+      return offline;
+    }
 
     const [smallBefore, smallAfter] = await Promise.all([
       downscaleCapture(before?.dataUrl),
@@ -2967,7 +3117,14 @@ async function getVerifiedScore(aiResult, before, after) {
     ]);
 
     if (!smallBefore || !smallAfter) {
-      return { status: "error", reason: "image" };
+      const imageError = {
+        status: "error",
+        reason: "image",
+        provider: target.provider,
+        model: target.model
+      };
+      appendProviderLog({ ...imageError, overall: null, mock: false });
+      return imageError;
     }
 
     const controller = new AbortController();
@@ -2979,16 +3136,16 @@ async function getVerifiedScore(aiResult, before, after) {
     let response;
 
     try {
-      response = await fetch(CONFIG.cloud.endpoint, {
+      response = await fetch(target.url, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${settings.metaKey}`,
+          Authorization: `Bearer ${target.key}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          model: CONFIG.cloud.model,
+          model: target.model,
           messages: [
-            { role: "developer", content: CLOUD_SCORING_PROMPT },
+            { role: target.role, content: CLOUD_SCORING_PROMPT },
             {
               role: "user",
               content: [
@@ -3006,7 +3163,14 @@ async function getVerifiedScore(aiResult, before, after) {
     }
 
     if (!response || !response.ok) {
-      return { status: "error", reason: `http-${response?.status || "none"}` };
+      const httpError = {
+        status: "error",
+        reason: `http-${response?.status || "none"}`,
+        provider: target.provider,
+        model: target.model
+      };
+      appendProviderLog({ ...httpError, overall: null, mock: false });
+      return httpError;
     }
 
     const data = await response.json().catch(() => null);
@@ -3015,16 +3179,38 @@ async function getVerifiedScore(aiResult, before, after) {
     );
 
     if (!parsed) {
-      return { status: "error", reason: "schema" };
+      const schemaError = {
+        status: "error",
+        reason: "schema",
+        provider: target.provider,
+        model: target.model
+      };
+      appendProviderLog({ ...schemaError, overall: null, mock: false });
+      return schemaError;
     }
 
-    return {
+    const verified = {
       status: "verified",
-      provider: "meta",
-      model: CONFIG.cloud.model,
+      provider: target.provider,
+      model: target.model,
       ...parsed
     };
+    appendProviderLog({
+      provider: target.provider,
+      model: target.model,
+      status: "verified",
+      overall: verified.overall,
+      mock: false
+    });
+    return verified;
   } catch {
+    appendProviderLog({
+      provider: "unknown",
+      model: "unknown",
+      status: "error",
+      overall: null,
+      mock: false
+    });
     return { status: "error", reason: "network" };
   }
 }
@@ -3039,7 +3225,7 @@ function renderVerifiedScorecard() {
   els.offlineScoreNote?.classList.add("hidden");
   els.scorecardErrorNote?.classList.add("hidden");
 
-  if (!verified || verified.status === "offline") {
+  if (!verified || verified.status === "offline" || verified.status === "mock") {
     els.offlineScoreNote?.classList.remove("hidden");
     return;
   }
@@ -4978,6 +5164,10 @@ function bindEvents() {
 
   if (els.settingsDone) {
     els.settingsDone.addEventListener("click", closeSettings);
+  }
+
+  if (els.providerLogExport) {
+    els.providerLogExport.addEventListener("click", exportProviderLog);
   }
 
   [els.setupVideo, els.timerVideo].forEach(
