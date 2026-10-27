@@ -38,6 +38,15 @@ const CONFIG = {
     pixelDifferenceThreshold: 38,
     objectWeight: 0.9,
     changeWeight: 0.1
+  },
+
+  cloud: {
+    endpoint: "https://api.meta.ai/v1/chat/completions",
+    model: "muse-spark-1.3",
+    timeoutMs: 25000,
+    maxEdgePx: 768,
+    jpegQuality: 0.82,
+    minSurfaceConfidence: 0.6
   }
 };
 
@@ -176,7 +185,19 @@ const translations = {
     reportCopied: "REPORT COPIED",
 
     muteVoice: "Mute voice narration",
-    unmuteVoice: "Unmute voice narration"
+    unmuteVoice: "Unmute voice narration",
+    settingsTitle: "SETTINGS",
+    settingsMetaKey: "Meta Model API key",
+    settingsBasetenKey: "Baseten API key",
+    settingsKeysNote: "Keys stay in this browser only. The game works fully offline without them.",
+    settingsSave: "SAVE KEYS",
+    settingsClear: "CLEAR KEYS",
+    settingsSaved: "Saved in this browser.",
+    settingsDone: "DONE",
+    verifiedScorecard: "VERIFIED SCORECARD",
+    offlineScoreNote: "Offline score — add a key in Settings for cloud verification.",
+    scorecardErrorNote: "Cloud check failed — showing the on-device score.",
+    surfaceUnverified: "unverified",
   },
 
   es: {
@@ -313,7 +334,19 @@ const translations = {
     reportCopied: "INFORME COPIADO",
 
     muteVoice: "Silenciar narración",
-    unmuteVoice: "Activar narración"
+    unmuteVoice: "Activar narración",
+    settingsTitle: "AJUSTES",
+    settingsMetaKey: "Clave de Meta Model API",
+    settingsBasetenKey: "Clave API de Baseten",
+    settingsKeysNote: "Las claves solo quedan en este navegador. El juego funciona sin conexión sin ellas.",
+    settingsSave: "GUARDAR CLAVES",
+    settingsClear: "BORRAR CLAVES",
+    settingsSaved: "Guardadas en este navegador.",
+    settingsDone: "LISTO",
+    verifiedScorecard: "TARJETA VERIFICADA",
+    offlineScoreNote: "Puntuación local — añade una clave en Ajustes para la verificación en la nube.",
+    scorecardErrorNote: "Falló la comprobación en la nube — se muestra la puntuación local.",
+    surfaceUnverified: "sin verificar",
   },
 
   pl: {
@@ -450,7 +483,19 @@ const translations = {
     reportCopied: "RAPORT SKOPIOWANY",
 
     muteVoice: "Wycisz narrację",
-    unmuteVoice: "Włącz narrację"
+    unmuteVoice: "Włącz narrację",
+    settingsTitle: "USTAWIENIA",
+    settingsMetaKey: "Klucz Meta Model API",
+    settingsBasetenKey: "Klucz API Baseten",
+    settingsKeysNote: "Klucze zostają tylko w tej przeglądarce. Gra działa w pełni offline bez nich.",
+    settingsSave: "ZAPISZ KLUCZE",
+    settingsClear: "WYCZYŚĆ KLUCZE",
+    settingsSaved: "Zapisano w tej przeglądarce.",
+    settingsDone: "GOTOWE",
+    verifiedScorecard: "ZWERYFIKOWANA KARTA",
+    offlineScoreNote: "Wynik lokalny — dodaj klucz w Ustawieniach, aby włączyć weryfikację w chmurze.",
+    scorecardErrorNote: "Weryfikacja w chmurze nie powiodła się — wyświetlono wynik lokalny.",
+    surfaceUnverified: "niezweryfikowana",
   }
 };
 
@@ -460,7 +505,8 @@ const screens = [
   "camera",
   "timer",
   "results",
-  "leaderboard"
+  "leaderboard",
+  "settings"
 ];
 
 const query = new URLSearchParams(window.location.search);
@@ -527,6 +573,7 @@ const state = {
   latestScore: null,
   result: null,
   latestRunId: null,
+  settingsReturn: "welcome",
 
   selfTest: {
     running: false,
@@ -622,7 +669,21 @@ const els = {
   selfTestResults: document.getElementById("selfTestResults"),
   selfTestSummary: document.getElementById("selfTestSummary"),
   selfTestChecklist: document.getElementById("selfTestChecklist"),
-  copySelfTestReport: document.getElementById("copySelfTestReport")
+  copySelfTestReport: document.getElementById("copySelfTestReport"),
+
+  settingsButton: document.getElementById("settingsButton"),
+  metaApiKey: document.getElementById("metaApiKey"),
+  basetenApiKey: document.getElementById("basetenApiKey"),
+  settingsSave: document.getElementById("settingsSave"),
+  settingsClear: document.getElementById("settingsClear"),
+  settingsDone: document.getElementById("settingsDone"),
+  settingsSavedNote: document.getElementById("settingsSavedNote"),
+
+  verifiedScorecard: document.getElementById("verifiedScorecard"),
+  verifiedBody: document.getElementById("verifiedBody"),
+  verifiedHype: document.getElementById("verifiedHype"),
+  offlineScoreNote: document.getElementById("offlineScoreNote"),
+  scorecardErrorNote: document.getElementById("scorecardErrorNote")
 };
 
 const COUNTABLE_CLASSES = new Set([
@@ -1021,6 +1082,11 @@ function getPreviousScreen() {
 
 function handleBack() {
   stopSpeech();
+
+  if (state.screen === "settings") {
+    closeSettings();
+    return;
+  }
 
   if (state.screen === "timer" && state.timer.running) {
     pauseTimer();
@@ -2152,6 +2218,8 @@ async function analyzeChallenge() {
 
   state.latestScore = aiResult;
 
+  aiResult.verified = await getVerifiedScore(aiResult, before, after);
+
   state.result = {
     elapsedMs: state.timer.elapsedMs,
     ai: aiResult
@@ -2682,6 +2750,348 @@ async function scoreWithCloudVision() {
   return null;
 }
 
+const CLOUD_SETTINGS_KEY = "cleanquest.settings";
+
+const CLOUD_SCORING_PROMPT = [
+  "You are the CleanQuest score verifier.",
+  "You receive two photos: BEFORE cleaning and AFTER cleaning.",
+  "Score only visible cleanliness and technique.",
+  "Never claim sanitation, disinfection, or certification.",
+  "Respond with JSON ONLY, no other text, matching this schema:",
+  "{",
+  '  "surfaces": [',
+  '    { "name": "counter|glass|floor|fixture", "score": 0-100,',
+  '      "missed": [], "confidence": 0-1 }',
+  "  ],",
+  '  "overall": 0-100,',
+  '  "verdict": "pass|retry",',
+  '  "hype_line": "one celebratory hype sentence, at most 20 words"',
+  "}",
+  "The hype line celebrates the result. No cleaning advice,",
+  "no instructions, no coaching, no technique tips."
+].join(" ");
+
+const VERIFIED_SURFACES = new Set([
+  "counter",
+  "glass",
+  "floor",
+  "fixture"
+]);
+
+function loadCloudSettings() {
+  const empty = { metaKey: "", basetenKey: "" };
+
+  try {
+    const raw = localStorage.getItem(CLOUD_SETTINGS_KEY);
+    if (!raw) return empty;
+
+    const parsed = JSON.parse(raw);
+
+    return {
+      metaKey: typeof parsed.metaKey === "string" ? parsed.metaKey : "",
+      basetenKey: typeof parsed.basetenKey === "string" ? parsed.basetenKey : ""
+    };
+  } catch {
+    return empty;
+  }
+}
+
+function refreshSettingsInputs() {
+  const settings = loadCloudSettings();
+
+  if (els.metaApiKey) els.metaApiKey.value = settings.metaKey;
+  if (els.basetenApiKey) els.basetenApiKey.value = settings.basetenKey;
+}
+
+function openSettings() {
+  if (state.screen !== "settings") {
+    state.settingsReturn = state.screen;
+  }
+
+  refreshSettingsInputs();
+  els.settingsSavedNote?.classList.add("hidden");
+  navigateTo("settings");
+}
+
+function closeSettings() {
+  navigateTo(state.settingsReturn || "welcome");
+}
+
+function saveSettingsKeys() {
+  const next = {
+    metaKey: els.metaApiKey?.value.trim() || "",
+    basetenKey: els.basetenApiKey?.value.trim() || ""
+  };
+
+  try {
+    localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(next));
+  } catch {}
+
+  if (els.metaApiKey) els.metaApiKey.value = next.metaKey;
+  if (els.basetenApiKey) els.basetenApiKey.value = next.basetenKey;
+  els.settingsSavedNote?.classList.remove("hidden");
+}
+
+function clearSettingsKeys() {
+  try {
+    localStorage.removeItem(CLOUD_SETTINGS_KEY);
+  } catch {}
+
+  refreshSettingsInputs();
+  els.settingsSavedNote?.classList.remove("hidden");
+}
+
+function downscaleCapture(dataUrl) {
+  return new Promise((resolve) => {
+    if (!dataUrl) {
+      resolve(null);
+      return;
+    }
+
+    const image = new Image();
+
+    image.onload = () => {
+      try {
+        const longest = Math.max(
+          image.naturalWidth || 1,
+          image.naturalHeight || 1
+        );
+        const scale = Math.min(
+          1,
+          CONFIG.cloud.maxEdgePx / longest
+        );
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.max(
+          1,
+          Math.round((image.naturalWidth || 1) * scale)
+        );
+        canvas.height = Math.max(
+          1,
+          Math.round((image.naturalHeight || 1) * scale)
+        );
+        canvas
+          .getContext("2d")
+          .drawImage(image, 0, 0, canvas.width, canvas.height);
+        resolve(
+          canvas.toDataURL("image/jpeg", CONFIG.cloud.jpegQuality)
+        );
+      } catch {
+        resolve(null);
+      }
+    };
+
+    image.onerror = () => resolve(null);
+    image.src = dataUrl;
+  });
+}
+
+function extractScorecardJSON(text) {
+  if (typeof text !== "string" || !text) return null;
+
+  const cleaned = text
+    .replace(/```json\s*/gi, "")
+    .replace(/```/g, "")
+    .trim();
+  const start = cleaned.indexOf("{");
+  const end = cleaned.lastIndexOf("}");
+
+  if (start < 0 || end <= start) return null;
+
+  try {
+    return JSON.parse(cleaned.slice(start, end + 1));
+  } catch {
+    return null;
+  }
+}
+
+function sanitizeScorecard(parsed) {
+  if (!parsed || typeof parsed !== "object") return null;
+  if (!Array.isArray(parsed.surfaces) || !parsed.surfaces.length) return null;
+
+  const surfaces = [];
+
+  for (const entry of parsed.surfaces) {
+    if (!entry || typeof entry !== "object") continue;
+    if (!VERIFIED_SURFACES.has(entry.name)) continue;
+
+    const confidence = Number(entry.confidence);
+    const score = Math.round(Number(entry.score));
+
+    surfaces.push({
+      name: entry.name,
+      score: Number.isFinite(score) ? Math.min(100, Math.max(0, score)) : 0,
+      missed: Array.isArray(entry.missed)
+        ? entry.missed.filter((item) => typeof item === "string").slice(0, 8)
+        : [],
+      verified: Number.isFinite(confidence) && confidence >= CONFIG.cloud.minSurfaceConfidence
+    });
+  }
+
+  if (!surfaces.length) return null;
+
+  const overall = Math.round(Number(parsed.overall));
+  const hypeWords = String(parsed.hype_line || "").split(/\s+/).filter(Boolean).slice(0, 20);
+
+  return {
+    surfaces,
+    overall: Number.isFinite(overall) ? Math.min(100, Math.max(0, overall)) : 0,
+    verdict: parsed.verdict === "pass" ? "pass" : "retry",
+    hypeLine: hypeWords.join(" ")
+  };
+}
+
+async function getVerifiedScore(aiResult, before, after) {
+  const offline = { status: "offline" };
+
+  try {
+    if (
+      state.demoMode ||
+      before?.placeholder ||
+      after?.placeholder
+    ) {
+      return offline;
+    }
+
+    const settings = loadCloudSettings();
+    if (!settings.metaKey) return offline;
+
+    const [smallBefore, smallAfter] = await Promise.all([
+      downscaleCapture(before?.dataUrl),
+      downscaleCapture(after?.dataUrl)
+    ]);
+
+    if (!smallBefore || !smallAfter) {
+      return { status: "error", reason: "image" };
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(
+      () => controller.abort(),
+      CONFIG.cloud.timeoutMs
+    );
+
+    let response;
+
+    try {
+      response = await fetch(CONFIG.cloud.endpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${settings.metaKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: CONFIG.cloud.model,
+          messages: [
+            { role: "developer", content: CLOUD_SCORING_PROMPT },
+            {
+              role: "user",
+              content: [
+                { type: "text", text: "BEFORE photo first, AFTER photo second. Score the visible change." },
+                { type: "image_url", image_url: { url: smallBefore } },
+                { type: "image_url", image_url: { url: smallAfter } }
+              ]
+            }
+          ]
+        }),
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (!response || !response.ok) {
+      return { status: "error", reason: `http-${response?.status || "none"}` };
+    }
+
+    const data = await response.json().catch(() => null);
+    const parsed = sanitizeScorecard(
+      extractScorecardJSON(data?.choices?.[0]?.message?.content)
+    );
+
+    if (!parsed) {
+      return { status: "error", reason: "schema" };
+    }
+
+    return {
+      status: "verified",
+      provider: "meta",
+      model: CONFIG.cloud.model,
+      ...parsed
+    };
+  } catch {
+    return { status: "error", reason: "network" };
+  }
+}
+
+function renderVerifiedScorecard() {
+  const card = els.verifiedScorecard;
+  if (!card) return;
+
+  const verified = state.result?.ai?.verified;
+
+  card.classList.add("hidden");
+  els.offlineScoreNote?.classList.add("hidden");
+  els.scorecardErrorNote?.classList.add("hidden");
+
+  if (!verified || verified.status === "offline") {
+    els.offlineScoreNote?.classList.remove("hidden");
+    return;
+  }
+
+  if (verified.status !== "verified") {
+    els.scorecardErrorNote?.classList.remove("hidden");
+    return;
+  }
+
+  const body = els.verifiedBody;
+  body.innerHTML = "";
+
+  const head = document.createElement("div");
+  head.className = "verified-head";
+
+  const overall = document.createElement("strong");
+  overall.textContent = `${verified.overall}%`;
+
+  const verdict = document.createElement("span");
+  verdict.className = `verified-verdict ${verified.verdict}`;
+  verdict.textContent = verified.verdict.toUpperCase();
+
+  head.append(overall, verdict);
+  body.append(head);
+
+  verified.surfaces.forEach((surface) => {
+    const row = document.createElement("div");
+    row.className = "verified-row";
+
+    const name = document.createElement("span");
+    name.className = "verified-name";
+    name.textContent = surface.name.toUpperCase();
+
+    const score = document.createElement("strong");
+    score.textContent = surface.verified
+      ? `${surface.score}%`
+      : t("surfaceUnverified").toUpperCase();
+    if (!surface.verified) score.classList.add("is-unverified");
+
+    row.append(name, score);
+
+    if (surface.missed.length) {
+      const missed = document.createElement("small");
+      missed.className = "verified-missed";
+      missed.textContent = surface.missed.join(" · ");
+      row.append(missed);
+    }
+
+    body.append(row);
+  });
+
+  if (els.verifiedHype) {
+    els.verifiedHype.textContent = verified.hypeLine || "";
+  }
+
+  card.classList.remove("hidden");
+}
+
 function getMockAIScore() {
   return {
     cleanliness: null,
@@ -2909,6 +3319,7 @@ function renderResults() {
     ? t("unverified")
     : `${Math.round(Number(score.confidence || 0) * 100)}% ${t("evidence")}`;
   els.visualChangeValue.textContent = `${Number(score.changeMagnitude || 0).toFixed(1)}%`;
+  renderVerifiedScorecard();
   els.styleScoreDisplay.textContent = `${Number(score.styleScore ?? 7.5).toFixed(1)} / 10`;
 
   if (els.sceneMatchValue) els.sceneMatchValue.textContent = score.simulated ? "—" : `${Math.round(Number(score.sceneMatch || 0) * 100)}%`;
@@ -4363,6 +4774,22 @@ function bindEvents() {
       navigateTo("welcome");
     }
   );
+
+  if (els.settingsButton) {
+    els.settingsButton.addEventListener("click", openSettings);
+  }
+
+  if (els.settingsSave) {
+    els.settingsSave.addEventListener("click", saveSettingsKeys);
+  }
+
+  if (els.settingsClear) {
+    els.settingsClear.addEventListener("click", clearSettingsKeys);
+  }
+
+  if (els.settingsDone) {
+    els.settingsDone.addEventListener("click", closeSettings);
+  }
 
   [els.setupVideo, els.timerVideo].forEach(
     (video) => {

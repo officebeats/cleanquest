@@ -40,6 +40,10 @@
       >
         <span id="soundIcon" aria-hidden="true">◖)))</span>
       </button>
+
+      <button id="settingsButton" class="icon-button" type="button" aria-label="Settings">
+        ⚙
+      </button>
     </header>
 
     <!-- WELCOME -->
@@ -467,7 +471,21 @@
               <span data-i18n="visualChange">VISUAL CHANGE</span>
               <span id="visualChangeValue">--</span>
             </div>
+        </div>
+
+          <div id="verifiedScorecard" class="verified-card hologram-card hidden">
+            <div class="section-label" data-i18n="verifiedScorecard">VERIFIED SCORECARD</div>
+            <div id="verifiedBody"></div>
+            <p id="verifiedHype" class="verified-hype"></p>
           </div>
+
+          <p id="offlineScoreNote" class="fine-print hidden" data-i18n="offlineScoreNote">
+            Offline score — add a key in Settings for cloud verification.
+          </p>
+
+          <p id="scorecardErrorNote" class="fine-print hidden" data-i18n="scorecardErrorNote">
+            Cloud check failed — showing the on-device score.
+          </p>
 
           <p
             id="analysisDisclaimer"
@@ -562,6 +580,77 @@
         </button>
       </div>
     </section>
+
+    <!-- SETTINGS -->
+    <section id="settingsScreen" class="screen">
+      <div class="content">
+        <div class="eyebrow" data-i18n="settingsTitle">SETTINGS</div>
+        <h2 data-i18n="settingsTitle">SETTINGS</h2>
+
+        <div class="identity-panel hologram-card">
+          <label for="metaApiKey" data-i18n="settingsMetaKey">
+            Meta Model API key
+          </label>
+          <input
+            id="metaApiKey"
+            type="password"
+            maxlength="200"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="••••••••"
+          />
+
+          <label for="basetenApiKey" data-i18n="settingsBasetenKey">
+            Baseten API key
+          </label>
+          <input
+            id="basetenApiKey"
+            type="password"
+            maxlength="200"
+            autocomplete="off"
+            spellcheck="false"
+            placeholder="••••••••"
+          />
+
+          <small data-i18n="settingsKeysNote">
+            Keys stay in this browser only. The game works fully offline without them.
+          </small>
+
+          <div class="settings-row">
+            <button
+              id="settingsSave"
+              class="primary-button"
+              type="button"
+              data-i18n="settingsSave"
+            >
+              SAVE KEYS
+            </button>
+
+            <button
+              id="settingsClear"
+              class="secondary-button"
+              type="button"
+              data-i18n="settingsClear"
+            >
+              CLEAR KEYS
+            </button>
+          </div>
+
+          <small id="settingsSavedNote" class="settings-saved hidden" data-i18n="settingsSaved">
+            Saved in this browser.
+          </small>
+        </div>
+
+        <button
+          id="settingsDone"
+          class="primary-button"
+          type="button"
+          data-i18n="settingsDone"
+        >
+          DONE
+        </button>
+      </div>
+    </section>
   </main>
 
   <!-- SPECTATOR MODE -->
@@ -572,7 +661,7 @@
           <div class="spectator-kicker" data-i18n="liveLeaderboard">
             LIVE LEADERBOARD
           </div>
-          <h1>AI CLEANING<br /><span>CHALLENGE</span></h1>
+          <h1>CLEANQUEST</h1>
         </div>
 
         <div class="spectator-live">
