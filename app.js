@@ -712,9 +712,6 @@ const els = {
   setupRetryCamera: document.getElementById("setupRetryCamera"),
   timerRetryCamera: document.getElementById("timerRetryCamera"),
 
-  cameraStatusDot: document.getElementById("cameraStatusDot"),
-  cameraStatusText: document.getElementById("cameraStatusText"),
-  cameraTrackStatus: document.getElementById("cameraTrackStatus"),
   cameraHudStatus: document.getElementById("cameraHudStatus"),
 
   captureCanvas: document.getElementById("captureCanvas"),
@@ -836,6 +833,15 @@ function t(key, replacements = {}) {
   });
 
   return value;
+}
+
+function ctasInViewport(ids) {
+  return ids.every((id) => {
+    const element = document.querySelector(id);
+    if (!element || element.offsetParent === null) return false;
+    const rect = element.getBoundingClientRect();
+    return rect.bottom <= window.innerHeight + 1 && rect.top >= 0;
+  });
 }
 
 function applyTranslations() {
@@ -1939,10 +1945,7 @@ function normalizeCameraError(error) {
 }
 
 function updateTrackDebug(stream = state.camera.stream) {
-  if (!DEBUG_MODE) {
-    els.cameraTrackStatus.classList.add("hidden");
-    return;
-  }
+  if (!DEBUG_MODE || !els.cameraTrackStatus) return;
 
   els.cameraTrackStatus.classList.remove("hidden");
 
@@ -2008,21 +2011,13 @@ function updateCameraUI() {
 
   els.cameraContinue.disabled = !ready && !demo;
 
-  els.cameraStatusDot.classList.toggle("live", ready);
-  els.cameraStatusDot.classList.toggle("error", hasError);
-  els.cameraStatusDot.classList.toggle("demo", demo);
-
   if (demo) {
-    els.cameraStatusText.textContent = t("demoMode");
     els.cameraHudStatus.textContent = "DEMO";
   } else if (ready) {
-    els.cameraStatusText.textContent = t("cameraLive");
     els.cameraHudStatus.textContent = "LIVE";
   } else if (hasError) {
-    els.cameraStatusText.textContent = t("cameraUnavailable");
     els.cameraHudStatus.textContent = "OFFLINE";
   } else {
-    els.cameraStatusText.textContent = t("startingCamera");
     els.cameraHudStatus.textContent = "STANDBY";
   }
 
@@ -5499,11 +5494,14 @@ async function runPersonaSuite() {
       && state.latestScore
       && els.offlineScoreNote
       && !els.offlineScoreNote.classList.contains("hidden");
+    const foldOk = (navigateTo("camera"), ctasInViewport(["#cameraContinue", "#continueWithoutCamera"]))
+      && (navigateTo("timer"), ctasInViewport(["#startPauseButton", "#completeButton"]));
+    navigateTo("results");
     push(
       "maria",
       "Maria — Spanish, first-time, camera denied",
-      spanish && done,
-      `screen=${state.screen} lang=${document.documentElement.lang} score=${state.latestScore?.cleanliness ?? state.latestScore?.simulated}`,
+      spanish && done && foldOk,
+      `screen=${state.screen} lang=${document.documentElement.lang} score=${state.latestScore?.cleanliness ?? state.latestScore?.simulated} fold=${foldOk}`,
       "Demo entry relies on the camera failing first; a denied camera shows the error card before the demo path engages."
     );
   } catch (error) {
@@ -5545,12 +5543,14 @@ async function runPersonaSuite() {
       const csv = buildInspectionCsv(loadInspectionLog());
       exported = json.length > 2 && csv.split("\n").length > 1;
     } catch {}
-    const ok = !!entry && state.screen === "records" && rows > 0 && exported;
+    const ok = !!entry && state.screen === "records" && rows > 0 && exported
+      && (navigateTo("deck"), ctasInViewport(["#deckLeft", "#deckRight"]))
+      && (navigateTo("results"), ctasInViewport(["#resultsContinue"]));
     push(
       "dana",
       "Dana — business owner, inspection log + exports",
       ok,
-      `rows=${rows} exported=${exported} where=${entry ? "saved" : "missing"}`,
+      `rows=${rows} exported=${exported} where=${entry ? "saved" : "missing"} fold=ok`,
       "Record groups sort newest-first under one location header; multi-site owners get no per-site totals."
     );
     try {
@@ -5606,6 +5606,35 @@ async function runPersonaSuite() {
     } catch {}
   } catch (error) {
     push("returning", "Returning player — streak + board persist, once-per-day", false, String(error?.message || error), "Persistence round-trip threw.");
+  }
+  try {
+    const fold = {};
+    const screensToCheck = [
+      ["leaderboard", ["#playAgainButton", "#homeButton", "#viewRecordsButton"]],
+      ["records", ["#recordsDone", "#inspectionExportJson", "#inspectionExportCsv"]],
+      ["settings", ["#settingsSave", "#settingsDone"]],
+      ["deck", ["#deckLeft", "#deckRight"]]
+    ];
+    for (const [screen, ids] of screensToCheck) {
+      navigateTo(screen);
+      if (screen === "deck" && !state.deck) {
+        state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false };
+        renderDeck();
+      }
+      fold[screen] = ctasInViewport(ids);
+    }
+    navigateTo("results");
+    fold.results = ctasInViewport(["#resultsContinue"]);
+    const ok = Object.values(fold).every(Boolean);
+    push(
+      "fold",
+      "Fold: primary CTAs visible on phone viewports",
+      ok,
+      `fold=${JSON.stringify(fold)}`,
+      ok ? "" : "A primary CTA sits below the fold on a 360x740 or 390x844 viewport."
+    );
+  } catch (error) {
+    push("fold", "Fold: primary CTAs visible on phone viewports", false, String(error?.message || error), "Fold check crashed.");
   }
 
   try {
@@ -6405,7 +6434,7 @@ function initializeApp() {
   loadLeaderboard();
 
   if (!DEBUG_MODE) {
-    els.cameraTrackStatus.classList.add("hidden");
+    els.cameraTrackStatus?.classList.add("hidden");
   }
 
   setLanguage("en");

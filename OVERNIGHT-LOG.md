@@ -78,6 +78,18 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Judge sign-off: all ES lines neutral LatAm, all PL lines diacritics-correct and gender-safe, numbers linguistically sound — v2 scripts approved for recording.
 - Blockers: none. Next: install Piper, EN-first generation.
 
+## DOCUMENTATION GATE — CLEARED at fd2ebef
+- v2 inventory verified complete in docs/AUDIO-PLAN.md: legacy bank + trims, 16 new beats x 12 x 3 (every beat line verified 12 variants), number/time grammar with corrected ES apocope and PL declension + jedna/dwie, delivery+trigger table, coverage table, naming/manifest/record-priority, judge sign-off recorded.
+- Commit fd2ebef "Audio plan v2: robust trilingual scripts" confirmed on origin/main; tree clean.
+- Verified nothing installed or generated yet (no venv, no tools/, no assets/); install + generation may now proceed per sequence.
+- STALL LOGGED: session stopped at the install step when the Mac locked (~00:30 CT); resumed 05:15 CT with caffeinate 4h display+idle+system hold so it cannot stall again. No work was lost; gate entry above stands as written pre-stall.
+
+## RESPONSIVE FIX — phone fold — 05:15/06:05 — DONE
+- Fixed: topbar grid was 3 columns for 4 children (settings gear wrapped → 93px bar); now 4 columns. Camera: side-by-side primary CTA + text-link demo fallback, dead status card + privacy row removed. Timer COMPLETE in fold. Results/leaderboard/records/settings scroll internally with sticky bottom CTA bars; capped internal lists (38dvh leaderboard, 30dvh logs). Deck/voice already fit.
+- Added permanent fold assertion (ctasInViewport + navigate-per-screen checks) to runPersonaSuite; Orca-browser manual walk validated welcome→results on iPhone size incl. sticky CTA holding after scroll.
+- Evidence: headless suite all-pass + fold pass + self-test 6/6 at BOTH 360x740 and 390x844 (fold={"leaderboard":true,"records":true,"settings":true,"deck":true,"results":true}); Orca-browser manual pass on all 9 screens.
+- Blockers: none.
+
 ## CHUNK E — Daily swipe deck — 22:42/22:49 — DONE
 - Implemented: deck.js static data (22 real-work cards: surface/product/technique, right-call vs the miss + why note each, zero API calls); deck screen with category/text/progress/streak, tap buttons + touch-swipe (>=60px), instant right/wrong feedback with auto-advance, day streak in localStorage (increments once per calendar day); new window.SWIPE_DECK-free lexical reference (const scripts don't attach to window).
 - Evidence: headless E1 22 cards, 0 malformed; E2 full 10-card playthrough, streak 1 then stays 1 on replay, deck closes; self-test 6/6 PASS; manual Orca-browser deck open, card render, correct+wrong answers show feedback and advance.

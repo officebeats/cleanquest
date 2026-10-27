@@ -177,13 +177,6 @@
     <!-- CAMERA -->
     <section id="cameraScreen" class="screen">
       <div class="content camera-content">
-        <div>
-          <div class="eyebrow" data-i18n="cameraCheck">CAMERA CHECK</div>
-          <h2 data-i18n="frameStation">Frame the station</h2>
-          <p class="section-copy" data-i18n="cameraInstruction">
-            Keep the full cleaning surface visible.
-          </p>
-        </div>
 
         <div class="camera-frame">
           <video
@@ -230,18 +223,6 @@
           </div>
         </div>
 
-        <div class="camera-status-card">
-          <div>
-            <span id="cameraStatusDot" class="status-dot"></span>
-            <strong id="cameraStatusText" data-i18n="startingCamera">
-              STARTING CAMERA
-            </strong>
-          </div>
-
-          <small id="cameraTrackStatus" class="camera-debug hidden">
-            readyState: — · muted: — · enabled: —
-          </small>
-        </div>
 
         <button
           id="cameraContinue"
@@ -255,19 +236,11 @@
 
         <button
           id="continueWithoutCamera"
-          class="secondary-button demo-button"
+          class="demo-link-inline"
           type="button"
           data-i18n="continueWithoutCamera"
-        >
-          CONTINUE WITHOUT CAMERA
-        </button>
+        >CONTINUE WITHOUT CAMERA</button>
 
-        <p class="privacy-note">
-          <span class="privacy-dot"></span>
-          <span data-i18n="localPrivacy">
-            On-device analysis: photos stay on this phone.
-          </span>
-        </p>
       </div>
     </section>
 
@@ -570,6 +543,7 @@
             </small>
           </div>
 
+        <div class="results-cta-bar sticky-cta">
           <button
             id="resultsContinue"
             class="primary-button"
@@ -578,6 +552,7 @@
           >
             VIEW LEADERBOARD
           </button>
+        </div>
         </div>
       </div>
     </section>
@@ -598,22 +573,23 @@
 
         <div id="leaderboardList" class="leaderboard-list"></div>
 
-        <button
-          id="playAgainButton"
-          class="primary-button"
-          type="button"
-          data-i18n="playAgain"
-        >
-          PLAY AGAIN
-        </button>
+        <div class="sticky-cta">
+          <button
+            id="playAgainButton"
+            class="primary-button"
+            type="button"
+            data-i18n="playAgain"
+          >
+            PLAY AGAIN
+          </button>
 
-        <button
-          id="homeButton"
-          class="secondary-button"
-          type="button"
-          data-i18n="returnHome"
-        >
-          RETURN HOME
+          <button
+            id="homeButton"
+            class="secondary-button"
+            type="button"
+            data-i18n="returnHome"
+          >
+            RETURN HOME
           </button>
 
           <button
@@ -624,6 +600,7 @@
           >
             VIEW RECORDS
           </button>
+        </div>
       </div>
     </section>
 
@@ -636,33 +613,35 @@
         <div id="inspectionLogList" class="provider-log"></div>
         <small id="inspectionLogEmpty" data-i18n="recordsEmpty">No inspection records yet.</small>
 
-        <div class="settings-row">
+        <div class="sticky-cta">
+          <div class="settings-row">
+            <button
+              id="inspectionExportJson"
+              class="secondary-button"
+              type="button"
+              data-i18n="exportJson"
+            >
+              EXPORT JSON
+            </button>
+            <button
+              id="inspectionExportCsv"
+              class="secondary-button"
+              type="button"
+              data-i18n="exportCsv"
+            >
+              EXPORT CSV
+            </button>
+          </div>
+
           <button
-            id="inspectionExportJson"
-            class="secondary-button"
+            id="recordsDone"
+            class="primary-button"
             type="button"
-            data-i18n="exportJson"
+            data-i18n="settingsDone"
           >
-            EXPORT JSON
-          </button>
-          <button
-            id="inspectionExportCsv"
-            class="secondary-button"
-            type="button"
-            data-i18n="exportCsv"
-          >
-            EXPORT CSV
+            DONE
           </button>
         </div>
-
-        <button
-          id="recordsDone"
-          class="primary-button"
-          type="button"
-          data-i18n="settingsDone"
-        >
-          DONE
-        </button>
       </div>
     </section>
 
@@ -764,14 +743,16 @@
           </div>
         </div>
 
-        <button
-          id="settingsDone"
-          class="primary-button"
-          type="button"
-          data-i18n="settingsDone"
-        >
-          DONE
-        </button>
+        <div class="sticky-cta">
+          <button
+            id="settingsDone"
+            class="primary-button"
+            type="button"
+            data-i18n="settingsDone"
+          >
+            DONE
+          </button>
+        </div>
       </div>
     </section>
     <!-- DECK -->
