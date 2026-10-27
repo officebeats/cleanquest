@@ -58,6 +58,14 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Final verification: self-test 6/6 PASS · banned-term grep zero hits · tree clean, all commits pushed.
 - Needs Ernesto: Meta key (verifies cloud verdict voice + transcription), Baseten key (verifies Spark Open path). Nothing else.
 
+## JUDGE + ADVISOR — 23:40 — APPLIED
+- Profiles note: exact advisor/judge profiles are not available in this harness — used reviewer + task subagents playing those roles per the standing instruction.
+- Judge scores (Round 2): Impact 8.0 · Meta Tooling 7.5 · Technical Depth 7.5 · Demo 6.5 · weighted 7.40/10.
+- Judge top fix applied (one iteration): verdict voice interpolated {id,text} objects ("object Object" spoken aloud) — fixed via pure buildVerdictText() + verified-hype precedence over scorable-false, plus a verdict-text regression check in the persona suite.
+- Judge suggestion declined with reason: promoting verified.overall into the hero ring/leaderboard changes the scoring contract (quality gates top ranking); needs Ernesto's call, not a midnight change.
+- Advisor guidance applied: EN-first clip generation then ES/PL; single arbiter merge for the 3-writer audio plan before any install; wire audio behind existing manifest/fallback with self-test+personas after each wiring step; park game-event SFX first if time runs short; keep G6/G7/G5 in Round 5.
+- Advisor past-call review: agreed SAM boxes-only, finish+verdict single utterance, records-screen nav fix.
+
 ## CHUNK E — Daily swipe deck — 22:42/22:49 — DONE
 - Implemented: deck.js static data (22 real-work cards: surface/product/technique, right-call vs the miss + why note each, zero API calls); deck screen with category/text/progress/streak, tap buttons + touch-swipe (>=60px), instant right/wrong feedback with auto-advance, day streak in localStorage (increments once per calendar day); new window.SWIPE_DECK-free lexical reference (const scripts don't attach to window).
 - Evidence: headless E1 22 cards, 0 malformed; E2 full 10-card playthrough, streak 1 then stays 1 on replay, deck closes; self-test 6/6 PASS; manual Orca-browser deck open, card render, correct+wrong answers show feedback and advance.

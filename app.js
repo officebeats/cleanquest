@@ -1334,26 +1334,36 @@ function announceResultSummary() {
   announceGameVerdict();
 }
 
-function announceGameVerdict() {
-  if (!state.result) return;
+function buildVerdictText() {
+  const ai = state.result?.ai;
+  const finish = pickHostLine("finish", state.language).text;
+  const isVerified = ai?.verified?.status === "verified";
+  const isRetry = isVerified
+    ? ai.verified.verdict === "retry"
+    : ai?.scorable === false;
+  const prosody = isRetry ? HOST_PROSODY.retry : HOST_PROSODY.pass;
+  let verdictText = pickHostLine(isRetry ? "retry" : "pass", state.language).text;
 
-  const ai = state.result.ai;
-  const finish = pickHostLine("finish", state.language);
-  let verdictText = pickHostLine("pass", state.language);
-  let prosody = HOST_PROSODY.pass;
-
-  if (ai?.scorable === false) {
-    verdictText = pickHostLine("retry", state.language);
-    prosody = HOST_PROSODY.retry;
-  } else if (ai?.verified?.hypeLine) {
+  if (isVerified && ai.verified.hypeLine) {
     verdictText = ai.verified.hypeLine;
   }
 
-  const text = `${finish} ${verdictText}`;
-  speakText(text, {
+  const text = [finish, verdictText].filter(Boolean).join(" ");
+
+  return {
+    text,
     rate: prosody.rate + prosodyJitter(text, 0.03),
-    pitch: prosody.pitch + prosodyJitter(text + ":p", 0.03)
-  });
+    pitch: prosody.pitch + prosodyJitter(`${text}:p`, 0.03)
+  };
+}
+
+function announceGameVerdict() {
+  if (!state.result) return;
+
+  const verdict = buildVerdictText();
+  if (!verdict.text) return;
+
+  speakText(verdict.text, { rate: verdict.rate, pitch: verdict.pitch });
 }
 
 function announceStyleScore(score) {
@@ -5501,6 +5511,20 @@ async function runPersonaSuite() {
   }
 
   try {
+    const verdict = buildVerdictText();
+    const clean = !!verdict.text && !verdict.text.includes("[object");
+    push(
+      "verdict-text",
+      "Verdict line renders as real words, never object text",
+      clean,
+      `text=${String(verdict.text).slice(0, 80)}`,
+      "None — regression guard for the host-voice object coercion."
+    );
+  } catch (error) {
+    push("verdict-text", "Verdict line renders as real words, never object text", false, String(error?.message || error), "buildVerdictText threw.");
+  }
+
+  try {
     if (els.playerName) els.playerName.value = "Dana";
     const entry = saveCompletedRun();
     const entryId = entry && entry.id;
@@ -6456,5 +6480,6 @@ window.cleaningChallenge = {
 
   runSelfTest,
   runPersonaSuite,
+  buildVerdictText,
   copySelfTestReport
 };
