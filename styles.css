@@ -2014,3 +2014,13 @@ h3 {
   margin: 8px 0 0;
   font-style: italic;
 }
+.verified-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+}
+
+.detection-box.sam-box {
+  border-style: dashed;
+}

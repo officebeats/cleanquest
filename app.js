@@ -46,7 +46,9 @@ const CONFIG = {
     timeoutMs: 25000,
     maxEdgePx: 768,
     jpegQuality: 0.82,
-    minSurfaceConfidence: 0.6
+    minSurfaceConfidence: 0.6,
+    samEndpoint: "https://api.meta.ai/v1/responses",
+    samModel: "sam-3.1"
   }
 };
 
@@ -643,6 +645,8 @@ const els = {
   objectsRemainingValue: document.getElementById("objectsRemainingValue"),
   beforeDetectionOverlay: document.getElementById("beforeDetectionOverlay"),
   afterDetectionOverlay: document.getElementById("afterDetectionOverlay"),
+  beforeSamOverlay: document.getElementById("beforeSamOverlay"),
+  afterSamOverlay: document.getElementById("afterSamOverlay"),
   resultTime: document.getElementById("resultTime"),
   timeComparison: document.getElementById("timeComparison"),
   findingText: document.getElementById("findingText"),
@@ -2220,6 +2224,8 @@ async function analyzeChallenge() {
 
   aiResult.verified = await getVerifiedScore(aiResult, before, after);
 
+  aiResult.sam = await getSamOverlays(aiResult, before, after);
+
   state.result = {
     elapsedMs: state.timer.elapsedMs,
     ai: aiResult
@@ -3063,6 +3069,10 @@ function renderVerifiedScorecard() {
     const row = document.createElement("div");
     row.className = "verified-row";
 
+    const dot = document.createElement("span");
+    dot.className = "verified-dot";
+    dot.style.background = SURFACE_COLORS[surface.name] || "#ffffff";
+
     const name = document.createElement("span");
     name.className = "verified-name";
     name.textContent = surface.name.toUpperCase();
@@ -3073,7 +3083,7 @@ function renderVerifiedScorecard() {
       : t("surfaceUnverified").toUpperCase();
     if (!surface.verified) score.classList.add("is-unverified");
 
-    row.append(name, score);
+    row.append(dot, name, score);
 
     if (surface.missed.length) {
       const missed = document.createElement("small");
@@ -3090,6 +3100,184 @@ function renderVerifiedScorecard() {
   }
 
   card.classList.remove("hidden");
+}
+
+const SURFACE_COLORS = {
+  counter: "#34d399",
+  glass: "#60a5fa",
+  floor: "#fbbf24",
+  fixture: "#c084fc"
+};
+
+const SAM_BOX_PATTERN = /<\|box;x1=(\d+);y1=(\d+);x2=(\d+);y2=(\d+);w=(\d+);h=(\d+)(?:;c=[\d.]+)?\|>/g;
+
+function parseSamBoxes(line) {
+  const boxes = [];
+  if (typeof line !== "string" || !line) return boxes;
+
+  SAM_BOX_PATTERN.lastIndex = 0;
+  let match;
+
+  while ((match = SAM_BOX_PATTERN.exec(line))) {
+    const values = match.slice(1, 7).map(Number);
+    if (values.some((value) => !Number.isFinite(value))) continue;
+    if (values[4] <= 0 || values[5] <= 0) continue;
+
+    boxes.push({
+      x1: values[0],
+      y1: values[1],
+      x2: values[2],
+      y2: values[3],
+      w: values[4],
+      h: values[5]
+    });
+  }
+
+  return boxes;
+}
+
+function collectSamText(data) {
+  const texts = [];
+  const output = data?.output;
+
+  if (Array.isArray(output)) {
+    for (const item of output) {
+      const content = item?.content;
+      if (!Array.isArray(content)) continue;
+
+      for (const part of content) {
+        if (part?.type === "output_text" && typeof part.text === "string") {
+          texts.push(part.text);
+        }
+      }
+    }
+  }
+
+  if (!texts.length && typeof data?.output_text === "string") {
+    texts.push(data.output_text);
+  }
+
+  return texts.join("\n");
+}
+
+async function requestSurfaceBoxes(imageDataURL, phrase) {
+  try {
+    const settings = loadCloudSettings();
+    if (!settings.metaKey || !imageDataURL) return [];
+
+    const controller = new AbortController();
+    const timeout = setTimeout(
+      () => controller.abort(),
+      CONFIG.cloud.timeoutMs
+    );
+
+    let response;
+
+    try {
+      response = await fetch(CONFIG.cloud.samEndpoint, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${settings.metaKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: CONFIG.cloud.samModel,
+          input: [
+            {
+              role: "user",
+              content: [
+                { type: "input_text", text: phrase },
+                { type: "input_image", image_url: imageDataURL }
+              ]
+            }
+          ]
+        }),
+        signal: controller.signal
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+
+    if (!response || !response.ok) return [];
+
+    const data = await response.json().catch(() => null);
+    return parseSamBoxes(collectSamText(data));
+  } catch {
+    return [];
+  }
+}
+
+async function getSamOverlays(aiResult, before, after) {
+  const skipped = { status: "skipped" };
+
+  try {
+    if (!aiResult || aiResult.verified?.status !== "verified") {
+      return skipped;
+    }
+
+    const names = aiResult.verified.surfaces
+      .map((surface) => surface.name)
+      .filter((name) => VERIFIED_SURFACES.has(name));
+
+    if (!names.length) return skipped;
+
+    const surfaces = {};
+
+    for (const name of names) {
+      const [beforeBoxes, afterBoxes] = await Promise.all([
+        requestSurfaceBoxes(before?.dataUrl, name),
+        requestSurfaceBoxes(after?.dataUrl, name)
+      ]);
+      surfaces[name] = { before: beforeBoxes, after: afterBoxes };
+    }
+
+    return { status: "overlays", surfaces };
+  } catch {
+    return { status: "error" };
+  }
+}
+
+function drawSamBoxes(container, boxes, color, label) {
+  boxes.forEach((box) => {
+    const width = Number(box.w) || 1;
+    const height = Number(box.h) || 1;
+    const element = document.createElement("div");
+    element.className = "detection-box sam-box";
+    element.style.borderColor = color;
+    element.style.left = `${clamp(box.x1 / width) * 100}%`;
+    element.style.top = `${clamp(box.y1 / height) * 100}%`;
+    element.style.width = `${clamp(Math.max(0, box.x2 - box.x1) / width) * 100}%`;
+    element.style.height = `${clamp(Math.max(0, box.y2 - box.y1) / height) * 100}%`;
+
+    const tag = document.createElement("span");
+    tag.textContent = label;
+    element.append(tag);
+    container.append(element);
+  });
+}
+
+function renderSamOverlays() {
+  const pairs = [
+    [els.beforeSamOverlay, "before"],
+    [els.afterSamOverlay, "after"]
+  ];
+  const sam = state.result?.ai?.sam;
+
+  pairs.forEach(([container, slot]) => {
+    if (!container) return;
+    container.innerHTML = "";
+
+    if (!sam || sam.status !== "overlays") return;
+
+    Object.entries(sam.surfaces).forEach(([name, slots]) => {
+      drawSamBoxes(
+        container,
+        slots[slot] || [],
+        SURFACE_COLORS[name] || "#ffffff",
+        name.toUpperCase()
+      );
+    });
+  });
 }
 
 function getMockAIScore() {
@@ -3320,6 +3508,7 @@ function renderResults() {
     : `${Math.round(Number(score.confidence || 0) * 100)}% ${t("evidence")}`;
   els.visualChangeValue.textContent = `${Number(score.changeMagnitude || 0).toFixed(1)}%`;
   renderVerifiedScorecard();
+  renderSamOverlays();
   els.styleScoreDisplay.textContent = `${Number(score.styleScore ?? 7.5).toFixed(1)} / 10`;
 
   if (els.sceneMatchValue) els.sceneMatchValue.textContent = score.simulated ? "—" : `${Math.round(Number(score.sceneMatch || 0) * 100)}%`;
