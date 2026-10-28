@@ -5,6 +5,11 @@ repo) reconciled against the current vanilla-JS build. No external brand names,
 sponsor names, dollar figures, or revenue mechanics appear in code or in this
 doc. Generic terms only: "standards body", "sponsor slot", "operator".
 
+> **Status (overnight loop):** all four phases below are SHIPPED and verified
+> (6/6 self-test, 12/12 personas, weighted 50/25/25 scoring everywhere).
+> The living ledger is `../OVERNIGHT-LOG.md`; the loop contract is
+> `HACKATHON-LOOP-PROMPT.md`; parked items are listed in `HANDOFF.md`.
+
 ## Positioning pivot
 
 From: a 90-second speed-cleaning game with a score.
