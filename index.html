@@ -64,6 +64,12 @@
           Clean fast. Clean well. Let AI evaluate what it can clearly see.
         </p>
 
+        <div id="cleanerStepTabs" class="mvp-step-tabs" role="tablist" aria-label="Cleaner onboarding and home screens">
+          <button class="mvp-tab-chip" type="button" data-cleaner-step="1">1 · Language</button>
+          <button class="mvp-tab-chip" type="button" data-cleaner-step="2">2 · PIN</button>
+          <button class="mvp-tab-chip" type="button" data-cleaner-step="3">3 · Consent</button>
+          <button class="mvp-tab-chip active" type="button" data-cleaner-step="4">4 · Home</button>
+        </div>
         <div class="language-selector" role="group" aria-label="Language">
           <button class="language-button active" data-language="en" type="button">
             🌐 ENGLISH
@@ -76,24 +82,25 @@
           </button>
         </div>
 
-        <button
-          id="welcomeContinue"
-          class="primary-button hero-button"
-          type="button"
-          data-i18n="acceptChallenge"
-        >
-          ACCEPT THE CHALLENGE
-        </button>
+        <div class="home-cta-grid">
+          <button
+            id="welcomeContinue"
+            class="primary-button hero-button"
+            type="button"
+            data-i18n="acceptChallenge"
+          >
+            ▶ START SHIFT RUN
+          </button>
 
-        <button
-          id="viewDeckButton"
-          class="secondary-button hero-button"
-          type="button"
-          data-i18n="viewDeck"
-        >
-          DAILY DECK
-        </button>
-
+          <button
+            id="viewDeckButton"
+            class="secondary-button hero-button"
+            type="button"
+            data-i18n="viewDeck"
+          >
+            ⚡ DAILY 5-CARD TRAINING
+          </button>
+        </div>
         <div id="ftueSummaryBar" class="ftue-summary-bar hologram-card hidden">
           <span id="ftueSummaryText" class="consent-status-badge">✓ Consent &amp; Pass active</span>
           <div class="ftue-summary-actions">
@@ -301,6 +308,7 @@
                 <option value="classroom">Classroom</option>
               </select>
             </label>
+            <button id="scanAreaQrButton" class="ghost-toggle-chip" type="button" data-i18n="scanAreaQrAction">⌗ SCAN QR</button>
             <span id="assignedSpotBadge" class="assigned-spot-badge">SPOT: SINK &amp; COUNTER</span>
           </div>
 
@@ -537,7 +545,7 @@
             <p id="findingText"></p>
           </article>
 
-          <div class="proof-grid" aria-label="AI evidence summary">
+          <div id="proofGridPanel" class="proof-grid hidden" aria-label="AI evidence summary">
             <article class="proof-card hologram-card">
               <span data-i18n="sceneMatch">SCENE MATCH</span>
               <strong id="sceneMatchValue">--</strong>
@@ -552,7 +560,7 @@
             </article>
           </div>
 
-          <div class="analysis-meta-panel">
+          <div id="analysisMetaPanel" class="analysis-meta-panel hidden">
             <div class="analysis-meta">
               <span id="analysisMethod">LOCAL AI</span>
               <span id="analysisConfidence">--</span>
@@ -625,42 +633,44 @@
             <small data-i18n="nameOptional">Optional — Player will be used by default.</small>
           </div>
 
-          <div class="identity-panel hologram-card">
-            <span data-i18n="voiceNoteTitle">VOICE NOTE</span>
-            <div class="settings-row">
-              <button
-                id="voiceRecordButton"
-                class="secondary-button"
-                type="button"
-                data-i18n="voiceRecord"
-              >
-                RECORD NOTE
-              </button>
-              <button
-                id="voiceStopButton"
-                class="secondary-button hidden"
-                type="button"
-                data-i18n="voiceStop"
-              >
-                STOP
-              </button>
+          <div class="results-actions-grid">
+            <div class="identity-panel hologram-card">
+              <div class="dispute-row">
+                <span class="section-label" data-i18n="voiceNoteTitle">VOICE NOTE</span>
+                <button
+                  id="voiceRecordButton"
+                  class="secondary-button compact-chip"
+                  type="button"
+                  data-i18n="voiceRecord"
+                >
+                  🎙 RECORD NOTE
+                </button>
+                <button
+                  id="voiceStopButton"
+                  class="secondary-button compact-chip hidden"
+                  type="button"
+                  data-i18n="voiceStop"
+                >
+                  ■ STOP
+                </button>
+              </div>
+              <audio id="voiceNoteAudio" class="voice-audio hidden" controls></audio>
+              <small id="voiceNoteStatus" class="fine-print" data-i18n="voiceNoteHint">
+                Optional spoken note (Muse Voice Transcribe).
+              </small>
             </div>
-            <audio id="voiceNoteAudio" class="voice-audio hidden" controls></audio>
-            <small id="voiceNoteStatus" class="fine-print" data-i18n="voiceNoteHint">
-              Optional — attach a spoken note to this result.
-            </small>
-          </div>
 
-          <div id="disputePanel" class="dispute-panel hologram-card">
-            <div class="dispute-row">
-              <span class="section-label" data-i18n="disputeHeading">FAIR REVIEW</span>
-              <button id="disputeButton" class="secondary-button compact-chip" type="button" data-i18n="disputeAction">
-                DISPUTE SCORE
-              </button>
+            <div id="disputePanel" class="dispute-panel hologram-card">
+              <div class="dispute-row">
+                <span class="section-label" data-i18n="disputeHeading">FAIR REVIEW</span>
+                <button id="disputeButton" class="secondary-button compact-chip" type="button" data-i18n="disputeAction">
+                  ⚑ DISPUTE SCORE
+                </button>
+              </div>
+              <small id="disputeStatus" class="fine-print" data-i18n="disputeHint">
+                1-tap appeal (5 business days). Read-only scores.
+              </small>
             </div>
-            <small id="disputeStatus" class="fine-print" data-i18n="disputeHint">
-              One-tap appeal — reviewed within 5 business days. Scores are never edited manually.
-            </small>
           </div>
 
         <div class="results-cta-bar sticky-cta">
@@ -685,11 +695,17 @@
 
         <div id="crewLeaderboardSummary" class="crew-summary-bar hologram-card"></div>
         <div id="personalRecordBar" class="crew-summary-bar hologram-card">
-          <div id="personalRecordSummary" class="personal-record-summary"></div>
+          <div class="consent-gate-head">
+            <div id="personalRecordSummary" class="personal-record-summary"></div>
+            <button id="sharePassportButton" class="secondary-button compact-chip" type="button" data-i18n="sharePassportAction">
+              🪪 SHARE PASSPORT
+            </button>
+          </div>
           <label class="consent-check-label" for="optInShareCheckbox">
             <input id="optInShareCheckbox" type="checkbox" />
             <span data-i18n="optInShareLabel">Opt-in: share verified record with current site (portable record owned by you)</span>
           </label>
+          <small id="passportShareStatus" class="consent-status-badge hidden"></small>
         </div>
 
         <div class="leaderboard-header">
@@ -712,23 +728,25 @@
             PLAY AGAIN
           </button>
 
-          <button
-            id="homeButton"
-            class="secondary-button"
-            type="button"
-            data-i18n="returnHome"
-          >
-            RETURN HOME
-          </button>
+          <div class="settings-row">
+            <button
+              id="homeButton"
+              class="secondary-button"
+              type="button"
+              data-i18n="returnHome"
+            >
+              RETURN HOME
+            </button>
 
-          <button
-            id="viewRecordsButton"
-            class="secondary-button"
-            type="button"
-            data-i18n="viewRecords"
-          >
-            VIEW RECORDS
-          </button>
+            <button
+              id="viewRecordsButton"
+              class="secondary-button"
+              type="button"
+              data-i18n="viewRecords"
+            >
+              VIEW RECORDS
+            </button>
+          </div>
         </div>
       </div>
     </section>
@@ -751,21 +769,55 @@
         <small id="inspectionLogEmpty" data-i18n="recordsEmpty">No inspection records yet.</small>
 
         <section id="adminDashboardPanel" class="offline-queue-section hologram-card" aria-label="Supervisor training and site tools">
-          <div class="section-label" data-i18n="adminPanelTitle">SUPERVISOR TOOLS (TRAINING &amp; SITES — NEVER EDITS SCORES)</div>
-          <label class="consent-check-label" for="adminPledgeCheckbox">
-            <input id="adminPledgeCheckbox" type="checkbox" />
-            <span data-i18n="adminPledgeText">Supervisor pledge: data is for training &amp; recognition only, never discipline.</span>
-          </label>
-          <div id="adminGapSummary" class="home-crew-matchup"></div>
-          <div class="pin-row">
-            <select id="assignTrainingPackSelect" class="area-select">
-              <option value="dwell">5-Day Dwell &amp; Disinfection Pack</option>
-              <option value="surface">5-Day Top-to-Bottom Surface Pack</option>
-              <option value="product">5-Day Product-to-Surface Match Pack</option>
-            </select>
-            <button id="assignTrainingPackButton" class="secondary-button compact-chip" type="button" data-i18n="assignPackAction">
-              ASSIGN 5-DAY PACK
-            </button>
+          <div class="section-label" data-i18n="adminPanelTitle">ADMIN SCREENS (11–15 · NEVER EDITS SCORES)</div>
+          <div id="adminScreenTabs" class="mvp-step-tabs" role="tablist" aria-label="Admin screens 11 to 15">
+            <button class="mvp-tab-chip active" type="button" data-admin-tab="11">11 · Invite</button>
+            <button class="mvp-tab-chip" type="button" data-admin-tab="12">12 · Sites &amp; QR</button>
+            <button class="mvp-tab-chip" type="button" data-admin-tab="13">13 · Crew</button>
+            <button class="mvp-tab-chip" type="button" data-admin-tab="14">14 · Dashboard</button>
+            <button class="mvp-tab-chip" type="button" data-admin-tab="15">15 · Assign</button>
+          </div>
+
+          <div id="adminPane11" class="admin-tab-pane">
+            <label class="consent-check-label" for="adminPledgeCheckbox">
+              <input id="adminPledgeCheckbox" type="checkbox" />
+              <span data-i18n="adminPledgeText">Accept Team Invite &amp; Pledge: data is for training &amp; recognition only, never discipline.</span>
+            </label>
+          </div>
+
+          <div id="adminPane12" class="admin-tab-pane hidden">
+            <div class="pin-row">
+              <input id="adminSiteInput" class="pin-input" type="text" maxlength="48" placeholder="Site 2 · Restroom &amp; Lobby" aria-label="Register site and area" />
+              <button id="registerSiteButton" class="secondary-button compact-chip" type="button">REGISTER SITE</button>
+              <button id="printQrStickerButton" class="secondary-button compact-chip" type="button">🖨 PRINT QR</button>
+            </div>
+            <div id="qrStickerPreview" class="home-crew-matchup">⌗ QR STICKER READY · Site 1 · Breakroom &amp; Restroom</div>
+          </div>
+
+          <div id="adminPane13" class="admin-tab-pane hidden">
+            <div class="pin-row">
+              <input id="adminInviteInput" class="pin-input" type="text" maxlength="48" placeholder="Paste phone/name list to invite" aria-label="Invite crew member" />
+              <button id="inviteApproveButton" class="secondary-button compact-chip" type="button">INVITE &amp; APPROVE</button>
+            </div>
+            <div id="adminCrewList" class="home-crew-matchup"></div>
+          </div>
+
+          <div id="adminPane14" class="admin-tab-pane hidden">
+            <div id="adminGapSummary" class="home-crew-matchup"></div>
+            <div id="sponsorAnalyticsSummary" class="home-crew-matchup"></div>
+          </div>
+
+          <div id="adminPane15" class="admin-tab-pane hidden">
+            <div class="pin-row">
+              <select id="assignTrainingPackSelect" class="area-select">
+                <option value="dwell">5-Day Dwell &amp; Disinfection Pack</option>
+                <option value="surface">5-Day Top-to-Bottom Surface Pack</option>
+                <option value="product">5-Day Product-to-Surface Match Pack</option>
+              </select>
+              <button id="assignTrainingPackButton" class="secondary-button compact-chip" type="button" data-i18n="assignPackAction">
+                ASSIGN 5-DAY PACK
+              </button>
+            </div>
           </div>
           <small id="adminPackStatus" class="fine-print"></small>
         </section>

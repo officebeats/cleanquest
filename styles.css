@@ -2704,3 +2704,395 @@ h3 {
   margin: 0 !important;
   padding: 0 !important;
 }
+
+/* ==========================================================================
+ * IMPECCABLE CRAFT FLOOR, TYPESET, BROWSER SURFACES & ABOVE-THE-FOLD SYSTEM
+ * ========================================================================== */
+:root {
+  --success: var(--green);
+  --warning: var(--yellow);
+  --border: var(--line);
+  --radius: 14px;
+}
+
+::selection {
+  background: rgba(69, 234, 255, 0.28);
+  color: #ffffff;
+}
+
+input,
+textarea,
+select {
+  caret-color: var(--cyan);
+}
+
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(2, 8, 17, 0.6);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(69, 234, 255, 0.28);
+  border-radius: 999px;
+}
+
+/* Craft-floor: remove decorative sci-fi noise, kickers, and gradient text */
+.eyebrow,
+.ambient-grid,
+.hero-scanline,
+.hero::before {
+  display: none !important;
+}
+
+.gradient-text {
+  color: var(--cyan) !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  filter: none !important;
+}
+
+h1,
+h2,
+h3 {
+  letter-spacing: -0.03em !important;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+#timerDisplay,
+#elapsedDisplay,
+#cleanlinessScore,
+#resultTime,
+#timeComparison,
+.leaderboard-row,
+.spectator-row,
+.score-bar-head strong {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Single-elevation crisp surface (no ghost card blur thrash on low-end phones) */
+.hologram-card {
+  background: #081626 !important;
+  border: 1px solid rgba(99, 218, 255, 0.2) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.28) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 3-way Topbar Host Hype Pill */
+.topbar {
+  grid-template-columns: 40px minmax(0, 1fr) auto 40px !important;
+  min-height: 54px !important;
+  padding: max(6px, env(safe-area-inset-top)) 14px 6px !important;
+}
+
+.sound-toggle {
+  width: auto !important;
+  min-width: 74px !important;
+  height: 34px !important;
+  padding: 0 10px !important;
+  border-radius: 999px !important;
+  font-size: 10px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.04em !important;
+}
+
+.home-cta-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+@media (min-width: 900px) {
+  .home-cta-grid {
+    grid-template-columns: 1.2fr 1fr;
+  }
+}
+
+/* Ensure all 9 screens fit above the fold on both mobile and desktop */
+.content {
+  padding: 12px 16px max(12px, env(safe-area-inset-bottom)) !important;
+}
+
+#welcomeScreen .hero {
+  min-height: auto !important;
+  justify-content: flex-start !important;
+  padding-top: 8px !important;
+}
+
+#welcomeScreen h1 {
+  font-size: clamp(28px, 6vw, 40px) !important;
+  line-height: 1.02 !important;
+  margin: 4px 0 6px !important;
+}
+
+#welcomeScreen h1 span {
+  display: inline !important;
+}
+
+#welcomeScreen .hero-copy {
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+  margin: 0 0 8px !important;
+}
+
+#welcomeScreen .language-selector {
+  margin: 6px 0 !important;
+  padding: 4px !important;
+}
+
+#welcomeScreen .language-button {
+  min-height: 38px !important;
+  font-size: 11px !important;
+}
+
+#welcomeScreen .hero-button {
+  min-height: 46px !important;
+  margin: 0 !important;
+}
+
+#welcomeScreen .fine-print {
+  margin-top: 8px !important;
+}
+
+/* Distilled Results Screen: 100% above the fold on mobile & desktop */
+#resultsScreen h2,
+#leaderboardScreen h2,
+#recordsScreen h2,
+#settingsScreen h2,
+#deckScreen h2,
+#instructionsScreen h2 {
+  font-size: clamp(22px, 5vw, 30px) !important;
+  margin: 2px 0 8px !important;
+}
+
+#resultsBody {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+#resultsScreen .score-hero {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  min-height: 0 !important;
+  padding: 8px 14px !important;
+  margin: 0 !important;
+  border-radius: 14px !important;
+}
+
+#resultsScreen .score-rings {
+  display: none !important;
+}
+
+#resultsScreen .score-hero > strong {
+  font-size: clamp(32px, 7vw, 44px) !important;
+  margin: 0 !important;
+}
+
+
+#resultsScreen .score-hero {
+  gap: 10px !important;
+}
+
+#resultsScreen #scoreEvidenceState {
+  text-align: right !important;
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+}
+
+#resultsScreen .score-bar-item {
+  justify-content: space-between !important;
+}
+
+#resultsScreen .score-bar-head {
+  white-space: nowrap !important;
+  gap: 4px !important;
+  font-size: 9px !important;
+}
+
+#resultsScreen .detection-box span {
+  max-width: 100% !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  font-size: 7px !important;
+  padding: 1px 4px !important;
+}
+#resultsScreen .result-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 6px !important;
+  margin: 0 !important;
+}
+
+#resultsScreen .result-card.full-width {
+  grid-column: auto !important;
+}
+
+#resultsScreen .result-card {
+  padding: 6px 10px !important;
+  min-height: 0 !important;
+  border-radius: 12px !important;
+}
+
+#resultsScreen .result-card strong {
+  font-size: 15px !important;
+  margin-top: 2px !important;
+}
+
+#resultsScreen .score-breakdown-card {
+  padding: 6px 10px !important;
+  margin: 0 !important;
+}
+
+#resultsScreen .evidence-section {
+  margin: 0 !important;
+}
+
+#resultsScreen .evidence-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
+  margin-top: 4px !important;
+}
+
+#resultsScreen .evidence-grid .evidence-image-wrap {
+  max-height: 115px !important;
+  aspect-ratio: 16 / 10 !important;
+  overflow: hidden !important;
+}
+
+.results-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+#resultsScreen .finding-card,
+#resultsScreen .identity-panel,
+#resultsScreen .dispute-panel {
+  padding: 5px 8px !important;
+  margin: 0 !important;
+}
+
+#resultsScreen .finding-card p {
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+  margin: 2px 0 0 !important;
+}
+
+#resultsScreen .score-bar-detail {
+  display: none !important;
+}
+
+#resultsScreen #voiceRecordButton,
+#resultsScreen #disputeButton {
+  min-height: 28px !important;
+}
+
+#resultsScreen #resultsContinue {
+  min-height: 42px !important;
+}
+
+#resultsScreen .sticky-cta {
+  padding: 4px 0 max(6px, env(safe-area-inset-bottom)) !important;
+}
+
+
+.mvp-step-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 4px 0 6px;
+}
+
+.mvp-tab-chip {
+  flex: 1 1 auto;
+  min-height: 28px;
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: rgba(10, 27, 43, 0.72);
+  color: var(--muted-bright);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.mvp-tab-chip.active {
+  border-color: var(--cyan);
+  background: rgba(23, 111, 150, 0.28);
+  color: #ffffff;
+}
+
+.admin-tab-pane {
+  margin-top: 4px;
+}
+/* Leaderboard, Records & Settings compact fit */
+#leaderboardScreen .leaderboard-list {
+  max-height: 26dvh !important;
+  overflow-y: auto !important;
+  gap: 4px !important;
+}
+
+#leaderboardScreen .leaderboard-row {
+  padding: 6px 10px !important;
+  min-height: 0 !important;
+}
+
+#leaderboardScreen .sticky-cta button,
+#recordsScreen .sticky-cta button,
+#settingsScreen .sticky-cta button {
+  min-height: 44px !important;
+}
+
+#recordsScreen #inspectionLogList,
+#settingsScreen #providerLogList,
+#settingsScreen #voiceNameList {
+  max-height: 14dvh !important;
+  overflow-y: auto !important;
+}
+
+#settingsScreen .identity-panel {
+  padding: 8px 12px !important;
+  margin: 6px 0 !important;
+}
+
+#settingsScreen .identity-panel input[type="password"],
+#settingsScreen .identity-panel input[type="text"] {
+  height: 36px !important;
+  margin: 4px 0 !important;
+}
+
+#settingsScreen #settingsSave,
+#settingsScreen #settingsClear,
+#settingsScreen #providerLogExport {
+  min-height: 38px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 120ms !important;
+  }
+}

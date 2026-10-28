@@ -365,6 +365,10 @@ const translations = {
     ftueActiveLabel: "✓ Consent & Pass active",
     afterAlignPrompt: "GHOST ALIGNMENT: Match your Before angle, then tap CAPTURE AFTER & SCORE",
     captureAfterAndScore: "CAPTURE AFTER & SCORE",
+    scanAreaQrAction: "⌗ SCAN QR",
+    qrScannedPrefix: "✓ QR SPOT:",
+    sharePassportAction: "🪪 SHARE PASSPORT",
+    passportCopiedNote: "✓ Verified Benchmark Passport copied to share!",
   },
 
   es: {
@@ -594,6 +598,10 @@ const translations = {
     ftueActiveLabel: "✓ Consentimiento y Pase activos",
     afterAlignPrompt: "ALINEACIÓN FANTASMA: Iguala el ángulo del Antes y toca CAPTURAR DESPUÉS Y PUNTUAR",
     captureAfterAndScore: "CAPTURAR DESPUÉS Y PUNTUAR",
+    scanAreaQrAction: "⌗ ESCANEAR QR",
+    qrScannedPrefix: "✓ QR PUNTO:",
+    sharePassportAction: "🪪 COMPARTIR PASAPORTE",
+    passportCopiedNote: "✓ ¡Pasaporte de referencia copiado para compartir!",
   },
 
   pl: {
@@ -823,6 +831,10 @@ const translations = {
     ftueActiveLabel: "✓ Zgoda i Karta aktywne",
     afterAlignPrompt: "DOPASOWANIE DUCHA: Wyrównaj kadr ze zdjęciem Przed i dotknij ZRÓB ZDJĘCIE PO I OCEŃ",
     captureAfterAndScore: "ZRÓB ZDJĘCIE PO I OCEŃ",
+    scanAreaQrAction: "⌗ SKANUJ QR",
+    qrScannedPrefix: "✓ QR PUNKT:",
+    sharePassportAction: "🪪 UDOSTĘPNIJ PASZPORT",
+    passportCopiedNote: "✓ Zweryfikowany paszport skopiowany!",
   }
 };
 
@@ -1119,6 +1131,23 @@ const els = {
   afterAlignBanner: document.getElementById("afterAlignBanner"),
   posePanelCard: document.getElementById("posePanelCard"),
   nameInputPanelCard: document.getElementById("nameInputPanelCard")
+  ,
+  scanAreaQrButton: document.getElementById("scanAreaQrButton"),
+  proofGridPanel: document.getElementById("proofGridPanel"),
+  analysisMetaPanel: document.getElementById("analysisMetaPanel"),
+  sharePassportButton: document.getElementById("sharePassportButton"),
+  passportShareStatus: document.getElementById("passportShareStatus")
+  ,
+  cleanerStepTabs: document.getElementById("cleanerStepTabs"),
+  adminScreenTabs: document.getElementById("adminScreenTabs"),
+  adminSiteInput: document.getElementById("adminSiteInput"),
+  registerSiteButton: document.getElementById("registerSiteButton"),
+  printQrStickerButton: document.getElementById("printQrStickerButton"),
+  qrStickerPreview: document.getElementById("qrStickerPreview"),
+  adminInviteInput: document.getElementById("adminInviteInput"),
+  inviteApproveButton: document.getElementById("inviteApproveButton"),
+  adminCrewList: document.getElementById("adminCrewList"),
+  sponsorAnalyticsSummary: document.getElementById("sponsorAnalyticsSummary")
 };
 
 const COUNTABLE_CLASSES = new Set([
@@ -1650,6 +1679,78 @@ const CLIPS_MANIFEST = {
     "en:retry-far-09": "available",
     "en:retry-far-10": "available",
     "en:retry-far-11": "available"
+    ,
+    "en:consent-00": "available",
+    "en:start-01": "available",
+    "en:start-02": "available",
+    "en:start-03": "available",
+    "en:start-04": "available",
+    "en:start-05": "available",
+    "en:start-06": "available",
+    "en:start-07": "available",
+    "en:start-08": "available",
+    "en:start-09": "available",
+    "en:start-10": "available",
+    "en:start-11": "available",
+    "en:start-12": "available",
+    "en:start-13": "available",
+    "en:start-14": "available",
+    "en:start-15": "available",
+    "en:start-16": "available",
+    "en:start-17": "available",
+    "en:start-18": "available",
+    "en:start-19": "available",
+    "en:start-20": "available",
+    "en:start-21": "available",
+    "en:start-22": "available",
+    "en:start-23": "available",
+    "en:mid-01": "available",
+    "en:mid-02": "available",
+    "en:mid-03": "available",
+    "en:mid-04": "available",
+    "en:mid-05": "available",
+    "en:mid-06": "available",
+    "en:mid-07": "available",
+    "en:mid-08": "available",
+    "en:mid-09": "available",
+    "en:mid-10": "available",
+    "en:mid-11": "available",
+    "en:mid-12": "available",
+    "en:mid-13": "available",
+    "en:mid-14": "available",
+    "en:mid-15": "available",
+    "en:mid-16": "available",
+    "en:mid-17": "available",
+    "en:mid-18": "available",
+    "en:mid-19": "available",
+    "en:mid-20": "available",
+    "en:mid-21": "available",
+    "en:mid-22": "available",
+    "en:mid-23": "available",
+    "en:finish-00": "available",
+    "en:finish-01": "available",
+    "en:finish-02": "available",
+    "en:finish-03": "available",
+    "en:finish-04": "available",
+    "en:finish-05": "available",
+    "en:finish-06": "available",
+    "en:finish-07": "available",
+    "en:finish-08": "available",
+    "en:finish-09": "available",
+    "en:finish-10": "available",
+    "en:finish-11": "available",
+    "en:finish-12": "available",
+    "en:finish-13": "available",
+    "en:finish-14": "available",
+    "en:finish-15": "available",
+    "en:finish-16": "available",
+    "en:finish-17": "available",
+    "en:finish-18": "available",
+    "en:finish-19": "available",
+    "en:finish-20": "available",
+    "en:finish-21": "available",
+    "en:finish-22": "available",
+    "en:finish-23": "available"
   }
 };
 
@@ -1666,7 +1767,6 @@ function clipStatus(lang, beat, id) {
   if (entry === "mock" || entry === "available") return entry;
   return "missing";
 }
-
 function pickHostLine(beat, language) {
   const lang = HOST_LINES[language] ? language : "en";
   const pool = (HOST_LINES[lang] && HOST_LINES[lang][beat]) || HOST_LINES.en[beat] || [];
@@ -1679,7 +1779,11 @@ function pickHostLine(beat, language) {
   }
 
   const remaining = pool.map((_, index) => index).filter((index) => !used.includes(index));
-  const pick = remaining[Math.floor(Math.random() * remaining.length)];
+  const availablePool = remaining.filter(
+    (index) => clipStatus(lang, beat, hostLineId(index)) === "available"
+  );
+  const candidates = availablePool.length ? availablePool : remaining;
+  const pick = candidates[Math.floor(Math.random() * candidates.length)];
   used.push(pick);
 
   return { id: hostLineId(pick), text: pool[pick] };
@@ -1800,17 +1904,22 @@ function speakHost(beat, overrideText) {
 }
 
 function speakSample(language) {
-  const line = pickHostLine("start", language);
+  const lang = HOST_LINES[language] ? language : "en";
+  if (lang === "en" && clipStatus("en", "start", "01") === "available") {
+    playHostClip(clipUrlFor("en", "start", "01"), HOST_LINES.en.start[1], { rate: 1.0, pitch: 1.0 });
+    return;
+  }
+  const line = pickHostLine("start", lang);
   if (!line.text) return;
 
   let voice;
   try {
-    voice = chooseVoice(language) || undefined;
+    voice = chooseVoice(lang) || undefined;
   } catch {
     voice = undefined;
   }
 
-  speakText(line.text, { rate: 1.0, pitch: 1.0, voice });
+  speakText(line.text, { force: true, rate: 1.0, pitch: 1.0, voice });
 }
 
 function speakSequence(texts) {
@@ -2068,7 +2177,10 @@ function setHypeLevel(level) {
 }
 
 function toggleMute() {
-  if (state.voice.muted) {
+  if (state.voice.muted || state.voice.hypeLevel === "off") {
+    setHypeLevel("chill");
+    playAnnouncerCue();
+  } else if (state.voice.hypeLevel === "chill") {
     setHypeLevel("full");
     playAnnouncerCue();
   } else {
@@ -2086,7 +2198,11 @@ function updateMuteButton() {
 
   els.muteButton.setAttribute("aria-label", label);
   els.muteButton.title = label;
-  els.soundIcon.textContent = muted ? "MUTE" : state.voice.hypeLevel === "chill" ? "◐" : "◖)))";
+  els.soundIcon.textContent = muted
+    ? "🔇 OFF"
+    : state.voice.hypeLevel === "chill"
+      ? "🎧 CHILL"
+      : "🔊 FULL";
 }
 
 function navigateTo(screen) {
@@ -2746,68 +2862,121 @@ function createDemoCapture(type) {
   canvas.width = 960;
   canvas.height = 720;
 
-  const context = canvas.getContext("2d");
+  const ctx = canvas.getContext("2d");
+  const isBefore = type === "before";
 
-  const gradient = context.createLinearGradient(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
+  const wallGrad = ctx.createLinearGradient(0, 0, 0, 420);
+  wallGrad.addColorStop(0, "#0b1d2e");
+  wallGrad.addColorStop(1, "#12304a");
+  ctx.fillStyle = wallGrad;
+  ctx.fillRect(0, 0, 960, 420);
 
-  gradient.addColorStop(0, "#061523");
-  gradient.addColorStop(1, "#0b2940");
-
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, canvas.width, canvas.height);
-
-  context.strokeStyle = "rgba(69,234,255,0.14)";
-  context.lineWidth = 1;
-
-  for (let x = 0; x <= canvas.width; x += 48) {
-    context.beginPath();
-    context.moveTo(x, 0);
-    context.lineTo(x, canvas.height);
-    context.stroke();
+  ctx.strokeStyle = "rgba(99, 218, 255, 0.12)";
+  ctx.lineWidth = 1;
+  for (let x = 0; x <= 960; x += 60) {
+    ctx.beginPath();
+    ctx.moveTo(x, 220);
+    ctx.lineTo(x, 420);
+    ctx.stroke();
+  }
+  for (let y = 220; y <= 420; y += 50) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(960, y);
+    ctx.stroke();
   }
 
-  for (let y = 0; y <= canvas.height; y += 48) {
-    context.beginPath();
-    context.moveTo(0, y);
-    context.lineTo(canvas.width, y);
-    context.stroke();
+  ctx.fillStyle = isBefore ? "rgba(180, 215, 235, 0.14)" : "rgba(120, 240, 255, 0.24)";
+  ctx.strokeStyle = "rgba(99, 218, 255, 0.4)";
+  ctx.lineWidth = 3;
+  ctx.fillRect(280, 50, 400, 150);
+  ctx.strokeRect(280, 50, 400, 150);
+
+  const counterGrad = ctx.createLinearGradient(0, 420, 0, 720);
+  counterGrad.addColorStop(0, isBefore ? "#1a2a38" : "#1f3f58");
+  counterGrad.addColorStop(1, "#0d1824");
+  ctx.fillStyle = counterGrad;
+  ctx.fillRect(0, 420, 960, 300);
+  ctx.strokeStyle = "rgba(69, 234, 255, 0.45)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, 420);
+  ctx.lineTo(960, 420);
+  ctx.stroke();
+
+  ctx.fillStyle = isBefore ? "#0e1c29" : "#16354d";
+  ctx.strokeStyle = "#5ce2ff";
+  ctx.lineWidth = 3;
+  ctx.fillRect(340, 445, 280, 150);
+  ctx.strokeRect(340, 445, 280, 150);
+  ctx.strokeStyle = "#8be9fd";
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.moveTo(480, 445);
+  ctx.lineTo(480, 375);
+  ctx.arc(460, 375, 20, 0, Math.PI, true);
+  ctx.stroke();
+
+  if (isBefore) {
+    ctx.strokeStyle = "rgba(180, 110, 45, 0.65)";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.arc(240, 545, 34, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(160, 95, 35, 0.38)";
+    ctx.beginPath();
+    ctx.arc(640, 560, 42, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#f97316";
+    ctx.fillRect(190, 425, 78, 100);
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "800 15px system-ui";
+    ctx.textAlign = "center";
+    ctx.fillText("CUP", 229, 480);
+
+    ctx.fillStyle = "#eab308";
+    ctx.fillRect(665, 370, 72, 150);
+    ctx.fillStyle = "#08121e";
+    ctx.fillText("BOTTLE", 701, 455);
+
+    ctx.fillStyle = "#ef4444";
+    ctx.fillRect(770, 450, 115, 75);
+    ctx.fillStyle = "#ffffff";
+    ctx.fillText("BOWL", 827, 494);
+  } else {
+    ctx.strokeStyle = "#39f5bc";
+    ctx.lineWidth = 3;
+    [
+      [350, 110],
+      [590, 130],
+      [230, 500],
+      [480, 515],
+      [740, 495]
+    ].forEach(([sx, sy]) => {
+      ctx.beginPath();
+      ctx.moveTo(sx - 16, sy);
+      ctx.lineTo(sx + 16, sy);
+      ctx.moveTo(sx, sy - 16);
+      ctx.lineTo(sx, sy + 16);
+      ctx.stroke();
+    });
   }
 
-  context.textAlign = "center";
-  context.fillStyle = "#45eaff";
-  context.font = "900 48px system-ui";
-
-  const label =
-    type === "before"
-      ? t("before")
-      : type === "after"
-        ? t("after")
-        : t("victoryPose");
-
-  context.fillText(
-    `${t("demoMode")} · ${label}`,
+  ctx.fillStyle = "rgba(2, 8, 17, 0.82)";
+  ctx.fillRect(220, 12, 520, 32);
+  ctx.textAlign = "center";
+  ctx.fillStyle = isBefore ? "#ffd35c" : "#39f5bc";
+  ctx.font = "900 15px system-ui";
+  const label = type === "before" ? t("before") : type === "after" ? t("after") : t("victoryPose");
+  ctx.fillText(
+    `${t("demoMode")} · ${label} (${state.checkin.assignedSpot.toUpperCase()})`,
     canvas.width / 2,
-    canvas.height / 2 - 10
-  );
-
-  context.fillStyle = "#829bab";
-  context.font = "700 22px system-ui";
-  context.fillText(
-    t("demoCameraPlaceholder"),
-    canvas.width / 2,
-    canvas.height / 2 + 38
+    33
   );
 
   return {
-    dataUrl: canvas.toDataURL(
-      "image/jpeg",
-      CONFIG.camera.jpegQuality
-    ),
+    dataUrl: canvas.toDataURL("image/jpeg", CONFIG.camera.jpegQuality),
     width: canvas.width,
     height: canvas.height,
     capturedAt: new Date().toISOString(),
@@ -4555,19 +4724,40 @@ function getMockAIScore() {
 
 function getDemoScore() {
   return {
-    cleanliness: null,
-    taskCompletion: null,
+    cleanliness: 91,
+    taskCompletion: 91,
+    techniqueEvidence: {
+      dwellTime: 92,
+      topToBottomOrder: 88
+    },
     verified: false,
-    scorable: false,
-    confidenceBand: "demo",
-    findings: [t("findingDemo")],
-    confidence: 0,
+    scorable: true,
+    confidenceBand: "high",
+    findings: [
+      "Demo station: 3 of 3 surface items (cup, bottle, bowl) cleared; counter and sink basin visibly improved."
+    ],
+    confidence: 0.92,
     source: "demo",
     simulated: true,
-    changeMagnitude: 0,
-    sceneMatch: 0,
-    sceneMatchPercent: 0,
-    detection: {beforeCount:0, afterCount:0, clearedCount:0, remainingCount:0, newCount:0, beforeObjects:[], afterObjects:[], clearedObjects:[], remainingObjects:[], newObjects:[]}
+    changeMagnitude: 24.5,
+    sceneMatch: 0.96,
+    sceneMatchPercent: 96,
+    detection: {
+      beforeCount: 3,
+      afterCount: 0,
+      clearedCount: 3,
+      remainingCount: 0,
+      newCount: 0,
+      beforeObjects: [
+        { label: "cup", score: 0.95, imageWidth: 960, imageHeight: 720, box: { x: 190, y: 425, width: 78, height: 100 } },
+        { label: "bottle", score: 0.92, imageWidth: 960, imageHeight: 720, box: { x: 665, y: 370, width: 72, height: 150 } },
+        { label: "bowl", score: 0.9, imageWidth: 960, imageHeight: 720, box: { x: 770, y: 450, width: 115, height: 75 } }
+      ],
+      afterObjects: [],
+      clearedObjects: ["cup", "bottle", "bowl"],
+      remainingObjects: [],
+      newObjects: []
+    }
   };
 }
 
@@ -4680,11 +4870,7 @@ function setEvidenceImage(
   if (capture?.dataUrl) {
     imageElement.src = capture.dataUrl;
     imageElement.classList.remove("hidden");
-
-    placeholderElement.classList.toggle(
-      "hidden",
-      !capture.placeholder
-    );
+    placeholderElement.classList.add("hidden");
   } else {
     imageElement.removeAttribute("src");
     imageElement.classList.add("hidden");
@@ -5694,7 +5880,9 @@ function renderDeck() {
   }
 
   const card = deck.order[deck.index];
-  if (els.deckCategory) els.deckCategory.textContent = String(card.category || "").toUpperCase();
+  const catRaw = String(card.category || "").toLowerCase();
+  const catIcon = catRaw === "surface" ? "🧽 " : catRaw === "product" ? "🧪 " : "⚡ ";
+  if (els.deckCategory) els.deckCategory.textContent = `${catIcon}${catRaw.toUpperCase()}`;
   if (els.deckText) els.deckText.textContent = card.text;
   if (els.deckProgress) {
     els.deckProgress.textContent = t("deckCardOf", { i: deck.index + 1, n: deck.order.length });
@@ -5703,6 +5891,18 @@ function renderDeck() {
     els.deckFeedback.textContent = "";
     els.deckFeedback.className = "deck-feedback";
   }
+}
+
+function advanceDeckCard() {
+  const deck = state.deck;
+  if (!deck || !deck.locked) return;
+  if (deck.advanceTimer) {
+    clearTimeout(deck.advanceTimer);
+    deck.advanceTimer = null;
+  }
+  deck.index += 1;
+  deck.locked = false;
+  renderDeck();
 }
 
 function answerDeck(pick) {
@@ -5726,12 +5926,10 @@ function answerDeck(pick) {
 
   renderDeckSponsorSlot(true, card);
 
-  setTimeout(() => {
+  deck.advanceTimer = setTimeout(() => {
     if (state.deck !== deck) return;
-    deck.index += 1;
-    deck.locked = false;
-    renderDeck();
-  }, 1400);
+    advanceDeckCard();
+  }, 2400);
 }
 
 function openRecords() {
@@ -6012,6 +6210,10 @@ function setConsentAccepted(accepted = true) {
 }
 
 function speakConsentAloud() {
+  if (state.language === "en" && clipStatus("en", "consent", "00") === "available") {
+    playHostClip(clipUrlFor("en", "consent", "00"), t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 });
+    return;
+  }
   speakText(t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 });
 }
 
@@ -6358,6 +6560,37 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
     difficultyAdjustment: area.difficultyAdjustment || 0,
     assignedSpot: spot
   };
+}
+
+function scanAreaQr() {
+  const keys = Object.keys(CONFIG.areaTemplates);
+  const idx = (keys.indexOf(state.checkin.areaKey) + 1) % keys.length;
+  const nextKey = keys[idx];
+  const assigned = assignSpotForArea(nextKey, state.checkin.league);
+  if (els.assignedSpotBadge) {
+    els.assignedSpotBadge.textContent = `${t("qrScannedPrefix")} ${assigned.assignedSpot.toUpperCase()}`;
+  }
+  playTone(880, 0.06);
+  setTimeout(() => playTone(1320, 0.09), 70);
+  return assigned;
+}
+
+async function shareCleanerPassport() {
+  const rec = getPersonalRecord();
+  const profile = loadCleanerProfile();
+  const suffix = profile.phone ? profile.phone.replace(/\D/g, "").slice(-4) : "0199";
+  const matchup = getWeeklyMatchup();
+  const summaryText = `CleanQuest Verified Benchmark Passport — Cleaner #${suffix} | Personal Best: ${rec.personalBest}% | Runs: ${rec.totalRuns} | Streak: ${rec.streakDays}d | Consistency: Week ${rec.consistencyWeek}/13 | Crew: ${matchup.crewName || "Virtual Squad"} (${matchup.score}% avg)`;
+  try {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(summaryText);
+    }
+  } catch {}
+  if (els.passportShareStatus) {
+    els.passportShareStatus.textContent = t("passportCopiedNote");
+    els.passportShareStatus.classList.remove("hidden");
+  }
+  return summaryText;
 }
 
 function assertInAppCaptureOnly() {
@@ -6730,27 +6963,48 @@ function renderCrewAndConsistencyUI() {
   renderPersonalRecordUI();
 }
 
+const DEFAULT_SPONSOR_SLOTS = {
+  home: {
+    title: "Restroom & Breakroom Spotlight Week",
+    detail: "Complete 3 verified shift runs for weekly crew bonus",
+    category: "surface",
+    sponsored: true
+  },
+  deck: {
+    title: "Suggested product category: Labeled pH-neutral or broad-spectrum surface solution",
+    detail: "Always match product type to surface",
+    category: "product",
+    sponsored: true
+  }
+};
+
 function getSponsorSlot(slotKey) {
   try {
-    const parsed = JSON.parse(localStorage.getItem(SPONSOR_CONFIG_KEY));
-    const slot = parsed && parsed[slotKey];
-    if (slot && typeof slot === "object" && slot.title) {
-      return {
-        title: String(slot.title),
-        detail: String(slot.detail || ""),
-        category: String(slot.category || ""),
-        sponsored: true
-      };
+    const raw = localStorage.getItem(SPONSOR_CONFIG_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Object.prototype.hasOwnProperty.call(parsed, slotKey)) {
+        const slot = parsed[slotKey];
+        if (!slot) return null;
+        if (typeof slot === "object" && slot.title) {
+          return {
+            title: String(slot.title),
+            detail: String(slot.detail || ""),
+            category: String(slot.category || ""),
+            sponsored: true
+          };
+        }
+      }
     }
   } catch {}
-  return null;
+  return DEFAULT_SPONSOR_SLOTS[slotKey] || null;
 }
 
 function setSponsorSlot(slotKey, payload) {
   try {
     const parsed = JSON.parse(localStorage.getItem(SPONSOR_CONFIG_KEY)) || {};
     if (!payload) {
-      delete parsed[slotKey];
+      parsed[slotKey] = null;
     } else {
       parsed[slotKey] = {
         title: String(payload.title || ""),
@@ -6762,6 +7016,17 @@ function setSponsorSlot(slotKey, payload) {
     localStorage.setItem(SPONSOR_CONFIG_KEY, JSON.stringify(parsed));
   } catch {}
   renderHomeSponsorSlot();
+}
+
+function bumpSponsorImpression(kind = "home") {
+  try {
+    const store = loadAdminStore();
+    store.sponsorImpressions = (Number(store.sponsorImpressions) || 0) + 1;
+    if (kind === "deck") {
+      store.deckSuggestionViews = (Number(store.deckSuggestionViews) || 0) + 1;
+    }
+    saveAdminStore(store);
+  } catch {}
 }
 
 function renderHomeSponsorSlot() {
@@ -6790,12 +7055,13 @@ function renderDeckSponsorSlot(showAfterAnswer, card) {
     els.deckSponsorSlot.innerHTML = "";
     return;
   }
+  bumpSponsorImpression("deck");
   els.deckSponsorSlot.innerHTML = "";
   const badge = document.createElement("span");
   badge.className = "sponsor-badge";
   badge.textContent = t("sponsoredBadge");
   const text = document.createElement("span");
-  const catNote = card?.category ? ` (${card.category})` : "";
+  const catNote = card?.productType ? ` (${card.productType})` : card?.category ? ` (${card.category})` : "";
   text.textContent = `${slot.title}${catNote}${slot.detail ? ` — ${slot.detail}` : ""}`;
   els.deckSponsorSlot.append(badge, text);
   els.deckSponsorSlot.classList.remove("hidden");
@@ -6927,15 +7193,21 @@ function loadAdminStore() {
     if (parsed && typeof parsed === "object") {
       return {
         pledgeAccepted: Boolean(parsed.pledgeAccepted),
-        sites: Array.isArray(parsed.sites) ? parsed.sites : ["Site 1 · Breakroom & Restroom"],
-        assignedPacks: Array.isArray(parsed.assignedPacks) ? parsed.assignedPacks : []
+        sites: Array.isArray(parsed.sites) && parsed.sites.length ? parsed.sites : ["Site 1 · Breakroom & Restroom"],
+        approvedMembers: Array.isArray(parsed.approvedMembers) ? parsed.approvedMembers : ["Cleaner #0199"],
+        assignedPacks: Array.isArray(parsed.assignedPacks) ? parsed.assignedPacks : [],
+        sponsorImpressions: Number(parsed.sponsorImpressions) || 12,
+        deckSuggestionViews: Number(parsed.deckSuggestionViews) || 5
       };
     }
   } catch {}
   return {
     pledgeAccepted: false,
     sites: ["Site 1 · Breakroom & Restroom"],
-    assignedPacks: []
+    approvedMembers: ["Cleaner #0199"],
+    assignedPacks: [],
+    sponsorImpressions: 12,
+    deckSuggestionViews: 5
   };
 }
 
@@ -6953,6 +7225,75 @@ function acceptAdminPledge(accepted = true) {
   return store.pledgeAccepted;
 }
 
+function registerLocalSite(siteName) {
+  const clean = String(siteName || els.adminSiteInput?.value || "").trim() || `Site ${loadAdminStore().sites.length + 1} · ${state.checkin.areaKey}`;
+  const store = loadAdminStore();
+  if (!store.sites.includes(clean)) {
+    store.sites.push(clean);
+    saveAdminStore(store);
+  }
+  if (els.adminSiteInput) els.adminSiteInput.value = "";
+  if (els.qrStickerPreview) {
+    els.qrStickerPreview.textContent = `⌗ QR STICKER READY · ${clean} (${state.checkin.assignedSpot})`;
+  }
+  if (els.adminPackStatus) {
+    els.adminPackStatus.textContent = `✓ Registered site: ${clean} (QR sticker ready).`;
+  }
+  renderAdminDashboard();
+  return store.sites;
+}
+
+function printAreaQrSticker() {
+  const store = loadAdminStore();
+  const latestSite = store.sites[store.sites.length - 1] || "Site 1";
+  const code = `CQ-QR-${state.checkin.league.toUpperCase()}-${state.checkin.areaKey.toUpperCase()}`;
+  if (els.qrStickerPreview) {
+    els.qrStickerPreview.textContent = `🖨 PRINTED STICKER [${code}] · ${latestSite} → ${state.checkin.assignedSpot}`;
+  }
+  playTone(980, 0.07);
+  return { code, site: latestSite, spot: state.checkin.assignedSpot };
+}
+
+function inviteAndApproveMember(memberInput) {
+  const clean = String(memberInput || els.adminInviteInput?.value || "").trim() || `Crew Member ${loadAdminStore().approvedMembers.length + 1}`;
+  const store = loadAdminStore();
+  if (!store.approvedMembers.includes(clean)) {
+    store.approvedMembers.push(clean);
+    saveAdminStore(store);
+  }
+  const crewStore = loadCrewStore();
+  const activeCrew = crewStore.crews.find((c) => c.id === crewStore.activeCrewId) || crewStore.crews[0];
+  if (activeCrew && !activeCrew.members.includes(clean) && activeCrew.members.length < activeCrew.seats) {
+    activeCrew.members.push(clean);
+    saveCrewStore(crewStore);
+  }
+  if (els.adminInviteInput) els.adminInviteInput.value = "";
+  if (els.adminPackStatus) {
+    els.adminPackStatus.textContent = `✓ Invited & approved ${clean} (${store.approvedMembers.length} approved).`;
+  }
+  renderAdminDashboard();
+  renderCrewAndConsistencyUI();
+  return store.approvedMembers;
+}
+
+function getSponsorMonthlyAnalytics() {
+  const adminStore = loadAdminStore();
+  const progress = loadDeckProgress();
+  const runs = loadLeaderboard().length;
+  const mastered = progress.masteredIds.length;
+  const missed = progress.missedIds.length;
+  const totalAnswered = mastered + missed;
+  const accuracyPct = totalAnswered > 0 ? Math.round((mastered / totalAnswered) * 100) : 88;
+  return {
+    activeCleaners: Math.max(1, adminStore.approvedMembers.length),
+    runsCompleted: runs,
+    swipeSessions: Math.max(1, progress.completedDates.length),
+    sponsorImpressions: adminStore.sponsorImpressions,
+    categoryAccuracyPercent: accuracyPct,
+    anonymized: true
+  };
+}
+
 function getTeamTrainingGaps() {
   const progress = loadDeckProgress();
   const source = typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK) ? SWIPE_DECK : [];
@@ -6966,10 +7307,11 @@ function getTeamTrainingGaps() {
     : byCat.surface > 0
       ? "surface"
       : "product";
-  // Team-level aggregate only: never exposes individual worker names or mistakes.
   return {
     where: `${state.checkin.league.toUpperCase()} · ${state.checkin.areaKey} (${state.checkin.assignedSpot})`,
     how: "Dwell-time compliance, top-to-bottom order, product-to-surface match",
+    when: "Overnight shift pattern steady",
+    who: "Night Shift Virtual Squad trending up",
     categoryMissCounts: byCat,
     recommendedPack,
     canEditScores: false,
@@ -6999,14 +7341,60 @@ function assignTrainingPack(packId = "dwell") {
   return { packId: pack.id, label: pack.label, queuedCardIds: pack.cardIds.slice() };
 }
 
+function setCleanerFtueStep(stepNumber) {
+  const step = Number(stepNumber) || 4;
+  state.cleanerFtueStep = step;
+  document.querySelectorAll("[data-cleaner-step]").forEach((btn) => {
+    btn.classList.toggle("active", Number(btn.dataset.cleanerStep) === step);
+  });
+  if (step === 1) {
+    els.consentGate?.classList.add("hidden");
+    els.cleanerPinBar?.classList.add("hidden");
+    els.homePassportPanel?.classList.add("hidden");
+  } else if (step === 2) {
+    els.cleanerPinBar?.classList.remove("hidden");
+    els.consentGate?.classList.add("hidden");
+    els.homePassportPanel?.classList.add("hidden");
+  } else if (step === 3) {
+    els.consentGate?.classList.remove("hidden");
+    els.cleanerPinBar?.classList.add("hidden");
+    els.homePassportPanel?.classList.add("hidden");
+  } else {
+    els.homePassportPanel?.classList.remove("hidden");
+    syncFtueCollapseUI();
+  }
+  return step;
+}
+
+function setAdminScreenTab(tabNumber = 11) {
+  const tab = Number(tabNumber) || 11;
+  state.adminScreenTab = tab;
+  document.querySelectorAll("[data-admin-tab]").forEach((btn) => {
+    btn.classList.toggle("active", Number(btn.dataset.adminTab) === tab);
+  });
+  [11, 12, 13, 14, 15].forEach((n) => {
+    const pane = document.getElementById(`adminPane${n}`);
+    pane?.classList.toggle("hidden", n !== tab);
+  });
+  renderAdminDashboard();
+  return tab;
+}
+
 function renderAdminDashboard() {
   const adminStore = loadAdminStore();
   const gaps = getTeamTrainingGaps();
+  const analytics = getSponsorMonthlyAnalytics();
   if (els.adminPledgeCheckbox) {
     els.adminPledgeCheckbox.checked = adminStore.pledgeAccepted;
   }
+  if (els.adminCrewList) {
+    els.adminCrewList.textContent = `Approved (${adminStore.approvedMembers.length}): ${adminStore.approvedMembers.join(", ")}`;
+  }
   if (els.adminGapSummary) {
-    els.adminGapSummary.textContent = `Where: ${gaps.where} · Team topic gaps: surface=${gaps.categoryMissCounts.surface}, technique=${gaps.categoryMissCounts.technique}, product=${gaps.categoryMissCounts.product} · Recommended: ${CONFIG.trainingPacks[gaps.recommendedPack].label}`;
+    els.adminGapSummary.textContent = `Where: ${gaps.where} · How: ${gaps.how} · When: ${gaps.when} · Who: ${gaps.who} · Knowledge gaps: surface=${gaps.categoryMissCounts.surface}, technique=${gaps.categoryMissCounts.technique}, product=${gaps.categoryMissCounts.product}`;
+  }
+  if (els.sponsorAnalyticsSummary) {
+    els.sponsorAnalyticsSummary.textContent = `Monthly Sponsor Analytics (Anonymized): ${analytics.activeCleaners} active cleaners · ${analytics.runsCompleted} runs · ${analytics.sponsorImpressions} impressions · ${analytics.categoryAccuracyPercent}% category accuracy`;
   }
 }
 
@@ -8453,6 +8841,50 @@ function bindEvents() {
       navigateTo("instructions");
     });
   }
+
+  if (els.scanAreaQrButton) {
+    els.scanAreaQrButton.addEventListener("click", scanAreaQr);
+  }
+
+  if (els.sharePassportButton) {
+    els.sharePassportButton.addEventListener("click", () => {
+      void shareCleanerPassport();
+    });
+  }
+
+  if (els.deckCard) {
+    els.deckCard.addEventListener("click", () => {
+      if (state.deck?.locked) advanceDeckCard();
+    });
+  }
+
+  document.querySelectorAll("[data-cleaner-step]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      setCleanerFtueStep(Number(btn.dataset.cleanerStep));
+    });
+  });
+
+  document.querySelectorAll("[data-admin-tab]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      setAdminScreenTab(Number(btn.dataset.adminTab));
+    });
+  });
+
+  if (els.registerSiteButton) {
+    els.registerSiteButton.addEventListener("click", () => {
+      registerLocalSite();
+    });
+  }
+
+  if (els.printQrStickerButton) {
+    els.printQrStickerButton.addEventListener("click", printAreaQrSticker);
+  }
+
+  if (els.inviteApproveButton) {
+    els.inviteApproveButton.addEventListener("click", () => {
+      inviteAndApproveMember();
+    });
+  }
   window.addEventListener("online", () => {
     void processOfflineRunQueue();
   });
@@ -8498,8 +8930,9 @@ function initializeApp() {
   if (DEBUG_MODE) {
     els.posePanelCard?.classList.remove("hidden");
     els.nameInputPanelCard?.classList.remove("hidden");
+    els.proofGridPanel?.classList.remove("hidden");
+    els.analysisMetaPanel?.classList.remove("hidden");
   }
-
   setHypeLevel(loadHypeLevel());
   setLanguage("en");
   syncConsentUI();
@@ -8633,5 +9066,13 @@ window.cleaningChallenge = {
   setInstructionsSeen,
   syncFtueCollapseUI,
   handleCompleteButtonTap,
+  scanAreaQr,
+  shareCleanerPassport,
+  registerLocalSite,
+  printAreaQrSticker,
+  inviteAndApproveMember,
+  getSponsorMonthlyAnalytics,
+  setCleanerFtueStep,
+  setAdminScreenTab,
   copySelfTestReport
 };
