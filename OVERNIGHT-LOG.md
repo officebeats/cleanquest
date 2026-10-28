@@ -499,3 +499,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 74 — Orca wedge diagnosis (default profile) — DONE
 - Evidence: closing the loop6-fresh tab and creating a default-profile app tab restored eval instantly (title + cleaningChallenge object OK); the tab then wedged again after the first interaction eval (activateDemoMode probe), and even a trivial 1+1 eval timed out after. Pattern: first eval succeeds, channel dies after — specific to this Orca/browser build interacting with the app page; fresh-profile headless CDP runs identical code green every loop, so this is a tooling wedge, not an app defect. No further 60s retries tonight; CDP remains the verification path.
 - Blockers: Orca app-page eval channel (focus-trap live proof still outstanding, code-reviewed + CDP-covered).
+
+## LOOP 75 — Usage + gates checkpoint (02:01) — DONE
+- Evidence: usage page (last updated 2:01 AM): current window 0%, weekly 38% — displayed headroom unchanged after 70+ loops. CDP self-test 6/6; personas 0 fails.
+- Blockers: none.
