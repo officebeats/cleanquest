@@ -414,3 +414,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: tools/generate_batch_es.py renders all 11 HOST_LINES.es beats (192 clips, Piper es_ES-sharvard-medium, sentence-silence 0.3, loudnorm -19 LUFS, mono 22050 Hz, 6.6 MB) into assets/audio/es/; CLIPS_MANIFEST gains 192 es:* available entries (423 total, 422 available, 0 missing files). Maria's verdict/start/mid lines now play real clips instead of synth. Attribution for the CC BY 3.0 voice recorded in docs/AUDIO-PLAN.md.
 - Evidence: manifest parity 422 available / 0 missing; node --check PASS; VM all-true; CDP 6/6; personas 0 fails.
 - Blockers: none. PL render is the same one-command batch when wanted (CC0 voice).
+
+## LOOP 55 — Polish host audio rendered + wired (192 clips) — DONE
+- Implemented: tools/generate_batch_pl.py renders all 11 HOST_LINES.pl beats (192 clips, Piper pl_PL-gosia-medium CC0, same loudnorm pipeline, 7.5 MB) into assets/audio/pl/; manifest now 615 entries / 614 available / 0 missing across EN+ES+PL. All three languages play real host clips; synth is fallback only.
+- Evidence: parity 614/0; node --check PASS; VM all-true; CDP 6/6; personas 0 fails.
+- Blockers: none.

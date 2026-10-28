@@ -5,8 +5,10 @@
 > `assets/audio/es/` (all 11 beats from `HOST_LINES.es`, Piper
 > es_ES-sharvard-medium, loudnorm -19 LUFS). Voice attribution:
 > es_ES-sharvard-medium is CC BY 3.0 — credit: "es_ES-sharvard-medium
-> (Piper TTS voice)". PL clips are not yet rendered; synth fallback
-> covers PL. The plan below is the original research/spec record.
+> (Piper TTS voice)". PL host audio is SHIPPED — 192 MP3s under
+> `assets/audio/pl/` (same 11 beats, Piper pl_PL-gosia-medium, CC0).
+> All three languages now play real clips; synth is fallback only.
+> The plan below is the original research/spec record.
 > Parked: announcer-voice regen needs an operator listen-back before
 > replacing shipped clips (see `../OVERNIGHT-LOG.md`).
 
