@@ -442,3 +442,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 60 — Pages audio + usage checkpoint (01:07) — DONE
 - Evidence: Pages serves es/num-80, es/glue-00, pl/num-100, es/consent-00 (all 200; num-87 correctly 404 — 87 composes num-80 + num-07). Usage page (last updated 1:01 AM): current window 0%, weekly 38%.
 - Blockers: none.
+
+## LOOP 61 — Stability double-run — DONE
+- Evidence: syntax + banned lint clean; VM all-true; CDP self-test 6/6 and personas 0 fails on repeated consecutive runs (no flakiness detected in scoring, deck, crew, or consent paths after tonight's 55 loops of changes).
+- Blockers: none.
