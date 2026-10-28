@@ -305,3 +305,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: REGISTER SITE / PRINT QR / INVITE & APPROVE buttons now carry data-i18n with EN/ES/PL keys.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 33 — Training-pack labels translated — DONE
+- Implemented: pack select options and the assigned-packs list now render via packDwell/packSurface/packProduct keys in EN/ES/PL.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

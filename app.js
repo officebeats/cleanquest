@@ -379,6 +379,9 @@ const translations = {
     registerSiteAction: "REGISTER SITE",
     printQrAction: "🖨 PRINT QR",
     inviteApproveAction: "INVITE & APPROVE",
+    packDwell: "5-Day Dwell & Disinfection Pack",
+    packSurface: "5-Day Top-to-Bottom Surface Pack",
+    packProduct: "5-Day Product-to-Surface Match Pack",
     editFtueAction: "PASS / CONSENT",
     mountGuideAction: "? MOUNT GUIDE",
     ftueActiveLabel: "✓ Consent & Pass active",
@@ -647,6 +650,9 @@ const translations = {
     registerSiteAction: "REGISTRAR SITIO",
     printQrAction: "🖨 IMPRIMIR QR",
     inviteApproveAction: "INVITAR Y APROBAR",
+    packDwell: "Paquete de 5 días: contacto y desinfección",
+    packSurface: "Paquete de 5 días: superficies de arriba abajo",
+    packProduct: "Paquete de 5 días: producto según superficie",
     editFtueAction: "PASE / CONSENTIMIENTO",
     mountGuideAction: "? GUÍA DE MONTAJE",
     ftueActiveLabel: "✓ Consentimiento y Pase activos",
@@ -915,6 +921,9 @@ const translations = {
     registerSiteAction: "ZAPISZ OBIEKT",
     printQrAction: "🖨 DRUKUJ QR",
     inviteApproveAction: "ZAPROŚ I ZATWIERDŹ",
+    packDwell: "Pakiet 5-dniowy: czas kontaktu i dezynfekcja",
+    packSurface: "Pakiet 5-dniowy: powierzchnie od góry do dołu",
+    packProduct: "Pakiet 5-dniowy: produkt do powierzchni",
     editFtueAction: "KARTA / ZGODA",
     mountGuideAction: "? INSTRUKCJA",
     ftueActiveLabel: "✓ Zgoda i Karta aktywne",
@@ -8702,7 +8711,7 @@ function renderAdminDashboard() {
   }
   if (els.assignedPacksList) {
     els.assignedPacksList.textContent = adminStore.assignedPacks.length
-      ? `Assigned packs: ${adminStore.assignedPacks.map((id) => CONFIG.trainingPacks[id]?.label || id).join(" · ")}`
+      ? `Assigned packs: ${adminStore.assignedPacks.map((id) => t(id === "dwell" ? "packDwell" : id === "surface" ? "packSurface" : id === "product" ? "packProduct" : "assignPackAction")).join(" · ")}`
       : "Assigned packs: none yet";
   }
   if (els.adminCrewList) {
