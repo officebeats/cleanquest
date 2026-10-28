@@ -264,3 +264,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: cleaner step chips (1 Language / 2 PIN / 3 Consent / 4 Home) now carry data-i18n with EN/ES/PL keys, translated by applyTranslations like the rest of the UI.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 25 — Admin tab chips translated — DONE
+- Implemented: admin screen chips 11–15 now carry data-i18n with EN/ES/PL keys (Invite/Sites & QR/Crew/Dashboard/Assign).
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
