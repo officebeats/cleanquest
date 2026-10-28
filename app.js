@@ -2310,6 +2310,28 @@ function announceGameVerdict() {
   }
 
   speakHost(beat);
+
+  // Announce the weighted total after the verdict clip (EN number clips, synth fallback elsewhere).
+  const weighted = computeWeightedRunScore();
+  const spokenScore = Number.isFinite(weighted) ? weighted
+    : Number.isFinite(Number(ai?.cleanliness)) ? Number(ai.cleanliness) : null;
+  if (spokenScore !== null && !state.voice.muted) {
+    const scheduledGeneration = state.voice.speakGeneration || 0;
+    setTimeout(() => {
+      if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGeneration) return;
+      speakScoreNumber(spokenScore, "percent");
+    }, 2600);
+  }
+}
+
+function requireAdminPledge() {
+  if (loadAdminStore().pledgeAccepted) return true;
+  setAdminScreenTab(11);
+  if (els.adminPackStatus) {
+    els.adminPackStatus.textContent = "⚠ Accept the supervisor pledge on tab 11 first — data is for training & recognition only, never discipline.";
+  }
+  playTone(300, 0.08);
+  return false;
 }
 
 function announceStyleScore(score) {
@@ -10111,6 +10133,7 @@ function bindEvents() {
 
   if (els.assignTrainingPackButton) {
     els.assignTrainingPackButton.addEventListener("click", () => {
+      if (!requireAdminPledge()) return;
       assignTrainingPack(els.assignTrainingPackSelect?.value || "dwell");
     });
   }
@@ -10189,16 +10212,21 @@ function bindEvents() {
 
   if (els.registerSiteButton) {
     els.registerSiteButton.addEventListener("click", () => {
+      if (!requireAdminPledge()) return;
       registerLocalSite();
     });
   }
 
   if (els.printQrStickerButton) {
-    els.printQrStickerButton.addEventListener("click", printAreaQrSticker);
+    els.printQrStickerButton.addEventListener("click", () => {
+      if (!requireAdminPledge()) return;
+      printAreaQrSticker();
+    });
   }
 
   if (els.inviteApproveButton) {
     els.inviteApproveButton.addEventListener("click", () => {
+      if (!requireAdminPledge()) return;
       inviteAndApproveMember();
     });
   }

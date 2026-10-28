@@ -179,3 +179,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Evidence: node --check PASS; CDP selftest 6/6; personas 0 fails; VM all-true. Orca live eval unavailable this loop: runtime_timeout x5 (bg_44-49) after a camera-permission wedge in the fresh profile; hung tab closed, replacement tab created (26f0395c). Trap/laser verified by static read + CDP gates; live trap probe queued when runtime recovers.
 - Decisions: ship on CDP + static evidence per loop contract rather than stall overnight on the browser runtime.
 - Blockers: Orca eval runtime wedged (tab close/create/status still work).
+
+## LOOP 8 — Verdict number speech + admin pledge UI gating — DONE
+- Implemented: announceGameVerdict now chains speakScoreNumber(weighted) 2.6s after the verdict clip (generation/mute guarded, EN number clips + synth fallback); requireAdminPledge() gates the four supervisor UI handlers (register site, print sticker, invite, assign pack) — unpledged clicks route to tab 11 with a warning instead of acting. Exported functions unchanged (persona/direct-API paths unaffected).
+- Evidence: node --check PASS; VM all-true incl. 5-tier verdict routing + score-number composition; CDP 6/6; personas 0 fails.
+- Blockers: none. Next: LOOP 9 consent disclosure copy.
