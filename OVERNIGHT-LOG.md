@@ -167,3 +167,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## WONDER REVISION FOLLOW-UP — Weighted leaderboard sort + practice-run exclusion — DONE
 - Fixed: sortLeaderboard primary key is now (weightedScore ?? cleanliness), legacy entries fall back to raw; visibleLeaderboard filters prizeEligible === false (legacy unflagged entries stay eligible).
 - Evidence: live probe board [cleanliness 99/weighted 60, cleanliness 70/weighted 95, practice 100/flagged, legacy cleanliness 80] renders [b:1, legacy:2, a:3] with practice run absent; CDP 6/6 + 0 persona fails after change; the prefers-reduced-motion opener concern was already restored (styles.css:4101).
+
+## LOOP 6 — Trilingual swipe deck (ES/PL) — DONE (overnight run, usage at start: current window 0%, weekly 38%)
+- Implemented: deck.js all 30 cards gain text_es/text_pl, why_es/why_pl, productType_es/productType_pl (brand-neutral, EN fallback); localizedDeckField() in app.js used by renderDeck, answerDeck feedback, and sponsor-slot note; setLanguage re-renders an open deck so language switches apply live.
+- Evidence: node --check PASS; CDP selftest 6/6; personas 0 fails; lint clean; fresh-profile Orca probe: ES "Retira la suciedad gruesa…", PL "Usuń gruby brud z blatu…", EN original — switching live on one card; stale-cache trap caught and bypassed via fresh browser profile.
+- Decisions: kept EN fields as source of truth (personas/deck30 contract unchanged); translations are training content only, no sponsor/product names.
+- Blockers: none. Next: LOOP 7 focus traps + QR laser dead-state.

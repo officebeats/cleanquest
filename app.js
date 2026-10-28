@@ -1279,6 +1279,9 @@ function setLanguage(language) {
   state.language = language;
   state.voice.selectedVoice = chooseVoice(language);
   applyTranslations();
+  if (state.deck) {
+    try { renderDeck(); } catch {}
+  }
 }
 
 function initializeSpeech() {
@@ -6233,6 +6236,15 @@ function getShareableDeckSummary() {
   };
 }
 
+function localizedDeckField(card, field) {
+  if (!card) return "";
+  const lang = state.language;
+  if (lang === "es" || lang === "pl") {
+    return card[`${field}_${lang}`] || card[field] || "";
+  }
+  return card[field] || "";
+}
+
 function buildDailyDeck() {
   const source = (typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK))
     ? SWIPE_DECK
@@ -6328,7 +6340,7 @@ function renderDeck() {
   const catRaw = String(card.category || "").toLowerCase();
   const catIcon = catRaw === "surface" ? "🧽 " : catRaw === "product" ? "🧪 " : "⚡ ";
   if (els.deckCategory) els.deckCategory.textContent = `${catIcon}${catRaw.toUpperCase()}`;
-  if (els.deckText) els.deckText.textContent = card.text;
+  if (els.deckText) els.deckText.textContent = localizedDeckField(card, "text");
   if (els.deckProgress) {
     els.deckProgress.textContent = t("deckCardOf", { i: deck.index + 1, n: deck.order.length });
   }
@@ -6407,8 +6419,9 @@ function answerDeck(pick) {
   playTone(hit ? 880 : 320, 0.07);
 
   if (els.deckFeedback) {
-    const productNote = card.productType ? ` · ${t("productTypePrefix")} ${card.productType}.` : "";
-    els.deckFeedback.textContent = `${hit ? t("deckCorrect") : t("deckWrong")} ${card.why || ""}${productNote}`;
+    const productType = localizedDeckField(card, "productType");
+    const productNote = productType ? ` · ${t("productTypePrefix")} ${productType}.` : "";
+    els.deckFeedback.textContent = `${hit ? t("deckCorrect") : t("deckWrong")} ${localizedDeckField(card, "why")}${productNote}`;
     els.deckFeedback.className = `deck-feedback ${hit ? "is-correct" : "is-wrong"}`;
   }
 
@@ -8096,7 +8109,7 @@ function renderDeckSponsorSlot(showAfterAnswer, card) {
   badge.className = "sponsor-badge";
   badge.textContent = t("sponsoredBadge");
   const text = document.createElement("span");
-  const catNote = card?.productType ? ` (${card.productType})` : card?.category ? ` (${card.category})` : "";
+  const catNote = card?.productType ? ` (${localizedDeckField(card, "productType")})` : card?.category ? ` (${card.category})` : "";
   text.textContent = `${slot.title}${catNote}${slot.detail ? ` — ${slot.detail}` : ""}`;
   els.deckSponsorSlot.append(badge, text);
   els.deckSponsorSlot.classList.remove("hidden");
