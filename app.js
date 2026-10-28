@@ -1580,15 +1580,13 @@ function prosodyJitter(text, amount) {
 }
 
 const HOST_PROSODY = {
-  start: { rate: 1.0, pitch: 1.0 },
-  mid: { rate: 1.0, pitch: 1.0 },
-  hurry: { rate: 1.04, pitch: 1.03 },
-  "hurry-final": { rate: 1.06, pitch: 1.05 },
+  start: { rate: 1.08, pitch: 1.06 },
+  mid: { rate: 1.07, pitch: 1.05 },
+  hurry: { rate: 1.1, pitch: 1.06 },
+  "hurry-final": { rate: 1.12, pitch: 1.08 },
   "scoring-wait": { rate: 0.98, pitch: 1.0 },
-  finish: { rate: 1.03, pitch: 1.05 },
+  finish: { rate: 1.08, pitch: 1.08 },
   "pass-big": { rate: 0.98, pitch: 1.03 },
-  pass: { rate: 0.95, pitch: 0.97 },
-  "pass-close": { rate: 0.96, pitch: 0.99 },
   retry: { rate: 0.95, pitch: 0.97 },
   "retry-far": { rate: 0.94, pitch: 0.95 }
 };
@@ -2018,48 +2016,56 @@ function speakHost(beat, overrideText) {
     state.voice.lastPath = "chill-skipped";
     return;
   }
-  if (beat === "start" || beat === "mid" || beat === "hurry" || beat === "hurry-final" || beat === "nudge") {
+  const isLiveBeat = beat === "start" || beat === "mid" || beat === "hurry" || beat === "hurry-final" || beat === "nudge";
+  if (isLiveBeat) {
     playLiveHypeSting(beat);
   }
 
   const base = HOST_PROSODY[beat] || HOST_PROSODY.start;
-  if (overrideText) {
-    state.voice.lastPath = "dynamic";
-    speakText(overrideText, {
-      rate: base.rate + prosodyJitter(overrideText, 0.03),
-      pitch: base.pitch + prosodyJitter(`${overrideText}:p`, 0.03)
-    });
-    return;
-  }
+  const deliverHostLine = () => {
+    if (overrideText) {
+      state.voice.lastPath = "dynamic";
+      speakText(overrideText, {
+        rate: base.rate + prosodyJitter(overrideText, 0.03),
+        pitch: base.pitch + prosodyJitter(`${overrideText}:p`, 0.03)
+      });
+      return;
+    }
 
-  const line = pickHostLine(beat, state.language);
-  if (!line.text) return;
+    const line = pickHostLine(beat, state.language);
+    if (!line.text) return;
 
-  const status = clipStatus(state.language, beat, line.id);
+    const status = clipStatus(state.language, beat, line.id);
 
-  if (status === "mock") {
-    state.voice.lastPath = "mock";
+    if (status === "mock") {
+      state.voice.lastPath = "mock";
+      speakText(line.text, {
+        rate: base.rate + prosodyJitter(line.text, 0.03),
+        pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
+      });
+      return;
+    }
+
+    if (status === "available") {
+      state.voice.lastPath = "clip";
+      playHostClip(clipUrlFor(state.language, beat, line.id), line.text, {
+        rate: base.rate + prosodyJitter(line.text, 0.03),
+        pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
+      }, beat);
+      return;
+    }
+
+    state.voice.lastPath = "synth";
     speakText(line.text, {
       rate: base.rate + prosodyJitter(line.text, 0.03),
       pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
     });
+  };
+  if (isLiveBeat) {
+    setTimeout(deliverHostLine, 320);
     return;
   }
-
-  if (status === "available") {
-    state.voice.lastPath = "clip";
-    playHostClip(clipUrlFor(state.language, beat, line.id), line.text, {
-      rate: base.rate + prosodyJitter(line.text, 0.03),
-      pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
-    }, beat);
-    return;
-  }
-
-  state.voice.lastPath = "synth";
-  speakText(line.text, {
-    rate: base.rate + prosodyJitter(line.text, 0.03),
-    pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
-  });
+  deliverHostLine();
 }
 
 function speakSample(language) {
