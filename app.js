@@ -8580,7 +8580,13 @@ function renderAdminDashboard() {
       : "Assigned packs: none yet";
   }
   if (els.adminCrewList) {
-    els.adminCrewList.textContent = `Approved (${adminStore.approvedMembers.length}): ${adminStore.approvedMembers.join(", ")}`;
+    const crewStore = loadCrewStore();
+    const activeCrew = crewStore.crews.find((c) => c.id === crewStore.activeCrewId) || crewStore.crews[0];
+    const part = activeCrew ? getCrewParticipation(activeCrew.id) : null;
+    const crewNote = activeCrew
+      ? ` · Crew: ${activeCrew.name} ${activeCrew.members.length}/${activeCrew.seats} seats · Participation ${Math.round((part?.participationRate || 0) * 100)}%${part?.qualified ? " (80%+ qualified)" : ""}`
+      : "";
+    els.adminCrewList.textContent = `Approved (${adminStore.approvedMembers.length}): ${adminStore.approvedMembers.join(", ")}${crewNote}`;
   }
   if (els.adminGapSummary) {
     els.adminGapSummary.textContent = `Where: ${gaps.where} · How: ${gaps.how} · When: ${gaps.when} · Who: ${gaps.who} · Knowledge gaps: surface=${gaps.categoryMissCounts.surface}, technique=${gaps.categoryMissCounts.technique}, product=${gaps.categoryMissCounts.product} · Recommended pack: ${gaps.recommendedPack} (one tap to assign below)`;

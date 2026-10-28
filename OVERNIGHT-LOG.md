@@ -249,3 +249,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: pane 15 now lists already-assigned training packs by label (or "none yet"), rendered from the admin store on every dashboard render.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 22 — Crew seats + participation on pane 13 — DONE
+- Implemented: admin crew list now also shows the active crew's seat fill (members/seats) and weekly participation % with 80%+ qualified marker, from live crew store data.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
