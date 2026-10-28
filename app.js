@@ -68,6 +68,7 @@ const CONFIG = {
     techniqueWeight: 0.25,
     timeWeight: 0.25,
     timeFloor: 10,
+    fastReviewRatio: 0.7,
     implausiblyFastSeconds: 15,
     dwellCreditStepSeconds: 15
   },
@@ -85,27 +86,52 @@ const CONFIG = {
     participationThreshold: 0.8
   },
   deck: {
-    dailyCount: 5
+    dailyCount: 5,
+    totalCards: 30
+  },
+  retentionDays: 90,
+  buildingLeagues: ["office", "education", "healthcare", "industrial", "retail"],
+  trainingPacks: {
+    dwell: {
+      id: "dwell",
+      label: "5-Day Dwell & Disinfection Pack",
+      cardIds: ["deck-14", "deck-22", "deck-25", "deck-28", "deck-09"]
+    },
+    surface: {
+      id: "surface",
+      label: "5-Day Top-to-Bottom Surface Pack",
+      cardIds: ["deck-01", "deck-10", "deck-13", "deck-16", "deck-21"]
+    },
+    product: {
+      id: "product",
+      label: "5-Day Product-to-Surface Match Pack",
+      cardIds: ["deck-03", "deck-06", "deck-18", "deck-23", "deck-29"]
+    }
   },
   areaTemplates: {
     breakroom: {
       label: "Breakroom",
+      difficultyAdjustment: 0,
       spots: ["Sink & counter", "Tabletop & appliance front", "Trash & floor zone"]
     },
     restroom: {
       label: "Restroom",
+      difficultyAdjustment: 3,
       spots: ["Sink & mirror counter", "Fixture row & partition", "Entry door & dispenser zone"]
     },
     lobby: {
       label: "Lobby",
+      difficultyAdjustment: 1,
       spots: ["Entry glass & handles", "Reception counter", "Waiting area floor"]
     },
     office: {
       label: "Office",
+      difficultyAdjustment: 0,
       spots: ["Workstation desk surface", "Conference table & chairs", "Entry & glass partition"]
     },
     classroom: {
       label: "Classroom",
+      difficultyAdjustment: 2,
       spots: ["Board rail & front desk", "Student desk row", "Doorway & sink area"]
     }
   }
@@ -325,6 +351,15 @@ const translations = {
     hypeChillLabel: "Chill — start, finish & verdict only",
     hypeFullLabel: "Full — all host hype beats",
     sponsoredBadge: "SPONSORED",
+    pinSignupTitle: "CLEANER PASS (PHONE + 4-DIGIT PIN)",
+    pinSaveAction: "SAVE PIN",
+    pinSavedNote: "✓ PIN active",
+    leagueLabel: "LEAGUE",
+    productTypePrefix: "Right product type:",
+    optInShareLabel: "Opt-in: share verified record with current site (portable record owned by you)",
+    adminPanelTitle: "SUPERVISOR TOOLS (TRAINING & SITES — NEVER EDITS SCORES)",
+    adminPledgeText: "Supervisor pledge: data is for training & recognition only, never discipline.",
+    assignPackAction: "ASSIGN 5-DAY PACK",
   },
 
   es: {
@@ -540,6 +575,15 @@ const translations = {
     hypeChillLabel: "Suave — solo inicio, final y veredicto",
     hypeFullLabel: "Completo — toda la voz del anfitrión",
     sponsoredBadge: "PATROCINADO",
+    pinSignupTitle: "PASE DE LIMPIEZA (TELÉFONO + PIN DE 4 DÍGITOS)",
+    pinSaveAction: "GUARDAR PIN",
+    pinSavedNote: "✓ PIN activo",
+    leagueLabel: "LIGA",
+    productTypePrefix: "Tipo de producto correcto:",
+    optInShareLabel: "Opcional: compartir historial verificado con el sitio actual (tú eres dueño de tu récord)",
+    adminPanelTitle: "HERRAMIENTAS DE SUPERVISIÓN (FORMACIÓN Y SITIOS — SIN EDITAR PUNTOS)",
+    adminPledgeText: "Compromiso: los datos son solo para formación y reconocimiento, nunca disciplina.",
+    assignPackAction: "ASIGNAR PAQUETE 5 DÍAS",
   },
 
   pl: {
@@ -755,6 +799,15 @@ const translations = {
     hypeChillLabel: "Spokojny — tylko start, koniec i werdykt",
     hypeFullLabel: "Pełny — wszystkie kwestie prowadzącego",
     sponsoredBadge: "SPONSOROWANE",
+    pinSignupTitle: "KARTA SPRZĄTACZA (TELEFON + 4-CYFROWY PIN)",
+    pinSaveAction: "ZAPISZ PIN",
+    pinSavedNote: "✓ PIN aktywny",
+    leagueLabel: "LIGA",
+    productTypePrefix: "Właściwy typ produktu:",
+    optInShareLabel: "Opcjonalnie: udostępnij zweryfikowany rekord obecnemu obiektowi (rekord należy do Ciebie)",
+    adminPanelTitle: "NARZĘDZIA NADZORU (SZKOLENIA I OBIEKTY — BEZ EDYCJI WYNIKÓW)",
+    adminPledgeText: "Zobowiązanie: dane służą wyłącznie szkoleniu i uznaniu, nigdy dyscyplinie.",
+    assignPackAction: "PRZYPISZ PAKIET 5 DNI",
   }
 };
 
@@ -844,6 +897,7 @@ const state = {
   recordChunks: [],
   settingsReturn: "welcome",
   checkin: {
+    league: "office",
     areaKey: "breakroom",
     assignedSpot: "Sink & counter",
     ghostEnabled: true,
@@ -1022,6 +1076,24 @@ const els = {
   hypeLevelChill: document.getElementById("hypeLevelChill"),
   hypeLevelFull: document.getElementById("hypeLevelFull"),
   deckSponsorSlot: document.getElementById("deckSponsorSlot")
+  ,
+  cleanerPinBar: document.getElementById("cleanerPinBar"),
+  cleanerPhone: document.getElementById("cleanerPhone"),
+  cleanerPin: document.getElementById("cleanerPin"),
+  pinSaveButton: document.getElementById("pinSaveButton"),
+  pinStatusBadge: document.getElementById("pinStatusBadge"),
+  consistencyMilestone: document.getElementById("consistencyMilestone"),
+  buildingLeagueSelect: document.getElementById("buildingLeagueSelect"),
+  surfaceGradeMap: document.getElementById("surfaceGradeMap"),
+  personalRecordBar: document.getElementById("personalRecordBar"),
+  personalRecordSummary: document.getElementById("personalRecordSummary"),
+  optInShareCheckbox: document.getElementById("optInShareCheckbox"),
+  adminDashboardPanel: document.getElementById("adminDashboardPanel"),
+  adminPledgeCheckbox: document.getElementById("adminPledgeCheckbox"),
+  adminGapSummary: document.getElementById("adminGapSummary"),
+  assignTrainingPackSelect: document.getElementById("assignTrainingPackSelect"),
+  assignTrainingPackButton: document.getElementById("assignTrainingPackButton"),
+  adminPackStatus: document.getElementById("adminPackStatus")
 };
 
 const COUNTABLE_CLASSES = new Set([
@@ -1326,7 +1398,7 @@ const HOST_LINES = {
     start: ["Let's go... time to shine!", "Game on... show that room who's boss!", "Cameras up... let's see it sparkle!", "Alright, champ... make it count!", "Clock's ticking... you've got this!", "Time to work... nice and quick!", "Let's do this... clean and mean!", "Ready... set... shine!", "Your room... your stage... go!", "Star moment... let's clean!", "Showtime... cleaning star!", "Ninety seconds... make 'em count!", "Let's roll... spotless is the goal!", "Game face on... here we go!", "Time to hustle... you've trained for this!", "Okay, star... own that room!", "Let's make it gleam... starting now!", "Lights ready... room ready... go!", "The clock is live... do your thing!", "No pressure... just shine!", "Here we go... clean machine!", "Lights, camera... clean!", "Your ninety seconds... start now!", "Let's get it... looking fresh!"],
     mid: ["Halfway... looking good!", "Nice pace... truly glowing!", "Forty-five down... looking sharp!", "Looking smooth... beautiful flow!", "Halfway mark... you've got this!", "Good rhythm... pure groove!", "Strong start... stunning middle!", "Still moving... looking great!", "Halfway home... what a run!", "Smooth moves... love this run!", "Right on track... perfect pace!", "Looking clean already... wow!", "Halfway... full of shine!", "Great energy... electric room!", "You're flying... pure magic!", "Halfway point... looking sharp!", "So steady... almost there!", "Beautiful pace... pure beauty!", "That energy... looking good!", "Halfway... the room believes in you!", "Smooth and steady... nice!", "Looking like a pro... wow!", "Halfway... shining loud!", "Great hustle... still shining!"],
     finish: ["Time!... what a sight!", "And... done! Beautiful work!", "That's it... pure champ!", "Clock's out... gorgeous!", "Finished! ... take a bow!", "Time's up... what a run!", "Done and dusted... literally!", "Stop the clock... stunning!", "That's a wrap... well played!", "Time! ... look at that shine!", "All done... give yourself credit!", "Ninety seconds... nailed it!", "And stop... fantastic job!", "Complete! ... room's glowing!", "Time called... you delivered!", "Done! ... that's how it's done!", "Whistle blows... great run!", "Finished strong... love to see it!", "That's time... absolute star!", "Clock stops... crowd goes wild!", "All finished... take it in!", "Done deal... sparkling result!", "Time! ... chef's kiss!", "Complete... you made it look easy!"],
-    pass: ["Pass! That room is gleaming!", "Certified fresh... beautiful!", "Pass with style... well earned!", "That's a pass... gorgeous work!", "Stamp it... sparkling clean!", "Pass! ... the judges are smiling!", "Top marks... enjoy it!", "A clear pass... take the win!", "Pass! ... what a transformation!", "Verified and victorious... yes!", "That's the standard... pass!", "Pass! ... room looks brand new!", "Gold star... fully earned!", "Pass with flying colors... wow!", "Clean bill... beautifully done!", "That's a pass... own it!", "Scoreboard loves it... pass!", "Pass! ... picture-perfect clean!", "Nailed the benchmark... pass!", "Victory lap... you passed!", "Pass! ... simply stunning!", "The room approves... pass!", "Flawless finish... that's a pass!", "Pass! ... remember this feeling!"],
+    pass: ["Pass! That room is gleaming!", "Sparkling fresh... beautiful!", "Pass with style... well earned!", "That's a pass... gorgeous work!", "Stamp it... sparkling clean!", "Pass! ... the judges are smiling!", "Top marks... enjoy it!", "A clear pass... take the win!", "Pass! ... what a transformation!", "Verified and victorious... yes!", "That's the standard... pass!", "Pass! ... room looks brand new!", "Gold star... fully earned!", "Pass with flying colors... wow!", "Clean bill... beautifully done!", "That's a pass... own it!", "Scoreboard loves it... pass!", "Pass! ... picture-perfect clean!", "Nailed the benchmark... pass!", "Victory lap... you passed!", "Pass! ... simply stunning!", "The room approves... pass!", "Flawless finish... that's a pass!", "Pass! ... remember this feeling!"],
     retry: ["So close... one more run?", "Not quite... you've got another in you!", "Missed it... shake it off, go again!", "Almost there... run it back!", "No shame... champions retry!", "Just short... next one's yours!", "Ooh, close... let's go again!", "Not this time... you'll get it!", "So near... one more try?", "Dust yourself off... retry!", "Almost had it... again!", "Close call... stunning effort!", "Not yet... but you're close!", "Retry time... I believe in you!", "Missed the mark... reload and go!", "One more... you've got this!", "Close... but no cigar yet!", "Almost... such great heart!", "Not quite... the room's waiting!", "Retry... make it count!", "So close... feel that fire?", "Next run's the one... go!", "Missed... but what heart!", "Again... cleaner and meaner!"],
     "pass-big": ["Massive win... absolutely glowing!", "Blown away... perfect score vibes!", "History made... look at that!", "Unreal result... take a bow!", "Total triumph... room transformed!", "Legendary clean... hall of fame!", "Off the charts... incredible!", "A masterpiece... pure gold!", "Best yet... simply flawless!", "Record breaker... enjoy it!", "Pure perfection... wow wow!", "Champion level... undisputed!"],
     "pass-close": ["Squeaked through... still counts!", "By a whisker... you made it!", "Just enough... celebrate it!", "Narrow win... sweet relief!", "Cut it close... beautiful!", "Over the line... phew!", "Made it... by a hair!", "Close one... but it's yours!", "Scraped by... take it!", "Photo finish... you passed!", "Barely... but brilliantly!", "Survived... and shining!"],
@@ -3286,6 +3358,8 @@ function detectObjectsInImage(
     .map(normalizeDetection)
     .filter(
       (detection) =>
+        detection.label !== "person" &&
+        detection.label !== "face" &&
         COUNTABLE_CLASSES.has(
           detection.label
         ) &&
@@ -5581,7 +5655,8 @@ function answerDeck(pick) {
   }
 
   if (els.deckFeedback) {
-    els.deckFeedback.textContent = `${hit ? t("deckCorrect") : t("deckWrong")} ${card.why || ""}`;
+    const productNote = card.productType ? ` · ${t("productTypePrefix")} ${card.productType}.` : "";
+    els.deckFeedback.textContent = `${hit ? t("deckCorrect") : t("deckWrong")} ${card.why || ""}${productNote}`;
     els.deckFeedback.className = `deck-feedback ${hit ? "is-correct" : "is-wrong"}`;
   }
 
@@ -5600,7 +5675,10 @@ function openRecords() {
     state.recordsReturn = state.screen;
   }
 
+  pruneExpiredRecords(CONFIG.retentionDays);
   renderInspectionLog();
+  renderOfflineQueue();
+  renderAdminDashboard();
   navigateTo("records");
 }
 
@@ -5976,8 +6054,12 @@ function timeBarExplanation(run) {
     };
   }
   const dwellCredit = Number(run?.dwellCreditSeconds ?? state.checkin?.dwellCreditSeconds ?? 0) || 0;
+  const effectiveElapsed = Math.max(0, rawElapsed - dwellCredit);
   const score = computeTimeBenchmarkScore(rawElapsed, dwellCredit);
-  const flag = rawElapsed > 0 && rawElapsed < CONFIG.scoring.implausiblyFastSeconds ? "review" : null;
+  const fastThresholdSeconds = CONFIG.challengeDurationSeconds * (CONFIG.scoring.fastReviewRatio || 0.7);
+  const flag = rawElapsed > 0 && (effectiveElapsed < fastThresholdSeconds || rawElapsed < CONFIG.scoring.implausiblyFastSeconds)
+    ? "review"
+    : null;
   return {
     key: "time",
     label: t("barTime"),
@@ -5985,12 +6067,46 @@ function timeBarExplanation(run) {
     score,
     display: `${score}%`,
     elapsedSeconds: Math.round(rawElapsed * 10) / 10,
+    effectiveElapsedSeconds: Math.round(effectiveElapsed * 10) / 10,
     benchmarkSeconds: CONFIG.challengeDurationSeconds,
     flag,
     detail: flag
-      ? "Capped at 100; flagged for review due to unusually short duration."
-      : "Capped at 100 at or under benchmark; gradual deduction above target, never zero."
+      ? "Faster than 70% of standard time — full time points (no bonus), flagged for human review."
+      : "85–100% of standard time earns full points; gradual deduction over standard, never zero."
   };
+}
+
+function computeWeightedRunScore(runInput) {
+  const bars = buildScoreExplanation(runInput);
+  const clean = bars[0].measured ? bars[0].score : null;
+  if (clean === null) return null;
+  const technique = bars[1].measured ? bars[1].score : clean;
+  const time = bars[2].measured ? bars[2].score : 100;
+  return Math.round(
+    clean * CONFIG.scoring.cleanWeight +
+    technique * CONFIG.scoring.techniqueWeight +
+    time * CONFIG.scoring.timeWeight
+  );
+}
+
+function gradeRunSurfaces(runInput) {
+  const ai = runInput || state.result?.ai;
+  if (!ai) return [];
+  if (ai.verified?.status === "verified" && Array.isArray(ai.verified.surfaces)) {
+    return ai.verified.surfaces.map((s) => ({
+      name: s.name,
+      score: s.score,
+      grade: s.score >= 80 ? "clean" : s.score >= 55 ? "partly" : "missed"
+    }));
+  }
+  const spotName = state.checkin?.assignedSpot || "Work surface";
+  const c = Number.isFinite(Number(ai.cleanliness)) && ai.scorable !== false ? Number(ai.cleanliness) : null;
+  if (c === null) {
+    return [{ name: spotName, score: null, grade: "partly" }];
+  }
+  return [
+    { name: spotName, score: c, grade: c >= 80 ? "clean" : c >= 55 ? "partly" : "missed" }
+  ];
 }
 
 function buildScoreExplanation(runInput) {
@@ -6039,7 +6155,18 @@ function renderScoreBreakdown(runInput) {
     item.append(head, track, detail);
     els.scoreBreakdownBars.appendChild(item);
   });
-  return bars;
+  if (els.surfaceGradeMap) {
+    els.surfaceGradeMap.innerHTML = "";
+    const surfaces = gradeRunSurfaces(runInput || state.result?.ai);
+    surfaces.forEach((s) => {
+      const chip = document.createElement("span");
+      chip.className = `surface-grade-chip ${s.grade}`;
+      const gradeLabel = s.grade === "clean" ? "CLEAN" : s.grade === "partly" ? "PARTLY CLEAN" : "MISSED";
+      chip.textContent = `${s.name}: ${gradeLabel}`;
+      els.surfaceGradeMap.appendChild(chip);
+    });
+  }
+  return Object.freeze(bars);
 }
 
 function readAppeals() {
@@ -6093,22 +6220,33 @@ function renderDisputeUI(runId = state.latestRunId) {
   }
 }
 
-function assignSpotForArea(areaKey = state.checkin.areaKey) {
+function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.checkin.league) {
   const area = CONFIG.areaTemplates[areaKey] || CONFIG.areaTemplates.breakroom;
+  const validLeague = CONFIG.buildingLeagues.includes(leagueKey) ? leagueKey : "office";
   const daySeed = Math.floor(Date.now() / 86400000);
   const spot = area.spots[daySeed % area.spots.length];
   state.checkin.areaKey = CONFIG.areaTemplates[areaKey] ? areaKey : "breakroom";
+  state.checkin.league = validLeague;
   state.checkin.assignedSpot = spot;
   if (els.areaTemplateSelect && els.areaTemplateSelect.value !== state.checkin.areaKey) {
     els.areaTemplateSelect.value = state.checkin.areaKey;
+  }
+  if (els.buildingLeagueSelect && els.buildingLeagueSelect.value !== state.checkin.league) {
+    els.buildingLeagueSelect.value = state.checkin.league;
   }
   if (els.assignedSpotBadge) {
     els.assignedSpotBadge.textContent = `${t("assignedSpotPrefix")} ${spot.toUpperCase()}`;
   }
   if (els.frameGuideText) {
-    els.frameGuideText.textContent = `${area.label.toUpperCase()} · ${spot.toUpperCase()}`;
+    els.frameGuideText.textContent = `${validLeague.toUpperCase()} · ${area.label.toUpperCase()} · ${spot.toUpperCase()}`;
   }
-  return { areaKey: state.checkin.areaKey, areaLabel: area.label, assignedSpot: spot };
+  return {
+    league: state.checkin.league,
+    areaKey: state.checkin.areaKey,
+    areaLabel: area.label,
+    difficultyAdjustment: area.difficultyAdjustment || 0,
+    assignedSpot: spot
+  };
 }
 
 function assertInAppCaptureOnly() {
@@ -6351,12 +6489,33 @@ function getCrewMVP(crewId, date = new Date()) {
   return runs.reduce((best, r) => (!best || r.score > best.score ? r : best), null);
 }
 
+function getCrewParticipation(crewId, date = new Date()) {
+  const store = loadCrewStore();
+  const crew = store.crews.find((c) => c.id === (crewId || store.activeCrewId)) || store.crews[0];
+  if (!crew || !crew.members.length) {
+    return { activeMembers: 0, totalMembers: 0, participationRate: 0, qualified: false };
+  }
+  const wk = weekKeyForDate(date);
+  const runs = store.runs.filter((r) => r.crewId === crew.id && r.week === wk);
+  const uniqueMembers = new Set(runs.map((r) => r.member));
+  const activeCount = Math.min(crew.members.length, uniqueMembers.size);
+  const rate = Math.min(1, activeCount / crew.members.length);
+  return {
+    activeMembers: activeCount,
+    totalMembers: crew.members.length,
+    participationRate: Math.round(rate * 100) / 100,
+    qualified: rate >= CONFIG.crews.participationThreshold
+  };
+}
+
 function getWeeklyMatchup(crewId, date = new Date()) {
   const store = loadCrewStore();
   const crew = store.crews.find((c) => c.id === (crewId || store.activeCrewId)) || store.crews[0];
   if (!crew) {
     return {
       hasCrew: false,
+      qualified: false,
+      participationRate: 0,
       label: "No crew active yet — join a 3–8 crew or tap Virtual Squad.",
       score: 0,
       opponentScore: 0,
@@ -6365,19 +6524,24 @@ function getWeeklyMatchup(crewId, date = new Date()) {
   }
   const score = getCrewScore(crew.id, date);
   const mvp = getCrewMVP(crew.id, date);
+  const participation = getCrewParticipation(crew.id, date);
   const rival = store.crews.find((c) => c.id !== crew.id);
   const opponentScore = rival ? getCrewScore(rival.id, date) : 76;
-  const opponentName = rival ? rival.name : "Benchmark Squad";
+  const opponentName = rival ? rival.name : "Rival Night Crew";
+  const qualBadge = participation.qualified ? `${Math.round(participation.participationRate * 100)}% active` : `${Math.round(participation.participationRate * 100)}% active (<80%)`;
   return {
     hasCrew: true,
     crewId: crew.id,
     crewName: crew.name,
+    league: state.checkin.league || "office",
     score,
     opponentName,
     opponentScore,
     ahead: score >= opponentScore,
+    qualified: participation.qualified,
+    participationRate: participation.participationRate,
     mvp,
-    label: `${crew.name} avg ${score}% vs. ${opponentName} ${opponentScore}%${mvp ? ` · MVP: ${mvp.member} (${mvp.score}%)` : ""}`
+    label: `${crew.name} avg ${score}% (${qualBadge}) vs. ${opponentName} ${opponentScore}%${mvp ? ` · MVP: ${mvp.member} (${mvp.score}%)` : ""}`
   };
 }
 
@@ -6402,16 +6566,25 @@ function getConsistencyProgress(weeklyAveragesInput) {
   }
   const recent = weeklyScores.slice(-windowWeeks);
   const weeksMet = recent.filter((s) => Number(s) >= benchmark).length;
+  const weeksBelowFloor = recent.filter((s) => Number(s) < 75).length;
   const currentWeek = Math.max(1, Math.min(windowWeeks, weeksMet || 1));
-  const onTrack = weeksMet >= Math.max(1, recent.length - 2);
+  const onTrack = weeksBelowFloor <= 2 && weeksMet >= Math.max(1, recent.length - 2);
   const percent = Math.max(8, Math.min(100, Math.round((currentWeek / windowWeeks) * 100)));
+  const weeksRemaining = Math.max(0, windowWeeks - currentWeek);
+  const monthlyMilestone = currentWeek >= 9
+    ? `Month 2 complete · ${weeksRemaining} weeks to go`
+    : currentWeek >= 5
+      ? `Month 1 complete · ${weeksRemaining} weeks to go`
+      : `${weeksRemaining} weeks to go · Benchmark only`;
   return {
     currentWeek,
     windowWeeks,
     weeksMet,
+    weeksBelowFloor,
     benchmark,
     onTrack,
     percent,
+    monthlyMilestone,
     label: t("consistencyProgress", {
       week: currentWeek,
       window: windowWeeks,
@@ -6432,6 +6605,9 @@ function renderCrewAndConsistencyUI() {
   if (els.consistencyLabel) {
     els.consistencyLabel.textContent = consistency.label;
   }
+  if (els.consistencyMilestone) {
+    els.consistencyMilestone.textContent = consistency.monthlyMilestone;
+  }
   if (els.consistencyFill) {
     els.consistencyFill.style.width = `${consistency.percent}%`;
   }
@@ -6440,6 +6616,7 @@ function renderCrewAndConsistencyUI() {
     const hasVirtual = store.crews.some((c) => c.virtual);
     els.joinVirtualSquadButton.textContent = hasVirtual ? t("virtualSquadActive") : t("joinVirtualSquad");
   }
+  renderPersonalRecordUI();
 }
 
 function getSponsorSlot(slotKey) {
@@ -6511,6 +6688,211 @@ function renderDeckSponsorSlot(showAfterAnswer, card) {
   text.textContent = `${slot.title}${catNote}${slot.detail ? ` — ${slot.detail}` : ""}`;
   els.deckSponsorSlot.append(badge, text);
   els.deckSponsorSlot.classList.remove("hidden");
+}
+
+const CLEANER_PROFILE_KEY = "cleanquest.profile.v1";
+const ADMIN_STORE_KEY = "cleanquest.admin.v1";
+
+function loadCleanerProfile() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(CLEANER_PROFILE_KEY));
+    if (parsed && typeof parsed === "object") {
+      return {
+        phone: String(parsed.phone || ""),
+        pinHash: String(parsed.pinHash || ""),
+        hasPin: Boolean(parsed.pinHash),
+        optInEmployerShare: Boolean(parsed.optInEmployerShare)
+      };
+    }
+  } catch {}
+  return { phone: "", pinHash: "", hasPin: false, optInEmployerShare: false };
+}
+
+function hashPin(pin) {
+  const clean = String(pin || "").trim();
+  let h = 2166136261;
+  for (let i = 0; i < clean.length; i++) {
+    h ^= clean.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0).toString(16);
+}
+
+function saveCleanerProfile(phone, pin, optInEmployerShare) {
+  const current = loadCleanerProfile();
+  const cleanPhone = phone != null ? String(phone).trim() : current.phone;
+  const cleanPin = pin != null ? String(pin).trim() : "";
+  if (cleanPin && !/^\d{4}$/.test(cleanPin)) {
+    throw new Error("PIN must be 4 digits");
+  }
+  const next = {
+    phone: cleanPhone,
+    pinHash: cleanPin ? hashPin(cleanPin) : current.pinHash,
+    optInEmployerShare: optInEmployerShare != null ? Boolean(optInEmployerShare) : current.optInEmployerShare,
+    updatedAt: new Date().toISOString()
+  };
+  try {
+    localStorage.setItem(CLEANER_PROFILE_KEY, JSON.stringify(next));
+  } catch {}
+  syncCleanerPinUI();
+  renderPersonalRecordUI();
+  return loadCleanerProfile();
+}
+
+function verifyCleanerPin(pin) {
+  const profile = loadCleanerProfile();
+  if (!profile.hasPin) return false;
+  return profile.pinHash === hashPin(String(pin || "").trim());
+}
+
+function setEmployerShareOptIn(optIn) {
+  const current = loadCleanerProfile();
+  return saveCleanerProfile(current.phone, null, Boolean(optIn));
+}
+
+function getPersonalRecord() {
+  const entries = loadLeaderboard();
+  const streak = loadStreak();
+  const consistency = getConsistencyProgress();
+  const profile = loadCleanerProfile();
+  const numericScores = entries.map((e) => Number(e.cleanliness)).filter(Number.isFinite);
+  const personalBest = numericScores.length ? Math.max(...numericScores) : 0;
+  // Never exposes "openToWork" to any employer view per operating standards.
+  return {
+    personalBest,
+    totalRuns: entries.length,
+    streakDays: streak.count,
+    consistencyWeek: consistency.currentWeek,
+    optInEmployerShare: profile.optInEmployerShare
+  };
+}
+
+function syncCleanerPinUI() {
+  const profile = loadCleanerProfile();
+  if (els.cleanerPhone && profile.phone && !els.cleanerPhone.value) {
+    els.cleanerPhone.value = profile.phone;
+  }
+  if (els.pinStatusBadge) {
+    els.pinStatusBadge.classList.toggle("hidden", !profile.hasPin);
+  }
+  if (els.optInShareCheckbox) {
+    els.optInShareCheckbox.checked = profile.optInEmployerShare;
+  }
+}
+
+function renderPersonalRecordUI() {
+  if (!els.personalRecordSummary) return;
+  const rec = getPersonalRecord();
+  els.personalRecordSummary.textContent = `Personal Best: ${rec.personalBest}% · Runs: ${rec.totalRuns} · Streak: ${rec.streakDays}d · Week ${rec.consistencyWeek}/13`;
+  if (els.optInShareCheckbox) {
+    els.optInShareCheckbox.checked = rec.optInEmployerShare;
+  }
+}
+
+function pruneExpiredRecords(maxAgeDays = CONFIG.retentionDays) {
+  const cutoffMs = Date.now() - Number(maxAgeDays || 90) * 86400000;
+  const openAppealIds = new Set(readAppeals().filter((a) => a.status === "open").map((a) => a.runId));
+  const logs = loadInspectionLog();
+  const kept = logs.filter((r) => {
+    if (r && openAppealIds.has(String(r.id))) return true;
+    const tMs = Date.parse(r?.when || r?.timestamp || "");
+    return !Number.isFinite(tMs) || tMs >= cutoffMs;
+  });
+  if (kept.length !== logs.length) {
+    try {
+      localStorage.setItem(INSPECTION_LOG_KEY, JSON.stringify(kept));
+    } catch {}
+  }
+  return { beforeCount: logs.length, afterCount: kept.length, prunedCount: logs.length - kept.length };
+}
+
+function loadAdminStore() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(ADMIN_STORE_KEY));
+    if (parsed && typeof parsed === "object") {
+      return {
+        pledgeAccepted: Boolean(parsed.pledgeAccepted),
+        sites: Array.isArray(parsed.sites) ? parsed.sites : ["Site 1 · Breakroom & Restroom"],
+        assignedPacks: Array.isArray(parsed.assignedPacks) ? parsed.assignedPacks : []
+      };
+    }
+  } catch {}
+  return {
+    pledgeAccepted: false,
+    sites: ["Site 1 · Breakroom & Restroom"],
+    assignedPacks: []
+  };
+}
+
+function saveAdminStore(store) {
+  try {
+    localStorage.setItem(ADMIN_STORE_KEY, JSON.stringify(store));
+  } catch {}
+}
+
+function acceptAdminPledge(accepted = true) {
+  const store = loadAdminStore();
+  store.pledgeAccepted = Boolean(accepted);
+  saveAdminStore(store);
+  renderAdminDashboard();
+  return store.pledgeAccepted;
+}
+
+function getTeamTrainingGaps() {
+  const progress = loadDeckProgress();
+  const source = typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK) ? SWIPE_DECK : [];
+  const byCat = { surface: 0, technique: 0, product: 0 };
+  progress.missedIds.forEach((id) => {
+    const card = source.find((c) => c.id === id);
+    if (card && card.category in byCat) byCat[card.category] += 1;
+  });
+  const recommendedPack = byCat.technique > 0
+    ? "dwell"
+    : byCat.surface > 0
+      ? "surface"
+      : "product";
+  // Team-level aggregate only: never exposes individual worker names or mistakes.
+  return {
+    where: `${state.checkin.league.toUpperCase()} · ${state.checkin.areaKey} (${state.checkin.assignedSpot})`,
+    how: "Dwell-time compliance, top-to-bottom order, product-to-surface match",
+    categoryMissCounts: byCat,
+    recommendedPack,
+    canEditScores: false,
+    exposesIndividualMistakes: false,
+    exposesOpenToWork: false
+  };
+}
+
+function assignTrainingPack(packId = "dwell") {
+  const pack = CONFIG.trainingPacks[packId] || CONFIG.trainingPacks.dwell;
+  const adminStore = loadAdminStore();
+  if (!adminStore.assignedPacks.includes(pack.id)) {
+    adminStore.assignedPacks.push(pack.id);
+    saveAdminStore(adminStore);
+  }
+  const progress = loadDeckProgress();
+  pack.cardIds.forEach((id) => {
+    if (!progress.missedIds.includes(id)) {
+      progress.missedIds.push(id);
+    }
+  });
+  saveDeckProgress(progress);
+  if (els.adminPackStatus) {
+    els.adminPackStatus.textContent = `✓ Assigned ${pack.label} (${pack.cardIds.length} cards queued for next 5-card session).`;
+  }
+  renderAdminDashboard();
+  return { packId: pack.id, label: pack.label, queuedCardIds: pack.cardIds.slice() };
+}
+
+function renderAdminDashboard() {
+  const adminStore = loadAdminStore();
+  const gaps = getTeamTrainingGaps();
+  if (els.adminPledgeCheckbox) {
+    els.adminPledgeCheckbox.checked = adminStore.pledgeAccepted;
+  }
+  if (els.adminGapSummary) {
+    els.adminGapSummary.textContent = `Where: ${gaps.where} · Team topic gaps: surface=${gaps.categoryMissCounts.surface}, technique=${gaps.categoryMissCounts.technique}, product=${gaps.categoryMissCounts.product} · Recommended: ${CONFIG.trainingPacks[gaps.recommendedPack].label}`;
+  }
 }
 
 function playTone(
@@ -7039,6 +7421,36 @@ async function runPersonaSuite() {
     );
   } catch (error) {
     push("crew-member", "Crew member — 5-card deck with missed repeat, virtual squad, system MVP, 13-week meter", false, String(error?.message || error), "Crew member persona threw.");
+  }
+
+  // Phase 5 refinement persona: supervisor-and-pin (4-digit PIN, 30-card deck + productType, <70% fast-run review, 80% crew participation, supervisor pack assignment)
+  try {
+    saveCleanerProfile("555-0142", "4829", true);
+    const pinOk = verifyCleanerPin("4829") && !verifyCleanerPin("0000");
+    const record = getPersonalRecord();
+    const noOpenToWorkField = !("openToWork" in record) && record.optInEmployerShare === true;
+    const deck30 = typeof SWIPE_DECK !== "undefined" && SWIPE_DECK.length === 30 && SWIPE_DECK.every((c) => Boolean(c.productType));
+    const fastBar = timeBarExplanation({ elapsedSeconds: 50, dwellCreditSeconds: 0 });
+    const fastFlaggedAt70Pct = fastBar.score === 100 && fastBar.flag === "review";
+    const squad = createVirtualSquad("Night Lead");
+    recordCrewRun(squad.id, "Night Lead", 91);
+    const part = getCrewParticipation(squad.id);
+    const partQualified = part.qualified && part.participationRate >= 0.8;
+    acceptAdminPledge(true);
+    const gaps = getTeamTrainingGaps();
+    const assigned = assignTrainingPack("dwell");
+    const adminSafe = gaps.canEditScores === false && gaps.exposesIndividualMistakes === false && assigned.queuedCardIds.length === 5;
+    localStorage.removeItem(DECK_PROGRESS_KEY);
+    state.deck = null;
+    push(
+      "supervisor-and-pin",
+      "PIN profile, 30-card productType deck, <70% fast-run review, 80% crew participation, supervisor pack",
+      pinOk && noOpenToWorkField && deck30 && fastFlaggedAt70Pct && partQualified && adminSafe,
+      `pin=${pinOk} deck=${SWIPE_DECK.length} fast50s=${fastBar.flag} crewPart=${part.participationRate} pack=${assigned.packId}`,
+      ""
+    );
+  } catch (error) {
+    push("supervisor-and-pin", "PIN profile, 30-card productType deck, <70% fast-run review, 80% crew participation, supervisor pack", false, String(error?.message || error), "Supervisor/PIN check threw.");
   }
 
   try {
@@ -7860,6 +8272,38 @@ function bindEvents() {
     });
   });
 
+
+  if (els.pinSaveButton) {
+    els.pinSaveButton.addEventListener("click", () => {
+      try {
+        saveCleanerProfile(els.cleanerPhone?.value || "", els.cleanerPin?.value || "1234");
+      } catch {}
+    });
+  }
+
+  if (els.buildingLeagueSelect) {
+    els.buildingLeagueSelect.addEventListener("change", (event) => {
+      assignSpotForArea(state.checkin.areaKey, event.target.value);
+    });
+  }
+
+  if (els.optInShareCheckbox) {
+    els.optInShareCheckbox.addEventListener("change", (event) => {
+      setEmployerShareOptIn(event.target.checked);
+    });
+  }
+
+  if (els.adminPledgeCheckbox) {
+    els.adminPledgeCheckbox.addEventListener("change", (event) => {
+      acceptAdminPledge(event.target.checked);
+    });
+  }
+
+  if (els.assignTrainingPackButton) {
+    els.assignTrainingPackButton.addEventListener("click", () => {
+      assignTrainingPack(els.assignTrainingPackSelect?.value || "dwell");
+    });
+  }
   window.addEventListener("online", () => {
     void processOfflineRunQueue();
   });
@@ -7906,10 +8350,12 @@ function initializeApp() {
   setHypeLevel(loadHypeLevel());
   setLanguage("en");
   syncConsentUI();
-  assignSpotForArea(state.checkin.areaKey);
+  syncCleanerPinUI();
+  assignSpotForArea(state.checkin.areaKey, state.checkin.league);
   renderCrewAndConsistencyUI();
   renderHomeSponsorSlot();
   renderOfflineQueue();
+  renderAdminDashboard();
   initializeSelfTestUI();
 
   if (SPECTATOR_MODE) {
@@ -8018,5 +8464,17 @@ window.cleaningChallenge = {
   getShareableDeckSummary,
   getSponsorSlot,
   setSponsorSlot,
+  computeWeightedRunScore,
+  gradeRunSurfaces,
+  getCrewParticipation,
+  loadCleanerProfile,
+  saveCleanerProfile,
+  verifyCleanerPin,
+  setEmployerShareOptIn,
+  getPersonalRecord,
+  pruneExpiredRecords,
+  acceptAdminPledge,
+  getTeamTrainingGaps,
+  assignTrainingPack,
   copySelfTestReport
 };

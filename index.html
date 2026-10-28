@@ -66,13 +66,13 @@
 
         <div class="language-selector" role="group" aria-label="Language">
           <button class="language-button active" data-language="en" type="button">
-            ENGLISH
+            🌐 ENGLISH
           </button>
           <button class="language-button" data-language="es" type="button">
-            ESPAÑOL
+            🌐 ESPAÑOL
           </button>
           <button class="language-button" data-language="pl" type="button">
-            POLSKI
+            🌐 POLSKI
           </button>
         </div>
 
@@ -119,25 +119,36 @@
           </small>
         </section>
 
+        <section id="cleanerPinBar" class="consent-gate hologram-card" aria-label="Phone and 4-digit PIN sign-up">
+          <div class="consent-gate-head">
+            <strong data-i18n="pinSignupTitle">CLEANER PASS (PHONE + 4-DIGIT PIN)</strong>
+            <span id="pinStatusBadge" class="consent-status-badge hidden" data-i18n="pinSavedNote">✓ PIN active</span>
+          </div>
+          <div class="pin-row">
+            <input id="cleanerPhone" class="pin-input" type="tel" maxlength="16" autocomplete="off" placeholder="555-0199" aria-label="Phone number" />
+            <input id="cleanerPin" class="pin-input pin-code" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4-digit PIN" aria-label="4-digit PIN" />
+            <button id="pinSaveButton" class="secondary-button compact-chip" type="button" data-i18n="pinSaveAction">SAVE PIN</button>
+          </div>
+        </section>
+
         <section id="homePassportPanel" class="home-passport-panel hologram-card" aria-label="Crew and consistency overview">
           <div id="homeCrewMatchup" class="home-crew-matchup"></div>
-          <div id="consistencyMeter" class="consistency-meter">
-            <div class="consistency-head">
-              <span id="consistencyLabel" data-i18n="consistencyDefault">Week 1 of 13 · On track</span>
-              <small data-i18n="consistencyDisclaimer">Benchmark consistency — never a certification</small>
-            </div>
-            <div class="progress-track consistency-track">
-              <div id="consistencyFill" class="progress-fill" style="width: 8%"></div>
-            </div>
-          </div>
           <div class="home-crew-actions">
             <button id="joinVirtualSquadButton" class="secondary-button compact-chip" type="button" data-i18n="joinVirtualSquad">
               SOLO? JOIN VIRTUAL SQUAD
             </button>
           </div>
+          <div id="homeSponsorSlot" class="sponsor-slot hidden" aria-live="polite"></div>
+          <div id="consistencyMeter" class="consistency-meter">
+            <div class="consistency-head">
+              <span id="consistencyLabel" data-i18n="consistencyDefault">Week 1 of 13 · On track</span>
+              <small id="consistencyMilestone" data-i18n="consistencyDisclaimer">Benchmark consistency — never a certification</small>
+            </div>
+            <div class="progress-track consistency-track">
+              <div id="consistencyFill" class="progress-fill" style="width: 8%"></div>
+            </div>
+          </div>
         </section>
-
-        <div id="homeSponsorSlot" class="sponsor-slot hidden" aria-live="polite"></div>
         <section id="selfTestPanel" class="selftest-panel hidden" aria-live="polite">
           <button id="runSelfTestButton" class="selftest-run-button" type="button" data-i18n="runSelfTest">
             RUN SELF-TEST
@@ -263,6 +274,16 @@
 
 
           <div id="checkinBar" class="checkin-bar">
+            <label class="checkin-area-label" for="buildingLeagueSelect">
+              <span data-i18n="leagueLabel">LEAGUE</span>
+              <select id="buildingLeagueSelect" class="area-select">
+                <option value="office">Office</option>
+                <option value="education">Education</option>
+                <option value="healthcare">Healthcare</option>
+                <option value="industrial">Industrial</option>
+                <option value="retail">Retail</option>
+              </select>
+            </label>
             <label class="checkin-area-label" for="areaTemplateSelect">
               <span data-i18n="areaLabel">AREA</span>
               <select id="areaTemplateSelect" class="area-select">
@@ -464,8 +485,9 @@
           </div>
 
           <section id="scoreBreakdownCard" class="score-breakdown-card hologram-card" aria-label="Three-bar score explanation">
-            <div class="section-label" data-i18n="scoreBreakdownTitle">SCORE EXPLANATION (CLEAN · TECHNIQUE · TIME)</div>
+            <div class="section-label" data-i18n="scoreBreakdownTitle">SCORE EXPLANATION (CLEAN 50% · TECHNIQUE 25% · TIME 25%)</div>
             <div id="scoreBreakdownBars" class="score-breakdown-bars"></div>
+            <div id="surfaceGradeMap" class="surface-grade-map"></div>
           </section>
 
           <div class="evidence-section">
@@ -652,6 +674,13 @@
         <h2 data-i18n="leaderboard">Leaderboard</h2>
 
         <div id="crewLeaderboardSummary" class="crew-summary-bar hologram-card"></div>
+        <div id="personalRecordBar" class="crew-summary-bar hologram-card">
+          <div id="personalRecordSummary" class="personal-record-summary"></div>
+          <label class="consent-check-label" for="optInShareCheckbox">
+            <input id="optInShareCheckbox" type="checkbox" />
+            <span data-i18n="optInShareLabel">Opt-in: share verified record with current site (portable record owned by you)</span>
+          </label>
+        </div>
 
         <div class="leaderboard-header">
           <span>#</span>
@@ -710,6 +739,26 @@
 
         <div id="inspectionLogList" class="provider-log"></div>
         <small id="inspectionLogEmpty" data-i18n="recordsEmpty">No inspection records yet.</small>
+
+        <section id="adminDashboardPanel" class="offline-queue-section hologram-card" aria-label="Supervisor training and site tools">
+          <div class="section-label" data-i18n="adminPanelTitle">SUPERVISOR TOOLS (TRAINING &amp; SITES — NEVER EDITS SCORES)</div>
+          <label class="consent-check-label" for="adminPledgeCheckbox">
+            <input id="adminPledgeCheckbox" type="checkbox" />
+            <span data-i18n="adminPledgeText">Supervisor pledge: data is for training &amp; recognition only, never discipline.</span>
+          </label>
+          <div id="adminGapSummary" class="home-crew-matchup"></div>
+          <div class="pin-row">
+            <select id="assignTrainingPackSelect" class="area-select">
+              <option value="dwell">5-Day Dwell &amp; Disinfection Pack</option>
+              <option value="surface">5-Day Top-to-Bottom Surface Pack</option>
+              <option value="product">5-Day Product-to-Surface Match Pack</option>
+            </select>
+            <button id="assignTrainingPackButton" class="secondary-button compact-chip" type="button" data-i18n="assignPackAction">
+              ASSIGN 5-DAY PACK
+            </button>
+          </div>
+          <small id="adminPackStatus" class="fine-print"></small>
+        </section>
 
         <div class="sticky-cta">
           <div class="settings-row">
