@@ -300,3 +300,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Hygiene verified: README "powered by Muse at scale" exactly once; zero .onnx/.wav/node_modules tracked; 230 EN clips tracked.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 32 — Admin action buttons translated — DONE
+- Implemented: REGISTER SITE / PRINT QR / INVITE & APPROVE buttons now carry data-i18n with EN/ES/PL keys.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
