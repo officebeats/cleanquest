@@ -259,3 +259,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: setLanguage persists to localStorage (cleanquest.language.v1) and initializeApp restores the saved language (validated against translations, EN default) instead of hardcoding English every load. Consent language matching now works correctly across restarts.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 24 — FTUE step chips translated — DONE
+- Implemented: cleaner step chips (1 Language / 2 PIN / 3 Consent / 4 Home) now carry data-i18n with EN/ES/PL keys, translated by applyTranslations like the rest of the UI.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
