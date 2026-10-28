@@ -2663,6 +2663,14 @@ h3 {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  flex-wrap: wrap !important;
+}
+
+.ftue-summary-actions .compact-chip {
+  white-space: normal !important;
+  min-width: 0 !important;
+  line-height: 1.25 !important;
+  text-align: center !important;
 }
 
 .after-align-banner {

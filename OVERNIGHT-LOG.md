@@ -139,3 +139,11 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Decisions: Q1 required no source change (handlers already correct) — proof committed as evidence only; Q3 minimal CSS inside the existing short-viewport block, no desktop/mobile geometry touched.
 - Queued: Q4 standards-compliant QR encoder or external-decode test; Q5 cosmetic (360 topbar, chip overflow, emoji tofu); Q6 Kokoro announcer regen + listen-back; Loop 4+ full 15-screen audit next.
 - Blockers: none.
+
+## LOOP 4 — Q5 chip-wrap fix + Pages verification (360 topbar cleared) — DONE
+- model: muse-wonder (reasoning/architect/evaluator) + muse-spark-1.3 (implementation); viewports: 390x844 + 360x740 Orca; gates: live overflow probes, screenshot critique, Pages HTTP/content check.
+- Implemented (styles.css only): .ftue-summary-actions wraps, chips allow multi-line centered text — "PASE / CONSENTIMIENTO" no longer clips at 390px ES (was 147px text in 129px chip, now over=false).
+- Evidence: pre-fix probe over=true → post-fix over=false on both chips; 390px screenshot shows clean two-row chip stack; 360px topbar measured 59px tall with 8px brand/mute gap (no overlap — no change needed); GitHub Pages 200, live bundle verified to contain LOOP 1+2 symbols (ensureActiveCrew/deliverHostLine/Solo Crew) and LOOP 3 CSS (660px block); new chip-wrap rule correctly absent live (uncommitted until this loop).
+- Decisions: no topbar change (measured, not assumed); emoji tofu is headless-font-only, untreated; Q4 QR encoder + Q6 voice regen remain human-gated.
+- Queued: Q4 standards-compliant QR encoder or external-decode test; Q6 Kokoro announcer regen + human listen-back.
+- Blockers: none.
