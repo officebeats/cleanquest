@@ -1103,13 +1103,13 @@
     <div id="evidenceLightboxModal" class="evidence-lightbox-modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Before and After Photo Comparison">
       <div class="lightbox-card hologram-card">
         <div class="lightbox-header">
-          <strong id="lightboxTitle">BEFORE &amp; AFTER COMPARISON</strong>
+          <strong id="lightboxTitle" data-i18n="lightboxTitle">BEFORE &amp; AFTER COMPARISON</strong>
           <div class="lightbox-tabs">
-            <button id="lightboxModeSplit" class="mvp-tab-chip active" type="button">SIDE BY SIDE</button>
-            <button id="lightboxModeBefore" class="mvp-tab-chip" type="button">BEFORE</button>
-            <button id="lightboxModeAfter" class="mvp-tab-chip" type="button">AFTER + SHADOW</button>
+            <button id="lightboxModeSplit" class="mvp-tab-chip active" type="button" data-i18n="lightboxSplit">SIDE BY SIDE</button>
+            <button id="lightboxModeBefore" class="mvp-tab-chip" type="button" data-i18n="before">BEFORE</button>
+            <button id="lightboxModeAfter" class="mvp-tab-chip" type="button" data-i18n="lightboxAfterShadow">AFTER + SHADOW</button>
           </div>
-          <button id="lightboxCloseButton" class="secondary-button compact-chip" type="button">✕ CLOSE</button>
+          <button id="lightboxCloseButton" class="secondary-button compact-chip" type="button" data-i18n="lightboxClose">✕ CLOSE</button>
         </div>
         <div id="lightboxStage" class="lightbox-stage">
           <figure id="lightboxBeforePane" class="lightbox-pane">
@@ -1144,11 +1144,11 @@
             <small id="qrCameraStateNote" class="fine-print">Point camera at a CQ-QR station sticker or tap a verified station sticker below.</small>
           </div>
           <div class="qr-controls-box">
-            <div class="section-label">TAP A STATION QR STICKER OR ENTER CODE</div>
+            <div class="section-label" data-i18n="qrTapStation">TAP A STATION QR STICKER OR ENTER CODE</div>
             <div id="qrStickerQuickGrid" class="qr-sticker-quick-grid" role="group" aria-label="Station QR Stickers"></div>
             <div class="qr-manual-row">
               <input id="qrManualInput" class="pin-input" type="text" maxlength="64" placeholder="CQ-QR-OFFICE-BREAKROOM" aria-label="QR Code Payload" />
-              <button id="qrManualSubmit" class="primary-button compact-chip" type="button">APPLY QR CODE</button>
+              <button id="qrManualSubmit" class="primary-button compact-chip" type="button" data-i18n="qrApply">APPLY QR CODE</button>
             </div>
             <p id="qrScannerStatus" class="fine-print" role="status">Format: CQ-QR-&lt;LEAGUE&gt;-&lt;AREA&gt; (e.g. CQ-QR-OFFICE-BREAKROOM)</p>
           </div>

@@ -384,6 +384,12 @@ const translations = {
     deckPracticeAgain: "🔄 PRACTICE ANOTHER 5 CARDS",
     openPassportHub: "🪪 PASSPORT, CREW & SUPERVISOR",
     qrModalTitle: "⌗ SCAN STATION QR STICKER",
+    lightboxTitle: "BEFORE & AFTER COMPARISON",
+    lightboxSplit: "SIDE BY SIDE",
+    lightboxAfterShadow: "AFTER + SHADOW",
+    lightboxClose: "✕ CLOSE",
+    qrTapStation: "TAP A STATION QR STICKER OR ENTER CODE",
+    qrApply: "APPLY QR CODE",
   },
 
   es: {
@@ -632,6 +638,12 @@ const translations = {
     deckPracticeAgain: "🔄 PRACTICAR OTRAS 5 TARJETAS",
     openPassportHub: "🪪 PASAPORTE, EQUIPO Y SUPERVISOR",
     qrModalTitle: "⌗ ESCANEAR QR DE ESTACIÓN",
+    lightboxTitle: "COMPARACIÓN ANTES Y DESPUÉS",
+    lightboxSplit: "LADO A LADO",
+    lightboxAfterShadow: "DESPUÉS + SOMBRA",
+    lightboxClose: "✕ CERRAR",
+    qrTapStation: "TOCA UNA ETIQUETA QR DE ESTACIÓN O INGRESA EL CÓDIGO",
+    qrApply: "APLICAR CÓDIGO QR",
   },
 
   pl: {
@@ -880,6 +892,12 @@ const translations = {
     deckPracticeAgain: "🔄 ĆWICZ KOLEJNE 5 KART",
     openPassportHub: "🪪 PASZPORT, EKIPA I NADZÓR",
     qrModalTitle: "⌗ SKANUJ KOD QR STACJI",
+    lightboxTitle: "PORÓWNANIE PRZED I PO",
+    lightboxSplit: "OBOK SIEBIE",
+    lightboxAfterShadow: "PO + CIEŃ",
+    lightboxClose: "✕ ZAMKNIJ",
+    qrTapStation: "DOTKNIJ NAKLEJKI QR STACJI LUB WPISZ KOD",
+    qrApply: "ZASTOSUJ KOD QR",
   }
 };
 

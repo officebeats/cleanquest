@@ -269,3 +269,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: admin screen chips 11–15 now carry data-i18n with EN/ES/PL keys (Invite/Sites & QR/Crew/Dashboard/Assign).
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 26 — Lightbox + QR modal labels translated — DONE
+- Implemented: lightbox title/mode/close labels and QR modal section/apply labels now carry data-i18n with EN/ES/PL keys.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
