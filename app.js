@@ -8455,11 +8455,30 @@ function getTeamTrainingGaps() {
     : byCat.surface > 0
       ? "surface"
       : "product";
+  // When/Who derived from real local data (inspection log times + crew runs), never canned.
+  const logs = loadInspectionLog();
+  const hourBuckets = { Overnight: 0, Day: 0, Evening: 0 };
+  logs.forEach((r) => {
+    const tMs = Date.parse(r?.when || r?.timestamp || "");
+    if (!Number.isFinite(tMs)) return;
+    const h = new Date(tMs).getHours();
+    if (h >= 22 || h < 6) hourBuckets.Overnight += 1;
+    else if (h < 17) hourBuckets.Day += 1;
+    else hourBuckets.Evening += 1;
+  });
+  const topBucket = Object.entries(hourBuckets).sort((a, b) => b[1] - a[1])[0];
+  const whenText = topBucket && topBucket[1] > 0
+    ? `${topBucket[0]} shift pattern (${topBucket[1]} of ${logs.length} logged runs)`
+    : "No timed runs logged yet";
+  const mvp = getCrewMVP();
+  const whoText = mvp
+    ? `${mvp.member} leading this week (${mvp.score} top run)`
+    : "No crew runs this week yet";
   return {
     where: `${state.checkin.league.toUpperCase()} · ${state.checkin.areaKey} (${state.checkin.assignedSpot})`,
     how: "Dwell-time compliance, top-to-bottom order, product-to-surface match",
-    when: "Overnight shift pattern steady",
-    who: "Night Shift Virtual Squad trending up",
+    when: whenText,
+    who: whoText,
     categoryMissCounts: byCat,
     recommendedPack,
     canEditScores: false,

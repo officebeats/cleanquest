@@ -239,3 +239,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 19 — Live Pages verification (loops 6–18 bundle) — DONE
 - Evidence: https://officebeats.github.io/cleanquest/ returns 200; served app.js contains localizedDeckField (x5), requireAdminPledge (x5), photosStripped; served deck.js contains 31 text_pl fields (30 cards + header comment). Consistency meter verified to derive from crew runs (weighted since LOOP 1 follow-up) — no change needed.
 - Blockers: none.
+
+## LOOP 20 — Training-gap When/Who derived from real data — DONE
+- Implemented: getTeamTrainingGaps When now buckets logged run times (Overnight/Day/Evening with counts) and Who names this week's crew MVP run — canned strings removed; honest empty states when no data.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails (supervisor-and-pin gaps assertions green).
+- Blockers: none.
