@@ -274,3 +274,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: lightbox title/mode/close labels and QR modal section/apply labels now carry data-i18n with EN/ES/PL keys.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 27 — SPOT / rule / nudge / activity strings translated — DONE
+- Implemented: spotLabel, rulePrefix, idleNudge, noMotionBadge, zonesActive keys in EN/ES/PL; SPOT labels + idle banner carry data-i18n; badge and activity writes go through t(). Scoring-profile summaries remain EN source text (noted).
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

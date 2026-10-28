@@ -377,6 +377,11 @@ const translations = {
     captureAfterAndScore: "CAPTURE AFTER & SCORE",
     scanAreaQrAction: "⌗ SCAN QR",
     qrScannedPrefix: "✓ QR SPOT:",
+    spotLabel: "SPOT",
+    rulePrefix: "RULE:",
+    idleNudge: "⚡ NO MOTION DETECTED — STEP IN & WORK THE ASSIGNED SPOT!",
+    noMotionBadge: "⚠ NO MOTION · STEP IN!",
+    zonesActive: "🔥 {n}/9 ZONES · ACTIVE",
     sharePassportAction: "🪪 SHARE PASSPORT",
     passportCopiedNote: "✓ Verified Benchmark Passport copied to share!",
     deckSwipeHint: "⟵ DRAG / SWIPE LEFT = MISS  ·  DRAG / SWIPE RIGHT = RIGHT CALL ⟶",
@@ -631,6 +636,11 @@ const translations = {
     captureAfterAndScore: "CAPTURAR DESPUÉS Y PUNTUAR",
     scanAreaQrAction: "⌗ ESCANEAR QR",
     qrScannedPrefix: "✓ QR PUNTO:",
+    spotLabel: "PUNTO",
+    rulePrefix: "REGLA:",
+    idleNudge: "⚡ SIN MOVIMIENTO DETECTADO — ¡ENTRA Y TRABAJA EL PUNTO ASIGNADO!",
+    noMotionBadge: "⚠ SIN MOVIMIENTO · ¡ENTRA!",
+    zonesActive: "🔥 {n}/9 ZONAS · ACTIVO",
     sharePassportAction: "🪪 COMPARTIR PASAPORTE",
     passportCopiedNote: "✓ ¡Pasaporte de referencia copiado para compartir!",
     deckSwipeHint: "⟵ DESLIZA IZQUIERDA = FALLO  ·  DESLIZA DERECHA = ACIERTA ⟶",
@@ -885,6 +895,11 @@ const translations = {
     captureAfterAndScore: "ZRÓB ZDJĘCIE PO I OCEŃ",
     scanAreaQrAction: "⌗ SKANUJ QR",
     qrScannedPrefix: "✓ QR PUNKT:",
+    spotLabel: "PUNKT",
+    rulePrefix: "ZASADA:",
+    idleNudge: "⚡ BRAK RUCHU — WEJDŹ I PRACUJ NAD PRZYPISANYM PUNKTEM!",
+    noMotionBadge: "⚠ BRAK RUCHU · WEJDŹ!",
+    zonesActive: "🔥 {n}/9 STREF · AKTYWNE",
     sharePassportAction: "🪪 UDOSTĘPNIJ PASZPORT",
     passportCopiedNote: "✓ Zweryfikowany paszport skopiowany!",
     deckSwipeHint: "⟵ PRZESUŃ W LEWO = BŁĄD  ·  PRZESUŃ W PRAWO = DOBRZE ⟶",
@@ -3630,10 +3645,10 @@ function sampleLiveRunActivity(forceIdleForTest = false) {
   }
   if (els.liveActivityBadge) {
     if (isIdle) {
-      els.liveActivityBadge.textContent = "⚠ NO MOTION · STEP IN!";
+      els.liveActivityBadge.textContent = t("noMotionBadge");
       els.liveActivityBadge.classList.add("idle-warning");
     } else {
-      els.liveActivityBadge.textContent = `🔥 ${workedCount}/9 ZONES · ACTIVE`;
+      els.liveActivityBadge.textContent = t("zonesActive", { n: workedCount });
       els.liveActivityBadge.classList.remove("idle-warning");
     }
   }
@@ -7229,10 +7244,10 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
     });
   }
   if (els.assignedSpotBadge) {
-    els.assignedSpotBadge.textContent = `RULE: ${profile.ruleSummary}`;
+    els.assignedSpotBadge.textContent = `${t("rulePrefix")} ${profile.ruleSummary}`;
   }
   if (els.timerSpotRuleBadge) {
-    els.timerSpotRuleBadge.textContent = `RULE: ${profile.ruleSummary}`;
+    els.timerSpotRuleBadge.textContent = `${t("rulePrefix")} ${profile.ruleSummary}`;
   }
   if (els.frameGuideText) {
     els.frameGuideText.textContent = `${chosenSpot.toUpperCase()} · ${profile.ruleSummary}`;
@@ -7454,7 +7469,7 @@ function applyAreaQrPayload(raw) {
     return null;
   }
   const assigned = assignSpotForArea(parsed.areaKey, parsed.league, parsed.spot || null);
-  const badgeText = `${t("qrScannedPrefix")} ${assigned.assignedSpot.toUpperCase()} · RULE: ${assigned.scoringProfile.ruleSummary}`;
+  const badgeText = `${t("qrScannedPrefix")} ${assigned.assignedSpot.toUpperCase()} · ${t("rulePrefix")} ${assigned.scoringProfile.ruleSummary}`;
   if (els.assignedSpotBadge) {
     els.assignedSpotBadge.textContent = badgeText;
   }
