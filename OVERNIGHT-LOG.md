@@ -225,3 +225,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: admin panes 11–15 and lightbox before/after panes now carry role=tabpanel with aria-hidden synced to visibility on every switch.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 17 — Weighted display on leaderboard + spectator rows — DONE
+- Implemented: both boards now display weightedScore ?? cleanliness in the quality cell, matching the weighted sort order (previously ranked by weighted but labeled with raw clean %).
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails (judge spectator persona green).
+- Blockers: none.

@@ -6654,8 +6654,9 @@ function renderLeaderboard() {
 
     const quality = document.createElement("span");
     quality.className = "quality";
+    const displayScore = Number.isFinite(entry.weightedScore) ? entry.weightedScore : entry.cleanliness;
     quality.textContent =
-      Number.isFinite(entry.cleanliness) ? `${entry.cleanliness}%` : "—";
+      Number.isFinite(displayScore) ? `${displayScore}%` : "—";
 
     const time = document.createElement("span");
     time.className = "time";
@@ -6689,8 +6690,9 @@ function renderSpectatorLeaderboard() {
 
     const quality = document.createElement("span");
     quality.className = "quality";
+    const displayScore = Number.isFinite(entry.weightedScore) ? entry.weightedScore : entry.cleanliness;
     quality.textContent =
-      Number.isFinite(entry.cleanliness) ? `${entry.cleanliness}%` : "—";
+      Number.isFinite(displayScore) ? `${displayScore}%` : "—";
 
     const time = document.createElement("span");
     time.className = "time";
