@@ -1142,7 +1142,8 @@ const els = {
   adminGapSummary: document.getElementById("adminGapSummary"),
   assignTrainingPackSelect: document.getElementById("assignTrainingPackSelect"),
   assignTrainingPackButton: document.getElementById("assignTrainingPackButton"),
-  adminPackStatus: document.getElementById("adminPackStatus")
+  adminPackStatus: document.getElementById("adminPackStatus"),
+  assignedPacksList: document.getElementById("assignedPacksList")
   ,
   ftueSummaryBar: document.getElementById("ftueSummaryBar"),
   ftueSummaryText: document.getElementById("ftueSummaryText"),
@@ -8572,6 +8573,11 @@ function renderAdminDashboard() {
   const analytics = getSponsorMonthlyAnalytics();
   if (els.adminPledgeCheckbox) {
     els.adminPledgeCheckbox.checked = adminStore.pledgeAccepted;
+  }
+  if (els.assignedPacksList) {
+    els.assignedPacksList.textContent = adminStore.assignedPacks.length
+      ? `Assigned packs: ${adminStore.assignedPacks.map((id) => CONFIG.trainingPacks[id]?.label || id).join(" · ")}`
+      : "Assigned packs: none yet";
   }
   if (els.adminCrewList) {
     els.adminCrewList.textContent = `Approved (${adminStore.approvedMembers.length}): ${adminStore.approvedMembers.join(", ")}`;

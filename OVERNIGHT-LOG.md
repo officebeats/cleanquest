@@ -244,3 +244,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: getTeamTrainingGaps When now buckets logged run times (Overnight/Day/Evening with counts) and Who names this week's crew MVP run — canned strings removed; honest empty states when no data.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails (supervisor-and-pin gaps assertions green).
 - Blockers: none.
+
+## LOOP 21 — Assigned packs visible on dashboard — DONE
+- Implemented: pane 15 now lists already-assigned training packs by label (or "none yet"), rendered from the admin store on every dashboard render.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
