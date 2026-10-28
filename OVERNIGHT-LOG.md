@@ -205,3 +205,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Usage monitor (dev.meta.ai/usage, user-provided link, re-read 23:57): current window 0% used, weekly 38% used — page notes usage can take up to an hour to appear, so pacing stays conservative.
 - Evidence: CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 13 — Tab/pressed semantics — DONE
+- Implemented: FTUE step chips and admin tabs now set role=tab + aria-selected on switch; lightbox mode buttons set aria-pressed alongside .active.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

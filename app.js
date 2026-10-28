@@ -7648,6 +7648,9 @@ function setEvidenceLightboxMode(mode = "split") {
   els.lightboxModeSplit?.classList.toggle("active", isSplit);
   els.lightboxModeBefore?.classList.toggle("active", isBefore);
   els.lightboxModeAfter?.classList.toggle("active", isAfter);
+  els.lightboxModeSplit?.setAttribute("aria-pressed", String(isSplit));
+  els.lightboxModeBefore?.setAttribute("aria-pressed", String(isBefore));
+  els.lightboxModeAfter?.setAttribute("aria-pressed", String(isAfter));
   els.lightboxBeforePane?.classList.toggle("hidden", isAfter || !beforeUrl);
   els.lightboxAfterPane?.classList.toggle("hidden", isBefore || !afterUrl);
   els.lightboxGhostImg?.classList.toggle("hidden", !isAfter || !beforeUrl);
@@ -8468,7 +8471,10 @@ function setCleanerFtueStep(stepNumber) {
   const step = Number(stepNumber) || 4;
   state.cleanerFtueStep = step;
   document.querySelectorAll("[data-cleaner-step]").forEach((btn) => {
-    btn.classList.toggle("active", Number(btn.dataset.cleanerStep) === step);
+    const isActiveStep = Number(btn.dataset.cleanerStep) === step;
+    btn.classList.toggle("active", isActiveStep);
+    btn.setAttribute("role", "tab");
+    btn.setAttribute("aria-selected", String(isActiveStep));
   });
   const langSelector = document.querySelector("#welcomeScreen .language-selector");
   if (step === 1) {
@@ -8502,7 +8508,10 @@ function setAdminScreenTab(tabNumber = 11) {
   const tab = Number(tabNumber) || 11;
   state.adminScreenTab = tab;
   document.querySelectorAll("[data-admin-tab]").forEach((btn) => {
-    btn.classList.toggle("active", Number(btn.dataset.adminTab) === tab);
+    const isActiveTab = Number(btn.dataset.adminTab) === tab;
+    btn.classList.toggle("active", isActiveTab);
+    btn.setAttribute("role", "tab");
+    btn.setAttribute("aria-selected", String(isActiveTab));
   });
   [11, 12, 13, 14, 15].forEach((n) => {
     const pane = document.getElementById(`adminPane${n}`);
