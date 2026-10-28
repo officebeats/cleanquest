@@ -15,18 +15,19 @@ https://officebeats.github.io/cleanquest/ or open `index.html` in a mobile brows
 - No API keys/secrets in the repo, ever. Keys go in the app's Settings screen
   (stored in that browser only) — see Resources below.
 
-## Screens (9) — feature map
+## Screens (15 MVP: 10 cleaner + 5 admin) — feature map
 | Screen | What it does |
 |---|---|
-| welcome | Entry; language pick (EN/ES/PL); daily-deck teaser |
-| instructions | How a round works; demo-mode entry when camera denied |
-| camera | Before-photo → Start → clean against clock → after-photo |
-| timer | Countdown, pause, COMPLETE; hurry beats near the end |
-| results | Score hero, evidence grid (SAM overlays), verdict hype line, voice-note record, pose style score, Continue |
-| leaderboard | Ranked scores; play again / home / records |
-| records | Per-location inspection log (geofence stamp: who/when/where/scores/provider/note); JSON+CSV export |
-| settings | API keys, provider toggle (Meta Model API / Baseten Spark Open), voice/test buttons |
-| deck | Daily swipe deck: 22 static cards (surface/product/technique) in `deck.js`; streak in localStorage, once per calendar day |
+| welcome | Entry; FTUE steps 1 Language (persisted) / 2 PIN / 3 Consent (gates first run, read-aloud) / 4 Home hub (passport, crew matchup, streak, sponsor card, 13-week meter) |
+| instructions | How a round works; consent-gated camera entry; demo-mode entry when camera denied |
+| camera | Check-in bar (league/area/system-assigned SPOT + QR scan), frame guide, before-photo |
+| timer | Spot bar + QR, 4-mode Before-shadow ghost, 3x3 live zone grid + idle nudge, dwell cue, host callouts at 75/60/45/30/20/10s, big Finish |
+| results | Weighted TOTAL hero (50/25/25), 3 bars + details, honest surface map, uncropped evidence + full-screen lightbox, 1-tap read-only Dispute, voice note, pose |
+| leaderboard | Top-10 + own (weighted sort; practice runs excluded), crew matchup/MVP, personal record |
+| records | Inspection log + supervisor panes 11–15 (pledge-gated tools, sites+QR stickers, bulk invite, training gaps, assign packs) |
+| settings | API keys, provider toggle (Meta Model API / Baseten Spark Open), hype levels (default off), voice/test buttons |
+| deck | Daily swipe deck: 30 trilingual cards (EN/ES/PL fields in `deck.js`), pointer-drag + stamps + keys, missed-card repeat, 5/day |
+| spectator | `?spectator=1` distance board (weighted display, 15s refresh) |
 
 Providers: on-device vision always runs (offline note when no key). With keys:
 Meta Model API = Muse Spark scorecards + SAM 3.1 overlays + transcription;
@@ -36,26 +37,34 @@ Baseten = Spark Open second provider behind toggle, every run in exportable log.
 - `app.js` — everything. `HOST_LINES` = host script lines (`start`, `mid`,
   `finish`, `pass`, `retry`, `pass-big`, `pass-close`, `retry-far`, `hurry`,
   `hurry-final`, `scoring-wait`); audio manifest
-  `{"version":1,"clips":{"<lang>:<beat>-<nn>":"available"|"mock"}}` (154 entries:
-  153 EN MP3s + 1 mock) — unlisted IDs fall back to synth/TTS.
-  `announceGameVerdict()` routes through `selectVerdictBeat()` + `speakHost()` +
-  `playVerdictSfx()`, and `speakScoreNumber()` composes `num`/`glue` clips.
-  Also implements Phases 1–4 of `docs/PRODUCT-PLAN.md`: consent gate with
-  read-aloud, host hype levels (default `off`), 3-bar score breakdown, 1-tap
-  read-only appeal record, top-10+own fair leaderboard, area check-in + assigned
-  spot, after-shot ghost overlay, dwell-time UI cue, offline run queue, 5/day
-  swipe deck with missed-card repeat, local crews + virtual squad + system MVP,
-  13-week benchmark consistency meter, and operator-configured sponsor slots.
-- `deck.js` — 22 static training cards (no `window.SWIPE_DECK`; lexical const).
+  `{"version":1,"clips":{"<lang>:<beat>-<nn>":"available"|"mock"}}` (231 entries:
+  230 EN MP3s incl. `nudge` + 1 mock) — unlisted IDs fall back to synth/TTS.
+  `announceGameVerdict()` routes through `selectVerdictBeat()` + `speakHost()`
+  (sting-segue: hype sting first, voice 320ms later, mute/generation guarded) +
+  `playVerdictSfx()`, chains `speakScoreNumber()` (weighted total) on BOTH
+  verdict paths, and clips play through the WebAudio Broadcast Studio chain
+  (`attachBroadcastStudioChain`, `state.voice.currentAudio` stoppable via
+  `stopSpeech`). Loop-era anchors: `parseAreaQrPayload`/`openQrScannerModal`
+  (CQ-QR-<LEAGUE>-<AREA>[-<SPOTSLUG>], decodable V2-L encoder
+  `encodeQrVersion2L`), `ensureActiveCrew`+`recordCrewRun` in
+  `saveCompletedRun` (first-save only; manual spot = `spotOverride` →
+  `prizeEligible:false`, no crew/public credit), `computeWeightedRunScore`
+  hero/boards/personal-best, hermetic `runPersonaSuite` (full storage+state
+  snapshot/restore), `localizedDeckField`/`localizedRuleSummary`.
+- `deck.js` — 30 static trilingual training cards (no `window.SWIPE_DECK`; lexical const).
 - `docs/AUDIO-PLAN.md` — full audio spec: engine picks, scripts, naming
   `assets/audio/<lang>/<beat>-<nn>.mp3`, record priority, SFX plan.
 - `OVERNIGHT-LOG.md` — build diary (history, not spec).
 
 ## Verify any change
-- Self-test: open `index.html?selftest=1`, press run — must be 6/6.
-- Persona suite: `window.cleaningChallenge.runPersonaSuite()` in console (10/10):
-  maria, verdict-text, dana, judge, returning, fold, consent-first-timer,
-  appellant, offline-queued, crew-member.
+- Syntax: `node --check app.js && node --check deck.js`.
+- VM audio harness: `node /tmp/cq-vm-verify.mjs` (all-true).
+- Self-test + personas (headless): `node /tmp/cq-cdp-verify.mjs` — must be
+  6/6 PASS and 0 persona fails (12 personas incl. `consent-first-timer`
+  gated, `crew-member`, `supervisor-and-pin`). Suite is hermetic: it must
+  leave consent/storage exactly as found.
+- Banned-token grep over `app.js deck.js index.html styles.css` (brands,
+  currency, certification/sanitized claims) must be zero.
 - Phone-first: primary CTA of every screen visible without scroll at 360x740
   and 390x844 (long lists scroll internally; sticky bottom CTA bars).
 
@@ -68,8 +77,10 @@ Baseten = Spark Open second provider behind toggle, every run in exportable log.
 - Cash budget: keep paid inference minimal; offline/demo paths must always work.
 
 ## Current task
-Audio install + generation per `docs/AUDIO-PLAN.md` §1 + record-priority order
-(verdict moments → numbers/time glue → streak/board/inspect → the rest),
-EN first, then ES/PL. Done = a priority batch rendered as MP3s, manifest
-updated, sample verified playing in-game, 6/6 + suite still green, committed
-with evidence.
+Overnight Ralph loop per `docs/HACKATHON-LOOP-PROMPT.md` (Wonder reasons/
+evaluates, Spark implements; one slice → gates → commit+push → next).
+Shipped through LOOP 50; see `OVERNIGHT-LOG.md` tail for the ledger.
+Parked/human-gated: Q6 Kokoro announcer-voice regen (needs operator
+listen-back), live Orca focus-trap proof (app-tab eval runtime wedged —
+CDP is authoritative), registered-site fuzzy prize matching (deliberately
+not implemented; prize eligibility is spot-override based).

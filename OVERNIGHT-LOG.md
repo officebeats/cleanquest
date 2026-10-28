@@ -389,3 +389,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: all 9 spot profiles (+ default) carry focusNote_es/focusNote_pl; findings[0] renders the localized note with EN fallback. Closes the last reviewer P3-6 remainder.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 50 — HANDOFF refreshed to tonight's reality — DONE
+- Implemented: docs/HANDOFF.md updated — 15-screen map (was 9), 30 trilingual deck cards (was 22), 231-entry manifest (was 154), persona count 12 + hermetic contract, new code anchors (QR, crew pipeline, weighted score, segue/broadcast chain), verification commands (syntax/VM/CDP/lint), and Current task now points at the Ralph loop + parked human-gated items.
+- Evidence: CDP 6/6 confirmed before commit; docs-only change plus this log.
+- Blockers: none.
