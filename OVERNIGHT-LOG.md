@@ -374,3 +374,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: built-in default sponsor slots are flagged isDefault and rendered via sponsorHome/sponsorDeck i18n keys in EN/ES/PL; operator-entered custom slot text is never translated or altered.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails. Independent OvernightDiffReviewer spawned on loops 6–45 diff (read-only) — findings next loop.
 - Blockers: none.
+
+## LOOP 47 — Usage checkpoint (00:39) — DONE
+- Evidence: dev.meta.ai/usage reloaded, "Last updated at 12:40 AM": Current usage 0% used, Weekly limit 38% used. Displayed headroom remains full for the current window; pacing stays economical (small slices, CDP gates, no screenshots per loop).
+- Blockers: none.
