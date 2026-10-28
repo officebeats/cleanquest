@@ -4118,3 +4118,16 @@ body.lightbox-open {
 #timerScreen .live-badge span {
   font-size: 11px !important;
 }
+
+/* Explain every score: bar details visible on larger screens, folded away on phones */
+#resultsScreen .score-bar-detail {
+  display: block !important;
+  font-size: 11px !important;
+  line-height: 1.35 !important;
+}
+
+@media (max-width: 640px) {
+  #resultsScreen .score-bar-detail {
+    display: none !important;
+  }
+}

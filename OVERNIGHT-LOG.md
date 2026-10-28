@@ -289,3 +289,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: deck category badge (surface/product/technique) now renders via deckCat* keys in EN/ES/PL instead of raw uppercase English.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 30 — Score-bar explanations visible on desktop — DONE
+- Implemented: .score-bar-detail now displays (11px) on larger screens so every bar explains itself; still hidden ≤640px to protect the phone fold. Usage checkpoint: current window still reads 0% / weekly 38% (page lags up to an hour). Orca app-tab eval still runtime_timeout (bg_51) — CDP remains authoritative.
+- Evidence: CDP 6/6; personas 0 fails.
+- Blockers: Orca app-page eval wedged.
