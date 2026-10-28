@@ -279,3 +279,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: spotLabel, rulePrefix, idleNudge, noMotionBadge, zonesActive keys in EN/ES/PL; SPOT labels + idle banner carry data-i18n; badge and activity writes go through t(). Scoring-profile summaries remain EN source text (noted).
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 28 — Rule summaries localized — DONE
+- Implemented: localizedRuleSummary() phrase-maps scoring-profile summaries into ES/PL (longest-phrase-first) and is used at check-in badge, timer badge, frame guide, and QR-applied badge. Weights/percentages unchanged.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

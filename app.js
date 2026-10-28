@@ -4393,6 +4393,34 @@ const SPOT_LOGIC_PROFILES = {
   }
 };
 
+const RULE_SUMMARY_PHRASES = {
+  es: {
+    "SURFACE GLEAM": "BRILLO DE SUPERFICIE", "MIRROR/BASIN GLEAM": "BRILLO DE ESPEJO Y LAVABO",
+    "ITEM ORDER": "ORDEN DE OBJETOS", "TABLE WIPE": "LIMPIEZA DE MESA",
+    "STREAK-FREE GLASS": "CRISTAL SIN RAYAS", "FIXTURE GLEAM": "BRILLO DE APARATOS",
+    "TOP-DOWN ZONES": "ZONAS DE ARRIBA ABAJO", "FLOOR PASS": "PASADA DE PISO",
+    "ZONE COVERAGE": "COBERTURA DE ZONAS", "SURFACE": "SUPERFICIE", "ZONES": "ZONAS",
+    "ITEMS": "OBJETOS", "DEBRIS": "RESIDUOS"
+  },
+  pl: {
+    "SURFACE GLEAM": "POŁYSK POWIERZCHNI", "MIRROR/BASIN GLEAM": "POŁYSK LUSTRA I UMYWALKI",
+    "ITEM ORDER": "PORZĄDEK PRZEDMIOTÓW", "TABLE WIPE": "CZYSTOŚĆ BLATU",
+    "STREAK-FREE GLASS": "SZKŁO BEZ SMUG", "FIXTURE GLEAM": "POŁYSK ARMATURY",
+    "TOP-DOWN ZONES": "STREFY OD GÓRY DO DOŁU", "FLOOR PASS": "PRZEJŚCIE PODŁOGI",
+    "ZONE COVERAGE": "POKRYCIE STREF", "SURFACE": "POWIERZCHNIA", "ZONES": "STREFY",
+    "ITEMS": "PRZEDMIOTY", "DEBRIS": "ODPADY"
+  }
+};
+
+function localizedRuleSummary(profile) {
+  const summary = String(profile?.ruleSummary || "");
+  const dict = RULE_SUMMARY_PHRASES[state.language];
+  if (!dict) return summary;
+  return Object.entries(dict)
+    .sort((a, b) => b[0].length - a[0].length)
+    .reduce((acc, [en, local]) => acc.split(en).join(local), summary);
+}
+
 function getSpotScoringProfile(spotName = state.checkin?.assignedSpot) {
   return (
     SPOT_LOGIC_PROFILES[spotName] || {
@@ -7244,13 +7272,13 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
     });
   }
   if (els.assignedSpotBadge) {
-    els.assignedSpotBadge.textContent = `${t("rulePrefix")} ${profile.ruleSummary}`;
+    els.assignedSpotBadge.textContent = `${t("rulePrefix")} ${localizedRuleSummary(profile)}`;
   }
   if (els.timerSpotRuleBadge) {
-    els.timerSpotRuleBadge.textContent = `${t("rulePrefix")} ${profile.ruleSummary}`;
+    els.timerSpotRuleBadge.textContent = `${t("rulePrefix")} ${localizedRuleSummary(profile)}`;
   }
   if (els.frameGuideText) {
-    els.frameGuideText.textContent = `${chosenSpot.toUpperCase()} · ${profile.ruleSummary}`;
+    els.frameGuideText.textContent = `${chosenSpot.toUpperCase()} · ${localizedRuleSummary(profile)}`;
   }
   return {
     league: state.checkin.league,
@@ -7469,7 +7497,7 @@ function applyAreaQrPayload(raw) {
     return null;
   }
   const assigned = assignSpotForArea(parsed.areaKey, parsed.league, parsed.spot || null);
-  const badgeText = `${t("qrScannedPrefix")} ${assigned.assignedSpot.toUpperCase()} · ${t("rulePrefix")} ${assigned.scoringProfile.ruleSummary}`;
+  const badgeText = `${t("qrScannedPrefix")} ${assigned.assignedSpot.toUpperCase()} · ${t("rulePrefix")} ${localizedRuleSummary(assigned.scoringProfile)}`;
   if (els.assignedSpotBadge) {
     els.assignedSpotBadge.textContent = badgeText;
   }
