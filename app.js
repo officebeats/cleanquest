@@ -230,6 +230,8 @@ const translations = {
 
     playerNameLabel: "NAME / ALIAS",
     playerNamePlaceholder: "Player",
+    phonePlaceholder: "555-0199",
+    phoneAria: "Phone number",
     pinPlaceholder: "4-digit PIN",
     siteInputPlaceholder: "Site 2 · Restroom & Lobby",
     inviteInputPlaceholder: "Paste phone/name list to invite",
@@ -559,6 +561,8 @@ const translations = {
 
     playerNameLabel: "NOMBRE / ALIAS",
     playerNamePlaceholder: "Jugador",
+    phonePlaceholder: "555-0199",
+    phoneAria: "Número de teléfono",
     pinPlaceholder: "PIN de 4 dígitos",
     siteInputPlaceholder: "Sitio 2 · Baño y vestíbulo",
     inviteInputPlaceholder: "Pega la lista de teléfonos/nombres para invitar",
@@ -888,6 +892,8 @@ const translations = {
 
     playerNameLabel: "IMIĘ / PSEUDONIM",
     playerNamePlaceholder: "Gracz",
+    phonePlaceholder: "555-0199",
+    phoneAria: "Numer telefonu",
     pinPlaceholder: "4-cyfrowy PIN",
     siteInputPlaceholder: "Obiekt 2 · Łazienka i hol",
     inviteInputPlaceholder: "Wklej listę telefonów/nazwisk do zaproszenia",
@@ -2232,7 +2238,7 @@ const CLIPS_MANIFEST = {
     "pl:num-14": "available", "pl:num-15": "available", "pl:num-16": "available", "pl:num-17": "available",
     "pl:num-18": "available", "pl:num-19": "available", "pl:num-20": "available", "pl:num-30": "available",
     "pl:num-40": "available", "pl:num-50": "available", "pl:num-60": "available", "pl:num-70": "available",
-    "pl:num-80": "available", "pl:num-90": "available", "pl:num-100": "available", "pl:glue-00": "available",
+    "pl:num-80": "available", "pl:num-90": "available", "pl:num-100": "available", "pl:glue-00": "available", "es:glue-y-00": "available",
     "es:glue-01": "available", "es:glue-02": "available", "pl:glue-01": "available", "pl:glue-02": "available"
   }
 };
@@ -2543,6 +2549,8 @@ function composeScoreClipIds(value, unit = "percent", lang = state.language || "
     const ones = rounded % 10;
     parts.push({ beat: "num", id: String(tens).padStart(2, "0") });
     if (ones > 0) {
+      // Spanish compounds need the conjunction: "ochenta y siete".
+      if (lang === "es") parts.push({ beat: "glue-y", id: "00" });
       parts.push({ beat: "num", id: String(ones).padStart(2, "0") });
     }
   }
@@ -2724,7 +2732,7 @@ function announceGameVerdict() {
     setTimeout(() => {
       if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGeneration) return;
       speakScoreNumber(spokenScore, "percent");
-    }, 2600);
+    }, 3000);
   }
 
   if (customHype) {
@@ -8848,6 +8856,7 @@ function acceptAdminPledge(accepted = true) {
 }
 
 function registerLocalSite(siteName) {
+  if (!requireAdminPledge()) return loadAdminStore().sites;
   const clean = String(siteName || els.adminSiteInput?.value || "").trim() || `Site ${loadAdminStore().sites.length + 1} · ${state.checkin.areaKey}`;
   const store = loadAdminStore();
   if (!store.sites.includes(clean)) {
@@ -8866,6 +8875,7 @@ function registerLocalSite(siteName) {
 }
 
 function printAreaQrSticker() {
+  if (!requireAdminPledge()) return null;
   const store = loadAdminStore();
   const latestSite = store.sites[store.sites.length - 1] || "Site 1";
   const spotSlug = String(state.checkin.assignedSpot || "SINK").toUpperCase().replace(/[^A-Z]+/g, "-").split("-").filter(Boolean)[0] || "SINK";
@@ -8881,6 +8891,7 @@ function printAreaQrSticker() {
 }
 
 function inviteAndApproveMember(memberInput) {
+  if (!requireAdminPledge()) return loadAdminStore().approvedMembers;
   const raw = String(memberInput || els.adminInviteInput?.value || "");
   const names = raw.split(/[\n,;]+/).map((s) => s.trim()).filter(Boolean);
   const list = names.length ? names : [`Crew Member ${loadAdminStore().approvedMembers.length + 1}`];
@@ -8971,6 +8982,7 @@ function getTeamTrainingGaps() {
 }
 
 function assignTrainingPack(packId = "dwell") {
+  if (!requireAdminPledge()) return null;
   const pack = CONFIG.trainingPacks[packId] || CONFIG.trainingPacks.dwell;
   const adminStore = loadAdminStore();
   if (!adminStore.assignedPacks.includes(pack.id)) {

@@ -535,3 +535,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Usage (dev.meta.ai/usage, monitored hourly): current window 0% and weekly 38% at every hourly refresh (23:40 → 04:01) — the displayed cap was never approached.
 - Parked for the operator (unchanged): Q6 announcer-voice regen (needs listen-back), live Orca focus-trap proof (Orca interactive eval wedges on the app page in this build; CDP is authoritative and green), registered-site fuzzy prize matching (deliberately not implemented).
 - Tree clean; origin/main == local HEAD.
+
+## LOOP 82 — Aggregated-review valid items (post-summary) — DONE
+- Fixed: Spanish compound numbers are grammatical — es:glue-y-00 ("y") rendered and inserted between tens and ones for ES 31–99 (21–29 already single-word); verdict number delay 2600→3000ms so it cannot clip the verdict tail; pledge guard moved inside registerLocalSite/printAreaQrSticker/inviteAndApproveMember/assignTrainingPack (exported-API bypass closed; persona pledges first, still green); script tags cache-busted (?v=20261028) after the stale-deck cache trap; phone placeholder/aria localized.
+- Rejected with rationale: single trapModal+inert refactor (modals live inside #appShell — inert would inert the dialogs themselves; the shared single Tab listener already covers both); LOOP14 enqueue-on-scored-runs (queue is first-save-only per run id and never re-saves leaderboard/crew, so no double count); usage-spend alarm (usage page read-only monitored all night: 0% current window at every hourly refresh).
+- Evidence: syntax + lint clean; parity 696 available / 0 missing; VM all-true; single CDP run 6/6 + 0 persona fails.
+- Blockers: none.
