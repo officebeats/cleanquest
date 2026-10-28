@@ -335,3 +335,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: admin crew note (name, seat fill, participation %, qualified marker) now renders via crewNote/crewQualified keys in EN/ES/PL.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 39 — Supervisor status messages translated — DONE
+- Implemented: pledge warning, site-registered, members-invited, and pack-assigned status messages now render via i18n keys in EN/ES/PL.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

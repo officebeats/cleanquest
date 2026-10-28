@@ -396,6 +396,10 @@ const translations = {
     packProduct: "5-Day Product-to-Surface Match Pack",
     editFtueAction: "PASS / CONSENT",
     mountGuideAction: "? MOUNT GUIDE",
+    pledgeWarning: "⚠ Accept the supervisor pledge on tab 11 first — data is for training & recognition only, never discipline.",
+    siteRegistered: "✓ Registered site: {site} (QR sticker ready).",
+    membersInvited: "✓ Invited & approved {count} member(s) ({total} approved).",
+    packAssigned: "✓ Assigned {pack} ({cards} cards queued for next 5-card session).",
     ftueActiveLabel: "✓ Consent & Pass active",
     afterAlignPrompt: "GHOST ALIGNMENT: Match your Before angle, then tap CAPTURE AFTER & SCORE",
     captureAfterAndScore: "CAPTURE AFTER & SCORE",
@@ -679,6 +683,10 @@ const translations = {
     packProduct: "Paquete de 5 días: producto según superficie",
     editFtueAction: "PASE / CONSENTIMIENTO",
     mountGuideAction: "? GUÍA DE MONTAJE",
+    pledgeWarning: "⚠ Acepta primero el compromiso de supervisión en la pestaña 11: los datos son solo para formación y reconocimiento, nunca disciplina.",
+    siteRegistered: "✓ Sitio registrado: {site} (etiqueta QR lista).",
+    membersInvited: "✓ Invitados y aprobados {count} miembro(s) ({total} aprobados).",
+    packAssigned: "✓ Asignado {pack} ({cards} tarjetas en cola para la próxima sesión de 5).",
     ftueActiveLabel: "✓ Consentimiento y Pase activos",
     afterAlignPrompt: "ALINEACIÓN FANTASMA: Iguala el ángulo del Antes y toca CAPTURAR DESPUÉS Y PUNTUAR",
     captureAfterAndScore: "CAPTURAR DESPUÉS Y PUNTUAR",
@@ -962,6 +970,10 @@ const translations = {
     packProduct: "Pakiet 5-dniowy: produkt do powierzchni",
     editFtueAction: "KARTA / ZGODA",
     mountGuideAction: "? INSTRUKCJA",
+    pledgeWarning: "⚠ Najpierw zaakceptuj zobowiązanie nadzoru na karcie 11 — dane służą tylko szkoleniu i uznaniu, nigdy dyscyplinie.",
+    siteRegistered: "✓ Zapisano obiekt: {site} (naklejka QR gotowa).",
+    membersInvited: "✓ Zaproszono i zatwierdzono {count} członków ({total} zatwierdzonych).",
+    packAssigned: "✓ Przypisano {pack} ({cards} kart w kolejce na następną sesję 5 kart).",
     ftueActiveLabel: "✓ Zgoda i Karta aktywne",
     afterAlignPrompt: "DOPASOWANIE DUCHA: Wyrównaj kadr ze zdjęciem Przed i dotknij ZRÓB ZDJĘCIE PO I OCEŃ",
     captureAfterAndScore: "ZRÓB ZDJĘCIE PO I OCEŃ",
@@ -2475,7 +2487,7 @@ function requireAdminPledge() {
   if (loadAdminStore().pledgeAccepted) return true;
   setAdminScreenTab(11);
   if (els.adminPackStatus) {
-    els.adminPackStatus.textContent = "⚠ Accept the supervisor pledge on tab 11 first — data is for training & recognition only, never discipline.";
+    els.adminPackStatus.textContent = t("pledgeWarning");
   }
   playTone(300, 0.08);
   return false;
@@ -8549,7 +8561,7 @@ function registerLocalSite(siteName) {
     els.qrStickerPreview.textContent = `⌗ QR STICKER READY · ${clean} (${state.checkin.assignedSpot})`;
   }
   if (els.adminPackStatus) {
-    els.adminPackStatus.textContent = `✓ Registered site: ${clean} (QR sticker ready).`;
+    els.adminPackStatus.textContent = t("siteRegistered", { site: clean });
   }
   renderAdminDashboard();
   return store.sites;
@@ -8589,7 +8601,7 @@ function inviteAndApproveMember(memberInput) {
   if (activeCrew) saveCrewStore(crewStore);
   if (els.adminInviteInput) els.adminInviteInput.value = "";
   if (els.adminPackStatus) {
-    els.adminPackStatus.textContent = `✓ Invited & approved ${list.length} member(s) (${store.approvedMembers.length} approved).`;
+    els.adminPackStatus.textContent = t("membersInvited", { count: list.length, total: store.approvedMembers.length });
   }
   renderAdminDashboard();
   renderCrewAndConsistencyUI();
@@ -8674,7 +8686,7 @@ function assignTrainingPack(packId = "dwell") {
   });
   saveDeckProgress(progress);
   if (els.adminPackStatus) {
-    els.adminPackStatus.textContent = `✓ Assigned ${pack.label} (${pack.cardIds.length} cards queued for next 5-card session).`;
+    els.adminPackStatus.textContent = t("packAssigned", { pack: pack.label, cards: pack.cardIds.length });
   }
   renderAdminDashboard();
   return { packId: pack.id, label: pack.label, queuedCardIds: pack.cardIds.slice() };
