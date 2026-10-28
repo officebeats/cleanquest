@@ -349,3 +349,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 41 — Live Pages verification (overnight bundle) — DONE
 - Evidence: Pages 200; served app.js contains 25 hits across localizedDeckField/requireAdminPledge/qrOpenGeneration/personalRecordSummary/localizedRuleSummary; served deck.js has 31 text_es fields. Loops 6–40 are live for users.
 - Blockers: none.
+
+## LOOP 42 — Detected-object labels localized — DONE
+- Implemented: describeObjects now maps the five countable classes (cup/bottle/bowl/cell phone/book) into ES/PL in findings text; detection labels themselves unchanged.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

@@ -4371,6 +4371,11 @@ function compareFrames(
     sceneMatchPercent: sceneMatch * 100
   };
 }
+const OBJECT_LABEL_I18N = {
+  es: { cup: "taza", bottle: "botella", bowl: "tazón", "cell phone": "teléfono", book: "libro" },
+  pl: { cup: "kubek", bottle: "butelka", bowl: "miska", "cell phone": "telefon", book: "książka" }
+};
+
 function describeObjects(objects) {
   const counts = {};
 
@@ -4379,11 +4384,12 @@ function describeObjects(objects) {
       (counts[object.label] || 0) + 1;
   });
 
+  const labelFor = (name) => OBJECT_LABEL_I18N[state.language]?.[name] || name;
   return Object.entries(counts)
     .map(([name, count]) =>
       count > 1
-        ? `${count} ${name}`
-        : name
+        ? `${count} ${labelFor(name)}`
+        : labelFor(name)
     )
     .join(", ");
 }
