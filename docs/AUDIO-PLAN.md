@@ -1,3 +1,11 @@
+> **Status (overnight loop):** EN host audio is SHIPPED — 230 MP3s under
+> `assets/audio/en/` wired through `CLIPS_MANIFEST` (231 entries incl. 1 mock),
+> rendered offline (Piper verdict batches, then Kokoro-82M high-energy
+> game-show batches with broadcast mastering). ES/PL clips are not yet
+> rendered; synth fallback covers them. The plan below is the original
+> research/spec record. Parked: announcer-voice regen needs an operator
+> listen-back before replacing shipped clips (see `../OVERNIGHT-LOG.md`).
+
 # AUDIO PLAN — CleanQuest voice clips + SFX (research, no installs, no audio generated yet)
 
 Arbiter-merged from 3 parallel research agents (TTS tooling, sound design, script inventory) into this single file. Single writer, no conflicts.

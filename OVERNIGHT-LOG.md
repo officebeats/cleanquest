@@ -404,3 +404,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: README Tech section now states 15 MVP screens + spectator and 30 trilingual deck cards (was 9 screens / 22 cards). Required phrase count verified still exactly 1.
 - Evidence: grep checks only; no code touched.
 - Blockers: none.
+
+## LOOP 53 — Audio plan status banner — DONE
+- Implemented: docs/AUDIO-PLAN.md now opens with the shipped status (230 EN MP3s live, ES/PL pending, regen parked for listen-back); the research body is preserved as the spec record.
+- Evidence: docs-only; README phrase count re-verified = 1 in LOOP 52.
+- Blockers: none.
