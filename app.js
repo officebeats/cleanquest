@@ -357,6 +357,20 @@ const translations = {
     scoreBreakdownTitle: "SCORE EXPLANATION (CLEAN · TECHNIQUE · TIME)",
     barClean: "Clean",
     barDetailClean: "Visible surface cleanliness from before/after comparison.",
+    barDetailCleanNone: "Visible surface cleanliness was not measured on this run.",
+    gapHow: "Dwell-time compliance, top-to-bottom order, product-to-surface match",
+    gapWhenPattern: "{bucket} shift pattern ({count} of {total} logged runs)",
+    gapWhenNone: "No timed runs logged yet",
+    gapWhoMvp: "{member} leading this week ({score} top run)",
+    gapWhoNone: "No crew runs this week yet",
+    gapBucketOvernight: "Overnight",
+    gapBucketDay: "Day",
+    gapBucketEvening: "Evening",
+    queueSaveFailed: "⚠ Offline queue is full — this run could not be saved offline.",
+    srcDwellTime: "dwell time",
+    srcTopToBottomOrder: "top-to-bottom order",
+    srcSurfaceOrder: "surface order",
+    srcTechniqueScore: "technique score",
     barDetailTechniqueNone: "No local technique evidence was measured for this run.",
     barDetailTechnique: "Derived from measured evidence ({sources}).",
     barDetailNoTime: "No elapsed run time recorded.",
@@ -665,6 +679,20 @@ const translations = {
     scoreBreakdownTitle: "EXPLICACIÓN DE PUNTUACIÓN (LIMPIEZA · TÉCNICA · TIEMPO)",
     barClean: "Limpieza",
     barDetailClean: "Limpieza visible de la superficie comparando antes y después.",
+    barDetailCleanNone: "La limpieza visible de la superficie no se midió en esta ronda.",
+    gapHow: "Cumplimiento del tiempo de contacto, orden de arriba abajo y de limpio a sucio, producto según superficie",
+    gapWhenPattern: "Patrón de turno {bucket} ({count} de {total} rondas registradas)",
+    gapWhenNone: "Aún no hay rondas con hora registrada",
+    gapWhoMvp: "{member} lidera esta semana ({score} mejor ronda)",
+    gapWhoNone: "Aún no hay rondas del equipo esta semana",
+    gapBucketOvernight: "Nocturno",
+    gapBucketDay: "Diurno",
+    gapBucketEvening: "Vespertino",
+    queueSaveFailed: "⚠ La cola sin conexión está llena: esta ronda no pudo guardarse sin conexión.",
+    srcDwellTime: "tiempo de contacto",
+    srcTopToBottomOrder: "orden de arriba abajo",
+    srcSurfaceOrder: "orden de superficies",
+    srcTechniqueScore: "puntuación de técnica",
     barDetailTechniqueNone: "No se midió evidencia local de técnica en esta ronda.",
     barDetailTechnique: "Derivado de evidencia medida ({sources}).",
     barDetailNoTime: "No se registró tiempo transcurrido.",
@@ -973,6 +1001,20 @@ const translations = {
     scoreBreakdownTitle: "WYJAŚNIENIE WYNIKU (CZYSTOŚĆ · TECHNIKA · CZAS)",
     barClean: "Czystość",
     barDetailClean: "Widoczna czystość powierzchni z porównania przed/po.",
+    barDetailCleanNone: "Widoczna czystość powierzchni nie została zmierzona w tym biegu.",
+    gapHow: "Zgodność czasu kontaktu, kolejność od góry do dołu i od czystego do brudnego, produkt do powierzchni",
+    gapWhenPattern: "Wzorzec zmiany {bucket} ({count} z {total} zapisanych biegów)",
+    gapWhenNone: "Brak biegów z zapisaną godziną",
+    gapWhoMvp: "{member} prowadzi w tym tygodniu ({score} najlepszy bieg)",
+    gapWhoNone: "Brak biegów ekipy w tym tygodniu",
+    gapBucketOvernight: "Nocna",
+    gapBucketDay: "Dzienna",
+    gapBucketEvening: "Wieczorna",
+    queueSaveFailed: "⚠ Kolejka offline jest pełna — tego biegu nie udało się zapisać offline.",
+    srcDwellTime: "czas kontaktu",
+    srcTopToBottomOrder: "kolejność od góry do dołu",
+    srcSurfaceOrder: "kolejność powierzchni",
+    srcTechniqueScore: "wynik techniki",
     barDetailTechniqueNone: "W tym biegu nie zmierzono lokalnych dowodów techniki.",
     barDetailTechnique: "Na podstawie zmierzonych dowodów ({sources}).",
     barDetailNoTime: "Nie zapisano czasu biegu.",
@@ -2526,14 +2568,7 @@ function announceGameVerdict() {
   state.voice.lastVerdictBeat = beat;
   playVerdictSfx(beat);
 
-  if (customHype) {
-    speakHost(beat, customHype);
-    return;
-  }
-
-  speakHost(beat);
-
-  // Announce the weighted total after the verdict clip (EN number clips, synth fallback elsewhere).
+  // Schedule the weighted number first so BOTH verdict paths announce it.
   const weighted = computeWeightedRunScore();
   const spokenScore = Number.isFinite(weighted) ? weighted
     : Number.isFinite(Number(ai?.cleanliness)) ? Number(ai.cleanliness) : null;
@@ -2544,6 +2579,13 @@ function announceGameVerdict() {
       speakScoreNumber(spokenScore, "percent");
     }, 2600);
   }
+
+  if (customHype) {
+    speakHost(beat, customHype);
+    return;
+  }
+
+  speakHost(beat);
 }
 
 function requireAdminPledge() {
@@ -4654,7 +4696,7 @@ function calculateLocalScore(
     : evidenceConfidence >= 0.68 ? "high" : "medium";
 
   const findings = [
-    `Spot [${state.checkin?.assignedSpot || "Station"}] (${profile.ruleSummary}): ${profile.focusNote}`
+    `Spot [${state.checkin?.assignedSpot || "Station"}] (${localizedRuleSummary(profile)}): ${profile.focusNote}`
   ];
   if (!sceneValid) {
     findings.push(t("findingFraming"));
@@ -7122,7 +7164,7 @@ function cleanBarExplanation(run) {
       measured: false,
       score: null,
       display: t("notMeasured"),
-      detail: "Visible surface cleanliness was not measured on this run."
+      detail: t("barDetailCleanNone")
     };
   }
   return {
@@ -7175,7 +7217,7 @@ function techniqueBarExplanation(run) {
     score: avg,
     display: `${avg}%`,
     sources,
-    detail: t("barDetailTechnique", { sources: sources.join(", ") })
+    detail: t("barDetailTechnique", { sources: sources.map((s) => t({ dwellTime: "srcDwellTime", topToBottomOrder: "srcTopToBottomOrder", surfaceOrder: "srcSurfaceOrder", techniqueScore: "srcTechniqueScore" }[s] || "") || s).join(", ") })
   };
 }
 
@@ -7727,8 +7769,8 @@ async function openQrScannerModal() {
     setQrNote(t("qrDemoNote"));
   } else if (typeof window.BarcodeDetector !== "function") {
     setQrNote(t("qrUnsupportedNote"));
-  } else {
-    qrLaserEl?.classList.remove("hidden");
+  } else if (!navigator.mediaDevices?.getUserMedia) {
+    setQrNote(t("qrUnavailableNote"));
   }
 
   if (!state.demoMode && navigator.mediaDevices?.getUserMedia) {
@@ -7746,8 +7788,11 @@ async function openQrScannerModal() {
       if (els.qrScannerVideo && !els.qrScannerModal.classList.contains("hidden")) {
         els.qrScannerVideo.srcObject = qrScannerStream;
         els.qrScannerVideo.classList.remove("hidden");
-        await els.qrScannerVideo.play().catch(() => {});
-        qrLaserEl?.classList.remove("hidden");
+        await els.qrScannerVideo.play().then(() => {
+          qrLaserEl?.classList.remove("hidden");
+        }).catch(() => {
+          qrLaserEl?.classList.add("hidden");
+        });
         if (typeof window.BarcodeDetector === "function") {
           const detector = new window.BarcodeDetector({ formats: ["qr_code"] });
           const scanTick = async () => {
@@ -7991,7 +8036,7 @@ function enqueueOfflineRun(runPayload = {}) {
     areaKey: runPayload.areaKey || state.checkin.areaKey,
     assignedSpot: runPayload.assignedSpot || state.checkin.assignedSpot,
     elapsedMs: Number(runPayload.elapsedMs ?? state.timer.elapsedMs ?? 60000),
-    cleanliness: Number.isFinite(Number(runPayload.cleanliness)) ? Number(runPayload.cleanliness) : null,
+    cleanliness: runPayload.cleanliness == null ? null : (Number.isFinite(Number(runPayload.cleanliness)) ? Number(runPayload.cleanliness) : null),
     beforeDataUrl: queuedPhoto(rawBefore),
     afterDataUrl: queuedPhoto(rawAfter),
     photosOmitted: Boolean((rawBefore && !queuedPhoto(rawBefore)) || (rawAfter && !queuedPhoto(rawAfter)))
@@ -8000,6 +8045,7 @@ function enqueueOfflineRun(runPayload = {}) {
   // Cap retained queue so local storage cannot grow without bound.
   const capped = queue.slice(0, 10);
   item.saveFailed = !saveOfflineQueue(capped);
+  lastQueueSaveFailed = item.saveFailed;
   renderOfflineQueue();
   renderOfflineQueueNotice();
   return item;
@@ -8028,8 +8074,15 @@ async function processOfflineRunQueue() {
   return { total: queue.length, scoredCount, queue };
 }
 
+let lastQueueSaveFailed = false;
+
 function renderOfflineQueueNotice() {
   if (!els.offlineQueueNotice) return;
+  if (lastQueueSaveFailed) {
+    els.offlineQueueNotice.textContent = t("queueSaveFailed");
+    els.offlineQueueNotice.classList.remove("hidden");
+    return;
+  }
   const awaiting = loadOfflineQueue().filter((q) => q.status === "awaiting_score");
   if (awaiting.length > 0) {
     els.offlineQueueNotice.textContent = t("offlineQueuedNotice", { count: awaiting.length });
@@ -8577,7 +8630,7 @@ function pruneExpiredRecords(maxAgeDays = CONFIG.retentionDays) {
     const appeals = readAppeals();
     const keptAppeals = appeals.filter((a) => {
       if (a.status === "open") return true;
-      const tMs = Date.parse(a.createdAt || a.timestamp || "");
+      const tMs = Date.parse(a.closedAt || a.openedAt || a.createdAt || a.timestamp || "");
       return Number.isFinite(tMs) && tMs >= cutoffMs;
     });
     appealsPruned = appeals.length - keptAppeals.length;
@@ -8728,16 +8781,17 @@ function getTeamTrainingGaps() {
     else hourBuckets.Evening += 1;
   });
   const topBucket = Object.entries(hourBuckets).sort((a, b) => b[1] - a[1])[0];
+  const bucketKeys = { Overnight: "gapBucketOvernight", Day: "gapBucketDay", Evening: "gapBucketEvening" };
   const whenText = topBucket && topBucket[1] > 0
-    ? `${topBucket[0]} shift pattern (${topBucket[1]} of ${logs.length} logged runs)`
-    : "No timed runs logged yet";
+    ? t("gapWhenPattern", { bucket: t(bucketKeys[topBucket[0]] || "gapBucketDay"), count: topBucket[1], total: logs.length })
+    : t("gapWhenNone");
   const mvp = getCrewMVP();
   const whoText = mvp
-    ? `${mvp.member} leading this week (${mvp.score} top run)`
-    : "No crew runs this week yet";
+    ? t("gapWhoMvp", { member: mvp.member, score: mvp.score })
+    : t("gapWhoNone");
   return {
     where: `${state.checkin.league.toUpperCase()} · ${state.checkin.areaKey} (${state.checkin.assignedSpot})`,
-    how: "Dwell-time compliance, top-to-bottom order, product-to-surface match",
+    how: t("gapHow"),
     when: whenText,
     who: whoText,
     categoryMissCounts: byCat,
@@ -8763,7 +8817,7 @@ function assignTrainingPack(packId = "dwell") {
   });
   saveDeckProgress(progress);
   if (els.adminPackStatus) {
-    els.adminPackStatus.textContent = t("packAssigned", { pack: pack.label, cards: pack.cardIds.length });
+    els.adminPackStatus.textContent = t("packAssigned", { pack: t(pack.id === "surface" ? "packSurface" : pack.id === "product" ? "packProduct" : "packDwell"), cards: pack.cardIds.length });
   }
   renderAdminDashboard();
   return { packId: pack.id, label: pack.label, queuedCardIds: pack.cardIds.slice() };
@@ -8849,7 +8903,7 @@ function renderAdminDashboard() {
     els.adminCrewList.textContent = `${t("approvedLabel", { n: adminStore.approvedMembers.length })} ${adminStore.approvedMembers.join(", ")}${crewNote}`;
   }
   if (els.adminGapSummary) {
-    els.adminGapSummary.textContent = t("gapSummary", { where: gaps.where, how: gaps.how, when: gaps.when, who: gaps.who, surface: gaps.categoryMissCounts.surface, technique: gaps.categoryMissCounts.technique, product: gaps.categoryMissCounts.product, pack: gaps.recommendedPack });
+    els.adminGapSummary.textContent = t("gapSummary", { where: gaps.where, how: gaps.how, when: gaps.when, who: gaps.who, surface: gaps.categoryMissCounts.surface, technique: gaps.categoryMissCounts.technique, product: gaps.categoryMissCounts.product, pack: t(gaps.recommendedPack === "surface" ? "packSurface" : gaps.recommendedPack === "product" ? "packProduct" : "packDwell") });
   }
   if (els.assignTrainingPackSelect && gaps.recommendedPack) {
     els.assignTrainingPackSelect.value = gaps.recommendedPack;

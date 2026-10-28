@@ -378,3 +378,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 47 — Usage checkpoint (00:39) — DONE
 - Evidence: dev.meta.ai/usage reloaded, "Last updated at 12:40 AM": Current usage 0% used, Weekly limit 38% used. Displayed headroom remains full for the current window; pacing stays economical (small slices, CDP gates, no screenshots per loop).
 - Blockers: none.
+
+## LOOP 48 — OvernightDiffReviewer fix batch (8 findings) — DONE
+- Reviewer verdict on loops 6–45 was "incorrect" with 2 P2 + 6 P3 findings; all fixed: verdict number now scheduled before the custom-hype branch (verified runs announce it too); closed-appeal pruning reads openedAt/closedAt (was deleting closed appeals at startup); offline enqueue no longer turns null cleanliness into a fabricated 0%; gap How/When/Who + recommended-pack name localized; pack-assigned status uses localized pack names; findings[0] uses localizedRuleSummary; unmeasured clean detail + technique source labels localized; queue saveFailed now surfaces a visible notice; QR laser only appears after video.play() resolves and hides when camera APIs are absent.
+- Verified clean by reviewer (no action): placeholder parity across 290 keys x3, deck translations complete, language x consent interplay, pledge gating, weighted displays, rule-summary phrase coverage.
+- Evidence: node --check PASS; VM all-true; CDP 6/6; personas 0 fails.
+- Blockers: none.
