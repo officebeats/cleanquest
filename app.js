@@ -401,6 +401,14 @@ const translations = {
     membersInvited: "✓ Invited & approved {count} member(s) ({total} approved).",
     packAssigned: "✓ Assigned {pack} ({cards} cards queued for next 5-card session).",
     ftueActiveLabel: "✓ Consent & Pass active",
+    offlineScored: "SCORED {score}%",
+    offlineAwaiting: "AWAITING SCORE",
+    qrInvalid: "⚠ Invalid QR code — use format CQ-QR-<LEAGUE>-<AREA> (e.g. CQ-QR-OFFICE-BREAKROOM)",
+    qrScanned: "✓ Scanned {code} → {area} ({spot})",
+    qrReady: "Ready to scan · Current station: {code}",
+    qrDemoNote: "Demo mode: tap a station sticker below or enter the CQ-QR code manually.",
+    qrUnsupportedNote: "Camera scanning is not supported in this browser — tap a station below or enter the code.",
+    qrUnavailableNote: "Camera unavailable — tap a station below or enter the CQ-QR code manually.",
     afterAlignPrompt: "GHOST ALIGNMENT: Match your Before angle, then tap CAPTURE AFTER & SCORE",
     captureAfterAndScore: "CAPTURE AFTER & SCORE",
     scanAreaQrAction: "⌗ SCAN QR",
@@ -688,6 +696,14 @@ const translations = {
     membersInvited: "✓ Invitados y aprobados {count} miembro(s) ({total} aprobados).",
     packAssigned: "✓ Asignado {pack} ({cards} tarjetas en cola para la próxima sesión de 5).",
     ftueActiveLabel: "✓ Consentimiento y Pase activos",
+    offlineScored: "PUNTUADO {score}%",
+    offlineAwaiting: "ESPERANDO PUNTUACIÓN",
+    qrInvalid: "⚠ Código QR no válido: usa el formato CQ-QR-<LIGA>-<ÁREA> (ej. CQ-QR-OFFICE-BREAKROOM)",
+    qrScanned: "✓ Escaneado {code} → {area} ({spot})",
+    qrReady: "Listo para escanear · Estación actual: {code}",
+    qrDemoNote: "Modo demo: toca una etiqueta de estación abajo o ingresa el código CQ-QR manualmente.",
+    qrUnsupportedNote: "El escaneo con cámara no es compatible en este navegador: toca una estación abajo o ingresa el código.",
+    qrUnavailableNote: "Cámara no disponible: toca una estación abajo o ingresa el código CQ-QR manualmente.",
     afterAlignPrompt: "ALINEACIÓN FANTASMA: Iguala el ángulo del Antes y toca CAPTURAR DESPUÉS Y PUNTUAR",
     captureAfterAndScore: "CAPTURAR DESPUÉS Y PUNTUAR",
     scanAreaQrAction: "⌗ ESCANEAR QR",
@@ -975,6 +991,14 @@ const translations = {
     membersInvited: "✓ Zaproszono i zatwierdzono {count} członków ({total} zatwierdzonych).",
     packAssigned: "✓ Przypisano {pack} ({cards} kart w kolejce na następną sesję 5 kart).",
     ftueActiveLabel: "✓ Zgoda i Karta aktywne",
+    offlineScored: "OCENIONO {score}%",
+    offlineAwaiting: "OCZEKUJE NA WYNIK",
+    qrInvalid: "⚠ Nieprawidłowy kod QR — użyj formatu CQ-QR-<LIGA>-<OBSZAR> (np. CQ-QR-OFFICE-BREAKROOM)",
+    qrScanned: "✓ Zeskanowano {code} → {area} ({spot})",
+    qrReady: "Gotowy do skanowania · Bieżąca stacja: {code}",
+    qrDemoNote: "Tryb demo: dotknij naklejki stacji poniżej lub wpisz kod CQ-QR ręcznie.",
+    qrUnsupportedNote: "Skanowanie kamerą nie jest obsługiwane w tej przeglądarce — dotknij stacji poniżej lub wpisz kod.",
+    qrUnavailableNote: "Kamera niedostępna — dotknij stacji poniżej lub wpisz kod CQ-QR ręcznie.",
     afterAlignPrompt: "DOPASOWANIE DUCHA: Wyrównaj kadr ze zdjęciem Przed i dotknij ZRÓB ZDJĘCIE PO I OCEŃ",
     captureAfterAndScore: "ZRÓB ZDJĘCIE PO I OCEŃ",
     scanAreaQrAction: "⌗ SKANUJ QR",
@@ -7574,7 +7598,7 @@ function applyAreaQrPayload(raw) {
   const parsed = parseAreaQrPayload(raw);
   if (!parsed) {
     if (els.qrScannerStatus) {
-      els.qrScannerStatus.textContent = "⚠ Invalid QR code — use format CQ-QR-<LEAGUE>-<AREA> (e.g. CQ-QR-OFFICE-BREAKROOM)";
+      els.qrScannerStatus.textContent = t("qrInvalid");
       els.qrScannerStatus.classList.add("qr-status-error");
     }
     playTone(260, 0.09);
@@ -7595,7 +7619,7 @@ function applyAreaQrPayload(raw) {
     els.qrScannerPreviewSvg.innerHTML = renderQrCodeSvg(parsed.code, 116);
   }
   if (els.qrScannerStatus) {
-    els.qrScannerStatus.textContent = `✓ Scanned ${parsed.code} → ${assigned.areaLabel} (${assigned.assignedSpot})`;
+    els.qrScannerStatus.textContent = t("qrScanned", { code: parsed.code, area: assigned.areaLabel, spot: assigned.assignedSpot });
     els.qrScannerStatus.classList.remove("qr-status-error");
   }
   playTone(880, 0.06);
@@ -7619,7 +7643,7 @@ async function openQrScannerModal() {
     els.qrScannerPreviewSvg.innerHTML = renderQrCodeSvg(currentCode, 116);
   }
   if (els.qrScannerStatus) {
-    els.qrScannerStatus.textContent = `Ready to scan · Current station: ${currentCode}`;
+    els.qrScannerStatus.textContent = t("qrReady", { code: currentCode });
     els.qrScannerStatus.classList.remove("qr-status-error");
   }
   if (els.qrStickerQuickGrid) {
@@ -7652,9 +7676,9 @@ async function openQrScannerModal() {
     qrLaserEl?.classList.toggle("hidden", !liveStream);
   };
   if (state.demoMode) {
-    setQrNote("Demo mode: tap a station sticker below or enter the CQ-QR code manually.");
+    setQrNote(t("qrDemoNote"));
   } else if (typeof window.BarcodeDetector !== "function") {
-    setQrNote("Camera scanning is not supported in this browser — tap a station below or enter the code.");
+    setQrNote(t("qrUnsupportedNote"));
   } else {
     qrLaserEl?.classList.remove("hidden");
   }
@@ -7696,7 +7720,7 @@ async function openQrScannerModal() {
       }
     } catch {
       stopQrScannerCamera();
-      setQrNote("Camera unavailable — tap a station below or enter the CQ-QR code manually.");
+      setQrNote(t("qrUnavailableNote"));
     }
   }
   qrOpenInFlight = false;
@@ -7979,7 +8003,7 @@ function renderOfflineQueue() {
     label.textContent = `${item.areaKey || "area"} (${item.assignedSpot || "spot"})`;
     const stateBadge = document.createElement("span");
     stateBadge.className = "provider-mock-chip";
-    stateBadge.textContent = item.status === "scored" ? `SCORED ${item.score}%` : "AWAITING SCORE";
+    stateBadge.textContent = item.status === "scored" ? t("offlineScored", { score: item.score }) : t("offlineAwaiting");
     row.append(label, stateBadge);
     els.offlineQueueList.appendChild(row);
   });

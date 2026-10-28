@@ -340,3 +340,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: pledge warning, site-registered, members-invited, and pack-assigned status messages now render via i18n keys in EN/ES/PL.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 40 — Offline-queue + QR status strings translated — DONE
+- Implemented: queue scored/awaiting badges and all QR scanner status messages (invalid, scanned, ready, demo/unsupported/unavailable notes) now render via i18n keys in EN/ES/PL.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
