@@ -336,6 +336,9 @@ const translations = {
     matchupActive: "{pct}% active",
     rivalCrewName: "Rival Night Crew",
     virtualSquadActive: "✓ VIRTUAL SQUAD ACTIVE",
+    assignedPacksLabel: "Assigned packs:",
+    assignedPacksNone: "Assigned packs: none yet",
+    approvedLabel: "Approved ({n}):",
     areaLabel: "AREA",
     assignedSpotPrefix: "SPOT:",
     frameGuidePrompt: "ALIGN ASSIGNED SPOT IN FRAME",
@@ -612,6 +615,9 @@ const translations = {
     matchupActive: "{pct}% activo",
     rivalCrewName: "Equipo Nocturno Rival",
     virtualSquadActive: "✓ ESCUADRÓN VIRTUAL ACTIVO",
+    assignedPacksLabel: "Paquetes asignados:",
+    assignedPacksNone: "Paquetes asignados: ninguno aún",
+    approvedLabel: "Aprobados ({n}):",
     areaLabel: "ÁREA",
     assignedSpotPrefix: "PUNTO:",
     frameGuidePrompt: "ALINEA EL PUNTO ASIGNADO EN EL MARCO",
@@ -888,6 +894,9 @@ const translations = {
     matchupActive: "{pct}% aktywnych",
     rivalCrewName: "Rywalizująca Ekipa Nocna",
     virtualSquadActive: "✓ WIRTUALNA EKIPA AKTYWNA",
+    assignedPacksLabel: "Przypisane pakiety:",
+    assignedPacksNone: "Przypisane pakiety: brak",
+    approvedLabel: "Zatwierdzeni ({n}):",
     areaLabel: "STREFA",
     assignedSpotPrefix: "PUNKT:",
     frameGuidePrompt: "USTAW PRZYPISANY PUNKT W RAMCE",
@@ -8726,8 +8735,8 @@ function renderAdminDashboard() {
   }
   if (els.assignedPacksList) {
     els.assignedPacksList.textContent = adminStore.assignedPacks.length
-      ? `Assigned packs: ${adminStore.assignedPacks.map((id) => t(id === "dwell" ? "packDwell" : id === "surface" ? "packSurface" : id === "product" ? "packProduct" : "assignPackAction")).join(" · ")}`
-      : "Assigned packs: none yet";
+      ? `${t("assignedPacksLabel")} ${adminStore.assignedPacks.map((id) => t(id === "dwell" ? "packDwell" : id === "surface" ? "packSurface" : id === "product" ? "packProduct" : "assignPackAction")).join(" · ")}`
+      : t("assignedPacksNone");
   }
   if (els.adminCrewList) {
     const crewStore = loadCrewStore();
@@ -8736,7 +8745,7 @@ function renderAdminDashboard() {
     const crewNote = activeCrew
       ? ` · Crew: ${activeCrew.name} ${activeCrew.members.length}/${activeCrew.seats} seats · Participation ${Math.round((part?.participationRate || 0) * 100)}%${part?.qualified ? " (80%+ qualified)" : ""}`
       : "";
-    els.adminCrewList.textContent = `Approved (${adminStore.approvedMembers.length}): ${adminStore.approvedMembers.join(", ")}${crewNote}`;
+    els.adminCrewList.textContent = `${t("approvedLabel", { n: adminStore.approvedMembers.length })} ${adminStore.approvedMembers.join(", ")}${crewNote}`;
   }
   if (els.adminGapSummary) {
     els.adminGapSummary.textContent = `Where: ${gaps.where} · How: ${gaps.how} · When: ${gaps.when} · Who: ${gaps.who} · Knowledge gaps: surface=${gaps.categoryMissCounts.surface}, technique=${gaps.categoryMissCounts.technique}, product=${gaps.categoryMissCounts.product} · Recommended pack: ${gaps.recommendedPack} (one tap to assign below)`;
