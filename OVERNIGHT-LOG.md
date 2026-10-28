@@ -359,3 +359,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: shared objectLabel() helper now localizes detection-overlay labels on before/after evidence (same ES/PL map as findings); template typo in the plural branch caught by review and fixed before gates.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 44 — Score-bar detail strings translated — DONE
+- Implemented: clean/technique/time bar detail explanations (including the <70% review-flag wording) now render via barDetail* keys in EN/ES/PL — they became visible on desktop in LOOP 30, now they're localized too.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails (appellant bars green).
+- Blockers: none.

@@ -353,6 +353,12 @@ const translations = {
     dwellCredited: "Dwell credit +{s}s applied (never counts against speed).",
     scoreBreakdownTitle: "SCORE EXPLANATION (CLEAN · TECHNIQUE · TIME)",
     barClean: "Clean",
+    barDetailClean: "Visible surface cleanliness from before/after comparison.",
+    barDetailTechniqueNone: "No local technique evidence was measured for this run.",
+    barDetailTechnique: "Derived from measured evidence ({sources}).",
+    barDetailNoTime: "No elapsed run time recorded.",
+    barDetailTimeReview: "Faster than 70% of standard time — full time points (no bonus), flagged for human review.",
+    barDetailTimeOk: "85–100% of standard time earns full points; gradual deduction over standard, never zero.",
     barTechnique: "Technique",
     barTime: "Time vs. benchmark",
     notMeasured: "not measured",
@@ -648,6 +654,12 @@ const translations = {
     dwellCredited: "Crédito de contacto +{s}s aplicado (no cuenta contra tu tiempo).",
     scoreBreakdownTitle: "EXPLICACIÓN DE PUNTUACIÓN (LIMPIEZA · TÉCNICA · TIEMPO)",
     barClean: "Limpieza",
+    barDetailClean: "Limpieza visible de la superficie comparando antes y después.",
+    barDetailTechniqueNone: "No se midió evidencia local de técnica en esta ronda.",
+    barDetailTechnique: "Derivado de evidencia medida ({sources}).",
+    barDetailNoTime: "No se registró tiempo transcurrido.",
+    barDetailTimeReview: "Más rápido que el 70% del tiempo estándar: puntos completos de tiempo (sin bono), marcado para revisión humana.",
+    barDetailTimeOk: "Entre 85–100% del tiempo estándar gana puntos completos; deducción gradual sobre el estándar, nunca cero.",
     barTechnique: "Técnica",
     barTime: "Tiempo vs. referencia",
     notMeasured: "no medido",
@@ -943,6 +955,12 @@ const translations = {
     dwellCredited: "Dodano +{s}s czasu działania (nie obniża wyniku czasowego).",
     scoreBreakdownTitle: "WYJAŚNIENIE WYNIKU (CZYSTOŚĆ · TECHNIKA · CZAS)",
     barClean: "Czystość",
+    barDetailClean: "Widoczna czystość powierzchni z porównania przed/po.",
+    barDetailTechniqueNone: "W tym biegu nie zmierzono lokalnych dowodów techniki.",
+    barDetailTechnique: "Na podstawie zmierzonych dowodów ({sources}).",
+    barDetailNoTime: "Nie zapisano czasu biegu.",
+    barDetailTimeReview: "Szybciej niż 70% czasu standardowego — pełne punkty czasu (bez bonusu), oznaczone do przeglądu przez człowieka.",
+    barDetailTimeOk: "85–100% czasu standardowego daje pełne punkty; stopniowa obniżka powyżej standardu, nigdy zero.",
     barTechnique: "Technika",
     barTime: "Czas vs. wzorzec",
     notMeasured: "nie zmierzono",
@@ -7092,7 +7110,7 @@ function cleanBarExplanation(run) {
     measured: true,
     score: val,
     display: `${val}%`,
-    detail: "Visible surface cleanliness from before/after comparison."
+    detail: t("barDetailClean")
   };
 }
 
@@ -7125,7 +7143,7 @@ function techniqueBarExplanation(run) {
       score: null,
       display: t("notMeasured"),
       sources: [],
-      detail: "No local technique evidence was measured for this run."
+      detail: t("barDetailTechniqueNone")
     };
   }
   const avg = Math.max(0, Math.min(100, Math.round(values.reduce((a, b) => a + b, 0) / values.length)));
@@ -7136,7 +7154,7 @@ function techniqueBarExplanation(run) {
     score: avg,
     display: `${avg}%`,
     sources,
-    detail: `Derived from measured evidence (${sources.join(", ")}).`
+    detail: t("barDetailTechnique", { sources: sources.join(", ") })
   };
 }
 
@@ -7162,7 +7180,7 @@ function timeBarExplanation(run) {
       score: null,
       display: t("notMeasured"),
       flag: null,
-      detail: "No elapsed run time recorded."
+      detail: t("barDetailNoTime")
     };
   }
   const dwellCredit = Number(run?.dwellCreditSeconds ?? state.checkin?.dwellCreditSeconds ?? 0) || 0;
@@ -7183,8 +7201,8 @@ function timeBarExplanation(run) {
     benchmarkSeconds: CONFIG.challengeDurationSeconds,
     flag,
     detail: flag
-      ? "Faster than 70% of standard time — full time points (no bonus), flagged for human review."
-      : "85–100% of standard time earns full points; gradual deduction over standard, never zero."
+      ? t("barDetailTimeReview")
+      : t("barDetailTimeOk")
   };
 }
 
