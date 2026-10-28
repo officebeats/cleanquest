@@ -516,3 +516,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 78 — Mid-check (02:34) — DONE
 - Evidence: CDP self-test 6/6; personas 0 fails; tree clean. Single-shot Orca focus-trap eval on a fresh default-profile tab still runtime_timeout — the wedge triggers on interactive eval flows in this Orca build (title-only eval works); trap remains code-reviewed + CDP-covered. No further retries tonight.
 - Blockers: Orca interactive eval (tooling).
+
+## LOOP 79 — Usage + gates checkpoint (03:01) — DONE
+- Evidence: usage page (last updated 3:02 AM): current window 0%, weekly 38%. CDP self-test 6/6; personas 0 fails.
+- Blockers: none.
