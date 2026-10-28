@@ -479,3 +479,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 69 — Payload weight audit — DONE
 - Evidence: assets/audio totals EN 6.8 MB + ES 7.6 MB + PL 8.9 MB = 24 MB; git pack 15.8 MiB — comfortably within Pages limits; clips lazy-load per beat so first paint is unaffected.
 - Blockers: none.
+
+## LOOP 70 — Full-repo sponsor-name sweep — DONE
+- Evidence: per-term grep across all tracked files: the internal document's three sponsor/standards names appear in 0 files. (Settings provider names are the app's own inference providers, pre-existing design, not sponsor placements.) README required phrase still exactly 1.
+- Blockers: none.
