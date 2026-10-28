@@ -4067,6 +4067,37 @@ body.lightbox-open {
     margin-top: 2px !important;
   }
 }
+
+@media (max-width: 640px) {
+  #cameraScreen #checkinBar {
+    flex-wrap: wrap !important;
+  }
+  #cameraScreen #checkinBar .area-select {
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+  }
+  #cameraScreen #assignedSpotBadge {
+    width: 100% !important;
+    text-align: left !important;
+  }
+  #resultsScreen .results-cta-bar,
+  #resultsScreen .sticky-cta {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 20 !important;
+    background: linear-gradient(180deg, transparent, rgba(1, 5, 12, 0.94) 35%) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #resultsScreen .results-actions-grid {
+    grid-template-columns: 1fr !important;
+  }
+  #resultsScreen .dispute-row {
+    flex-wrap: wrap !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

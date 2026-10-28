@@ -193,7 +193,7 @@ const translations = {
     challengeComplete: "Challenge complete",
     analyzing: "AI ANALYZING",
     loadingVision: "Loading vision model…",
-    visibleCleanliness: "VISUAL CLEAN SCORE",
+    visibleCleanliness: "TOTAL SCORE",
     sceneMatch: "SCENE MATCH",
     objectsCleared: "OBJECTS CLEARED",
     objectsRemaining: "OBJECTS REMAIN",
@@ -431,7 +431,7 @@ const translations = {
     challengeComplete: "Reto completado",
     analyzing: "IA ANALIZANDO",
     loadingVision: "Cargando modelo de visión…",
-    visibleCleanliness: "PUNTUACIÓN VISUAL",
+    visibleCleanliness: "PUNTUACIÓN TOTAL",
     sceneMatch: "COINCIDENCIA DE ESCENA",
     objectsCleared: "OBJETOS RETIRADOS",
     objectsRemaining: "OBJETOS RESTANTES",
@@ -669,7 +669,7 @@ const translations = {
     challengeComplete: "Wyzwanie ukończone",
     analyzing: "AI ANALIZUJE",
     loadingVision: "Ładowanie modelu wizyjnego…",
-    visibleCleanliness: "WYNIK WIZUALNY",
+    visibleCleanliness: "WYNIK ŁĄCZNY",
     sceneMatch: "ZGODNOŚĆ KADRU",
     objectsCleared: "USUNIĘTE OBIEKTY",
     objectsRemaining: "POZOSTAŁE OBIEKTY",
@@ -1933,6 +1933,7 @@ function attachBroadcastStudioChain(audioEl) {
     slapGain.connect(masterGain);
     masterGain.connect(ctx.destination);
     state.voice.lastBroadcastChain = true;
+    audioEl._cqNodes = [source, lowWarmth, presence, comp, slapDelay, slapGain, masterGain];
     return true;
   } catch {
     return false;
@@ -1942,18 +1943,25 @@ function attachBroadcastStudioChain(audioEl) {
 function playHostClip(url, fallbackText, prosody, beat = "start") {
   try {
     const audio = new Audio(url);
+    state.voice.currentAudio = audio;
     const targetRate = Number(prosody?.rate) ? Math.max(0.92, Math.min(1.18, Number(prosody.rate))) : 1.04;
     audio.playbackRate = targetRate;
     audio.volume = 1.0;
     attachBroadcastStudioChain(audio);
 
+    const cleanup = () => {
+      try { (audio._cqNodes || []).forEach((n) => n.disconnect()); } catch {}
+      if (state.voice.currentAudio === audio) state.voice.currentAudio = null;
+    };
     audio.onended = () => {
+      cleanup();
       try {
         URL.revokeObjectURL(audio.src);
       } catch {}
     };
 
     audio.onerror = () => {
+      cleanup();
       speakText(fallbackText, prosody);
     };
 
@@ -2062,7 +2070,12 @@ function speakHost(beat, overrideText) {
     });
   };
   if (isLiveBeat) {
-    setTimeout(deliverHostLine, 320);
+    const scheduledGeneration = state.voice.speakGeneration || 0;
+    setTimeout(() => {
+      // Muted/stopped/navigated during the sting: never speak.
+      if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGeneration) return;
+      deliverHostLine();
+    }, 320);
     return;
   }
   deliverHostLine();
@@ -2306,6 +2319,11 @@ function announceStyleScore(score) {
 
 function stopSpeech() {
   announcerRequestId += 1;
+  state.voice.speakGeneration = (state.voice.speakGeneration || 0) + 1;
+  if (state.voice.currentAudio) {
+    try { state.voice.currentAudio.pause(); } catch {}
+    state.voice.currentAudio = null;
+  }
   showAnnouncerStatus("");
   if (!state.voice.available) return;
 
@@ -3754,6 +3772,7 @@ async function handleCompleteButtonTap() {
     }
     state.checkin.aligningAfter = true;
     state.checkin.ghostEnabled = true;
+    els.idleNudgeBanner?.classList.add("hidden");
     updateGhostOverlay();
     els.afterAlignBanner?.classList.remove("hidden");
     if (els.completeButton) {
@@ -5323,8 +5342,9 @@ function renderResults() {
   const differenceMs = targetMs - elapsed;
   const scorable = score.scorable !== false && Number.isFinite(score.cleanliness);
 
+  const weightedHero = scorable ? computeWeightedRunScore() : null;
   els.cleanlinessScore.textContent = scorable
-    ? `${score.cleanliness}%`
+    ? `${weightedHero ?? score.cleanliness}%`
     : score.simulated ? "DEMO" : "RESCAN";
 
   const scoreHero = els.cleanlinessScore.closest(".score-hero");
@@ -6092,7 +6112,11 @@ function inspectionRecordToRow(record) {
     record.note?.hasAudio ? "yes" : "no"
   ];
   return cells
-    .map((cell) => `"${String(cell).replace(/"/g, '""')}"`)
+    .map((cell) => {
+      const raw = String(cell);
+      const safe = /^[=+\-@]/.test(raw.trim()) ? `'${raw}` : raw;
+      return `"${safe.replace(/"/g, '""')}"`;
+    })
     .join(",");
 }
 
@@ -6393,7 +6417,7 @@ function answerDeck(pick) {
   deck.advanceTimer = setTimeout(() => {
     if (state.deck !== deck) return;
     advanceDeckCard();
-  }, 2400);
+  }, Math.min(9000, 2400 + (els.deckFeedback?.textContent?.length || 0) * 45));
 }
 
 function openRecords() {
@@ -6429,11 +6453,23 @@ function saveCompletedRun() {
       generateRunId();
   }
 
+  const weightedScore = Number.isFinite(state.latestScore.cleanliness) ? computeWeightedRunScore({
+    cleanliness: state.latestScore.cleanliness,
+    scorable: state.latestScore.scorable,
+    techniqueScore: state.latestScore.techniqueScore,
+    techniqueEvidence: state.latestScore.techniqueEvidence,
+    elapsedMs: state.timer.elapsedMs,
+    dwellCreditSeconds: state.checkin?.dwellCreditSeconds || 0
+  }) : null;
+
   const entry = {
     id: state.latestRunId,
     name,
     cleanliness:
       Number.isFinite(state.latestScore.cleanliness) ? state.latestScore.cleanliness : null,
+    weightedScore,
+    // Manual spot picks are practice runs: visible locally, never prize/crew credit.
+    prizeEligible: !state.checkin?.spotOverride,
     timeMs: state.timer.elapsedMs,
     styleScore:
       state.latestScore.styleScore ?? 7.5,
@@ -6453,14 +6489,16 @@ function saveCompletedRun() {
   }
 
   saveLeaderboard(entries);
-  if (Number.isFinite(entry.cleanliness)) {
-    try {
-      const crew = ensureActiveCrew(name);
-      recordCrewRun(crew.id, name, entry.cleanliness, new Date(entry.timestamp || Date.now()));
-    } catch {}
+  // Idempotent per run id: crew + inspection side-effects only on first save.
+  if (existingIndex < 0) {
+    if (Number.isFinite(entry.cleanliness) && entry.prizeEligible) {
+      try {
+        const crew = ensureActiveCrew(name);
+        recordCrewRun(crew.id, name, entry.weightedScore ?? entry.cleanliness, new Date(entry.timestamp || Date.now()));
+      } catch {}
+    }
+    void recordInspection(name, entry);
   }
-
-  void recordInspection(name, entry);
 
   return entry;
 }
@@ -6478,11 +6516,6 @@ function updateSavedRunStyleScore(styleScore) {
 
   entries[index].styleScore =
     styleScore;
-
-  entries[index].name =
-    els.playerName.value.trim() ||
-    entries[index].name ||
-    t("defaultPlayer");
 
   saveLeaderboard(entries);
 
@@ -6653,7 +6686,10 @@ function hasConsent() {
     const raw = localStorage.getItem(CONSENT_KEY);
     if (!raw) return false;
     const parsed = JSON.parse(raw);
-    return Boolean(parsed && parsed.accepted === true);
+    if (!parsed || parsed.accepted !== true) return false;
+    // Consent is given in the chosen language; a language switch re-presents it.
+    if (parsed.language && parsed.language !== state.language) return false;
+    return true;
   } catch {
     return false;
   }
@@ -6710,6 +6746,13 @@ function syncFtueCollapseUI() {
   const showHub = Boolean(state.showPassportHub);
   els.consentGate?.classList.toggle("hidden", !showSetup);
   els.cleanerPinBar?.classList.toggle("hidden", !showSetup);
+  // Step isolation: step 3 shows consent only, step 2 shows PIN only.
+  if (showSetup && state.cleanerFtueStep === 3) {
+    els.cleanerPinBar?.classList.add("hidden");
+  }
+  if (showSetup && state.cleanerFtueStep === 2) {
+    els.consentGate?.classList.add("hidden");
+  }
   els.ftueSummaryBar?.classList.toggle("hidden", !showHub && !showSetup);
   els.homePassportPanel?.classList.toggle("hidden", !showHub);
   els.cleanerStepTabs?.classList.toggle("hidden", !showHub && !showSetup);
@@ -6897,12 +6940,9 @@ function gradeRunSurfaces(runInput) {
   if (c === null) {
     return [{ name: spotName, score: null, grade: "partly" }];
   }
-  const topScore = Math.max(0, Math.min(100, Math.round(c + 3)));
-  const detailScore = Math.max(0, Math.min(100, Math.round(c - 4)));
+  // Only the measured spot is graded; per-zone grades are never fabricated.
   return [
-    { name: spotName, score: c, grade: c >= 80 ? "clean" : c >= 55 ? "partly" : "missed" },
-    { name: "Top / Fixture Zone", score: topScore, grade: topScore >= 80 ? "clean" : topScore >= 55 ? "partly" : "missed" },
-    { name: "Edges & Detail Zone", score: detailScore, grade: detailScore >= 80 ? "clean" : detailScore >= 55 ? "partly" : "missed" }
+    { name: spotName, score: c, grade: c >= 80 ? "clean" : c >= 55 ? "partly" : "missed" }
   ];
 }
 
@@ -7040,6 +7080,8 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
   state.checkin.areaKey = CONFIG.areaTemplates[areaKey] ? areaKey : "breakroom";
   state.checkin.league = validLeague;
   state.checkin.assignedSpot = chosenSpot;
+  // Any system/QR assignment clears a prior manual override (selectCleaningSpot re-sets it).
+  state.checkin.spotOverride = false;
   const profile = getSpotScoringProfile(chosenSpot);
 
   if (els.areaTemplateSelect && els.areaTemplateSelect.value !== state.checkin.areaKey) {
@@ -7090,7 +7132,10 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
 }
 
 function selectCleaningSpot(spotName) {
-  return assignSpotForArea(state.checkin.areaKey, state.checkin.league, spotName);
+  const assigned = assignSpotForArea(state.checkin.areaKey, state.checkin.league, spotName);
+  // Manual picks override the system assignment: practice only, no prize/crew credit.
+  state.checkin.spotOverride = true;
+  return assigned;
 }
 
 let qrScannerStream = null;
@@ -7118,7 +7163,11 @@ function parseAreaQrPayload(raw) {
       "Fixture row & partition",
       "Trash & floor zone"
     ];
-    matchedSpot = allSpots.find((s) => s.toUpperCase().includes(spotHint)) || null;
+    const hintTokens = spotHint.split("-").filter(Boolean);
+    matchedSpot = allSpots.find((s) => {
+      const norm = s.toUpperCase().replace(/[^A-Z]+/g, " ").trim();
+      return hintTokens.every((tok) => norm.split(" ").includes(tok)) || norm.includes(hintTokens.join(" "));
+    }) || allSpots.find((s) => s.toUpperCase().includes(hintTokens[0] || "")) || null;
   }
   return {
     code: `CQ-QR-${league.toUpperCase()}-${areaKey.toUpperCase()}`,
@@ -7256,7 +7305,7 @@ function renderQrCodeSvg(codeText, size = 112) {
       }
     }
   }
-  return `<svg viewBox="0 0 ${n + 4} ${n + 4}" width="${size}" height="${size}" shape-rendering="crispEdges" role="img" aria-label="QR Code ${str}"><rect width="${n + 4}" height="${n + 4}" fill="#ffffff"/>${rects}</svg>`;
+  return `<svg viewBox="0 0 ${n + 4} ${n + 4}" width="${size}" height="${size}" shape-rendering="crispEdges" role="img" aria-label="QR Code ${str.replace(/"/g, "")}"><rect width="${n + 4}" height="${n + 4}" fill="#ffffff"/>${rects}</svg>`;
 }
 
 function stopQrScannerCamera() {
@@ -7312,10 +7361,14 @@ function applyAreaQrPayload(raw) {
   return { ...assigned, qrCode: parsed.code };
 }
 
+let qrOpenGeneration = 0;
+let qrOpenInFlight = false;
+
 async function openQrScannerModal() {
-  if (!els.qrScannerModal) return false;
+  if (!els.qrScannerModal || qrOpenInFlight) return false;
+  qrOpenInFlight = true;
+  const myGeneration = ++qrOpenGeneration;
   lastQrTrigger = document.activeElement;
-  const currentCode = `CQ-QR-${state.checkin.league.toUpperCase()}-${state.checkin.areaKey.toUpperCase()}`;
   if (els.qrManualInput) {
     els.qrManualInput.value = currentCode;
   }
@@ -7329,11 +7382,11 @@ async function openQrScannerModal() {
   if (els.qrStickerQuickGrid) {
     els.qrStickerQuickGrid.innerHTML = "";
     const presets = [
-      { code: "CQ-QR-OFFICE-BREAKROOM", label: "Office · Breakroom", spot: "Sink & counter" },
-      { code: "CQ-QR-HEALTHCARE-RESTROOM", label: "Healthcare · Restroom", spot: "Fixture row & partition" },
-      { code: "CQ-QR-EDUCATION-CLASSROOM", label: "Education · Classroom", spot: "Workstation desk & shelf" },
-      { code: "CQ-QR-RETAIL-LOBBY", label: "Retail · Lobby", spot: "Mirror, glass & handles" },
-      { code: "CQ-QR-INDUSTRIAL-OFFICE", label: "Industrial · Office", spot: "Tabletop & appliance front" }
+      { code: "CQ-QR-OFFICE-BREAKROOM-SINK", label: "Office · Breakroom", spot: "Sink & counter" },
+      { code: "CQ-QR-HEALTHCARE-RESTROOM-FIXTURE", label: "Healthcare · Restroom", spot: "Fixture row & partition" },
+      { code: "CQ-QR-EDUCATION-CLASSROOM-WORKSTATION", label: "Education · Classroom", spot: "Workstation desk & shelf" },
+      { code: "CQ-QR-RETAIL-LOBBY-MIRROR", label: "Retail · Lobby", spot: "Mirror, glass & handles" },
+      { code: "CQ-QR-INDUSTRIAL-OFFICE-TABLETOP", label: "Industrial · Office", spot: "Tabletop & appliance front" }
     ];
     presets.forEach((p) => {
       const btn = document.createElement("button");
@@ -7348,14 +7401,29 @@ async function openQrScannerModal() {
   els.qrScannerModal.classList.remove("hidden");
   els.qrScannerModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("lightbox-open");
-  els.qrManualInput?.focus?.();
+  els.qrScannerCloseButton?.focus?.();
+  const setQrNote = (msg) => {
+    if (els.qrCameraStateNote) els.qrCameraStateNote.textContent = msg;
+    if (els.qrScannerStatus) els.qrScannerStatus.textContent = msg;
+  };
+  if (state.demoMode) {
+    setQrNote("Demo mode: tap a station sticker below or enter the CQ-QR code manually.");
+  } else if (typeof window.BarcodeDetector !== "function") {
+    setQrNote("Camera scanning is not supported in this browser — tap a station below or enter the code.");
+  }
 
   if (!state.demoMode && navigator.mediaDevices?.getUserMedia) {
     try {
-      qrScannerStream = await navigator.mediaDevices.getUserMedia({
+      const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: { ideal: "environment" }, width: { ideal: 640 }, height: { ideal: 480 } },
         audio: false
       });
+      if (myGeneration !== qrOpenGeneration || els.qrScannerModal.classList.contains("hidden")) {
+        stream.getTracks().forEach((track) => track.stop());
+        qrOpenInFlight = false;
+        return false;
+      }
+      qrScannerStream = stream;
       if (els.qrScannerVideo && !els.qrScannerModal.classList.contains("hidden")) {
         els.qrScannerVideo.srcObject = qrScannerStream;
         els.qrScannerVideo.classList.remove("hidden");
@@ -7380,14 +7448,17 @@ async function openQrScannerModal() {
       }
     } catch {
       stopQrScannerCamera();
+      setQrNote("Camera unavailable — tap a station below or enter the CQ-QR code manually.");
     }
   }
+  qrOpenInFlight = false;
   return true;
 }
 
 function closeQrScannerModal() {
+  qrOpenGeneration += 1;
+  qrOpenInFlight = false;
   stopQrScannerCamera();
-  if (!els.qrScannerModal) return;
   els.qrScannerModal.classList.add("hidden");
   els.qrScannerModal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("lightbox-open");
@@ -7601,7 +7672,9 @@ async function processOfflineRunQueue() {
   let scoredCount = 0;
   for (const item of queue) {
     if (item.status === "awaiting_score") {
-      item.score = Number.isFinite(item.cleanliness) ? item.cleanliness : 82;
+      // Never invent a score: only a measured cleanliness value can be scored.
+      if (!Number.isFinite(item.cleanliness)) continue;
+      item.score = item.cleanliness;
       item.status = "scored";
       item.scoredAt = new Date().toISOString();
       scoredCount += 1;
@@ -7706,7 +7779,20 @@ function joinCrew(crewId, memberName) {
 function ensureActiveCrew(memberName = "Night Cleaner") {
   const store = loadCrewStore();
   const crew = store.crews.find((c) => c.id === store.activeCrewId) || store.crews[0];
-  if (crew) return crew;
+  if (crew) {
+    const name = String(memberName || "Night Cleaner").trim();
+    let changed = false;
+    if (name && !crew.members.includes(name) && crew.members.length < crew.seats) {
+      crew.members.push(name);
+      changed = true;
+    }
+    if (store.activeCrewId !== crew.id) {
+      store.activeCrewId = crew.id;
+      changed = true;
+    }
+    if (changed) saveCrewStore(store);
+    return crew;
+  }
   return createCrew("Solo Crew", 4, memberName || "Night Cleaner");
 }
 
@@ -7783,7 +7869,8 @@ function getCrewParticipation(crewId, date = new Date()) {
   }
   const wk = weekKeyForDate(date);
   const runs = store.runs.filter((r) => r.crewId === crew.id && r.week === wk);
-  const uniqueMembers = new Set(runs.map((r) => r.member));
+  const memberSet = new Set(crew.members);
+  const uniqueMembers = new Set(runs.map((r) => r.member).filter((m) => memberSet.has(m)));
   const activeCount = Math.min(crew.members.length, uniqueMembers.size);
   const rate = Math.min(1, activeCount / crew.members.length);
   return {
@@ -8188,30 +8275,38 @@ function registerLocalSite(siteName) {
 function printAreaQrSticker() {
   const store = loadAdminStore();
   const latestSite = store.sites[store.sites.length - 1] || "Site 1";
-  const code = `CQ-QR-${state.checkin.league.toUpperCase()}-${state.checkin.areaKey.toUpperCase()}`;
+  const spotSlug = String(state.checkin.assignedSpot || "SINK").toUpperCase().replace(/[^A-Z]+/g, "-").split("-").filter(Boolean)[0] || "SINK";
+  const code = `CQ-QR-${state.checkin.league.toUpperCase()}-${state.checkin.areaKey.toUpperCase()}-${spotSlug}`;
   if (els.qrStickerPreview) {
-    els.qrStickerPreview.textContent = `🖨 PRINTED STICKER [${code}] · ${latestSite} → ${state.checkin.assignedSpot}`;
+    els.qrStickerPreview.innerHTML = renderQrCodeSvg(code, 116);
+    const label = document.createElement("div");
+    label.textContent = `🖨 STICKER [${code}] · ${latestSite} → ${state.checkin.assignedSpot}`;
+    els.qrStickerPreview.appendChild(label);
   }
   playTone(980, 0.07);
   return { code, site: latestSite, spot: state.checkin.assignedSpot };
 }
 
 function inviteAndApproveMember(memberInput) {
-  const clean = String(memberInput || els.adminInviteInput?.value || "").trim() || `Crew Member ${loadAdminStore().approvedMembers.length + 1}`;
+  const raw = String(memberInput || els.adminInviteInput?.value || "");
+  const names = raw.split(/[\n,;]+/).map((s) => s.trim()).filter(Boolean);
+  const list = names.length ? names : [`Crew Member ${loadAdminStore().approvedMembers.length + 1}`];
   const store = loadAdminStore();
-  if (!store.approvedMembers.includes(clean)) {
-    store.approvedMembers.push(clean);
-    saveAdminStore(store);
-  }
   const crewStore = loadCrewStore();
   const activeCrew = crewStore.crews.find((c) => c.id === crewStore.activeCrewId) || crewStore.crews[0];
-  if (activeCrew && !activeCrew.members.includes(clean) && activeCrew.members.length < activeCrew.seats) {
-    activeCrew.members.push(clean);
-    saveCrewStore(crewStore);
-  }
+  list.forEach((clean) => {
+    if (!store.approvedMembers.includes(clean)) {
+      store.approvedMembers.push(clean);
+    }
+    if (activeCrew && !activeCrew.members.includes(clean) && activeCrew.members.length < activeCrew.seats) {
+      activeCrew.members.push(clean);
+    }
+  });
+  saveAdminStore(store);
+  if (activeCrew) saveCrewStore(crewStore);
   if (els.adminInviteInput) els.adminInviteInput.value = "";
   if (els.adminPackStatus) {
-    els.adminPackStatus.textContent = `✓ Invited & approved ${clean} (${store.approvedMembers.length} approved).`;
+    els.adminPackStatus.textContent = `✓ Invited & approved ${list.length} member(s) (${store.approvedMembers.length} approved).`;
   }
   renderAdminDashboard();
   renderCrewAndConsistencyUI();
@@ -8342,7 +8437,10 @@ function renderAdminDashboard() {
     els.adminCrewList.textContent = `Approved (${adminStore.approvedMembers.length}): ${adminStore.approvedMembers.join(", ")}`;
   }
   if (els.adminGapSummary) {
-    els.adminGapSummary.textContent = `Where: ${gaps.where} · How: ${gaps.how} · When: ${gaps.when} · Who: ${gaps.who} · Knowledge gaps: surface=${gaps.categoryMissCounts.surface}, technique=${gaps.categoryMissCounts.technique}, product=${gaps.categoryMissCounts.product}`;
+    els.adminGapSummary.textContent = `Where: ${gaps.where} · How: ${gaps.how} · When: ${gaps.when} · Who: ${gaps.who} · Knowledge gaps: surface=${gaps.categoryMissCounts.surface}, technique=${gaps.categoryMissCounts.technique}, product=${gaps.categoryMissCounts.product} · Recommended pack: ${gaps.recommendedPack} (one tap to assign below)`;
+  }
+  if (els.assignTrainingPackSelect && gaps.recommendedPack) {
+    els.assignTrainingPackSelect.value = gaps.recommendedPack;
   }
   if (els.sponsorAnalyticsSummary) {
     els.sponsorAnalyticsSummary.textContent = `Monthly Sponsor Analytics (Anonymized): ${analytics.activeCleaners} active cleaners · ${analytics.runsCompleted} runs · ${analytics.sponsorImpressions} impressions · ${analytics.categoryAccuracyPercent}% category accuracy`;
@@ -8617,10 +8715,19 @@ async function runPersonaSuite() {
   const savedDemo = state.demoMode;
   const savedMuted = state.voice.muted;
   const savedName = els.playerName ? els.playerName.value : "";
-  let savedCrewsRaw = null;
+  // Hermetic suite: snapshot ALL storage + mutable run state, restore verbatim at end.
+  const savedStorage = {};
   try {
-    savedCrewsRaw = localStorage.getItem(CREWS_KEY);
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const k = localStorage.key(i);
+      if (k) savedStorage[k] = localStorage.getItem(k);
+    }
   } catch {}
+  const savedCheckin = { ...state.checkin };
+  const savedLatestRunId = state.latestRunId;
+  const savedDeckState = state.deck;
+  const savedEditingFtueAll = state.editingFtue;
+  const savedFtueStepAll = state.cleanerFtueStep;
   state.voice.muted = true;
 
   try {
@@ -8802,7 +8909,8 @@ async function runPersonaSuite() {
       && !els.consentGate.classList.contains("hidden");
     state.editingFtue = savedEditingFtue;
     state.cleanerFtueStep = savedStep;
-    setConsentAccepted(true);
+    // Do NOT re-accept consent here; the suite-end restore returns the user's real value.
+    setConsentAccepted(false);
     syncConsentUI();
     push(
       "consent-first-timer",
@@ -8931,12 +9039,17 @@ async function runPersonaSuite() {
   state.voice.muted = savedMuted;
   if (els.playerName) els.playerName.value = savedName;
   try {
-    if (savedCrewsRaw === null) {
-      localStorage.removeItem(CREWS_KEY);
-    } else {
-      localStorage.setItem(CREWS_KEY, savedCrewsRaw);
-    }
+    localStorage.clear();
+    Object.entries(savedStorage).forEach(([k, v]) => {
+      if (v !== null && v !== undefined) localStorage.setItem(k, v);
+    });
   } catch {}
+  state.checkin = { ...savedCheckin };
+  state.latestRunId = savedLatestRunId;
+  state.deck = savedDeckState;
+  state.editingFtue = savedEditingFtueAll;
+  state.cleanerFtueStep = savedFtueStepAll;
+  try { syncConsentUI(); } catch {}
   navigateTo("welcome");
 
   return results;
@@ -9478,6 +9591,15 @@ function bindEvents() {
     "click",
     async () => {
       stopSpeech();
+      if (!hasConsent()) {
+        navigateTo("welcome");
+        state.editingFtue = true;
+        setCleanerFtueStep(3);
+        syncConsentUI();
+        els.consentGate?.classList.add("needs-attention");
+        els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+        return;
+      }
       setInstructionsSeen(true);
       navigateTo("camera");
 
@@ -9486,7 +9608,6 @@ function bindEvents() {
       }
     }
   );
-
   els.cameraContinue.addEventListener(
     "click",
     async () => {
@@ -9655,6 +9776,7 @@ function bindEvents() {
     let suppressNextClick = false;
 
     els.deckCard.addEventListener("pointerdown", (event) => {
+      suppressNextClick = false;
       if (!state.deck || state.deck.locked) return;
       dragStartX = event.clientX;
       dragPointerId = event.pointerId;
