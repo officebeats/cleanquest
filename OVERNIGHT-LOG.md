@@ -230,3 +230,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: both boards now display weightedScore ?? cleanliness in the quality cell, matching the weighted sort order (previously ranked by weighted but labeled with raw clean %).
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails (judge spectator persona green).
 - Blockers: none.
+
+## LOOP 18 — Personal best on weighted score — DONE
+- Implemented: getPersonalRecord personalBest now uses weightedScore ?? cleanliness per entry, so the passport/personal record matches the hero, boards, and crew credit.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

@@ -8250,7 +8250,7 @@ function getPersonalRecord() {
   const streak = loadStreak();
   const consistency = getConsistencyProgress();
   const profile = loadCleanerProfile();
-  const numericScores = entries.map((e) => Number(e.cleanliness)).filter(Number.isFinite);
+  const numericScores = entries.map((e) => (Number.isFinite(e.weightedScore) ? Number(e.weightedScore) : Number(e.cleanliness))).filter(Number.isFinite);
   const personalBest = numericScores.length ? Math.max(...numericScores) : 0;
   // Never exposes "openToWork" to any employer view per operating standards.
   return {
