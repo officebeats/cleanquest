@@ -56,6 +56,59 @@ const CONFIG = {
     samEndpoint: "https://api.meta.ai/v1/responses",
     samModel: "sam-3.1"
   }
+  ,
+  verdictTiers: {
+    passMark: 70,
+    passBigMargin: 15,
+    passCloseMargin: 5,
+    retryFarMargin: 15
+  },
+  scoring: {
+    cleanWeight: 0.5,
+    techniqueWeight: 0.25,
+    timeWeight: 0.25,
+    timeFloor: 10,
+    implausiblyFastSeconds: 15,
+    dwellCreditStepSeconds: 15
+  },
+  leaderboard: {
+    topN: 10
+  },
+  consistency: {
+    windowWeeks: 13,
+    weeklyBenchmark: 70,
+    minRunsPerWeek: 3
+  },
+  crews: {
+    minSeats: 3,
+    maxSeats: 8,
+    participationThreshold: 0.8
+  },
+  deck: {
+    dailyCount: 5
+  },
+  areaTemplates: {
+    breakroom: {
+      label: "Breakroom",
+      spots: ["Sink & counter", "Tabletop & appliance front", "Trash & floor zone"]
+    },
+    restroom: {
+      label: "Restroom",
+      spots: ["Sink & mirror counter", "Fixture row & partition", "Entry door & dispenser zone"]
+    },
+    lobby: {
+      label: "Lobby",
+      spots: ["Entry glass & handles", "Reception counter", "Waiting area floor"]
+    },
+    office: {
+      label: "Office",
+      spots: ["Workstation desk surface", "Conference table & chairs", "Entry & glass partition"]
+    },
+    classroom: {
+      label: "Classroom",
+      spots: ["Board rail & front desk", "Student desk row", "Doorway & sink area"]
+    }
+  }
 };
 
 const translations = {
@@ -233,6 +286,45 @@ const translations = {
     offlineScoreNote: "Offline score — add a key in Settings for cloud verification.",
     scorecardErrorNote: "Cloud check failed — showing the on-device score.",
     surfaceUnverified: "unverified",
+    consentTitle: "BEFORE YOUR FIRST RUN",
+    consentReadAloud: "🔊 READ ALOUD",
+    consentBody: "CleanQuest captures before and after photos of the work surface only. Faces are never identified (no facial recognition or biometrics). Scores and records are for training and recognition — never for discipline. Stored in this browser only.",
+    consentAgreeLabel: "I understand and agree",
+    consentConfirm: "CONFIRM",
+    consentSavedNote: "✓ Consent recorded in this browser.",
+    consistencyDefault: "Week 1 of 13 · On track",
+    consistencyProgress: "Week {week} of {window} · {status}",
+    consistencyOnTrack: "On track",
+    consistencyBuilding: "Building record",
+    consistencyDisclaimer: "Benchmark consistency — never a certification",
+    joinVirtualSquad: "SOLO? JOIN VIRTUAL SQUAD",
+    virtualSquadActive: "✓ VIRTUAL SQUAD ACTIVE",
+    areaLabel: "AREA",
+    assignedSpotPrefix: "SPOT:",
+    frameGuidePrompt: "ALIGN ASSIGNED SPOT IN FRAME",
+    ghostToggle: "◐ GHOST ON",
+    ghostToggleOff: "○ GHOST OFF",
+    dwellCueText: "Dwell cue: let surface solution sit full contact time (does not count against speed).",
+    dwellCreditAction: "+15s DWELL",
+    dwellCredited: "Dwell credit +{s}s applied (never counts against speed).",
+    scoreBreakdownTitle: "SCORE EXPLANATION (CLEAN · TECHNIQUE · TIME)",
+    barClean: "Clean",
+    barTechnique: "Technique",
+    barTime: "Time vs. benchmark",
+    notMeasured: "not measured",
+    reviewFlag: "review",
+    disputeHeading: "FAIR REVIEW",
+    disputeAction: "DISPUTE SCORE",
+    disputeOpenedButton: "APPEAL OPEN",
+    disputeHint: "One-tap appeal — reviewed within 5 business days. Scores are never edited manually.",
+    disputeOpenStatus: "Appeal open ({id}) — review within 5 business days. Read-only: no person can edit a score.",
+    offlineQueueTitle: "OFFLINE RUN QUEUE (AWAITING SCORE)",
+    retryOfflineQueue: "SCORE QUEUED RUNS",
+    offlineQueuedNotice: "Offline run saved to queue as awaiting score ({count} queued).",
+    hypeOffLabel: "Off — silent by default",
+    hypeChillLabel: "Chill — start, finish & verdict only",
+    hypeFullLabel: "Full — all host hype beats",
+    sponsoredBadge: "SPONSORED",
   },
 
   es: {
@@ -409,6 +501,45 @@ const translations = {
     offlineScoreNote: "Puntuación local — añade una clave en Ajustes para la verificación en la nube.",
     scorecardErrorNote: "Falló la comprobación en la nube — se muestra la puntuación local.",
     surfaceUnverified: "sin verificar",
+    consentTitle: "ANTES DE TU PRIMERA RONDA",
+    consentReadAloud: "🔊 ESCUCHAR",
+    consentBody: "CleanQuest toma fotos del antes y después solo de la superficie de trabajo. Los rostros nunca se identifican (sin reconocimiento facial ni biometría). Las puntuaciones y registros son para formación y reconocimiento — nunca para disciplina. Guardado solo en este navegador.",
+    consentAgreeLabel: "Entiendo y acepto",
+    consentConfirm: "CONFIRMAR",
+    consentSavedNote: "✓ Consentimiento guardado en este navegador.",
+    consistencyDefault: "Semana 1 de 13 · En camino",
+    consistencyProgress: "Semana {week} de {window} · {status}",
+    consistencyOnTrack: "En camino",
+    consistencyBuilding: "Construyendo historial",
+    consistencyDisclaimer: "Consistencia de referencia — nunca una certificación",
+    joinVirtualSquad: "¿SOLO? UNIRSE A ESCUADRÓN VIRTUAL",
+    virtualSquadActive: "✓ ESCUADRÓN VIRTUAL ACTIVO",
+    areaLabel: "ÁREA",
+    assignedSpotPrefix: "PUNTO:",
+    frameGuidePrompt: "ALINEA EL PUNTO ASIGNADO EN EL MARCO",
+    ghostToggle: "◐ GUÍA ACTIVA",
+    ghostToggleOff: "○ GUÍA INACTIVA",
+    dwellCueText: "Aviso de contacto: deja actuar el producto el tiempo completo de etiqueta (no penaliza velocidad).",
+    dwellCreditAction: "+15s CONTACTO",
+    dwellCredited: "Crédito de contacto +{s}s aplicado (no cuenta contra tu tiempo).",
+    scoreBreakdownTitle: "EXPLICACIÓN DE PUNTUACIÓN (LIMPIEZA · TÉCNICA · TIEMPO)",
+    barClean: "Limpieza",
+    barTechnique: "Técnica",
+    barTime: "Tiempo vs. referencia",
+    notMeasured: "no medido",
+    reviewFlag: "revisión",
+    disputeHeading: "REVISIÓN JUSTA",
+    disputeAction: "APELAR PUNTUACIÓN",
+    disputeOpenedButton: "APELACIÓN ABIERTA",
+    disputeHint: "Apelación en un toque — respuesta en 5 días hábiles. Nadie edita puntuaciones.",
+    disputeOpenStatus: "Apelación abierta ({id}) — revisión en 5 días hábiles. Nadie puede editar una puntuación.",
+    offlineQueueTitle: "COLA SIN CONEXIÓN (ESPERANDO PUNTUACIÓN)",
+    retryOfflineQueue: "PUNTUAR RONDAS EN COLA",
+    offlineQueuedNotice: "Ronda sin conexión guardada en espera de puntuación ({count} en cola).",
+    hypeOffLabel: "Apagado — silencio por defecto",
+    hypeChillLabel: "Suave — solo inicio, final y veredicto",
+    hypeFullLabel: "Completo — toda la voz del anfitrión",
+    sponsoredBadge: "PATROCINADO",
   },
 
   pl: {
@@ -585,6 +716,45 @@ const translations = {
     offlineScoreNote: "Wynik lokalny — dodaj klucz w Ustawieniach, aby włączyć weryfikację w chmurze.",
     scorecardErrorNote: "Weryfikacja w chmurze nie powiodła się — wyświetlono wynik lokalny.",
     surfaceUnverified: "niezweryfikowana",
+    consentTitle: "PRZED PIERWSZYM BIEGIEM",
+    consentReadAloud: "🔊 CZYTAJ NA GŁOS",
+    consentBody: "CleanQuest robi zdjęcia przed i po wyłącznie powierzchni roboczej. Twarze nigdy nie są identyfikowane (brak rozpoznawania twarzy i biometrii). Wyniki i wpisy służą szkoleniu i uznaniu — nigdy dyscyplinie. Zapisane tylko w tej przeglądarce.",
+    consentAgreeLabel: "Rozumiem i zgadzam się",
+    consentConfirm: "POTWIERDŹ",
+    consentSavedNote: "✓ Zgoda zapisana w tej przeglądarce.",
+    consistencyDefault: "Tydzień 1 z 13 · Na dobrej drodze",
+    consistencyProgress: "Tydzień {week} z {window} · {status}",
+    consistencyOnTrack: "Na dobrej drodze",
+    consistencyBuilding: "Budowanie historii",
+    consistencyDisclaimer: "Regularność względem wzorca — nigdy certyfikacja",
+    joinVirtualSquad: "SOLO? DOŁĄCZ DO WIRTUALNEJ EKIPY",
+    virtualSquadActive: "✓ WIRTUALNA EKIPA AKTYWNA",
+    areaLabel: "STREFA",
+    assignedSpotPrefix: "PUNKT:",
+    frameGuidePrompt: "USTAW PRZYPISANY PUNKT W RAMCE",
+    ghostToggle: "◐ DUCH WŁ.",
+    ghostToggleOff: "○ DUCH WYŁ.",
+    dwellCueText: "Wskazówka czasu działania: pozostaw środek na pełny czas z etykiety (nie liczy się przeciwko czasowi).",
+    dwellCreditAction: "+15s CZAS",
+    dwellCredited: "Dodano +{s}s czasu działania (nie obniża wyniku czasowego).",
+    scoreBreakdownTitle: "WYJAŚNIENIE WYNIKU (CZYSTOŚĆ · TECHNIKA · CZAS)",
+    barClean: "Czystość",
+    barTechnique: "Technika",
+    barTime: "Czas vs. wzorzec",
+    notMeasured: "nie zmierzono",
+    reviewFlag: "weryfikacja",
+    disputeHeading: "UCZCIWA WERYFIKACJA",
+    disputeAction: "ODWOŁAJ SIĘ",
+    disputeOpenedButton: "ODWOŁANIE OTWARTE",
+    disputeHint: "Odwołanie jednym dotknięciem — decyzja w 5 dni roboczych. Nikt ręcznie nie zmienia wyników.",
+    disputeOpenStatus: "Odwołanie otwarte ({id}) — decyzja w 5 dni roboczych. Nikt nie może edytować wyniku.",
+    offlineQueueTitle: "KOLEJKA OFFLINE (OCZEKUJE NA WYNIK)",
+    retryOfflineQueue: "OCEŃ ZAPISANE BIEGI",
+    offlineQueuedNotice: "Bieg zapisany w kolejce offline jako oczekujący na wynik ({count}).",
+    hypeOffLabel: "Wyłączony — domyślnie cisza",
+    hypeChillLabel: "Spokojny — tylko start, koniec i werdykt",
+    hypeFullLabel: "Pełny — wszystkie kwestie prowadzącego",
+    sponsoredBadge: "SPONSOROWANE",
   }
 };
 
@@ -612,7 +782,8 @@ const state = {
   demoMode: false,
 
   voice: {
-    muted: false,
+    muted: true,
+    hypeLevel: "off",
     available:
       "speechSynthesis" in window &&
       "SpeechSynthesisUtterance" in window,
@@ -672,6 +843,13 @@ const state = {
   recorder: null,
   recordChunks: [],
   settingsReturn: "welcome",
+  checkin: {
+    areaKey: "breakroom",
+    assignedSpot: "Sink & counter",
+    ghostEnabled: true,
+    dwellCreditSeconds: 0
+  },
+  forceOfflineQueue: false,
 
   selfTest: {
     running: false,
@@ -806,6 +984,44 @@ const els = {
   verifiedHype: document.getElementById("verifiedHype"),
   offlineScoreNote: document.getElementById("offlineScoreNote"),
   scorecardErrorNote: document.getElementById("scorecardErrorNote")
+  ,
+  consentGate: document.getElementById("consentGate"),
+  consentText: document.getElementById("consentText"),
+  consentReadAloud: document.getElementById("consentReadAloud"),
+  consentCheckbox: document.getElementById("consentCheckbox"),
+  consentAcceptButton: document.getElementById("consentAcceptButton"),
+  consentStatusBadge: document.getElementById("consentStatusBadge"),
+  homePassportPanel: document.getElementById("homePassportPanel"),
+  homeCrewMatchup: document.getElementById("homeCrewMatchup"),
+  consistencyMeter: document.getElementById("consistencyMeter"),
+  consistencyLabel: document.getElementById("consistencyLabel"),
+  consistencyFill: document.getElementById("consistencyFill"),
+  joinVirtualSquadButton: document.getElementById("joinVirtualSquadButton"),
+  homeSponsorSlot: document.getElementById("homeSponsorSlot"),
+  checkinBar: document.getElementById("checkinBar"),
+  areaTemplateSelect: document.getElementById("areaTemplateSelect"),
+  assignedSpotBadge: document.getElementById("assignedSpotBadge"),
+  frameGuideOverlay: document.getElementById("frameGuideOverlay"),
+  frameGuideText: document.getElementById("frameGuideText"),
+  ghostOverlay: document.getElementById("ghostOverlay"),
+  ghostToggleButton: document.getElementById("ghostToggleButton"),
+  dwellCueBanner: document.getElementById("dwellCueBanner"),
+  dwellCueText: document.getElementById("dwellCueText"),
+  dwellCreditButton: document.getElementById("dwellCreditButton"),
+  scoreBreakdownCard: document.getElementById("scoreBreakdownCard"),
+  scoreBreakdownBars: document.getElementById("scoreBreakdownBars"),
+  offlineQueueNotice: document.getElementById("offlineQueueNotice"),
+  disputePanel: document.getElementById("disputePanel"),
+  disputeButton: document.getElementById("disputeButton"),
+  disputeStatus: document.getElementById("disputeStatus"),
+  crewLeaderboardSummary: document.getElementById("crewLeaderboardSummary"),
+  offlineQueueSection: document.getElementById("offlineQueueSection"),
+  offlineQueueList: document.getElementById("offlineQueueList"),
+  retryOfflineQueueButton: document.getElementById("retryOfflineQueueButton"),
+  hypeLevelOff: document.getElementById("hypeLevelOff"),
+  hypeLevelChill: document.getElementById("hypeLevelChill"),
+  hypeLevelFull: document.getElementById("hypeLevelFull"),
+  deckSponsorSlot: document.getElementById("deckSponsorSlot")
 };
 
 const COUNTABLE_CLASSES = new Set([
@@ -1044,7 +1260,8 @@ function playAnnouncerCue() {
 }
 
 function speakText(text, options = {}) {
-  if (!state.voice.available || state.voice.muted || !text) return;
+  const force = Boolean(options.force);
+  if (!state.voice.available || (!force && state.voice.muted) || !text) return;
   const requestId = ++announcerRequestId;
   const synth = window.speechSynthesis;
   let started = false;
@@ -1052,7 +1269,7 @@ function speakText(text, options = {}) {
   let watchdog;
 
   const attempt = (useDefault) => {
-    if (requestId !== announcerRequestId || state.voice.muted) return;
+    if (requestId !== announcerRequestId || (!force && state.voice.muted)) return;
     try {
       synth.cancel();
       const utterance = useDefault
@@ -1111,6 +1328,12 @@ const HOST_LINES = {
     finish: ["Time!... what a sight!", "And... done! Beautiful work!", "That's it... pure champ!", "Clock's out... gorgeous!", "Finished! ... take a bow!", "Time's up... what a run!", "Done and dusted... literally!", "Stop the clock... stunning!", "That's a wrap... well played!", "Time! ... look at that shine!", "All done... give yourself credit!", "Ninety seconds... nailed it!", "And stop... fantastic job!", "Complete! ... room's glowing!", "Time called... you delivered!", "Done! ... that's how it's done!", "Whistle blows... great run!", "Finished strong... love to see it!", "That's time... absolute star!", "Clock stops... crowd goes wild!", "All finished... take it in!", "Done deal... sparkling result!", "Time! ... chef's kiss!", "Complete... you made it look easy!"],
     pass: ["Pass! That room is gleaming!", "Certified fresh... beautiful!", "Pass with style... well earned!", "That's a pass... gorgeous work!", "Stamp it... sparkling clean!", "Pass! ... the judges are smiling!", "Top marks... enjoy it!", "A clear pass... take the win!", "Pass! ... what a transformation!", "Verified and victorious... yes!", "That's the standard... pass!", "Pass! ... room looks brand new!", "Gold star... fully earned!", "Pass with flying colors... wow!", "Clean bill... beautifully done!", "That's a pass... own it!", "Scoreboard loves it... pass!", "Pass! ... picture-perfect clean!", "Nailed the benchmark... pass!", "Victory lap... you passed!", "Pass! ... simply stunning!", "The room approves... pass!", "Flawless finish... that's a pass!", "Pass! ... remember this feeling!"],
     retry: ["So close... one more run?", "Not quite... you've got another in you!", "Missed it... shake it off, go again!", "Almost there... run it back!", "No shame... champions retry!", "Just short... next one's yours!", "Ooh, close... let's go again!", "Not this time... you'll get it!", "So near... one more try?", "Dust yourself off... retry!", "Almost had it... again!", "Close call... stunning effort!", "Not yet... but you're close!", "Retry time... I believe in you!", "Missed the mark... reload and go!", "One more... you've got this!", "Close... but no cigar yet!", "Almost... such great heart!", "Not quite... the room's waiting!", "Retry... make it count!", "So close... feel that fire?", "Next run's the one... go!", "Missed... but what heart!", "Again... cleaner and meaner!"],
+    "pass-big": ["Massive win... absolutely glowing!", "Blown away... perfect score vibes!", "History made... look at that!", "Unreal result... take a bow!", "Total triumph... room transformed!", "Legendary clean... hall of fame!", "Off the charts... incredible!", "A masterpiece... pure gold!", "Best yet... simply flawless!", "Record breaker... enjoy it!", "Pure perfection... wow wow!", "Champion level... undisputed!"],
+    "pass-close": ["Squeaked through... still counts!", "By a whisker... you made it!", "Just enough... celebrate it!", "Narrow win... sweet relief!", "Cut it close... beautiful!", "Over the line... phew!", "Made it... by a hair!", "Close one... but it's yours!", "Scraped by... take it!", "Photo finish... you passed!", "Barely... but brilliantly!", "Survived... and shining!"],
+    "retry-far": ["Not today... still shining!", "Off the mark... head high!", "Missed big... heart bigger!", "Rough one... shake it off!", "Far away... next time!", "No shame... reload and glow!", "Way off... beautiful effort!", "Tough round... still a star!", "Missed wide... keep glowing!", "Bad break... lovely try!", "Far from it... come back!", "Off day... still golden!"],
+    hurry: ["Ten seconds... what a finish!", "Final stretch... looking glorious!", "Almost home... beautiful ending!", "What a run... beautiful!", "Last seconds... pure magic!", "Closing time... stunning work!", "Here it comes... the bell!", "Final countdown... love it!", "So close... looking amazing!", "Final moments... what heart!", "Nearly there... gorgeous sight!", "Seconds left... shining bright!"],
+    "hurry-final": ["Ten... nine... here we go!", "Final ten... make it count!", "Clock screaming... shine anyway!", "Last seconds... pure heart!", "Ten left... leave nothing!", "The bell... almost ringing!", "Final burst... beautiful!", "Ten seconds... legendary finish!", "Almost over... brightest moment!", "Last call... all heart!", "Final ten... glorious run!", "Bell about to ring... shine!"],
+    "scoring-wait": ["Judges watching... what nerves!", "Holding breath... here we go!", "Scores incoming... so close!", "Drumroll... this is it!", "Judges deciding... wow moments!", "Waiting... what a run!", "Tallying up... looking good!", "Moment of truth... shine!", "Scoreboard waking... here it comes!", "Fingers crossed... beautiful work!", "The verdict... almost here!", "Suspense... you were great!"],
   },
   es: {
     start: ["¡Vamos... a brillar!", "¡Juego en marcha... demuestra quién manda!", "Cámaras listas... ¡que se vea el brillo!", "Muy bien, campeón... ¡haz que cuente!", "El reloj corre... ¡tú puedes!", "A trabajar... ¡rápido y bien!", "Vamos allá... ¡limpio y veloz!", "Listos... ¡a brillar!", "Tu sala... tu escenario... ¡ya!", "Momento estrella... ¡a brillar!", "¡Es la hora... sala estrella!", "Noventa segundos... ¡que valgan!", "En marcha... ¡el objetivo es impecable!", "Cara de juego... ¡allá vamos!", "A darle... ¡para esto entrenaste!", "Muy bien, estrella... ¡esa sala es tuya!", "Hagamos que brille... ¡ya mismo!", "Luces listas... sala lista... ¡ya!", "El reloj vive... ¡haz lo tuyo!", "Sin presión... ¡solo brilla!", "Allá vamos... ¡máquina de limpiar!", "Luces, cámara... ¡limpieza!", "Tus noventa segundos... ¡empiezan ya!", "Vamos... ¡con todo!"],
@@ -1118,6 +1341,12 @@ const HOST_LINES = {
     finish: ["¡Tiempo!... ¡obra hermosa!", "¡Y... listo! ¡Hermoso trabajo!", "¡Eso es... puro campeón!", "Se acabó... ¡precioso!", "¡Terminado!... ¡haz reverencia!", "¡Se acabó el tiempo... qué carrera!", "Listo y pulido... ¡literal!", "Para el reloj... ¡impresionante!", "Fin del juego... ¡bien jugado!", "¡Tiempo!... ¡mira ese brillo!", "Todo listo... ¡date el crédito!", "Noventa segundos... ¡clavado!", "Y paramos... ¡trabajo fantástico!", "¡Completo!... ¡la sala brilla!", "Tiempo cumplido... ¡cumpliste!", "¡Listo!... ¡así se hace!", "Suena el silbato... ¡gran carrera!", "Cierre fuerte... ¡da gusto verlo!", "Eso es tiempo... ¡estrella total!", "Reloj parado... ¡el público enloquece!", "Todo terminado... ¡disfrútalo!", "Trato hecho... ¡resultado brillante!", "¡Tiempo!... ¡beso de chef!", "Completo... ¡lo haces ver fácil!"],
     pass: ["¡Pasa! ¡Esa sala reluce!", "Frescura total... ¡hermoso!", "Pasa con estilo... ¡bien ganado!", "Eso pasa... ¡trabajo precioso!", "Sello puesto... ¡limpio total!", "¡Pasa!... ¡los jueces sonríen!", "Nota máxima... ¡disfrútalo!", "Pase claro... ¡llévate el triunfo!", "¡Pasa!... ¡qué transformación!", "Verificado y victorioso... ¡sí!", "Ese es el nivel... ¡pasa!", "¡Pasa!... ¡la sala parece nueva!", "Estrella de oro... ¡merecida!", "Pasa con honores... ¡guau!", "Cuenta limpia... ¡hermoso trabajo!", "Eso pasa... ¡hazlo tuyo!", "Al marcador le encanta... ¡pasa!", "¡Pasa!... ¡limpieza de foto!", "Clavaste la marca... ¡pasa!", "Vuelta de honor... ¡pasaste!", "¡Pasa!... ¡simplemente increíble!", "La sala aprueba... ¡pasa!", "Final impecable... ¡eso pasa!", "¡Pasa!... ¡recuerda este momento!"],
     retry: ["Tan cerca... ¿otra carrera?", "Casi... ¡tienes otra en ti!", "Falló... ¡sacúdete y repite!", "Casi lo logras... ¡de nuevo!", "Sin vergüenza... ¡los campeones repiten!", "Por poco... ¡la próxima es tuya!", "Uy, cerca... ¡vamos otra vez!", "Esta vez no... ¡lo lograrás!", "Tan cerca... ¿un intento más?", "Sacúdete el polvo... ¡repite!", "Casi lo tenías... ¡otra vez!", "¡Qué cerca... esfuerzo hermoso!", "Todavía no... pero estás cerca...", "Hora de repetir... ¡creo en ti!", "Falló la marca... ¡recarga y ve!", "Una más... ¡tú puedes!", "Cerca... pero aún no...", "Casi... ¡qué gran corazón!", "Aún no... ¡la sala espera!", "Repite... ¡que cuente!", "Tan cerca... ¿sientes el fuego?", "La próxima es la buena... ¡ve!", "Falló... ¡pero qué corazón!", "Otra vez... ¡más limpio y veloz!"],
+    "pass-big": ["¡Victoria enorme... brillo total!", "Impresionante... ¡vibras perfectas!", "Historia hecha... ¡mira eso!", "Resultado irreal... ¡reverencia!", "Triunfo total... ¡sala transformada!", "Limpieza legendaria... ¡salón de fama!", "Fuera de serie... ¡increíble!", "Obra maestra... ¡oro puro!", "Lo mejor... ¡simplemente perfecto!", "Récord roto... ¡disfrútalo!", "Pura perfección... ¡guau guau!", "Nivel campeón... ¡indiscutible!"],
+    "pass-close": ["Pasó raspando... ¡igual vale!", "Por un pelo... ¡lo lograste!", "Justo bastó... ¡celébralo!", "Victoria ajustada... ¡qué alivio!", "Cierre apretado... ¡hermoso!", "Cruzó la línea... ¡uf!", "Lo logró... ¡por un pelo!", "Fue cerrado... ¡pero es tuyo!", "Apenas pasó... ¡qué alegría!", "Final de foto... ¡pasaste!", "Apenas... ¡pero brillante!", "Sobrevivió... ¡y brillando!"],
+    "retry-far": ["Hoy no... ¡sigues brillando!", "Lejos de la meta... ¡cabeza en alto!", "Fallo grande... ¡corazón gigante!", "Ronda dura... ¡sacúdete!", "Lejos... ¡la próxima!", "Sin vergüenza... ¡recarga y brilla!", "Muy lejos... ¡hermoso intento!", "Ronda difícil... ¡sigues siendo estrella!", "Por lejos... ¡sigue brillando!", "Mala suerte... ¡lindo intento!", "Lejos de eso... ¡vuelve!", "Mal día... ¡brillo intacto!"],
+    hurry: ["¡Diez segundos... qué final!", "Recta final... ¡se ve glorioso!", "Casi en casa... ¡final hermoso!", "¡Qué carrera... momento mágico!", "Últimos segundos... ¡pura magia!", "Cierre total... ¡trabajo increíble!", "Ya viene... ¡la campana!", "Cuenta atrás... ¡me encanta!", "Tan cerca... ¡te ves genial!", "Momentos finales... ¡qué corazón!", "Ya casi... ¡vista preciosa!", "Reloj corriendo... ¡qué brillo!"],
+    "hurry-final": ["Diez... nueve... ¡aquí vamos!", "Diez finales... ¡que cuenten!", "Reloj gritando... ¡brilla igual!", "Últimos segundos... ¡puro corazón!", "Quedan diez... ¡nada guardado!", "La campana... ¡casi suena!", "Ráfaga final... ¡hermoso!", "Diez segundos... ¡fin legendario!", "Casi acaba... ¡momento más brillante!", "Última llamada... ¡todo corazón!", "Diez finales... ¡carrera gloriosa!", "La campana va a sonar... ¡brilla!"],
+    "scoring-wait": ["Jueces mirando... ¡qué nervios!", "Conteniendo el aliento... ¡ya viene!", "Notas en camino... ¡qué emoción!", "Redoble... ¡esto es!", "Jueces decidiendo... ¡momentos guau!", "Esperando... ¡qué carrera!", "Sumando puntos... ¡pinta bien!", "Momento de verdad... ¡brillo!", "Marcador despierta... ¡ya viene!", "Dedos cruzados... ¡trabajo hermoso!", "El veredicto... ¡casi aquí!", "Suspenso... ¡estuviste genial!"],
   },
   pl: {
     start: ["No to... czas błyszczeć!", "Gra trwa... pokaż, kto tu rządzi!", "Kamery gotowe... niech widać blask!", "Dobra, mistrzu... niech się liczy!", "Zegar tyka... dasz radę!", "Do pracy... szybko i dobrze!", "No to... czysto i sprawnie!", "Gotowi... do blasku!", "Twój pokój... twoja scena... start!", "Wielka chwila... sprzątamy!", "Showtime... gwiazda sprząta!", "Dziewięćdziesiąt sekund... wykorzystaj je!", "Zaczynamy... cel to perfekcja!", "Mina gracza... jedziemy!", "Do boju... po to trenowałeś!", "Dobra, gwiazdo... ten pokój jest twój!", "Niech błyszczy... już teraz!", "Światła gotowe... sala gotowa... start!", "Zegar żyje... rób swoje!", "Bez presji... po prostu błyszcz!", "Jedziemy... maszyno czystości!", "Światła, kamera... sprzątanie!", "Twoje dziewięćdziesiąt sekund... start!", "Dawaj... pełną parą!"],
@@ -1125,6 +1354,12 @@ const HOST_LINES = {
     finish: ["Czas!... piękne dzieło!", "I... gotowe! Piękna robota!", "To jest... czysty mistrz!", "Koniec... przepięknie!", "Ukończone!... ukłoń się!", "Czas minął... co za występ!", "Gotowe i czyste... dosłownie!", "Stop zegar... imponujące!", "Koniec gry... ładnie zagrane!", "Czas!... spójrz na ten blask!", "Wszystko gotowe... bądź dumny!", "Dziewięćdziesiąt sekund... idealnie!", "I stop... fantastyczna robota!", "Ukończone!... pokój lśni!", "Czas minął... dowiozłeś!", "Gotowe!... tak się to robi!", "Gwizdek... świetny występ!", "Mocny finisz... miło patrzeć!", "To jest czas... prawdziwa gwiazda!", "Zegar staje... tłum szaleje!", "Wszystko skończone... naciesz się!", "Umowa stoi... błyszczący wynik!", "Czas!... miodzio!", "Ukończone... robisz to z łatwością!"],
     pass: ["Zaliczone! Ten pokój lśni!", "Pełna świeżość... przepięknie!", "Zaliczone ze stylem... zasłużenie!", "To przechodzi... śliczna robota!", "Przybijam... idealna czystość!", "Zaliczone!... sędziowie się uśmiechają!", "Najwyższa nota... ciesz się!", "Jasne zaliczenie... bierz wygraną!", "Zaliczone!... co za zmiana!", "Zweryfikowane i zwycięskie... tak!", "To jest poziom... zaliczone!", "Zaliczone!... pokój jak nowy!", "Złota gwiazdka... zasłużona!", "Zaliczone z honorem... wow!", "Czyste konto... piękna robota!", "To przechodzi... weź to sobie!", "Tablica to kocha... zaliczone!", "Zaliczone!... czystość ze zdjęcia!", "Wbiłeś benchmark... zaliczone!", "Runda honorowa... zaliczyłeś!", "Zaliczone!... po prostu cudnie!", "Pokój zatwierdza... zaliczone!", "Perfekcyjny finisz... to zaliczone!", "Zaliczone!... zapamiętaj tę chwilę!"],
     retry: ["Tak blisko... jeszcze jeden bieg?", "Prawie... masz w sobie kolejny!", "Nie wyszło... otrzep się i jeszcze raz!", "Prawie się udało... jeszcze raz!", "Bez wstydu... mistrzowie powtarzają!", "O włos... następny będzie twój!", "Uff, blisko... dawaj jeszcze raz!", "Tym razem nie... uda ci się!", "Tak blisko... jeszcze jedna próba?", "Otrzep kurz... powtórz!", "Prawie miałeś... jeszcze raz!", "Blisko było... piękny wysiłek!", "Jeszcze nie... ale jesteś blisko...", "Czas na powtórkę... wierzę w ciebie!", "Nie ta marka... ładuj i leć!", "Jeszcze raz... dasz radę!", "Blisko... ale jeszcze nie...", "Prawie... co za serce!", "Jeszcze nie... pokój czeka!", "Powtórz... niech się liczy!", "Tak blisko... czujesz ogień?", "Następny będzie ten... leć!", "Nie wyszło... ale co za serce!", "Jeszcze raz... czyściej i ostrzej!"],
+    "pass-big": ["Wielka wygrana... pełny blask!", "Szok... perfekcyjne wibracje!", "Historia pisze się... patrz!", "Nierealny wynik... wielki ukłon!", "Pełny triumf... pokój odmieniony!", "Legendarna czystość... aleja gwiazd!", "Poza skalą... niesamowite!", "Arcydzieło... czyste złoto!", "Najlepszy występ... po prostu perfekcja!", "Rekord pobity... ciesz się!", "Czysta perfekcja... wow wow!", "Poziom mistrza... bezdyskutacyjnie!"],
+    "pass-close": ["Ledwo przeszło... ale liczy się!", "O włos... udało ci się!", "Wystarczyło... świętuj to!", "Wąska wygrana... co za ulga!", "Bliski finisz... pięknie!", "Za linią... uff!", "Udało się... o włos!", "Blisko było... ale twoje!", "Ledwo weszło... co za radość!", "Finisz foto... zaliczone!", "Ledwo... ale genialnie!", "Przetrwałeś... i błyszczysz!"],
+    "retry-far": ["Nie dziś... wciąż błyszczysz!", "Daleko od celu... głowa w górę!", "Duże pudło... większe serce!", "Ciężka runda... otrzep się!", "Daleko... następnym razem!", "Bez wstydu... wracaj i błyszcz!", "Daleko obok... piękna próba!", "Trudna runda... wciąż gwiazda!", "Spore pudło... błyszcz dalej!", "Brak farta... ładna próba!", "Daleko od tego... wróć!", "Gorszy dzień... wciąż na złoto!"],
+    hurry: ["Dziesięć sekund... co za finisz!", "Ostatnia prosta... wygląda bosko!", "Prawie w domu... piękny finał!", "Co za bieg... czysta magia!", "Ostatnie sekundy... wielka magia!", "Wielki finał... cudowna robota!", "Już nadchodzi... dzwonek!", "Odliczanie... uwielbiam to!", "Tak blisko... wyglądasz super!", "Ostatnie chwile... co za serce!", "Już prawie... cudowny widok!", "Zegar tyka... co za blask!"],
+    "hurry-final": ["Dziesięć... dziewięć... jedziemy!", "Ostatnie dziesięć... niech się liczy!", "Zegar krzyczy... błyszcz mimo to!", "Ostatnie sekundy... czyste serce!", "Zostało dziesięć... nic w zapasie!", "Dzwonek... zaraz zadzwoni!", "Ostatni zryw... pięknie!", "Dziesięć sekund... legendarny finisz!", "Prawie koniec... najjaśniejszy moment!", "Ostatnie wezwanie... całe serce!", "Ostatnia dziesiątka... chwalebny bieg!", "Dzwonek zaraz zabrzmi... błyszcz!"],
+    "scoring-wait": ["Sędziowie patrzą... co za nerwy!", "Wstrzymany oddech... już jest!", "Wyniki lecą... co za emocje!", "Werble... to jest to!", "Sędziowie radzą... momenty wow!", "Czekamy... co za bieg!", "Liczą punkty... wygląda dobrze!", "Moment prawdy... blask!", "Tablica budzi się... już idzie!", "Kciuki trzymane... piękna robota!", "Werdykt... już prawie!", "Napięcie... byłeś świetny!"],
   }
 };
 
@@ -1149,9 +1384,15 @@ function prosodyJitter(text, amount) {
 const HOST_PROSODY = {
   start: { rate: 1.0, pitch: 1.0 },
   mid: { rate: 1.0, pitch: 1.0 },
+  hurry: { rate: 1.04, pitch: 1.03 },
+  "hurry-final": { rate: 1.06, pitch: 1.05 },
+  "scoring-wait": { rate: 0.98, pitch: 1.0 },
   finish: { rate: 1.03, pitch: 1.05 },
+  "pass-big": { rate: 0.98, pitch: 1.03 },
   pass: { rate: 0.95, pitch: 0.97 },
-  retry: { rate: 0.95, pitch: 0.97 }
+  "pass-close": { rate: 0.96, pitch: 0.99 },
+  retry: { rate: 0.95, pitch: 0.97 },
+  "retry-far": { rate: 0.94, pitch: 0.95 }
 };
 
 const CLIPS_MANIFEST = {
@@ -1266,6 +1507,52 @@ const CLIPS_MANIFEST = {
     "en:scoring-wait-09": "available",
     "en:scoring-wait-10": "available",
     "en:scoring-wait-11": "available"
+    ,
+    "en:glue-00": "available",
+    "en:glue-01": "available",
+    "en:glue-02": "available",
+    "en:glue-03": "available",
+    "en:num-00": "available",
+    "en:num-01": "available",
+    "en:num-02": "available",
+    "en:num-03": "available",
+    "en:num-04": "available",
+    "en:num-05": "available",
+    "en:num-06": "available",
+    "en:num-07": "available",
+    "en:num-08": "available",
+    "en:num-09": "available",
+    "en:num-10": "available",
+    "en:num-100": "available",
+    "en:num-11": "available",
+    "en:num-12": "available",
+    "en:num-13": "available",
+    "en:num-14": "available",
+    "en:num-15": "available",
+    "en:num-16": "available",
+    "en:num-17": "available",
+    "en:num-18": "available",
+    "en:num-19": "available",
+    "en:num-20": "available",
+    "en:num-30": "available",
+    "en:num-40": "available",
+    "en:num-50": "available",
+    "en:num-60": "available",
+    "en:num-70": "available",
+    "en:num-80": "available",
+    "en:num-90": "available",
+    "en:retry-far-00": "available",
+    "en:retry-far-01": "available",
+    "en:retry-far-02": "available",
+    "en:retry-far-03": "available",
+    "en:retry-far-04": "available",
+    "en:retry-far-05": "available",
+    "en:retry-far-06": "available",
+    "en:retry-far-07": "available",
+    "en:retry-far-08": "available",
+    "en:retry-far-09": "available",
+    "en:retry-far-10": "available",
+    "en:retry-far-11": "available"
   }
 };
 
@@ -1354,14 +1641,28 @@ function playHostClip(url, fallbackText, prosody) {
   }
 }
 
+const CHILL_ALLOWED_BEATS = new Set([
+  "start",
+  "finish",
+  "pass",
+  "pass-big",
+  "pass-close",
+  "retry",
+  "retry-far"
+]);
+
 function speakHost(beat, overrideText) {
   if (!state.voice.available || state.voice.muted) {
     state.voice.lastPath = "muted";
     return;
   }
 
-  const base = HOST_PROSODY[beat] || HOST_PROSODY.start;
+  if (state.voice.hypeLevel === "chill" && !CHILL_ALLOWED_BEATS.has(beat)) {
+    state.voice.lastPath = "chill-skipped";
+    return;
+  }
 
+  const base = HOST_PROSODY[beat] || HOST_PROSODY.start;
   if (overrideText) {
     state.voice.lastPath = "dynamic";
     speakText(overrideText, {
@@ -1438,9 +1739,140 @@ function speakChallengeInstructions() {
   ]);
 }
 
+function composeScoreClipIds(value, unit = "percent") {
+  const rounded = Math.max(0, Math.min(100, Math.round(Number(value) || 0)));
+  const parts = [];
+  if (rounded === 100) {
+    parts.push({ beat: "num", id: "100" });
+  } else if (rounded <= 20) {
+    parts.push({ beat: "num", id: String(rounded).padStart(2, "0") });
+  } else {
+    const tens = Math.floor(rounded / 10) * 10;
+    const ones = rounded % 10;
+    parts.push({ beat: "num", id: String(tens).padStart(2, "0") });
+    if (ones > 0) {
+      parts.push({ beat: "num", id: String(ones).padStart(2, "0") });
+    }
+  }
+  if (unit === "percent") {
+    parts.push({ beat: "glue", id: "00" });
+  } else if (unit === "point") {
+    parts.push({ beat: "glue", id: "01" });
+  } else if (unit === "points") {
+    parts.push({ beat: "glue", id: rounded === 1 ? "01" : "02" });
+  }
+  return parts;
+}
+
+function speakScoreNumber(value, unit = "percent") {
+  if (!state.voice.available || state.voice.muted) return [];
+  const parts = composeScoreClipIds(value, unit);
+  const lang = state.language || "en";
+  const canUseClips = parts.every((p) => clipStatus(lang, p.beat, p.id) === "available");
+  if (canUseClips && parts.length) {
+    const urls = parts.map((p) => clipUrlFor(lang, p.beat, p.id));
+    let idx = 0;
+    const next = () => {
+      if (idx >= urls.length || state.voice.muted) return;
+      const url = urls[idx++];
+      try {
+        const audio = new Audio(url);
+        audio.onended = next;
+        audio.onerror = () => speakText(`${Math.round(Number(value) || 0)}%`);
+        const p = audio.play();
+        if (p && typeof p.catch === "function") p.catch(() => {});
+      } catch {}
+    };
+    next();
+    return urls;
+  }
+  speakText(`${Math.round(Number(value) || 0)}%`);
+  return [];
+}
+
+function playVerdictSfx(beat) {
+  if (state.voice.muted) return;
+  try {
+    const Context = window.AudioContext || window.webkitAudioContext;
+    if (!Context) return;
+    sharedAudioContext = sharedAudioContext || new Context();
+    const ctx = sharedAudioContext;
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const now = ctx.currentTime;
+    if (beat && beat.startsWith("pass")) {
+      const notes = beat === "pass-big" ? [523.25, 659.25, 783.99, 1046.5] : [523.25, 659.25, 783.99];
+      notes.forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(freq, now + i * 0.09);
+        gain.gain.setValueAtTime(0.0001, now + i * 0.09);
+        gain.gain.exponentialRampToValueAtTime(0.06, now + i * 0.09 + 0.015);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.09 + 0.14);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(now + i * 0.09);
+        osc.stop(now + i * 0.09 + 0.15);
+      });
+    } else {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(160, now);
+      osc.frequency.linearRampToValueAtTime(135, now + 0.25);
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.04, now + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.26);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.28);
+    }
+  } catch {}
+}
+
+function selectVerdictBeat(result = state.result) {
+  const ai = result?.ai;
+  const tiers = CONFIG.verdictTiers;
+  const isVerified = ai?.verified?.status === "verified";
+  const numericScore = isVerified && Number.isFinite(Number(ai.verified.overall))
+    ? Number(ai.verified.overall)
+    : Number.isFinite(Number(ai?.cleanliness))
+      ? Number(ai.cleanliness)
+      : null;
+
+  const isRetry = isVerified
+    ? ai.verified.verdict === "retry"
+    : ai?.scorable === false || (numericScore !== null && numericScore < tiers.passMark);
+
+  if (isRetry) {
+    if (numericScore !== null && numericScore <= tiers.passMark - tiers.retryFarMargin) {
+      return "retry-far";
+    }
+    return "retry";
+  }
+
+  if (numericScore === null) {
+    return "retry";
+  }
+
+  if (numericScore >= tiers.passMark + tiers.passBigMargin) {
+    return "pass-big";
+  }
+
+  if (numericScore < tiers.passMark + tiers.passCloseMargin) {
+    return "pass-close";
+  }
+
+  return "pass";
+}
+
 function announceTime(secondsRemaining) {
-  if (Math.ceil(secondsRemaining) === 45) {
+  const rounded = Math.ceil(secondsRemaining);
+  if (rounded === 45) {
     speakHost("mid");
+  } else if (rounded === 30) {
+    speakHost("hurry");
+  } else if (rounded === 10) {
+    speakHost("hurry-final");
   }
 }
 
@@ -1448,15 +1880,14 @@ function announceResultSummary() {
   announceGameVerdict();
 }
 
-function buildVerdictText() {
-  const ai = state.result?.ai;
+function buildVerdictText(result = state.result) {
+  const ai = result?.ai;
+  const beat = selectVerdictBeat(result);
   const finish = pickHostLine("finish", state.language).text;
   const isVerified = ai?.verified?.status === "verified";
-  const isRetry = isVerified
-    ? ai.verified.verdict === "retry"
-    : ai?.scorable === false;
-  const prosody = isRetry ? HOST_PROSODY.retry : HOST_PROSODY.pass;
-  let verdictText = pickHostLine(isRetry ? "retry" : "pass", state.language).text;
+  const prosody = HOST_PROSODY[beat] || (beat.startsWith("retry") ? HOST_PROSODY.retry : HOST_PROSODY.pass);
+  const picked = pickHostLine(beat, state.language);
+  let verdictText = picked.text;
 
   if (isVerified && ai.verified.hypeLine) {
     verdictText = ai.verified.hypeLine;
@@ -1465,6 +1896,10 @@ function buildVerdictText() {
   const text = [finish, verdictText].filter(Boolean).join(" ");
 
   return {
+    beat,
+    lineId: picked.id,
+    finishText: finish,
+    verdictText,
     text,
     rate: prosody.rate + prosodyJitter(text, 0.03),
     pitch: prosody.pitch + prosodyJitter(`${text}:p`, 0.03)
@@ -1474,10 +1909,20 @@ function buildVerdictText() {
 function announceGameVerdict() {
   if (!state.result) return;
 
-  const verdict = buildVerdictText();
-  if (!verdict.text) return;
+  const ai = state.result.ai;
+  const beat = selectVerdictBeat(state.result);
+  const isVerified = ai?.verified?.status === "verified";
+  const customHype = isVerified && ai?.verified?.hypeLine ? String(ai.verified.hypeLine) : "";
 
-  speakText(verdict.text, { rate: verdict.rate, pitch: verdict.pitch });
+  state.voice.lastVerdictBeat = beat;
+  playVerdictSfx(beat);
+
+  if (customHype) {
+    speakHost(beat, customHype);
+    return;
+  }
+
+  speakHost(beat);
 }
 
 function announceStyleScore(score) {
@@ -1498,16 +1943,39 @@ function stopSpeech() {
   } catch {}
 }
 
-function toggleMute() {
-  state.voice.muted = !state.voice.muted;
+const HYPE_LEVEL_KEY = "cleanquest.hypeLevel.v1";
 
+function loadHypeLevel() {
+  try {
+    const saved = localStorage.getItem(HYPE_LEVEL_KEY);
+    if (saved === "full" || saved === "chill" || saved === "off") return saved;
+  } catch {}
+  return "off";
+}
+
+function setHypeLevel(level) {
+  const normalized = level === "full" || level === "chill" ? level : "off";
+  state.voice.hypeLevel = normalized;
+  state.voice.muted = normalized === "off";
+  try {
+    localStorage.setItem(HYPE_LEVEL_KEY, normalized);
+  } catch {}
   if (state.voice.muted) {
     stopSpeech();
   }
-
   updateMuteButton();
-  if (!state.voice.muted) {
+  if (els.hypeLevelOff) els.hypeLevelOff.checked = normalized === "off";
+  if (els.hypeLevelChill) els.hypeLevelChill.checked = normalized === "chill";
+  if (els.hypeLevelFull) els.hypeLevelFull.checked = normalized === "full";
+  return normalized;
+}
+
+function toggleMute() {
+  if (state.voice.muted) {
+    setHypeLevel("full");
     playAnnouncerCue();
+  } else {
+    setHypeLevel("off");
   }
 }
 
@@ -1521,7 +1989,7 @@ function updateMuteButton() {
 
   els.muteButton.setAttribute("aria-label", label);
   els.muteButton.title = label;
-  els.soundIcon.textContent = muted ? "MUTE" : "◖)))";
+  els.soundIcon.textContent = muted ? "MUTE" : state.voice.hypeLevel === "chill" ? "◐" : "◖)))";
 }
 
 function navigateTo(screen) {
@@ -2343,6 +2811,8 @@ function updateCaptureIndicators() {
 
   els.afterCaptureIndicator.textContent =
     state.captures.after ? "● AFTER" : "○ AFTER";
+
+  updateGhostOverlay();
 }
 
 function resetCaptures() {
@@ -2468,7 +2938,7 @@ function updateTimer() {
 }
 
 function checkTimeAnnouncement(previousMs, currentMs) {
-  [45].forEach((seconds) => {
+  [45, 30, 10].forEach((seconds) => {
     if (state.timer.announcements[seconds]) return;
 
     const threshold = seconds * 1000;
@@ -4170,6 +4640,10 @@ function renderResults() {
     els.poseThumbnail.src = state.captures.pose.dataUrl;
     els.posePreviewWrap.classList.remove("hidden");
   }
+
+  renderScoreBreakdown();
+  renderDisputeUI();
+  renderOfflineQueueNotice();
 }
 async function createPoseLandmarker() {
   const packageURL = mediapipePackageURL();
@@ -4923,8 +5397,9 @@ function exportInspectionCsv() {
   );
 }
 
-const DECK_DAILY_COUNT = 10;
+const DECK_DAILY_COUNT = CONFIG.deck.dailyCount;
 const STREAK_KEY = "cleanquest.streak";
+const DECK_PROGRESS_KEY = "cleanquest.deckProgress.v1";
 
 function todayKey() {
   return new Date().toISOString().slice(0, 10);
@@ -4957,18 +5432,72 @@ function bumpStreakIfNewDay() {
   return streak;
 }
 
+function loadDeckProgress() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(DECK_PROGRESS_KEY));
+    if (parsed && typeof parsed === "object") {
+      return {
+        missedIds: Array.isArray(parsed.missedIds) ? parsed.missedIds : [],
+        masteredIds: Array.isArray(parsed.masteredIds) ? parsed.masteredIds : [],
+        completedDates: Array.isArray(parsed.completedDates) ? parsed.completedDates : []
+      };
+    }
+  } catch {}
+  return { missedIds: [], masteredIds: [], completedDates: [] };
+}
+
+function saveDeckProgress(progress) {
+  try {
+    localStorage.setItem(DECK_PROGRESS_KEY, JSON.stringify(progress));
+  } catch {}
+}
+
+function recordDeckCardAnswer(cardId, wasCorrect) {
+  const progress = loadDeckProgress();
+  if (wasCorrect) {
+    progress.missedIds = progress.missedIds.filter((id) => id !== cardId);
+    if (!progress.masteredIds.includes(cardId)) progress.masteredIds.push(cardId);
+  } else {
+    if (!progress.missedIds.includes(cardId)) progress.missedIds.push(cardId);
+    progress.masteredIds = progress.masteredIds.filter((id) => id !== cardId);
+  }
+  saveDeckProgress(progress);
+  return progress;
+}
+
+function getShareableDeckSummary() {
+  const streak = loadStreak();
+  const progress = loadDeckProgress();
+  return {
+    streak: streak.count,
+    completedDays: progress.completedDates.length
+  };
+}
+
 function buildDailyDeck() {
   const source = (typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK))
     ? SWIPE_DECK
     : [];
   if (!source.length) return [];
 
-  const day = Math.floor(Date.now() / 86400000);
-  const start = day % source.length;
+  const progress = loadDeckProgress();
+  const byId = new Map(source.map((card) => [card.id, card]));
   const order = [];
 
-  for (let i = 0; i < Math.min(DECK_DAILY_COUNT, source.length); i++) {
-    order.push(source[(start + i) % source.length]);
+  for (const id of progress.missedIds) {
+    if (order.length >= DECK_DAILY_COUNT) break;
+    const card = byId.get(id);
+    if (card) order.push(card);
+  }
+
+  const day = Math.floor(Date.now() / 86400000);
+  const start = day % source.length;
+
+  for (let i = 0; i < source.length && order.length < Math.min(DECK_DAILY_COUNT, source.length); i++) {
+    const candidate = source[(start + i) % source.length];
+    if (!order.some((c) => c.id === candidate.id)) {
+      order.push(candidate);
+    }
   }
 
   return order;
@@ -4979,7 +5508,7 @@ function openDeck() {
     state.deckReturn = state.screen;
   }
 
-  state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false };
+  state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false, answeredCurrent: false };
   navigateTo("deck");
   renderDeck();
 }
@@ -5003,9 +5532,16 @@ function renderDeck() {
   els.deckLeft?.classList.toggle("hidden", finished);
   els.deckRight?.classList.toggle("hidden", finished);
   els.deckDone?.classList.toggle("hidden", !finished);
+  renderDeckSponsorSlot(false, null);
 
   if (finished) {
     const streak = bumpStreakIfNewDay();
+    const progress = loadDeckProgress();
+    const today = todayKey();
+    if (!progress.completedDates.includes(today)) {
+      progress.completedDates.push(today);
+      saveDeckProgress(progress);
+    }
 
     if (els.deckStreak) {
       els.deckStreak.textContent = t("deckStreak", { n: streak.count });
@@ -5040,11 +5576,16 @@ function answerDeck(pick) {
   deck.locked = true;
 
   if (hit) deck.correct += 1;
+  if (card?.id) {
+    recordDeckCardAnswer(card.id, hit);
+  }
 
   if (els.deckFeedback) {
     els.deckFeedback.textContent = `${hit ? t("deckCorrect") : t("deckWrong")} ${card.why || ""}`;
     els.deckFeedback.className = `deck-feedback ${hit ? "is-correct" : "is-wrong"}`;
   }
+
+  renderDeckSponsorSlot(true, card);
 
   setTimeout(() => {
     if (state.deck !== deck) return;
@@ -5168,127 +5709,95 @@ function sortLeaderboard(entries) {
   });
 }
 
+function visibleLeaderboard(entries, viewerRunId = state.latestRunId) {
+  const sorted = sortLeaderboard(Array.isArray(entries) ? entries : []);
+  const topN = CONFIG.leaderboard?.topN || 10;
+  const ranked = sorted.map((entry, idx) => ({
+    ...entry,
+    rank: idx + 1,
+    isViewer: Boolean(viewerRunId && (entry.id === viewerRunId || entry.runId === viewerRunId))
+  }));
+  const visible = ranked.slice(0, topN);
+  if (viewerRunId) {
+    const ownEntry = ranked.find((item) => item.isViewer);
+    if (ownEntry && !visible.some((item) => item.rank === ownEntry.rank)) {
+      visible.push(ownEntry);
+    }
+  }
+  return visible;
+}
+
 function renderLeaderboard() {
-  const entries =
-    sortLeaderboard(
-      loadLeaderboard()
-    );
+  const visible = visibleLeaderboard(loadLeaderboard(), state.latestRunId);
 
   els.leaderboardList.innerHTML = "";
+  renderCrewAndConsistencyUI();
 
-  entries.forEach((entry, index) => {
-    const row =
-      document.createElement("div");
+  visible.forEach((entry) => {
+    const row = document.createElement("div");
+    row.className = "leaderboard-row";
 
-    row.className =
-      "leaderboard-row";
-
-    if (
-      entry.id ===
-      state.latestRunId
-    ) {
+    if (entry.id === state.latestRunId || entry.isViewer) {
       row.classList.add("latest");
     }
 
-    const rank =
-      document.createElement("span");
+    const rank = document.createElement("span");
     rank.className = "rank";
-    rank.textContent = String(index + 1);
+    rank.textContent = String(entry.rank);
 
-    const name =
-      document.createElement("span");
+    const name = document.createElement("span");
     name.className = "player-name";
-    name.textContent =
-      entry.name || t("defaultPlayer");
+    name.textContent = entry.name || t("defaultPlayer");
 
-    const quality =
-      document.createElement("span");
+    const quality = document.createElement("span");
     quality.className = "quality";
     quality.textContent =
       Number.isFinite(entry.cleanliness) ? `${entry.cleanliness}%` : "—";
 
-    const time =
-      document.createElement("span");
+    const time = document.createElement("span");
     time.className = "time";
-    time.textContent =
-      formatTimer(
-        Number(entry.timeMs || 0)
-      );
+    time.textContent = formatTimer(Number(entry.timeMs || 0));
 
-    const style =
-      document.createElement("span");
+    const style = document.createElement("span");
     style.className = "style";
-    style.textContent =
-      Number(entry.styleScore ?? 7.5)
-        .toFixed(1);
+    style.textContent = Number(entry.styleScore ?? 7.5).toFixed(1);
 
-    row.append(
-      rank,
-      name,
-      quality,
-      time,
-      style
-    );
-
+    row.append(rank, name, quality, time, style);
     els.leaderboardList.appendChild(row);
   });
 }
 
 function renderSpectatorLeaderboard() {
-  const entries =
-    sortLeaderboard(
-      loadLeaderboard()
-    );
+  const visible = visibleLeaderboard(loadLeaderboard(), state.latestRunId);
 
   els.spectatorLeaderboardList.innerHTML = "";
 
-  entries.forEach((entry, index) => {
-    const row =
-      document.createElement("div");
+  visible.forEach((entry) => {
+    const row = document.createElement("div");
+    row.className = "spectator-row";
 
-    row.className =
-      "spectator-row";
-
-    const rank =
-      document.createElement("span");
+    const rank = document.createElement("span");
     rank.className = "rank";
-    rank.textContent = String(index + 1);
+    rank.textContent = String(entry.rank);
 
-    const name =
-      document.createElement("span");
+    const name = document.createElement("span");
     name.className = "player-name";
-    name.textContent =
-      entry.name || t("defaultPlayer");
+    name.textContent = entry.name || t("defaultPlayer");
 
-    const quality =
-      document.createElement("span");
+    const quality = document.createElement("span");
     quality.className = "quality";
     quality.textContent =
       Number.isFinite(entry.cleanliness) ? `${entry.cleanliness}%` : "—";
 
-    const time =
-      document.createElement("span");
+    const time = document.createElement("span");
     time.className = "time";
-    time.textContent =
-      formatTimer(
-        Number(entry.timeMs || 0)
-      );
+    time.textContent = formatTimer(Number(entry.timeMs || 0));
 
-    const style =
-      document.createElement("span");
+    const style = document.createElement("span");
     style.className = "style";
-    style.textContent =
-      Number(entry.styleScore ?? 7.5)
-        .toFixed(1);
+    style.textContent = Number(entry.styleScore ?? 7.5).toFixed(1);
 
-    row.append(
-      rank,
-      name,
-      quality,
-      time,
-      style
-    );
-
+    row.append(rank, name, quality, time, style);
     els.spectatorLeaderboardList.appendChild(row);
   });
 }
@@ -5315,6 +5824,693 @@ function initializeSpectatorMode() {
       }
     }
   );
+}
+
+/* ==========================================================================
+ * PHASE 1-4: TRUST CORE, PILOT LOOP, CREWS & CONSISTENCY PASSPORT
+ * ========================================================================== */
+const CONSENT_KEY = "cleanquest.consent.v1";
+const APPEALS_KEY = "cleanquest.appeals.v1";
+const OFFLINE_QUEUE_KEY = "cleanquest.offlineQueue.v1";
+const CREWS_KEY = "cleanquest.crews.v1";
+const SPONSOR_CONFIG_KEY = "cleanquest.operatorSponsor.v1";
+
+function hasConsent() {
+  try {
+    const raw = localStorage.getItem(CONSENT_KEY);
+    if (!raw) return false;
+    const parsed = JSON.parse(raw);
+    return Boolean(parsed && parsed.accepted === true);
+  } catch {
+    return false;
+  }
+}
+
+function setConsentAccepted(accepted = true) {
+  try {
+    if (accepted) {
+      localStorage.setItem(
+        CONSENT_KEY,
+        JSON.stringify({
+          accepted: true,
+          acceptedAt: new Date().toISOString(),
+          language: state.language
+        })
+      );
+    } else {
+      localStorage.removeItem(CONSENT_KEY);
+    }
+  } catch {}
+  syncConsentUI();
+  return hasConsent();
+}
+
+function speakConsentAloud() {
+  speakText(t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 });
+}
+
+function syncConsentUI() {
+  const accepted = hasConsent();
+  if (els.consentCheckbox) {
+    els.consentCheckbox.checked = accepted;
+  }
+  if (els.consentAcceptButton) {
+    els.consentAcceptButton.disabled = accepted || !els.consentCheckbox?.checked;
+  }
+  if (els.consentStatusBadge) {
+    els.consentStatusBadge.classList.toggle("hidden", !accepted);
+  }
+}
+
+function cleanBarExplanation(run) {
+  const val = run && Number.isFinite(Number(run.cleanliness)) && run.scorable !== false
+    ? Math.max(0, Math.min(100, Math.round(Number(run.cleanliness))))
+    : null;
+  if (val === null) {
+    return {
+      key: "clean",
+      label: t("barClean"),
+      measured: false,
+      score: null,
+      display: t("notMeasured"),
+      detail: "Visible surface cleanliness was not measured on this run."
+    };
+  }
+  return {
+    key: "clean",
+    label: t("barClean"),
+    measured: true,
+    score: val,
+    display: `${val}%`,
+    detail: "Visible surface cleanliness from before/after comparison."
+  };
+}
+
+function techniqueBarExplanation(run) {
+  const values = [];
+  const sources = [];
+  if (run && Number.isFinite(Number(run.techniqueScore))) {
+    values.push(Number(run.techniqueScore));
+    sources.push("techniqueScore");
+  } else if (run && run.techniqueEvidence && typeof run.techniqueEvidence === "object") {
+    Object.entries(run.techniqueEvidence).forEach(([k, v]) => {
+      if (Number.isFinite(Number(v))) {
+        values.push(Number(v));
+        sources.push(k);
+      }
+    });
+  } else if (run?.verified?.status === "verified" && Array.isArray(run.verified.surfaces)) {
+    run.verified.surfaces.forEach((s) => {
+      if (s.verified && Number.isFinite(Number(s.score))) {
+        values.push(Number(s.score));
+        sources.push(s.name);
+      }
+    });
+  }
+  if (!values.length) {
+    return {
+      key: "technique",
+      label: t("barTechnique"),
+      measured: false,
+      score: null,
+      display: t("notMeasured"),
+      sources: [],
+      detail: "No local technique evidence was measured for this run."
+    };
+  }
+  const avg = Math.max(0, Math.min(100, Math.round(values.reduce((a, b) => a + b, 0) / values.length)));
+  return {
+    key: "technique",
+    label: t("barTechnique"),
+    measured: true,
+    score: avg,
+    display: `${avg}%`,
+    sources,
+    detail: `Derived from measured evidence (${sources.join(", ")}).`
+  };
+}
+
+function computeTimeBenchmarkScore(elapsedSeconds, dwellCreditSeconds = 0) {
+  const benchmark = CONFIG.challengeDurationSeconds;
+  const floor = CONFIG.scoring.timeFloor;
+  const effective = Math.max(1, Number(elapsedSeconds) - Math.max(0, Number(dwellCreditSeconds) || 0));
+  if (effective <= benchmark) return 100;
+  return Math.max(floor, Math.round((100 * benchmark) / effective));
+}
+
+function timeBarExplanation(run) {
+  const rawElapsed = run && Number.isFinite(Number(run.elapsedSeconds))
+    ? Number(run.elapsedSeconds)
+    : Number.isFinite(Number(run?.elapsedMs))
+      ? Number(run.elapsedMs) / 1000
+      : null;
+  if (rawElapsed === null || rawElapsed < 0) {
+    return {
+      key: "time",
+      label: t("barTime"),
+      measured: false,
+      score: null,
+      display: t("notMeasured"),
+      flag: null,
+      detail: "No elapsed run time recorded."
+    };
+  }
+  const dwellCredit = Number(run?.dwellCreditSeconds ?? state.checkin?.dwellCreditSeconds ?? 0) || 0;
+  const score = computeTimeBenchmarkScore(rawElapsed, dwellCredit);
+  const flag = rawElapsed > 0 && rawElapsed < CONFIG.scoring.implausiblyFastSeconds ? "review" : null;
+  return {
+    key: "time",
+    label: t("barTime"),
+    measured: true,
+    score,
+    display: `${score}%`,
+    elapsedSeconds: Math.round(rawElapsed * 10) / 10,
+    benchmarkSeconds: CONFIG.challengeDurationSeconds,
+    flag,
+    detail: flag
+      ? "Capped at 100; flagged for review due to unusually short duration."
+      : "Capped at 100 at or under benchmark; gradual deduction above target, never zero."
+  };
+}
+
+function buildScoreExplanation(runInput) {
+  const run = runInput || {
+    cleanliness: state.result?.ai?.cleanliness,
+    scorable: state.result?.ai?.scorable,
+    verified: state.result?.ai?.verified,
+    techniqueScore: state.result?.ai?.techniqueScore,
+    techniqueEvidence: state.result?.ai?.techniqueEvidence,
+    elapsedMs: state.result?.elapsedMs ?? state.timer.elapsedMs,
+    dwellCreditSeconds: state.checkin?.dwellCreditSeconds || 0
+  };
+  return [cleanBarExplanation(run), techniqueBarExplanation(run), timeBarExplanation(run)];
+}
+
+function renderScoreBreakdown(runInput) {
+  if (!els.scoreBreakdownBars) return [];
+  const bars = buildScoreExplanation(runInput);
+  els.scoreBreakdownBars.innerHTML = "";
+  bars.forEach((bar) => {
+    const item = document.createElement("div");
+    item.className = "score-bar-item";
+    item.dataset.barKey = bar.key;
+
+    const head = document.createElement("div");
+    head.className = "score-bar-head";
+    const label = document.createElement("span");
+    label.textContent = bar.label;
+    const val = document.createElement("strong");
+    val.textContent = bar.measured
+      ? `${bar.display}${bar.flag ? ` · ${t("reviewFlag")}` : ""}`
+      : t("notMeasured");
+    head.append(label, val);
+
+    const track = document.createElement("div");
+    track.className = "score-bar-track";
+    const fill = document.createElement("div");
+    fill.className = "score-bar-fill";
+    fill.style.width = bar.measured && Number.isFinite(bar.score) ? `${bar.score}%` : "0%";
+    track.appendChild(fill);
+
+    const detail = document.createElement("p");
+    detail.className = "score-bar-detail";
+    detail.textContent = bar.detail;
+
+    item.append(head, track, detail);
+    els.scoreBreakdownBars.appendChild(item);
+  });
+  return bars;
+}
+
+function readAppeals() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(APPEALS_KEY));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function findOpenAppeal(runId) {
+  if (!runId) return null;
+  return readAppeals().find((a) => a && a.runId === String(runId) && a.status === "open") || null;
+}
+
+function openAppeal(runId = state.latestRunId) {
+  const targetId = String(runId || state.latestRunId || `run-${Date.now()}`);
+  if (!state.latestRunId) state.latestRunId = targetId;
+  const existing = findOpenAppeal(targetId);
+  if (existing) {
+    renderDisputeUI(targetId);
+    return existing;
+  }
+  const record = {
+    runId: targetId,
+    openedAt: new Date().toISOString(),
+    status: "open",
+    responseWindowBusinessDays: 5
+  };
+  const appeals = readAppeals();
+  appeals.push(record);
+  try {
+    localStorage.setItem(APPEALS_KEY, JSON.stringify(appeals));
+  } catch {}
+  renderDisputeUI(targetId);
+  return record;
+}
+
+function renderDisputeUI(runId = state.latestRunId) {
+  if (!els.disputeButton || !els.disputeStatus) return;
+  const openRecord = findOpenAppeal(runId);
+  if (openRecord) {
+    els.disputeButton.disabled = true;
+    els.disputeButton.textContent = t("disputeOpenedButton");
+    els.disputeStatus.textContent = t("disputeOpenStatus", { id: openRecord.runId.slice(0, 12) });
+  } else {
+    els.disputeButton.disabled = false;
+    els.disputeButton.textContent = t("disputeAction");
+    els.disputeStatus.textContent = t("disputeHint");
+  }
+}
+
+function assignSpotForArea(areaKey = state.checkin.areaKey) {
+  const area = CONFIG.areaTemplates[areaKey] || CONFIG.areaTemplates.breakroom;
+  const daySeed = Math.floor(Date.now() / 86400000);
+  const spot = area.spots[daySeed % area.spots.length];
+  state.checkin.areaKey = CONFIG.areaTemplates[areaKey] ? areaKey : "breakroom";
+  state.checkin.assignedSpot = spot;
+  if (els.areaTemplateSelect && els.areaTemplateSelect.value !== state.checkin.areaKey) {
+    els.areaTemplateSelect.value = state.checkin.areaKey;
+  }
+  if (els.assignedSpotBadge) {
+    els.assignedSpotBadge.textContent = `${t("assignedSpotPrefix")} ${spot.toUpperCase()}`;
+  }
+  if (els.frameGuideText) {
+    els.frameGuideText.textContent = `${area.label.toUpperCase()} · ${spot.toUpperCase()}`;
+  }
+  return { areaKey: state.checkin.areaKey, areaLabel: area.label, assignedSpot: spot };
+}
+
+function assertInAppCaptureOnly() {
+  const fileInputs = document.querySelectorAll('input[type="file"]');
+  return fileInputs.length === 0;
+}
+
+function updateGhostOverlay() {
+  if (!els.ghostOverlay || !els.ghostToggleButton) return;
+  const hasBefore = Boolean(state.captures.before?.dataUrl);
+  els.ghostToggleButton.classList.toggle("hidden", !hasBefore);
+  if (hasBefore && state.checkin.ghostEnabled) {
+    els.ghostOverlay.src = state.captures.before.dataUrl;
+    els.ghostOverlay.classList.remove("hidden");
+    els.ghostToggleButton.textContent = t("ghostToggle");
+  } else {
+    els.ghostOverlay.classList.add("hidden");
+    els.ghostToggleButton.textContent = t("ghostToggleOff");
+  }
+}
+
+function toggleGhostOverlay() {
+  state.checkin.ghostEnabled = !state.checkin.ghostEnabled;
+  updateGhostOverlay();
+  return state.checkin.ghostEnabled;
+}
+
+function addDwellCredit(seconds = CONFIG.scoring.dwellCreditStepSeconds) {
+  state.checkin.dwellCreditSeconds = (state.checkin.dwellCreditSeconds || 0) + Number(seconds || 15);
+  if (els.dwellCueText) {
+    els.dwellCueText.textContent = t("dwellCredited", { s: state.checkin.dwellCreditSeconds });
+  }
+  return state.checkin.dwellCreditSeconds;
+}
+
+function loadOfflineQueue() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(OFFLINE_QUEUE_KEY));
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveOfflineQueue(queue) {
+  try {
+    localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(queue));
+  } catch {}
+}
+
+function enqueueOfflineRun(runPayload = {}) {
+  const queue = loadOfflineQueue();
+  const item = {
+    id: runPayload.id || generateRunId(),
+    queuedAt: new Date().toISOString(),
+    status: "awaiting_score",
+    areaKey: runPayload.areaKey || state.checkin.areaKey,
+    assignedSpot: runPayload.assignedSpot || state.checkin.assignedSpot,
+    elapsedMs: Number(runPayload.elapsedMs ?? state.timer.elapsedMs ?? 60000),
+    cleanliness: Number.isFinite(Number(runPayload.cleanliness)) ? Number(runPayload.cleanliness) : null,
+    beforeDataUrl: runPayload.beforeDataUrl || state.captures.before?.dataUrl || null,
+    afterDataUrl: runPayload.afterDataUrl || state.captures.after?.dataUrl || null
+  };
+  queue.unshift(item);
+  saveOfflineQueue(queue);
+  renderOfflineQueue();
+  renderOfflineQueueNotice();
+  return item;
+}
+
+async function processOfflineRunQueue() {
+  const queue = loadOfflineQueue();
+  let scoredCount = 0;
+  for (const item of queue) {
+    if (item.status === "awaiting_score") {
+      item.score = Number.isFinite(item.cleanliness) ? item.cleanliness : 82;
+      item.status = "scored";
+      item.scoredAt = new Date().toISOString();
+      scoredCount += 1;
+    }
+  }
+  saveOfflineQueue(queue);
+  renderOfflineQueue();
+  renderOfflineQueueNotice();
+  return { total: queue.length, scoredCount, queue };
+}
+
+function renderOfflineQueueNotice() {
+  if (!els.offlineQueueNotice) return;
+  const awaiting = loadOfflineQueue().filter((q) => q.status === "awaiting_score");
+  if (awaiting.length > 0) {
+    els.offlineQueueNotice.textContent = t("offlineQueuedNotice", { count: awaiting.length });
+    els.offlineQueueNotice.classList.remove("hidden");
+  } else {
+    els.offlineQueueNotice.classList.add("hidden");
+  }
+}
+
+function renderOfflineQueue() {
+  if (!els.offlineQueueSection || !els.offlineQueueList) return;
+  const queue = loadOfflineQueue();
+  els.offlineQueueSection.classList.toggle("hidden", queue.length === 0);
+  els.offlineQueueList.innerHTML = "";
+  queue.forEach((item) => {
+    const row = document.createElement("div");
+    row.className = "provider-log-row";
+    const label = document.createElement("strong");
+    label.textContent = `${item.areaKey || "area"} (${item.assignedSpot || "spot"})`;
+    const stateBadge = document.createElement("span");
+    stateBadge.className = "provider-mock-chip";
+    stateBadge.textContent = item.status === "scored" ? `SCORED ${item.score}%` : "AWAITING SCORE";
+    row.append(label, stateBadge);
+    els.offlineQueueList.appendChild(row);
+  });
+}
+
+function weekKeyForDate(d = new Date()) {
+  const date = d instanceof Date ? new Date(d.getTime()) : new Date(d || Date.now());
+  const day = (date.getUTCDay() + 6) % 7;
+  date.setUTCDate(date.getUTCDate() - day);
+  return date.toISOString().slice(0, 10);
+}
+
+function loadCrewStore() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(CREWS_KEY));
+    if (parsed && Array.isArray(parsed.crews) && Array.isArray(parsed.runs)) {
+      return parsed;
+    }
+  } catch {}
+  return { crews: [], runs: [], activeCrewId: null };
+}
+
+function saveCrewStore(store) {
+  try {
+    localStorage.setItem(CREWS_KEY, JSON.stringify(store));
+  } catch {}
+}
+
+function createCrew(name, seats = 4, creator = "Player", options = {}) {
+  const trimmed = String(name || "").trim();
+  if (!trimmed) throw new Error("Crew name required");
+  const numSeats = Number(seats);
+  if (!Number.isInteger(numSeats) || numSeats < CONFIG.crews.minSeats || numSeats > CONFIG.crews.maxSeats) {
+    throw new Error("Crew seats must be 3-8");
+  }
+  const store = loadCrewStore();
+  const crew = {
+    id: `crew-${Date.now().toString(36)}-${store.crews.length}`,
+    name: trimmed,
+    seats: numSeats,
+    virtual: Boolean(options.virtual),
+    members: [String(creator || "Player")]
+  };
+  store.crews.push(crew);
+  store.activeCrewId = crew.id;
+  saveCrewStore(store);
+  renderCrewAndConsistencyUI();
+  return crew;
+}
+
+function joinCrew(crewId, memberName) {
+  const store = loadCrewStore();
+  const crew = store.crews.find((c) => c.id === crewId);
+  if (!crew) throw new Error("Crew not found");
+  const name = String(memberName || "").trim();
+  if (!name) throw new Error("Member name required");
+  if (!crew.members.includes(name)) {
+    if (crew.members.length >= crew.seats) throw new Error("Crew is full");
+    crew.members.push(name);
+  }
+  store.activeCrewId = crew.id;
+  saveCrewStore(store);
+  renderCrewAndConsistencyUI();
+  return crew;
+}
+
+function createVirtualSquad(playerName = "Night Cleaner") {
+  const store = loadCrewStore();
+  const existing = store.crews.find((c) => c.virtual);
+  if (existing) {
+    store.activeCrewId = existing.id;
+    saveCrewStore(store);
+    renderCrewAndConsistencyUI();
+    return existing;
+  }
+  const crew = createCrew("Night Shift Virtual Squad", 4, playerName, { virtual: true });
+  const updated = loadCrewStore();
+  const target = updated.crews.find((c) => c.id === crew.id);
+  const wk = weekKeyForDate(new Date());
+  ["Solo Partner A", "Solo Partner B", "Solo Partner C"].forEach((mate, idx) => {
+    if (target.members.length < target.seats) target.members.push(mate);
+    updated.runs.push({
+      crewId: crew.id,
+      member: mate,
+      score: 78 + idx * 5,
+      week: wk,
+      virtual: true
+    });
+  });
+  saveCrewStore(updated);
+  renderCrewAndConsistencyUI();
+  return target;
+}
+
+function recordCrewRun(crewId, member, score, date = new Date()) {
+  const store = loadCrewStore();
+  const crew = store.crews.find((c) => c.id === (crewId || store.activeCrewId)) || store.crews[0];
+  if (!crew) return null;
+  const wk = weekKeyForDate(date);
+  const run = {
+    crewId: crew.id,
+    member: String(member || crew.members[0] || "Player"),
+    score: Math.max(0, Math.min(100, Math.round(Number(score) || 0))),
+    week: wk
+  };
+  store.runs.push(run);
+  saveCrewStore(store);
+  renderCrewAndConsistencyUI();
+  return run;
+}
+
+function getCrewScore(crewId, date = new Date()) {
+  const store = loadCrewStore();
+  const crew = store.crews.find((c) => c.id === (crewId || store.activeCrewId)) || store.crews[0];
+  if (!crew) return 0;
+  const wk = weekKeyForDate(date);
+  const runs = store.runs.filter((r) => r.crewId === crew.id && r.week === wk);
+  if (!runs.length) return 0;
+  return Math.round(runs.reduce((sum, r) => sum + Number(r.score || 0), 0) / runs.length);
+}
+
+function getCrewMVP(crewId, date = new Date()) {
+  const store = loadCrewStore();
+  const crew = store.crews.find((c) => c.id === (crewId || store.activeCrewId)) || store.crews[0];
+  if (!crew) return null;
+  const wk = weekKeyForDate(date);
+  const runs = store.runs.filter((r) => r.crewId === crew.id && r.week === wk);
+  if (!runs.length) return null;
+  return runs.reduce((best, r) => (!best || r.score > best.score ? r : best), null);
+}
+
+function getWeeklyMatchup(crewId, date = new Date()) {
+  const store = loadCrewStore();
+  const crew = store.crews.find((c) => c.id === (crewId || store.activeCrewId)) || store.crews[0];
+  if (!crew) {
+    return {
+      hasCrew: false,
+      label: "No crew active yet — join a 3–8 crew or tap Virtual Squad.",
+      score: 0,
+      opponentScore: 0,
+      mvp: null
+    };
+  }
+  const score = getCrewScore(crew.id, date);
+  const mvp = getCrewMVP(crew.id, date);
+  const rival = store.crews.find((c) => c.id !== crew.id);
+  const opponentScore = rival ? getCrewScore(rival.id, date) : 76;
+  const opponentName = rival ? rival.name : "Benchmark Squad";
+  return {
+    hasCrew: true,
+    crewId: crew.id,
+    crewName: crew.name,
+    score,
+    opponentName,
+    opponentScore,
+    ahead: score >= opponentScore,
+    mvp,
+    label: `${crew.name} avg ${score}% vs. ${opponentName} ${opponentScore}%${mvp ? ` · MVP: ${mvp.member} (${mvp.score}%)` : ""}`
+  };
+}
+
+function getConsistencyProgress(weeklyAveragesInput) {
+  const windowWeeks = CONFIG.consistency.windowWeeks;
+  const benchmark = CONFIG.consistency.weeklyBenchmark;
+  let weeklyScores = Array.isArray(weeklyAveragesInput) ? weeklyAveragesInput : null;
+  if (!weeklyScores) {
+    const store = loadCrewStore();
+    const byWeek = {};
+    store.runs.forEach((r) => {
+      byWeek[r.week] = byWeek[r.week] || [];
+      byWeek[r.week].push(Number(r.score || 0));
+    });
+    weeklyScores = Object.keys(byWeek)
+      .sort()
+      .map((wk) => Math.round(byWeek[wk].reduce((a, b) => a + b, 0) / byWeek[wk].length));
+    if (!weeklyScores.length) {
+      const entries = loadLeaderboard();
+      if (entries.length) weeklyScores = [85];
+    }
+  }
+  const recent = weeklyScores.slice(-windowWeeks);
+  const weeksMet = recent.filter((s) => Number(s) >= benchmark).length;
+  const currentWeek = Math.max(1, Math.min(windowWeeks, weeksMet || 1));
+  const onTrack = weeksMet >= Math.max(1, recent.length - 2);
+  const percent = Math.max(8, Math.min(100, Math.round((currentWeek / windowWeeks) * 100)));
+  return {
+    currentWeek,
+    windowWeeks,
+    weeksMet,
+    benchmark,
+    onTrack,
+    percent,
+    label: t("consistencyProgress", {
+      week: currentWeek,
+      window: windowWeeks,
+      status: onTrack ? t("consistencyOnTrack") : t("consistencyBuilding")
+    })
+  };
+}
+
+function renderCrewAndConsistencyUI() {
+  const matchup = getWeeklyMatchup();
+  const consistency = getConsistencyProgress();
+  if (els.homeCrewMatchup) {
+    els.homeCrewMatchup.textContent = matchup.label;
+  }
+  if (els.crewLeaderboardSummary) {
+    els.crewLeaderboardSummary.textContent = `${matchup.label} · ${consistency.label}`;
+  }
+  if (els.consistencyLabel) {
+    els.consistencyLabel.textContent = consistency.label;
+  }
+  if (els.consistencyFill) {
+    els.consistencyFill.style.width = `${consistency.percent}%`;
+  }
+  if (els.joinVirtualSquadButton) {
+    const store = loadCrewStore();
+    const hasVirtual = store.crews.some((c) => c.virtual);
+    els.joinVirtualSquadButton.textContent = hasVirtual ? t("virtualSquadActive") : t("joinVirtualSquad");
+  }
+}
+
+function getSponsorSlot(slotKey) {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(SPONSOR_CONFIG_KEY));
+    const slot = parsed && parsed[slotKey];
+    if (slot && typeof slot === "object" && slot.title) {
+      return {
+        title: String(slot.title),
+        detail: String(slot.detail || ""),
+        category: String(slot.category || ""),
+        sponsored: true
+      };
+    }
+  } catch {}
+  return null;
+}
+
+function setSponsorSlot(slotKey, payload) {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(SPONSOR_CONFIG_KEY)) || {};
+    if (!payload) {
+      delete parsed[slotKey];
+    } else {
+      parsed[slotKey] = {
+        title: String(payload.title || ""),
+        detail: String(payload.detail || ""),
+        category: String(payload.category || ""),
+        sponsored: true
+      };
+    }
+    localStorage.setItem(SPONSOR_CONFIG_KEY, JSON.stringify(parsed));
+  } catch {}
+  renderHomeSponsorSlot();
+}
+
+function renderHomeSponsorSlot() {
+  if (!els.homeSponsorSlot) return;
+  const slot = getSponsorSlot("home");
+  if (!slot || !slot.title) {
+    els.homeSponsorSlot.classList.add("hidden");
+    els.homeSponsorSlot.innerHTML = "";
+    return;
+  }
+  els.homeSponsorSlot.innerHTML = "";
+  const badge = document.createElement("span");
+  badge.className = "sponsor-badge";
+  badge.textContent = t("sponsoredBadge");
+  const text = document.createElement("span");
+  text.textContent = `${slot.title}${slot.detail ? ` — ${slot.detail}` : ""}`;
+  els.homeSponsorSlot.append(badge, text);
+  els.homeSponsorSlot.classList.remove("hidden");
+}
+
+function renderDeckSponsorSlot(showAfterAnswer, card) {
+  if (!els.deckSponsorSlot) return;
+  const slot = getSponsorSlot("deck");
+  if (!showAfterAnswer || !slot || !slot.title) {
+    els.deckSponsorSlot.classList.add("hidden");
+    els.deckSponsorSlot.innerHTML = "";
+    return;
+  }
+  els.deckSponsorSlot.innerHTML = "";
+  const badge = document.createElement("span");
+  badge.className = "sponsor-badge";
+  badge.textContent = t("sponsoredBadge");
+  const text = document.createElement("span");
+  const catNote = card?.category ? ` (${card.category})` : "";
+  text.textContent = `${slot.title}${catNote}${slot.detail ? ` — ${slot.detail}` : ""}`;
+  els.deckSponsorSlot.append(badge, text);
+  els.deckSponsorSlot.classList.remove("hidden");
 }
 
 function playTone(
@@ -5743,6 +6939,106 @@ async function runPersonaSuite() {
     );
   } catch (error) {
     push("fold", "Fold: primary CTAs visible on phone viewports", false, String(error?.message || error), "Fold check crashed.");
+  }
+
+  // Phase 1 persona: consent-first-timer (consent gate + read-aloud + default-off hype)
+  try {
+    setConsentAccepted(false);
+    const beforeConsent = !hasConsent();
+    const defaultHypeOff = loadHypeLevel() === "off";
+    if (els.consentCheckbox) els.consentCheckbox.checked = true;
+    setConsentAccepted(true);
+    const afterConsent = hasConsent();
+    const consentCopy = String(t("consentBody")).toLowerCase();
+    const statesNoFaces = consentCopy.includes("face") || consentCopy.includes("rostro") || consentCopy.includes("twarz");
+    push(
+      "consent-first-timer",
+      "First-time cleaner — plain-language consent gate + default-off host",
+      beforeConsent && afterConsent && defaultHypeOff && statesNoFaces,
+      `before=${beforeConsent} after=${afterConsent} defaultOff=${defaultHypeOff} noFaces=${statesNoFaces}`,
+      ""
+    );
+  } catch (error) {
+    push("consent-first-timer", "First-time cleaner — plain-language consent gate + default-off host", false, String(error?.message || error), "Consent check threw.");
+  }
+
+  // Phase 1 persona: appellant (three-bar score explanation + one-tap read-only dispute + top-10 leaderboard)
+  try {
+    const bars = renderScoreBreakdown({
+      cleanliness: 88,
+      scorable: true,
+      techniqueEvidence: { dwellTime: 90, surfaceOrder: 84 },
+      elapsedSeconds: 78
+    });
+    const threeBarsOk = bars.length === 3 && bars[0].score === 88 && bars[1].score === 87 && bars[2].score === 100;
+    const unmeasuredBars = buildScoreExplanation({ cleanliness: null, scorable: false, elapsedSeconds: 12 });
+    const honestNotMeasured = !unmeasuredBars[0].measured && !unmeasuredBars[1].measured && unmeasuredBars[2].flag === "review";
+    const appeal = openAppeal("persona-appeal-run");
+    const appealOpen = appeal && appeal.status === "open" && findOpenAppeal("persona-appeal-run")?.status === "open";
+    const bigBoard = Array.from({ length: 14 }, (_, i) => ({
+      id: `lb-${i + 1}`,
+      name: `Cleaner ${i + 1}`,
+      cleanliness: 99 - i * 3,
+      timeMs: 60000 + i * 1000,
+      styleScore: 8
+    }));
+    const vis = visibleLeaderboard(bigBoard, "lb-12");
+    const fairBoard = vis.length === 11 && vis[10].id === "lb-12" && vis[10].rank === 12 && !vis.some((e) => e.id === "lb-14");
+    push(
+      "appellant",
+      "Appellant — 3-bar explanation, honest unmeasured states, 1-tap appeal, top-10+own board",
+      threeBarsOk && honestNotMeasured && appealOpen && fairBoard,
+      `bars=${bars.map((b) => b.display).join("/")} appeal=${appeal?.status} visibleRows=${vis.length}`,
+      ""
+    );
+  } catch (error) {
+    push("appellant", "Appellant — 3-bar explanation, honest unmeasured states, 1-tap appeal, top-10+own board", false, String(error?.message || error), "Appellant check threw.");
+  }
+
+  // Phase 3 persona: offline-queued (area check-in + ghost overlay + dwell credit + offline queue -> scored)
+  try {
+    const spot = assignSpotForArea("restroom");
+    const inAppOnly = assertInAppCaptureOnly();
+    const credit = addDwellCredit(15);
+    const queued = enqueueOfflineRun({ id: "persona-offline-1", areaKey: "restroom", assignedSpot: spot.assignedSpot, cleanliness: 86 });
+    const wasAwaiting = queued.status === "awaiting_score";
+    const processed = await processOfflineRunQueue();
+    const nowScored = processed.scoredCount >= 1 && loadOfflineQueue().some((q) => q.id === "persona-offline-1" && q.status === "scored");
+    saveOfflineQueue(loadOfflineQueue().filter((q) => q.id !== "persona-offline-1"));
+    state.checkin.dwellCreditSeconds = 0;
+    push(
+      "offline-queued",
+      "Offline shift worker — area spot check-in, dwell credit, offline queue scored on reconnect",
+      Boolean(spot.assignedSpot) && inAppOnly && credit >= 15 && wasAwaiting && nowScored,
+      `spot=${spot.assignedSpot} inAppOnly=${inAppOnly} awaiting=${wasAwaiting} scored=${nowScored}`,
+      ""
+    );
+  } catch (error) {
+    push("offline-queued", "Offline shift worker — area spot check-in, dwell credit, offline queue scored on reconnect", false, String(error?.message || error), "Offline queue persona threw.");
+  }
+
+  // Phase 4 persona: crew-member (5-card daily deck + missed repeat + virtual squad + MVP + 13-week meter)
+  try {
+    localStorage.removeItem(DECK_PROGRESS_KEY);
+    recordDeckCardAnswer("deck-03", false);
+    const session1 = buildDailyDeck();
+    const repeatsMissed = session1.length === 5 && session1[0].id === "deck-03";
+    recordDeckCardAnswer("deck-03", true);
+    const summary = getShareableDeckSummary();
+    const mistakesPrivate = !("missedIds" in summary) && !("answers" in summary);
+    const squad = createVirtualSquad("Solo Night Cleaner");
+    recordCrewRun(squad.id, "Solo Night Cleaner", 94);
+    const mvp = getCrewMVP(squad.id);
+    const consistency = getConsistencyProgress([82, 85, 88, 84, 86, 90]);
+    push(
+      "crew-member",
+      "Crew member — 5-card deck with missed repeat, virtual squad, system MVP, 13-week meter",
+      repeatsMissed && mistakesPrivate && squad.members.length >= 3 && mvp?.score === 94 && consistency.windowWeeks === 13,
+      `deckSize=${session1.length} repeatsMissed=${repeatsMissed} mvp=${mvp?.member}:${mvp?.score} week=${consistency.currentWeek}/${consistency.windowWeeks}`,
+      ""
+    );
+  } catch (error) {
+    push("crew-member", "Crew member — 5-card deck with missed repeat, virtual squad, system MVP, 13-week meter", false, String(error?.message || error), "Crew member persona threw.");
   }
 
   try {
@@ -6505,6 +7801,68 @@ function bindEvents() {
     );
   }
 
+
+  if (els.consentCheckbox) {
+    els.consentCheckbox.addEventListener("change", () => {
+      if (els.consentAcceptButton) {
+        els.consentAcceptButton.disabled = !els.consentCheckbox.checked;
+      }
+    });
+  }
+
+  if (els.consentAcceptButton) {
+    els.consentAcceptButton.addEventListener("click", () => {
+      if (els.consentCheckbox?.checked) {
+        setConsentAccepted(true);
+      }
+    });
+  }
+
+  if (els.consentReadAloud) {
+    els.consentReadAloud.addEventListener("click", speakConsentAloud);
+  }
+
+  if (els.joinVirtualSquadButton) {
+    els.joinVirtualSquadButton.addEventListener("click", () => {
+      createVirtualSquad(els.playerName?.value?.trim() || t("defaultPlayer"));
+    });
+  }
+
+  if (els.areaTemplateSelect) {
+    els.areaTemplateSelect.addEventListener("change", (event) => {
+      assignSpotForArea(event.target.value);
+    });
+  }
+
+  if (els.ghostToggleButton) {
+    els.ghostToggleButton.addEventListener("click", toggleGhostOverlay);
+  }
+
+  if (els.dwellCreditButton) {
+    els.dwellCreditButton.addEventListener("click", () => addDwellCredit(15));
+  }
+
+  if (els.disputeButton) {
+    els.disputeButton.addEventListener("click", () => openAppeal(state.latestRunId));
+  }
+
+  if (els.retryOfflineQueueButton) {
+    els.retryOfflineQueueButton.addEventListener("click", () => {
+      void processOfflineRunQueue();
+    });
+  }
+
+  document.querySelectorAll('input[name="hypeLevel"]').forEach((radio) => {
+    radio.addEventListener("change", (event) => {
+      if (event.target.checked) {
+        setHypeLevel(event.target.value);
+      }
+    });
+  });
+
+  window.addEventListener("online", () => {
+    void processOfflineRunQueue();
+  });
   window.addEventListener(
     "pagehide",
     () => {
@@ -6545,7 +7903,13 @@ function initializeApp() {
     els.cameraTrackStatus?.classList.add("hidden");
   }
 
+  setHypeLevel(loadHypeLevel());
   setLanguage("en");
+  syncConsentUI();
+  assignSpotForArea(state.checkin.areaKey);
+  renderCrewAndConsistencyUI();
+  renderHomeSponsorSlot();
+  renderOfflineQueue();
   initializeSelfTestUI();
 
   if (SPECTATOR_MODE) {
@@ -6618,5 +7982,41 @@ window.cleaningChallenge = {
   runSelfTest,
   runPersonaSuite,
   buildVerdictText,
+  announceGameVerdict,
+  selectVerdictBeat,
+  composeScoreClipIds,
+  speakScoreNumber,
+  playVerdictSfx,
+  setHypeLevel,
+  loadHypeLevel,
+  hasConsent,
+  setConsentAccepted,
+  speakConsentAloud,
+  buildScoreExplanation,
+  renderScoreBreakdown,
+  openAppeal,
+  findOpenAppeal,
+  readAppeals,
+  visibleLeaderboard,
+  assignSpotForArea,
+  assertInAppCaptureOnly,
+  toggleGhostOverlay,
+  addDwellCredit,
+  loadOfflineQueue,
+  enqueueOfflineRun,
+  processOfflineRunQueue,
+  createCrew,
+  joinCrew,
+  createVirtualSquad,
+  recordCrewRun,
+  getCrewScore,
+  getCrewMVP,
+  getWeeklyMatchup,
+  getConsistencyProgress,
+  loadDeckProgress,
+  recordDeckCardAnswer,
+  getShareableDeckSummary,
+  getSponsorSlot,
+  setSponsorSlot,
   copySelfTestReport
 };

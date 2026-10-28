@@ -94,6 +94,50 @@
           DAILY DECK
         </button>
 
+
+        <section id="consentGate" class="consent-gate hologram-card" aria-label="First-run consent">
+          <div class="consent-gate-head">
+            <strong data-i18n="consentTitle">BEFORE YOUR FIRST RUN</strong>
+            <button id="consentReadAloud" class="secondary-button compact-chip" type="button" data-i18n="consentReadAloud">
+              🔊 READ ALOUD
+            </button>
+          </div>
+          <p id="consentText" class="consent-copy" data-i18n="consentBody">
+            CleanQuest captures before and after photos of the work surface only. Faces are never identified (no facial recognition or biometrics). Scores and records are for training and recognition — never for discipline. Stored in this browser only.
+          </p>
+          <div class="consent-actions">
+            <label class="consent-check-label" for="consentCheckbox">
+              <input id="consentCheckbox" type="checkbox" />
+              <span data-i18n="consentAgreeLabel">I understand and agree</span>
+            </label>
+            <button id="consentAcceptButton" class="secondary-button compact-chip" type="button" disabled data-i18n="consentConfirm">
+              CONFIRM
+            </button>
+          </div>
+          <small id="consentStatusBadge" class="consent-status-badge hidden" data-i18n="consentSavedNote">
+            ✓ Consent recorded in this browser.
+          </small>
+        </section>
+
+        <section id="homePassportPanel" class="home-passport-panel hologram-card" aria-label="Crew and consistency overview">
+          <div id="homeCrewMatchup" class="home-crew-matchup"></div>
+          <div id="consistencyMeter" class="consistency-meter">
+            <div class="consistency-head">
+              <span id="consistencyLabel" data-i18n="consistencyDefault">Week 1 of 13 · On track</span>
+              <small data-i18n="consistencyDisclaimer">Benchmark consistency — never a certification</small>
+            </div>
+            <div class="progress-track consistency-track">
+              <div id="consistencyFill" class="progress-fill" style="width: 8%"></div>
+            </div>
+          </div>
+          <div class="home-crew-actions">
+            <button id="joinVirtualSquadButton" class="secondary-button compact-chip" type="button" data-i18n="joinVirtualSquad">
+              SOLO? JOIN VIRTUAL SQUAD
+            </button>
+          </div>
+        </section>
+
+        <div id="homeSponsorSlot" class="sponsor-slot hidden" aria-live="polite"></div>
         <section id="selfTestPanel" class="selftest-panel hidden" aria-live="polite">
           <button id="runSelfTestButton" class="selftest-run-button" type="button" data-i18n="runSelfTest">
             RUN SELF-TEST
@@ -217,6 +261,24 @@
             <i></i><i></i><i></i><i></i>
           </div>
 
+
+          <div id="checkinBar" class="checkin-bar">
+            <label class="checkin-area-label" for="areaTemplateSelect">
+              <span data-i18n="areaLabel">AREA</span>
+              <select id="areaTemplateSelect" class="area-select">
+                <option value="breakroom">Breakroom</option>
+                <option value="restroom">Restroom</option>
+                <option value="lobby">Lobby</option>
+                <option value="office">Office</option>
+                <option value="classroom">Classroom</option>
+              </select>
+            </label>
+            <span id="assignedSpotBadge" class="assigned-spot-badge">SPOT: SINK &amp; COUNTER</span>
+          </div>
+
+          <div id="frameGuideOverlay" class="frame-guide-overlay" aria-hidden="true">
+            <span id="frameGuideText" class="frame-guide-label" data-i18n="frameGuidePrompt">ALIGN ASSIGNED SPOT IN FRAME</span>
+          </div>
           <div class="camera-hud">
             <span>AI VISION</span>
             <span id="cameraHudStatus">STANDBY</span>
@@ -298,11 +360,13 @@
             <i></i><i></i><i></i><i></i>
           </div>
 
+          <img id="ghostOverlay" class="ghost-overlay hidden" alt="Before capture ghost alignment" />
           <div id="captureFlash" class="capture-flash"></div>
 
           <div class="capture-status">
             <span id="beforeCaptureIndicator">○ BEFORE</span>
             <span id="afterCaptureIndicator">○ AFTER</span>
+            <button id="ghostToggleButton" class="ghost-toggle-chip hidden" type="button" data-i18n="ghostToggle">◐ GHOST ON</button>
           </div>
         </div>
 
@@ -319,6 +383,11 @@
           <div class="timer-meta">
             <span data-i18n="elapsed">ELAPSED</span>
             <strong id="elapsedDisplay">0:00.0</strong>
+          </div>
+
+          <div id="dwellCueBanner" class="dwell-cue-banner">
+            <span id="dwellCueText" data-i18n="dwellCueText">Dwell cue: let surface solution sit full contact time (does not count against speed).</span>
+            <button id="dwellCreditButton" class="dwell-credit-chip" type="button" data-i18n="dwellCreditAction">+15s DWELL</button>
           </div>
         </div>
 
@@ -393,6 +462,11 @@
               <strong id="timeComparison">--</strong>
             </article>
           </div>
+
+          <section id="scoreBreakdownCard" class="score-breakdown-card hologram-card" aria-label="Three-bar score explanation">
+            <div class="section-label" data-i18n="scoreBreakdownTitle">SCORE EXPLANATION (CLEAN · TECHNIQUE · TIME)</div>
+            <div id="scoreBreakdownBars" class="score-breakdown-bars"></div>
+          </section>
 
           <div class="evidence-section">
             <div class="section-label" data-i18n="visualEvidence">VISUAL EVIDENCE</div>
@@ -479,6 +553,8 @@
             Object-clearance estimate only. Does not verify sanitation or surface cleanliness.
           </p>
 
+          <p id="offlineQueueNotice" class="fine-print hidden" role="status"></p>
+
           <div class="pose-panel hologram-card">
             <div>
               <div class="section-label" data-i18n="victoryPose">VICTORY POSE</div>
@@ -543,6 +619,18 @@
             </small>
           </div>
 
+          <div id="disputePanel" class="dispute-panel hologram-card">
+            <div class="dispute-row">
+              <span class="section-label" data-i18n="disputeHeading">FAIR REVIEW</span>
+              <button id="disputeButton" class="secondary-button compact-chip" type="button" data-i18n="disputeAction">
+                DISPUTE SCORE
+              </button>
+            </div>
+            <small id="disputeStatus" class="fine-print" data-i18n="disputeHint">
+              One-tap appeal — reviewed within 5 business days. Scores are never edited manually.
+            </small>
+          </div>
+
         <div class="results-cta-bar sticky-cta">
           <button
             id="resultsContinue"
@@ -562,6 +650,8 @@
       <div class="content">
         <div class="eyebrow" data-i18n="beatLeader">BEAT THE LEADER</div>
         <h2 data-i18n="leaderboard">Leaderboard</h2>
+
+        <div id="crewLeaderboardSummary" class="crew-summary-bar hologram-card"></div>
 
         <div class="leaderboard-header">
           <span>#</span>
@@ -609,6 +699,14 @@
       <div class="content">
         <div class="eyebrow" data-i18n="recordsTitle">INSPECTION LOG</div>
         <h2 data-i18n="recordsTitle">INSPECTION LOG</h2>
+
+        <div id="offlineQueueSection" class="offline-queue-section hologram-card hidden">
+          <div class="section-label" data-i18n="offlineQueueTitle">OFFLINE RUN QUEUE (AWAITING SCORE)</div>
+          <div id="offlineQueueList" class="provider-log"></div>
+          <button id="retryOfflineQueueButton" class="secondary-button compact-chip" type="button" data-i18n="retryOfflineQueue">
+            SCORE QUEUED RUNS
+          </button>
+        </div>
 
         <div id="inspectionLogList" class="provider-log"></div>
         <small id="inspectionLogEmpty" data-i18n="recordsEmpty">No inspection records yet.</small>
@@ -735,6 +833,20 @@
 
         <div class="identity-panel hologram-card">
           <span data-i18n="hostVoiceTitle">HOST VOICE</span>
+          <div class="hype-level-group" role="radiogroup" aria-label="Host hype level">
+            <label class="provider-option">
+              <input id="hypeLevelOff" type="radio" name="hypeLevel" value="off" checked />
+              <span data-i18n="hypeOffLabel">Off — silent by default</span>
+            </label>
+            <label class="provider-option">
+              <input id="hypeLevelChill" type="radio" name="hypeLevel" value="chill" />
+              <span data-i18n="hypeChillLabel">Chill — start, finish &amp; verdict only</span>
+            </label>
+            <label class="provider-option">
+              <input id="hypeLevelFull" type="radio" name="hypeLevel" value="full" />
+              <span data-i18n="hypeFullLabel">Full — all host hype beats</span>
+            </label>
+          </div>
           <div id="voiceNameList" class="provider-log"></div>
           <div id="voiceTestButtons" class="settings-row hidden">
             <button type="button" class="secondary-button" data-voice-sample="en">EN ▸</button>
@@ -770,6 +882,7 @@
         </div>
 
         <p id="deckFeedback" class="deck-feedback"></p>
+        <div id="deckSponsorSlot" class="sponsor-slot hidden" aria-live="polite"></div>
 
         <div class="settings-row">
           <button

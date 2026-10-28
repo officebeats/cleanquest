@@ -33,17 +33,19 @@ Meta Model API = Muse Spark scorecards + SAM 3.1 overlays + transcription;
 Baseten = Spark Open second provider behind toggle, every run in exportable log.
 
 ## Code anchors
-- `app.js` — everything. `HOST_LINES` = host script lines (5 legacy beats only:
-  `start`, `mid`, `finish`, `pass`, `retry`); audio manifest
-  `{"version":1,"clips":{"<lang>:<beat>-<nn>":"available"|"mock"}}` — unlisted IDs
-  fall back to synth/TTS. That no-code-change rule holds ONLY for
-  `speakHost("start"|"mid")`, which checks `CLIPS_MANIFEST`.
-  ⚠️ `announceGameVerdict()` (app.js:1438) builds a combined `finish + verdict`
-  string via `buildVerdictText()` and calls `speakText()` directly — bypassing
-  `speakHost()` and the manifest. Verdict clips (pass tiers, retry tiers,
-  hurry-final) and all v1/v2 beats (`pass-big`, `pass-close`, etc.) need
-  WIRING in `app.js` too, not just MP3s — per AUDIO-PLAN.md §5
-  ("generate library → SFX set → wire → re-test").
+- `app.js` — everything. `HOST_LINES` = host script lines (`start`, `mid`,
+  `finish`, `pass`, `retry`, `pass-big`, `pass-close`, `retry-far`, `hurry`,
+  `hurry-final`, `scoring-wait`); audio manifest
+  `{"version":1,"clips":{"<lang>:<beat>-<nn>":"available"|"mock"}}` (154 entries:
+  153 EN MP3s + 1 mock) — unlisted IDs fall back to synth/TTS.
+  `announceGameVerdict()` routes through `selectVerdictBeat()` + `speakHost()` +
+  `playVerdictSfx()`, and `speakScoreNumber()` composes `num`/`glue` clips.
+  Also implements Phases 1–4 of `docs/PRODUCT-PLAN.md`: consent gate with
+  read-aloud, host hype levels (default `off`), 3-bar score breakdown, 1-tap
+  read-only appeal record, top-10+own fair leaderboard, area check-in + assigned
+  spot, after-shot ghost overlay, dwell-time UI cue, offline run queue, 5/day
+  swipe deck with missed-card repeat, local crews + virtual squad + system MVP,
+  13-week benchmark consistency meter, and operator-configured sponsor slots.
 - `deck.js` — 22 static training cards (no `window.SWIPE_DECK`; lexical const).
 - `docs/AUDIO-PLAN.md` — full audio spec: engine picks, scripts, naming
   `assets/audio/<lang>/<beat>-<nn>.mp3`, record priority, SFX plan.
@@ -51,10 +53,9 @@ Baseten = Spark Open second provider behind toggle, every run in exportable log.
 
 ## Verify any change
 - Self-test: open `index.html?selftest=1`, press run — must be 6/6.
-- Persona suite: `window.cleaningChallenge.runPersonaSuite()` in console —
-  maria (ES first-time, camera denied), verdict-text, dana (business owner,
-  records+exports), judge, returning (streak persistence), fold (primary CTAs
-  visible at 360x740 and 390x844).
+- Persona suite: `window.cleaningChallenge.runPersonaSuite()` in console (10/10):
+  maria, verdict-text, dana, judge, returning, fold, consent-first-timer,
+  appellant, offline-queued, crew-member.
 - Phone-first: primary CTA of every screen visible without scroll at 360x740
   and 390x844 (long lists scroll internally; sticky bottom CTA bars).
 
