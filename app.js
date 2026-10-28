@@ -230,6 +230,13 @@ const translations = {
 
     playerNameLabel: "NAME / ALIAS",
     playerNamePlaceholder: "Player",
+    pinPlaceholder: "4-digit PIN",
+    siteInputPlaceholder: "Site 2 · Restroom & Lobby",
+    inviteInputPlaceholder: "Paste phone/name list to invite",
+    ariaBack: "Go back",
+    ariaMaxBefore: "Maximize Before photo",
+    ariaMaxAfter: "Maximize After photo",
+    ariaQrPayload: "QR Code Payload",
     nameOptional: "Optional — Player will be used by default.",
     defaultPlayer: "Player",
     viewLeaderboard: "VIEW LEADERBOARD",
@@ -552,6 +559,13 @@ const translations = {
 
     playerNameLabel: "NOMBRE / ALIAS",
     playerNamePlaceholder: "Jugador",
+    pinPlaceholder: "PIN de 4 dígitos",
+    siteInputPlaceholder: "Sitio 2 · Baño y vestíbulo",
+    inviteInputPlaceholder: "Pega la lista de teléfonos/nombres para invitar",
+    ariaBack: "Volver",
+    ariaMaxBefore: "Ampliar foto del antes",
+    ariaMaxAfter: "Ampliar foto del después",
+    ariaQrPayload: "Código QR",
     nameOptional: "Opcional — se usará Jugador por defecto.",
     defaultPlayer: "Jugador",
     viewLeaderboard: "VER CLASIFICACIÓN",
@@ -874,6 +888,13 @@ const translations = {
 
     playerNameLabel: "IMIĘ / PSEUDONIM",
     playerNamePlaceholder: "Gracz",
+    pinPlaceholder: "4-cyfrowy PIN",
+    siteInputPlaceholder: "Obiekt 2 · Łazienka i hol",
+    inviteInputPlaceholder: "Wklej listę telefonów/nazwisk do zaproszenia",
+    ariaBack: "Wstecz",
+    ariaMaxBefore: "Powiększ zdjęcie przed",
+    ariaMaxAfter: "Powiększ zdjęcie po",
+    ariaQrPayload: "Kod QR",
     nameOptional: "Opcjonalnie — domyślnie użyjemy nazwy Gracz.",
     defaultPlayer: "Gracz",
     viewLeaderboard: "ZOBACZ RANKING",
@@ -1503,6 +1524,10 @@ function applyTranslations() {
 
   document.querySelectorAll("[data-i18n-placeholder]").forEach((element) => {
     element.placeholder = t(element.dataset.i18nPlaceholder);
+  });
+
+  document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
+    element.setAttribute("aria-label", t(element.dataset.i18nAria));
   });
 
   document.querySelectorAll(".language-button").forEach((button) => {
@@ -2198,7 +2223,7 @@ const CLIPS_MANIFEST = {
     "es:num-08": "available", "es:num-09": "available", "es:num-10": "available", "es:num-11": "available",
     "es:num-12": "available", "es:num-13": "available", "es:num-14": "available", "es:num-15": "available",
     "es:num-16": "available", "es:num-17": "available", "es:num-18": "available", "es:num-19": "available",
-    "es:num-20": "available", "es:num-30": "available", "es:num-40": "available", "es:num-50": "available",
+    "es:num-20": "available", "es:num-21": "available", "es:num-22": "available", "es:num-23": "available", "es:num-24": "available", "es:num-25": "available", "es:num-26": "available", "es:num-27": "available", "es:num-28": "available", "es:num-29": "available", "es:num-30": "available", "es:num-40": "available", "es:num-50": "available",
     "es:num-60": "available", "es:num-70": "available", "es:num-80": "available", "es:num-90": "available",
     "es:num-100": "available", "es:glue-00": "available", "pl:num-00": "available", "pl:num-01": "available",
     "pl:num-02": "available", "pl:num-03": "available", "pl:num-04": "available", "pl:num-05": "available",
@@ -2464,8 +2489,8 @@ function speakHost(beat, overrideText) {
 
 function speakSample(language) {
   const lang = HOST_LINES[language] ? language : "en";
-  if (lang === "en" && clipStatus("en", "start", "01") === "available") {
-    playHostClip(clipUrlFor("en", "start", "01"), HOST_LINES.en.start[1], { rate: 1.0, pitch: 1.0 });
+  if (clipStatus(lang, "start", "01") === "available") {
+    playHostClip(clipUrlFor(lang, "start", "01"), HOST_LINES[lang].start[1], { rate: 1.0, pitch: 1.0 });
     return;
   }
   const line = pickHostLine("start", lang);
@@ -2504,12 +2529,13 @@ function speakChallengeInstructions() {
   ]);
 }
 
-function composeScoreClipIds(value, unit = "percent") {
+function composeScoreClipIds(value, unit = "percent", lang = state.language || "en") {
   const rounded = Math.max(0, Math.min(100, Math.round(Number(value) || 0)));
   const parts = [];
   if (rounded === 100) {
     parts.push({ beat: "num", id: "100" });
-  } else if (rounded <= 20) {
+  } else if (rounded <= 20 || (lang === "es" && rounded < 30)) {
+    // Spanish 21-29 are single words (veintiuno...veintinueve), not tens+ones.
     parts.push({ beat: "num", id: String(rounded).padStart(2, "0") });
   } else {
     const tens = Math.floor(rounded / 10) * 10;
@@ -2531,18 +2557,24 @@ function composeScoreClipIds(value, unit = "percent") {
 
 function speakScoreNumber(value, unit = "percent") {
   if (!state.voice.available || state.voice.muted) return [];
-  const parts = composeScoreClipIds(value, unit);
   const lang = state.language || "en";
+  const parts = composeScoreClipIds(value, unit, lang);
   const canUseClips = parts.every((p) => clipStatus(lang, p.beat, p.id) === "available");
   if (canUseClips && parts.length) {
     const urls = parts.map((p) => clipUrlFor(lang, p.beat, p.id));
+    const scheduledGeneration = state.voice.speakGeneration || 0;
     let idx = 0;
     const next = () => {
       if (idx >= urls.length || state.voice.muted) return;
+      if ((state.voice.speakGeneration || 0) !== scheduledGeneration) return;
       const url = urls[idx++];
       try {
         const audio = new Audio(url);
-        audio.onended = next;
+        state.voice.currentAudio = audio;
+        audio.onended = () => {
+          if (state.voice.currentAudio === audio) state.voice.currentAudio = null;
+          next();
+        };
         audio.onerror = () => speakText(`${Math.round(Number(value) || 0)}%`);
         const p = audio.play();
         if (p && typeof p.catch === "function") p.catch(() => {});

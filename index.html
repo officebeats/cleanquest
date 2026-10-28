@@ -19,7 +19,7 @@
 
   <main id="appShell" class="app-shell">
     <header class="topbar">
-      <button id="backButton" class="icon-button" type="button" aria-label="Go back">
+      <button id="backButton" class="icon-button" type="button" aria-label="Go back" data-i18n-aria="ariaBack">
         ←
       </button>
 
@@ -41,7 +41,7 @@
         <span id="soundIcon" aria-hidden="true">◖)))</span>
       </button>
 
-      <button id="settingsButton" class="icon-button" type="button" aria-label="Settings">
+      <button id="settingsButton" class="icon-button" type="button" aria-label="Settings" data-i18n-aria="settingsTitle">
         ⚙
       </button>
     </header>
@@ -151,7 +151,7 @@
           </div>
           <div class="pin-row">
             <input id="cleanerPhone" class="pin-input" type="tel" maxlength="16" autocomplete="off" placeholder="555-0199" aria-label="Phone number" />
-            <input id="cleanerPin" class="pin-input pin-code" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4-digit PIN" aria-label="4-digit PIN" />
+            <input id="cleanerPin" class="pin-input pin-code" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4-digit PIN" data-i18n-placeholder="pinPlaceholder" aria-label="4-digit PIN" />
             <button id="pinSaveButton" class="secondary-button compact-chip" type="button" data-i18n="pinSaveAction">SAVE PIN</button>
           </div>
           <small class="fine-print" data-i18n="pinLocalNote">Local convenience lock only — your phone + PIN stay on this device and are never sent anywhere.</small>
@@ -558,7 +558,7 @@
             <div class="section-label" data-i18n="visualEvidence">VISUAL EVIDENCE</div>
 
             <div class="evidence-grid">
-              <figure id="beforeEvidenceCard" class="evidence-card clickable-evidence" role="button" tabindex="0" aria-label="Maximize Before photo">
+              <figure id="beforeEvidenceCard" class="evidence-card clickable-evidence" role="button" tabindex="0" aria-label="Maximize Before photo" data-i18n-aria="ariaMaxBefore">
                 <div class="evidence-image-wrap">
                   <img id="beforeThumbnail" alt="Before capture" />
                   <div id="beforeDetectionOverlay" class="detection-overlay" aria-hidden="true"></div>
@@ -572,7 +572,7 @@
                 <figcaption data-i18n="before">BEFORE (TAP TO ZOOM)</figcaption>
               </figure>
 
-              <figure id="afterEvidenceCard" class="evidence-card clickable-evidence" role="button" tabindex="0" aria-label="Maximize After photo">
+              <figure id="afterEvidenceCard" class="evidence-card clickable-evidence" role="button" tabindex="0" aria-label="Maximize After photo" data-i18n-aria="ariaMaxAfter">
                 <div class="evidence-image-wrap">
                   <img id="afterThumbnail" alt="After capture" />
                   <div id="afterDetectionOverlay" class="detection-overlay" aria-hidden="true"></div>
@@ -835,16 +835,16 @@
 
           <div id="adminPane12" class="admin-tab-pane hidden">
             <div class="pin-row">
-              <input id="adminSiteInput" class="pin-input" type="text" maxlength="48" placeholder="Site 2 · Restroom &amp; Lobby" aria-label="Register site and area" />
-              <button id="registerSiteButton" class="secondary-button compact-chip" type="button">REGISTER SITE</button>
-              <button id="printQrStickerButton" class="secondary-button compact-chip" type="button">🖨 PRINT QR</button>
+              <input id="adminSiteInput" class="pin-input" type="text" maxlength="48" placeholder="Site 2 · Restroom &amp; Lobby" data-i18n-placeholder="siteInputPlaceholder" aria-label="Register site and area" />
+              <button id="registerSiteButton" class="secondary-button compact-chip" type="button" data-i18n="registerSiteAction">REGISTER SITE</button>
+              <button id="printQrStickerButton" class="secondary-button compact-chip" type="button" data-i18n="printQrAction">🖨 PRINT QR</button>
             </div>
             <div id="qrStickerPreview" class="home-crew-matchup">⌗ QR STICKER READY · Site 1 · Breakroom &amp; Restroom</div>
           </div>
 
           <div id="adminPane13" class="admin-tab-pane hidden">
             <div class="pin-row">
-              <input id="adminInviteInput" class="pin-input" type="text" maxlength="2000" placeholder="Paste phone/name list to invite" aria-label="Invite crew member" />
+              <input id="adminInviteInput" class="pin-input" type="text" maxlength="2000" placeholder="Paste phone/name list to invite" data-i18n-placeholder="inviteInputPlaceholder" aria-label="Invite crew member" />
               <button id="inviteApproveButton" class="secondary-button compact-chip" type="button" data-i18n="inviteApproveAction">INVITE &amp; APPROVE</button>
             </div>
             <div id="adminCrewList" class="home-crew-matchup"></div>
@@ -1147,7 +1147,7 @@
             <div class="section-label" data-i18n="qrTapStation">TAP A STATION QR STICKER OR ENTER CODE</div>
             <div id="qrStickerQuickGrid" class="qr-sticker-quick-grid" role="group" aria-label="Station QR Stickers"></div>
             <div class="qr-manual-row">
-              <input id="qrManualInput" class="pin-input" type="text" maxlength="64" placeholder="CQ-QR-OFFICE-BREAKROOM" aria-label="QR Code Payload" />
+              <input id="qrManualInput" class="pin-input" type="text" maxlength="64" placeholder="CQ-QR-OFFICE-BREAKROOM" aria-label="QR Code Payload" data-i18n-aria="ariaQrPayload" />
               <button id="qrManualSubmit" class="primary-button compact-chip" type="button" data-i18n="qrApply">APPLY QR CODE</button>
             </div>
             <p id="qrScannerStatus" class="fine-print" role="status">Format: CQ-QR-&lt;LEAGUE&gt;-&lt;AREA&gt; (e.g. CQ-QR-OFFICE-BREAKROOM)</p>

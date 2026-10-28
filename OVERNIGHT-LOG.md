@@ -446,3 +446,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 61 — Stability double-run — DONE
 - Evidence: syntax + banned lint clean; VM all-true; CDP self-test 6/6 and personas 0 fails on repeated consecutive runs (no flakiness detected in scoring, deck, crew, or consent paths after tonight's 55 loops of changes).
 - Blockers: none.
+
+## LOOP 62 — Voice-chain completion + placeholder/aria i18n — DONE
+- Implemented: speakSample now plays start-01 clips in ES/PL too; speakScoreNumber tracks currentAudio + speakGeneration so stopSpeech/mute stops number playback; Spanish 21–29 rendered as single-word clips (veintiuno…veintinueve) with compose special-case; input placeholders (PIN/site/invite) localized via data-i18n-placeholder; aria labels (back/settings/maximize/QR) localized via new data-i18n-aria pass in applyTranslations. Also re-applied LOOP 32's admin button attrs, which a stale-snapshot edit had silently dropped (caught by grep audit).
+- Evidence: parity 691 available / 0 missing; syntax + VM all-true; CDP 6/6; personas 0 fails.
+- Blockers: none.
