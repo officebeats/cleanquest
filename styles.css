@@ -4107,3 +4107,14 @@ body.lightbox-open {
     transition-duration: 120ms !important;
   }
 }
+
+/* Legibility floor: no sub-11px text over live video */
+.camera-hud,
+.camera-hud span,
+.capture-status,
+.capture-status span,
+#timerScreen .timer-label,
+#timerScreen .live-badge,
+#timerScreen .live-badge span {
+  font-size: 11px !important;
+}

@@ -199,3 +199,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: pruneExpiredRecords now also prunes scored offline-queue items and closed appeals past the retention window (open appeals exempt, undated scored/closed items expire), and runs once at initializeApp in addition to openRecords.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 12 — Legibility floor over live video + usage re-check — DONE
+- Implemented: .camera-hud, .capture-status, timer label and live badge raised to an 11px floor (were 8px over live camera video).
+- Usage monitor (dev.meta.ai/usage, user-provided link, re-read 23:57): current window 0% used, weekly 38% used — page notes usage can take up to an hour to appear, so pacing stays conservative.
+- Evidence: CDP 6/6; personas 0 fails.
+- Blockers: none.
