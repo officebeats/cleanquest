@@ -491,3 +491,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 72 — Ignore coverage + workspace tidiness — DONE
 - Evidence: git status porcelain empty; .gitignore covers .venv/, tools/, *.wav (voice models check-ignored); no stray untracked artifacts after 70+ loops.
 - Blockers: none.
+
+## LOOP 73 — Runtime retry + served-bundle recency — DONE
+- Evidence: Orca app-tab eval still runtime_timeout (6th consecutive; Meta-tab eval + CDP unaffected — the wedge is specific to that app page/profile, not the app: fresh-profile CDP runs the same code green every loop). Pages served bundle verified current: es:num-21 entry + compose lang param present, es/num-21.mp3 returns 200.
+- Blockers: Orca app-page eval wedged (live focus-trap proof remains the only unverified-in-browser item; trap is code-reviewed + CDP-covered).
