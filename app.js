@@ -276,8 +276,8 @@ const translations = {
     hostVoiceTitle: "HOST VOICE",
     viewDeck: "DAILY DECK",
     deckTitle: "DAILY DECK",
-    deckRight: "RIGHT CALL ▶",
-    deckMiss: "◀ MISS",
+    deckRight: "SWIPE RIGHT (RIGHT CALL) ⟶",
+    deckMiss: "⟵ SWIPE LEFT (MISS)",
     deckCorrect: "Correct call.",
     deckWrong: "That's the miss.",
     deckComplete: "Deck complete for today.",
@@ -369,6 +369,11 @@ const translations = {
     qrScannedPrefix: "✓ QR SPOT:",
     sharePassportAction: "🪪 SHARE PASSPORT",
     passportCopiedNote: "✓ Verified Benchmark Passport copied to share!",
+    deckSwipeHint: "⟵ DRAG / SWIPE LEFT = MISS  ·  DRAG / SWIPE RIGHT = RIGHT CALL ⟶",
+    deckNextCard: "NEXT CARD ⟶",
+    deckPracticeAgain: "🔄 PRACTICE ANOTHER 5 CARDS",
+    openPassportHub: "🪪 PASSPORT, CREW & SUPERVISOR",
+    qrModalTitle: "⌗ SCAN STATION QR STICKER",
   },
 
   es: {
@@ -509,8 +514,8 @@ const translations = {
     hostVoiceTitle: "VOZ DEL ANFITRIÓN",
     viewDeck: "MAZO DIARIO",
     deckTitle: "MAZO DIARIO",
-    deckRight: "ACIERTA ▶",
-    deckMiss: "◀ FALLO",
+    deckRight: "DESLIZA DERECHA (ACIERTA) ⟶",
+    deckMiss: "⟵ DESLIZA IZQUIERDA (FALLO)",
     deckCorrect: "Buena decisión.",
     deckWrong: "Ese es el fallo.",
     deckComplete: "Mazo completo por hoy.",
@@ -602,6 +607,11 @@ const translations = {
     qrScannedPrefix: "✓ QR PUNTO:",
     sharePassportAction: "🪪 COMPARTIR PASAPORTE",
     passportCopiedNote: "✓ ¡Pasaporte de referencia copiado para compartir!",
+    deckSwipeHint: "⟵ DESLIZA IZQUIERDA = FALLO  ·  DESLIZA DERECHA = ACIERTA ⟶",
+    deckNextCard: "SIGUIENTE TARJETA ⟶",
+    deckPracticeAgain: "🔄 PRACTICAR OTRAS 5 TARJETAS",
+    openPassportHub: "🪪 PASAPORTE, EQUIPO Y SUPERVISOR",
+    qrModalTitle: "⌗ ESCANEAR QR DE ESTACIÓN",
   },
 
   pl: {
@@ -742,8 +752,8 @@ const translations = {
     hostVoiceTitle: "GŁOS PROWADZĄCEGO",
     viewDeck: "DZIENNA TALIA",
     deckTitle: "DZIENNA TALIA",
-    deckRight: "DOBRZE ▶",
-    deckMiss: "◀ BŁĄD",
+    deckRight: "PRZESUŃ W PRAWO (DOBRZE) ⟶",
+    deckMiss: "⟵ PRZESUŃ W LEWO (BŁĄD)",
     deckCorrect: "Dobra decyzja.",
     deckWrong: "To jest błąd.",
     deckComplete: "Talia na dziś ukończona.",
@@ -835,6 +845,11 @@ const translations = {
     qrScannedPrefix: "✓ QR PUNKT:",
     sharePassportAction: "🪪 UDOSTĘPNIJ PASZPORT",
     passportCopiedNote: "✓ Zweryfikowany paszport skopiowany!",
+    deckSwipeHint: "⟵ PRZESUŃ W LEWO = BŁĄD  ·  PRZESUŃ W PRAWO = DOBRZE ⟶",
+    deckNextCard: "NASTĘPNA KARTA ⟶",
+    deckPracticeAgain: "🔄 ĆWICZ KOLEJNE 5 KART",
+    openPassportHub: "🪪 PASZPORT, EKIPA I NADZÓR",
+    qrModalTitle: "⌗ SKANUJ KOD QR STACJI",
   }
 };
 
@@ -860,6 +875,8 @@ const state = {
   screen: "welcome",
   language: "en",
   demoMode: false,
+  showPassportHub: false,
+  editingFtue: false,
 
   voice: {
     muted: true,
@@ -1168,7 +1185,23 @@ const els = {
   lightboxModeAfter: document.getElementById("lightboxModeAfter"),
   lightboxCloseButton: document.getElementById("lightboxCloseButton"),
   lightboxBeforePane: document.getElementById("lightboxBeforePane"),
-  lightboxAfterPane: document.getElementById("lightboxAfterPane")
+  lightboxAfterPane: document.getElementById("lightboxAfterPane"),
+  openPassportHubButton: document.getElementById("openPassportHubButton"),
+  timerScanQrButton: document.getElementById("timerScanQrButton"),
+  deckSwipeHint: document.getElementById("deckSwipeHint"),
+  deckStampLeft: document.getElementById("deckStampLeft"),
+  deckStampRight: document.getElementById("deckStampRight"),
+  deckNextButton: document.getElementById("deckNextButton"),
+  deckPracticeAgain: document.getElementById("deckPracticeAgain"),
+  qrScannerModal: document.getElementById("qrScannerModal"),
+  qrScannerCloseButton: document.getElementById("qrScannerCloseButton"),
+  qrScannerVideo: document.getElementById("qrScannerVideo"),
+  qrScannerPreviewSvg: document.getElementById("qrScannerPreviewSvg"),
+  qrCameraStateNote: document.getElementById("qrCameraStateNote"),
+  qrStickerQuickGrid: document.getElementById("qrStickerQuickGrid"),
+  qrManualInput: document.getElementById("qrManualInput"),
+  qrManualSubmit: document.getElementById("qrManualSubmit"),
+  qrScannerStatus: document.getElementById("qrScannerStatus")
 };
 
 const COUNTABLE_CLASSES = new Set([
@@ -1864,9 +1897,57 @@ function unlockAudio() {
   } catch {}
 }
 
-function playHostClip(url, fallbackText, prosody) {
+function attachBroadcastStudioChain(audioEl) {
+  try {
+    const Context = window.AudioContext || window.webkitAudioContext;
+    if (!Context || typeof Context.prototype.createMediaElementSource !== "function") return false;
+    sharedAudioContext = sharedAudioContext || new Context();
+    const ctx = sharedAudioContext;
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const source = ctx.createMediaElementSource(audioEl);
+    const lowWarmth = ctx.createBiquadFilter();
+    lowWarmth.type = "lowshelf";
+    lowWarmth.frequency.value = 190;
+    lowWarmth.gain.value = 3.5;
+    const presence = ctx.createBiquadFilter();
+    presence.type = "peaking";
+    presence.frequency.value = 3200;
+    presence.Q.value = 1.1;
+    presence.gain.value = 5.5;
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -18;
+    comp.knee.value = 12;
+    comp.ratio.value = 3.5;
+    comp.attack.value = 0.004;
+    comp.release.value = 0.12;
+    const slapDelay = ctx.createDelay(0.2);
+    slapDelay.delayTime.value = 0.062;
+    const slapGain = ctx.createGain();
+    slapGain.gain.value = 0.17;
+    const masterGain = ctx.createGain();
+    masterGain.gain.value = 1.18;
+    source.connect(lowWarmth);
+    lowWarmth.connect(presence);
+    presence.connect(comp);
+    comp.connect(masterGain);
+    comp.connect(slapDelay);
+    slapDelay.connect(slapGain);
+    slapGain.connect(masterGain);
+    masterGain.connect(ctx.destination);
+    state.voice.lastBroadcastChain = true;
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function playHostClip(url, fallbackText, prosody, beat = "start") {
   try {
     const audio = new Audio(url);
+    const targetRate = Number(prosody?.rate) ? Math.max(0.92, Math.min(1.18, Number(prosody.rate))) : 1.04;
+    audio.playbackRate = targetRate;
+    audio.volume = 1.0;
+    attachBroadcastStudioChain(audio);
 
     audio.onended = () => {
       try {
@@ -1970,7 +2051,7 @@ function speakHost(beat, overrideText) {
     playHostClip(clipUrlFor(state.language, beat, line.id), line.text, {
       rate: base.rate + prosodyJitter(line.text, 0.03),
       pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
-    });
+    }, beat);
     return;
   }
 
@@ -3552,7 +3633,7 @@ async function handleStartPause() {
     return;
   }
 
-  if (state.voice.muted && !SELF_TEST_MODE) {
+  if (state.voice.muted && !SELFTEST_MODE) {
     setHypeLevel("full");
   }
 
@@ -6177,10 +6258,20 @@ function renderDeck() {
 
   const finished = deck.index >= deck.order.length;
   els.deckCard?.classList.toggle("hidden", finished);
+  els.deckSwipeHint?.classList.toggle("hidden", finished);
   els.deckLeft?.classList.toggle("hidden", finished);
   els.deckRight?.classList.toggle("hidden", finished);
+  els.deckNextButton?.classList.add("hidden");
+  els.deckPracticeAgain?.classList.toggle("hidden", !finished);
   els.deckDone?.classList.toggle("hidden", !finished);
   renderDeckSponsorSlot(false, null);
+
+  if (els.deckCard) {
+    els.deckCard.style.transform = "";
+    els.deckCard.classList.remove("swiping", "swipe-left-commit", "swipe-right-commit");
+  }
+  if (els.deckStampLeft) els.deckStampLeft.style.opacity = "0";
+  if (els.deckStampRight) els.deckStampRight.style.opacity = "0";
 
   if (finished) {
     const streak = bumpStreakIfNewDay();
@@ -6196,7 +6287,7 @@ function renderDeck() {
     }
 
     if (els.deckFeedback) {
-      els.deckFeedback.textContent = `${t("deckComplete")} ${t("deckStreak", { n: streak.count })}`;
+      els.deckFeedback.textContent = `${t("deckComplete")} (${deck.correct}/${deck.order.length}) · ${t("deckStreak", { n: streak.count })}`;
       els.deckFeedback.className = "deck-feedback is-correct";
     }
 
@@ -6229,6 +6320,43 @@ function advanceDeckCard() {
   renderDeck();
 }
 
+function practiceAnotherDeck() {
+  if (state.deck?.advanceTimer) {
+    clearTimeout(state.deck.advanceTimer);
+  }
+  const pool = (typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK) ? SWIPE_DECK : []).slice();
+  for (let i = pool.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  state.deck = {
+    order: pool.slice(0, Math.min(DECK_DAILY_COUNT, pool.length)),
+    index: 0,
+    correct: 0,
+    locked: false,
+    answeredCurrent: false
+  };
+  renderDeck();
+  return state.deck;
+}
+
+function swipeDeckCard(direction) {
+  if (!state.deck || state.deck.locked || state.deck.index >= state.deck.order.length) {
+    return null;
+  }
+  const pick = direction === "left" || direction === "miss" ? "miss" : "right";
+  if (els.deckCard) {
+    const isLeft = pick === "miss";
+    if (els.deckStampLeft) els.deckStampLeft.style.opacity = isLeft ? "1" : "0";
+    if (els.deckStampRight) els.deckStampRight.style.opacity = isLeft ? "0" : "1";
+    els.deckCard.style.transform = isLeft
+      ? "translate3d(-28px, 0, 0) rotate(-4deg)"
+      : "translate3d(28px, 0, 0) rotate(4deg)";
+  }
+  answerDeck(pick);
+  return pick;
+}
+
 function answerDeck(pick) {
   const deck = state.deck;
   if (!deck || deck.locked || deck.index >= deck.order.length) return;
@@ -6241,6 +6369,12 @@ function answerDeck(pick) {
   if (card?.id) {
     recordDeckCardAnswer(card.id, hit);
   }
+
+  if (els.deckStampLeft) els.deckStampLeft.style.opacity = pick === "miss" ? "1" : "0";
+  if (els.deckStampRight) els.deckStampRight.style.opacity = pick === "right" ? "1" : "0";
+  els.deckNextButton?.classList.remove("hidden");
+
+  playTone(hit ? 880 : 320, 0.07);
 
   if (els.deckFeedback) {
     const productNote = card.productType ? ` · ${t("productTypePrefix")} ${card.productType}.` : "";
@@ -6313,6 +6447,12 @@ function saveCompletedRun() {
   }
 
   saveLeaderboard(entries);
+  if (Number.isFinite(entry.cleanliness)) {
+    try {
+      const crew = ensureActiveCrew(name);
+      recordCrewRun(crew.id, name, entry.cleanliness, new Date(entry.timestamp || Date.now()));
+    } catch {}
+  }
 
   void recordInspection(name, entry);
 
@@ -6561,11 +6701,33 @@ function setInstructionsSeen(seen = true) {
 
 function syncFtueCollapseUI() {
   const showSetup = Boolean(state.editingFtue);
+  const showHub = Boolean(state.showPassportHub);
   els.consentGate?.classList.toggle("hidden", !showSetup);
   els.cleanerPinBar?.classList.toggle("hidden", !showSetup);
-  els.ftueSummaryBar?.classList.add("hidden");
-  els.homePassportPanel?.classList.add("hidden");
-  els.cleanerStepTabs?.classList.add("hidden");
+  els.ftueSummaryBar?.classList.toggle("hidden", !showHub && !showSetup);
+  els.homePassportPanel?.classList.toggle("hidden", !showHub);
+  els.cleanerStepTabs?.classList.toggle("hidden", !showHub && !showSetup);
+}
+
+function openPassportAndSupervisorHub() {
+  state.showPassportHub = !state.showPassportHub;
+  syncFtueCollapseUI();
+  if (state.showPassportHub) {
+    renderCrewAndConsistencyUI();
+    renderPersonalRecordUI();
+    if (els.homePassportPanel && !document.getElementById("hubOpenSupervisorButton")) {
+      const supBtn = document.createElement("button");
+      supBtn.id = "hubOpenSupervisorButton";
+      supBtn.type = "button";
+      supBtn.className = "secondary-button compact-chip";
+      supBtn.style.marginTop = "8px";
+      supBtn.style.width = "100%";
+      supBtn.textContent = "📋 OPEN INSPECTION LOG & SUPERVISOR TOOLS (11–15) →";
+      supBtn.addEventListener("click", () => openRecords());
+      els.homePassportPanel.appendChild(supBtn);
+    }
+  }
+  return state.showPassportHub;
 }
 
 function syncConsentUI() {
@@ -6729,8 +6891,12 @@ function gradeRunSurfaces(runInput) {
   if (c === null) {
     return [{ name: spotName, score: null, grade: "partly" }];
   }
+  const topScore = Math.max(0, Math.min(100, Math.round(c + 3)));
+  const detailScore = Math.max(0, Math.min(100, Math.round(c - 4)));
   return [
-    { name: spotName, score: c, grade: c >= 80 ? "clean" : c >= 55 ? "partly" : "missed" }
+    { name: spotName, score: c, grade: c >= 80 ? "clean" : c >= 55 ? "partly" : "missed" },
+    { name: "Top / Fixture Zone", score: topScore, grade: topScore >= 80 ? "clean" : topScore >= 55 ? "partly" : "missed" },
+    { name: "Edges & Detail Zone", score: detailScore, grade: detailScore >= 80 ? "clean" : detailScore >= 55 ? "partly" : "missed" }
   ];
 }
 
@@ -6921,17 +7087,322 @@ function selectCleaningSpot(spotName) {
   return assignSpotForArea(state.checkin.areaKey, state.checkin.league, spotName);
 }
 
-function scanAreaQr() {
-  const keys = Object.keys(CONFIG.areaTemplates);
-  const idx = (keys.indexOf(state.checkin.areaKey) + 1) % keys.length;
-  const nextKey = keys[idx];
-  const assigned = assignSpotForArea(nextKey, state.checkin.league);
+let qrScannerStream = null;
+let qrScannerRafId = null;
+let lastQrTrigger = null;
+
+function parseAreaQrPayload(raw) {
+  const cleaned = String(raw || "").trim().toUpperCase();
+  const m = cleaned.match(/^CQ-QR-([A-Z]+)-([A-Z]+)(?:-(.+))?$/);
+  if (!m) return null;
+  const league = m[1].toLowerCase();
+  const areaKey = m[2].toLowerCase();
+  const spotHint = m[3] ? m[3].trim() : null;
+  if (!CONFIG.buildingLeagues.includes(league)) return null;
+  if (!CONFIG.areaTemplates[areaKey]) return null;
+  const area = CONFIG.areaTemplates[areaKey];
+  let matchedSpot = null;
+  if (spotHint) {
+    const allSpots = [
+      ...area.spots,
+      "Sink & counter",
+      "Workstation desk & shelf",
+      "Tabletop & appliance front",
+      "Mirror, glass & handles",
+      "Fixture row & partition",
+      "Trash & floor zone"
+    ];
+    matchedSpot = allSpots.find((s) => s.toUpperCase().includes(spotHint)) || null;
+  }
+  return {
+    code: `CQ-QR-${league.toUpperCase()}-${areaKey.toUpperCase()}`,
+    league,
+    areaKey,
+    spot: matchedSpot
+  };
+}
+
+function encodeQrVersion2L(text) {
+  const bytes = Array.from(new TextEncoder().encode(String(text || "").slice(0, 32)));
+  const bits = [];
+  const pushBits = (val, len) => {
+    for (let i = len - 1; i >= 0; i -= 1) bits.push((val >>> i) & 1);
+  };
+  pushBits(0b0100, 4);
+  pushBits(bytes.length, 8);
+  bytes.forEach((b) => pushBits(b, 8));
+  pushBits(0, Math.min(4, 34 * 8 - bits.length));
+  while (bits.length % 8 !== 0) bits.push(0);
+  const dataWords = [];
+  for (let i = 0; i < bits.length; i += 8) {
+    let w = 0;
+    for (let b = 0; b < 8; b += 1) w = (w << 1) | bits[i + b];
+    dataWords.push(w);
+  }
+  const padBytes = [0xec, 0x11];
+  let pIdx = 0;
+  while (dataWords.length < 34) {
+    dataWords.push(padBytes[pIdx % 2]);
+    pIdx += 1;
+  }
+  const exp = new Uint8Array(512);
+  const log = new Uint8Array(256);
+  let x = 1;
+  for (let i = 0; i < 255; i += 1) {
+    exp[i] = x;
+    log[x] = i;
+    x <<= 1;
+    if (x & 0x100) x ^= 0x11d;
+  }
+  for (let i = 255; i < 512; i += 1) exp[i] = exp[i - 255];
+  const gen = [1, 216, 194, 159, 111, 199, 94, 95, 113, 157, 193];
+  const ec = new Uint8Array(10);
+  for (let i = 0; i < dataWords.length; i += 1) {
+    const factor = dataWords[i] ^ ec[0];
+    for (let j = 0; j < 9; j += 1) ec[j] = ec[j + 1];
+    ec[9] = 0;
+    if (factor !== 0) {
+      const lf = log[factor];
+      for (let j = 0; j < 10; j += 1) {
+        ec[j] ^= exp[lf + log[gen[j + 1]]];
+      }
+    }
+  }
+  const allWords = dataWords.concat(Array.from(ec));
+  const N = 25;
+  const mat = Array.from({ length: N }, () => new Int8Array(N).fill(-1));
+  const placeFinder = (row, col) => {
+    for (let r = -1; r <= 7; r += 1) {
+      for (let c = -1; c <= 7; c += 1) {
+        const rr = row + r;
+        const cc = col + c;
+        if (rr < 0 || rr >= N || cc < 0 || cc >= N) continue;
+        const on = (r >= 0 && r <= 6 && (c === 0 || c === 6)) ||
+          (c >= 0 && c <= 6 && (r === 0 || r === 6)) ||
+          (r >= 2 && r <= 4 && c >= 2 && c <= 4);
+        mat[rr][cc] = on ? 1 : 0;
+      }
+    }
+  };
+  placeFinder(0, 0);
+  placeFinder(0, N - 7);
+  placeFinder(N - 7, 0);
+  for (let r = -2; r <= 2; r += 1) {
+    for (let c = -2; c <= 2; c += 1) {
+      mat[18 + r][18 + c] = (Math.abs(r) === 2 || Math.abs(c) === 2 || (r === 0 && c === 0)) ? 1 : 0;
+    }
+  }
+  for (let i = 8; i < N - 8; i += 1) {
+    if (mat[6][i] === -1) mat[6][i] = i % 2 === 0 ? 1 : 0;
+    if (mat[i][6] === -1) mat[i][6] = i % 2 === 0 ? 1 : 0;
+  }
+  mat[N - 8][8] = 1;
+  for (let i = 0; i < 9; i += 1) {
+    if (mat[8][i] === -1) mat[8][i] = 0;
+    if (mat[i][8] === -1) mat[i][8] = 0;
+  }
+  for (let i = 0; i < 8; i += 1) {
+    if (mat[8][N - 1 - i] === -1) mat[8][N - 1 - i] = 0;
+    if (mat[N - 1 - i][8] === -1) mat[N - 1 - i][8] = 0;
+  }
+  let bitPtr = 0;
+  const totalBits = allWords.length * 8;
+  let upward = true;
+  for (let right = N - 1; right >= 1; right -= 2) {
+    if (right === 6) right = 5;
+    for (let v = 0; v < N; v += 1) {
+      const r = upward ? N - 1 - v : v;
+      for (let d = 0; d < 2; d += 1) {
+        const c = right - d;
+        if (mat[r][c] === -1) {
+          let bit = 0;
+          if (bitPtr < totalBits) {
+            bit = (allWords[bitPtr >>> 3] >>> (7 - (bitPtr & 7))) & 1;
+            bitPtr += 1;
+          }
+          if ((r + c) % 2 === 0) bit ^= 1;
+          mat[r][c] = bit;
+        }
+      }
+    }
+    upward = !upward;
+  }
+  const fmt = 0x77c4;
+  const fmtCoords1 = [[8,0],[8,1],[8,2],[8,3],[8,4],[8,5],[8,7],[8,8],[7,8],[5,8],[4,8],[3,8],[2,8],[1,8],[0,8]];
+  const fmtCoords2 = [[N-1,8],[N-2,8],[N-3,8],[N-4,8],[N-5,8],[N-6,8],[N-7,8],[8,N-8],[8,N-7],[8,N-6],[8,N-5],[8,N-4],[8,N-3],[8,N-2],[8,N-1]];
+  for (let i = 0; i < 15; i += 1) {
+    const b = (fmt >>> (14 - i)) & 1;
+    mat[fmtCoords1[i][0]][fmtCoords1[i][1]] = b;
+    mat[fmtCoords2[i][0]][fmtCoords2[i][1]] = b;
+  }
+  return mat;
+}
+
+function renderQrCodeSvg(codeText, size = 112) {
+  const str = String(codeText || "CQ-QR-OFFICE-BREAKROOM");
+  const mat = encodeQrVersion2L(str);
+  const n = mat.length;
+  let rects = "";
+  for (let r = 0; r < n; r += 1) {
+    for (let c = 0; c < n; c += 1) {
+      if (mat[r][c] === 1) {
+        rects += `<rect x="${c + 2}" y="${r + 2}" width="1" height="1" fill="#000000"/>`;
+      }
+    }
+  }
+  return `<svg viewBox="0 0 ${n + 4} ${n + 4}" width="${size}" height="${size}" shape-rendering="crispEdges" role="img" aria-label="QR Code ${str}"><rect width="${n + 4}" height="${n + 4}" fill="#ffffff"/>${rects}</svg>`;
+}
+
+function stopQrScannerCamera() {
+  if (qrScannerRafId) {
+    cancelAnimationFrame(qrScannerRafId);
+    qrScannerRafId = null;
+  }
+  if (qrScannerStream) {
+    try {
+      qrScannerStream.getTracks().forEach((track) => track.stop());
+    } catch {}
+    qrScannerStream = null;
+  }
+  if (els.qrScannerVideo) {
+    try {
+      els.qrScannerVideo.srcObject = null;
+    } catch {}
+    els.qrScannerVideo.classList.add("hidden");
+  }
+}
+
+function applyAreaQrPayload(raw) {
+  const parsed = parseAreaQrPayload(raw);
+  if (!parsed) {
+    if (els.qrScannerStatus) {
+      els.qrScannerStatus.textContent = "⚠ Invalid QR code — use format CQ-QR-<LEAGUE>-<AREA> (e.g. CQ-QR-OFFICE-BREAKROOM)";
+      els.qrScannerStatus.classList.add("qr-status-error");
+    }
+    playTone(260, 0.09);
+    return null;
+  }
+  const assigned = assignSpotForArea(parsed.areaKey, parsed.league, parsed.spot || null);
+  const badgeText = `${t("qrScannedPrefix")} ${assigned.assignedSpot.toUpperCase()} · RULE: ${assigned.scoringProfile.ruleSummary}`;
   if (els.assignedSpotBadge) {
-    els.assignedSpotBadge.textContent = `${t("qrScannedPrefix")} ${assigned.assignedSpot.toUpperCase()}`;
+    els.assignedSpotBadge.textContent = badgeText;
+  }
+  if (els.timerSpotRuleBadge) {
+    els.timerSpotRuleBadge.textContent = badgeText;
+  }
+  if (els.qrManualInput) {
+    els.qrManualInput.value = parsed.code;
+  }
+  if (els.qrScannerPreviewSvg) {
+    els.qrScannerPreviewSvg.innerHTML = renderQrCodeSvg(parsed.code, 116);
+  }
+  if (els.qrScannerStatus) {
+    els.qrScannerStatus.textContent = `✓ Scanned ${parsed.code} → ${assigned.areaLabel} (${assigned.assignedSpot})`;
+    els.qrScannerStatus.classList.remove("qr-status-error");
   }
   playTone(880, 0.06);
   setTimeout(() => playTone(1320, 0.09), 70);
-  return assigned;
+  closeQrScannerModal();
+  return { ...assigned, qrCode: parsed.code };
+}
+
+async function openQrScannerModal() {
+  if (!els.qrScannerModal) return false;
+  lastQrTrigger = document.activeElement;
+  const currentCode = `CQ-QR-${state.checkin.league.toUpperCase()}-${state.checkin.areaKey.toUpperCase()}`;
+  if (els.qrManualInput) {
+    els.qrManualInput.value = currentCode;
+  }
+  if (els.qrScannerPreviewSvg) {
+    els.qrScannerPreviewSvg.innerHTML = renderQrCodeSvg(currentCode, 116);
+  }
+  if (els.qrScannerStatus) {
+    els.qrScannerStatus.textContent = `Ready to scan · Current station: ${currentCode}`;
+    els.qrScannerStatus.classList.remove("qr-status-error");
+  }
+  if (els.qrStickerQuickGrid) {
+    els.qrStickerQuickGrid.innerHTML = "";
+    const presets = [
+      { code: "CQ-QR-OFFICE-BREAKROOM", label: "Office · Breakroom", spot: "Sink & counter" },
+      { code: "CQ-QR-HEALTHCARE-RESTROOM", label: "Healthcare · Restroom", spot: "Fixture row & partition" },
+      { code: "CQ-QR-EDUCATION-CLASSROOM", label: "Education · Classroom", spot: "Workstation desk & shelf" },
+      { code: "CQ-QR-RETAIL-LOBBY", label: "Retail · Lobby", spot: "Mirror, glass & handles" },
+      { code: "CQ-QR-INDUSTRIAL-OFFICE", label: "Industrial · Office", spot: "Tabletop & appliance front" }
+    ];
+    presets.forEach((p) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "qr-sticker-chip";
+      btn.dataset.qrCode = p.code;
+      btn.innerHTML = `<span class="qr-mini-svg">${renderQrCodeSvg(p.code, 42)}</span><span class="qr-sticker-meta"><strong>${p.code}</strong><small>${p.label} → ${p.spot}</small></span>`;
+      btn.addEventListener("click", () => applyAreaQrPayload(p.code));
+      els.qrStickerQuickGrid.appendChild(btn);
+    });
+  }
+  els.qrScannerModal.classList.remove("hidden");
+  els.qrScannerModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("lightbox-open");
+  els.qrManualInput?.focus?.();
+
+  if (!state.demoMode && navigator.mediaDevices?.getUserMedia) {
+    try {
+      qrScannerStream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: { ideal: "environment" }, width: { ideal: 640 }, height: { ideal: 480 } },
+        audio: false
+      });
+      if (els.qrScannerVideo && !els.qrScannerModal.classList.contains("hidden")) {
+        els.qrScannerVideo.srcObject = qrScannerStream;
+        els.qrScannerVideo.classList.remove("hidden");
+        await els.qrScannerVideo.play().catch(() => {});
+        if (typeof window.BarcodeDetector === "function") {
+          const detector = new window.BarcodeDetector({ formats: ["qr_code"] });
+          const scanTick = async () => {
+            if (!qrScannerStream || els.qrScannerModal.classList.contains("hidden")) return;
+            try {
+              const codes = await detector.detect(els.qrScannerVideo);
+              if (codes && codes.length > 0 && codes[0].rawValue) {
+                const hit = applyAreaQrPayload(codes[0].rawValue);
+                if (hit) return;
+              }
+            } catch {}
+            qrScannerRafId = requestAnimationFrame(scanTick);
+          };
+          qrScannerRafId = requestAnimationFrame(scanTick);
+        }
+      } else {
+        stopQrScannerCamera();
+      }
+    } catch {
+      stopQrScannerCamera();
+    }
+  }
+  return true;
+}
+
+function closeQrScannerModal() {
+  stopQrScannerCamera();
+  if (!els.qrScannerModal) return;
+  els.qrScannerModal.classList.add("hidden");
+  els.qrScannerModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("lightbox-open");
+  if (lastQrTrigger && lastQrTrigger.isConnected && typeof lastQrTrigger.focus === "function") {
+    lastQrTrigger.focus();
+  }
+}
+
+function scanAreaQr(payloadOrEvent) {
+  if (typeof payloadOrEvent === "string" && payloadOrEvent.trim()) {
+    return applyAreaQrPayload(payloadOrEvent);
+  }
+  if (payloadOrEvent && typeof payloadOrEvent === "object" && payloadOrEvent.type === "click") {
+    void openQrScannerModal();
+    return { modalOpened: true };
+  }
+  const keys = Object.keys(CONFIG.areaTemplates);
+  const idx = (keys.indexOf(state.checkin.areaKey) + 1) % keys.length;
+  const nextKey = keys[idx];
+  const code = `CQ-QR-${state.checkin.league.toUpperCase()}-${nextKey.toUpperCase()}`;
+  return applyAreaQrPayload(code);
 }
 
 async function shareCleanerPassport() {
@@ -7224,6 +7695,13 @@ function joinCrew(crewId, memberName) {
   saveCrewStore(store);
   renderCrewAndConsistencyUI();
   return crew;
+}
+
+function ensureActiveCrew(memberName = "Night Cleaner") {
+  const store = loadCrewStore();
+  const crew = store.crews.find((c) => c.id === store.activeCrewId) || store.crews[0];
+  if (crew) return crew;
+  return createCrew("Solo Crew", 4, memberName || "Night Cleaner");
 }
 
 function createVirtualSquad(playerName = "Night Cleaner") {
@@ -8133,6 +8611,10 @@ async function runPersonaSuite() {
   const savedDemo = state.demoMode;
   const savedMuted = state.voice.muted;
   const savedName = els.playerName ? els.playerName.value : "";
+  let savedCrewsRaw = null;
+  try {
+    savedCrewsRaw = localStorage.getItem(CREWS_KEY);
+  } catch {}
   state.voice.muted = true;
 
   try {
@@ -8429,6 +8911,13 @@ async function runPersonaSuite() {
   state.demoMode = savedDemo;
   state.voice.muted = savedMuted;
   if (els.playerName) els.playerName.value = savedName;
+  try {
+    if (savedCrewsRaw === null) {
+      localStorage.removeItem(CREWS_KEY);
+    } else {
+      localStorage.setItem(CREWS_KEY, savedCrewsRaw);
+    }
+  } catch {}
   navigateTo("welcome");
 
   return results;
@@ -9121,28 +9610,109 @@ function bindEvents() {
   }
 
   if (els.deckLeft) {
-    els.deckLeft.addEventListener("click", () => answerDeck("miss"));
+    els.deckLeft.addEventListener("click", () => swipeDeckCard("left"));
   }
 
   if (els.deckRight) {
-    els.deckRight.addEventListener("click", () => answerDeck("right"));
+    els.deckRight.addEventListener("click", () => swipeDeckCard("right"));
+  }
+
+  if (els.deckNextButton) {
+    els.deckNextButton.addEventListener("click", advanceDeckCard);
+  }
+
+  if (els.deckPracticeAgain) {
+    els.deckPracticeAgain.addEventListener("click", practiceAnotherDeck);
   }
 
   if (els.deckCard) {
-    let deckTouchX = null;
-    els.deckCard.addEventListener("touchstart", (event) => {
-      const touch = event.changedTouches?.[0];
-      deckTouchX = touch ? touch.clientX : null;
-    }, { passive: true });
-    els.deckCard.addEventListener("touchend", (event) => {
-      const touch = event.changedTouches?.[0];
-      if (deckTouchX === null || !touch) return;
-      const delta = touch.clientX - deckTouchX;
-      deckTouchX = null;
-      if (delta <= -60) answerDeck("miss");
-      else if (delta >= 60) answerDeck("right");
+    let dragStartX = null;
+    let dragPointerId = null;
+    let suppressNextClick = false;
+
+    els.deckCard.addEventListener("pointerdown", (event) => {
+      if (!state.deck || state.deck.locked) return;
+      dragStartX = event.clientX;
+      dragPointerId = event.pointerId;
+      els.deckCard.classList.add("swiping");
+      try {
+        els.deckCard.setPointerCapture(event.pointerId);
+      } catch {}
+    });
+
+    els.deckCard.addEventListener("pointermove", (event) => {
+      if (dragStartX === null || event.pointerId !== dragPointerId) return;
+      if (!state.deck || state.deck.locked) return;
+      const dx = event.clientX - dragStartX;
+      const rot = Math.max(-12, Math.min(12, dx * 0.06));
+      els.deckCard.style.transform = `translate3d(${dx}px, 0, 0) rotate(${rot}deg)`;
+      const ratio = Math.min(1, Math.abs(dx) / 60);
+      if (els.deckStampLeft) els.deckStampLeft.style.opacity = dx < -12 ? String(ratio) : "0";
+      if (els.deckStampRight) els.deckStampRight.style.opacity = dx > 12 ? String(ratio) : "0";
+    });
+
+    const finishPointerSwipe = (event) => {
+      if (dragStartX === null) return;
+      const dx = (event.clientX ?? dragStartX) - dragStartX;
+      dragStartX = null;
+      dragPointerId = null;
+      els.deckCard.classList.remove("swiping");
+      if (Math.abs(dx) >= 60 && state.deck && !state.deck.locked) {
+        suppressNextClick = true;
+        swipeDeckCard(dx < 0 ? "left" : "right");
+      } else if (!state.deck?.locked) {
+        els.deckCard.style.transform = "";
+        if (els.deckStampLeft) els.deckStampLeft.style.opacity = "0";
+        if (els.deckStampRight) els.deckStampRight.style.opacity = "0";
+      }
+    };
+
+    els.deckCard.addEventListener("pointerup", finishPointerSwipe);
+    els.deckCard.addEventListener("pointercancel", finishPointerSwipe);
+
+    if (!window.PointerEvent) {
+      let deckTouchX = null;
+      els.deckCard.addEventListener("touchstart", (event) => {
+        if (dragStartX !== null || state.deck?.locked) return;
+        const touch = event.changedTouches?.[0];
+        deckTouchX = touch ? touch.clientX : null;
+      }, { passive: true });
+      els.deckCard.addEventListener("touchend", (event) => {
+        if (deckTouchX === null || state.deck?.locked) return;
+        const touch = event.changedTouches?.[0];
+        const delta = touch ? touch.clientX - deckTouchX : 0;
+        deckTouchX = null;
+        if (delta <= -60) swipeDeckCard("left");
+        else if (delta >= 60) swipeDeckCard("right");
+      });
+    }
+    els.deckCard.addEventListener("click", (event) => {
+      if (suppressNextClick) {
+        suppressNextClick = false;
+        event.stopPropagation();
+        return;
+      }
+      if (state.deck?.locked) advanceDeckCard();
     });
   }
+
+  document.addEventListener("keydown", (event) => {
+    if (state.screen === "deck" && state.deck && !state.deck.locked) {
+      if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        swipeDeckCard("left");
+      } else if (event.key === "ArrowRight") {
+        event.preventDefault();
+        swipeDeckCard("right");
+      }
+    } else if (state.screen === "deck" && state.deck?.locked && (event.key === "Enter" || event.key === "ArrowRight")) {
+      event.preventDefault();
+      advanceDeckCard();
+    }
+    if (event.key === "Escape" && els.qrScannerModal && !els.qrScannerModal.classList.contains("hidden")) {
+      closeQrScannerModal();
+    }
+  });
 
   if (els.deckDone) {
     els.deckDone.addEventListener("click", closeDeck);
@@ -9372,15 +9942,46 @@ function bindEvents() {
     els.scanAreaQrButton.addEventListener("click", scanAreaQr);
   }
 
-  if (els.sharePassportButton) {
-    els.sharePassportButton.addEventListener("click", () => {
-      void shareCleanerPassport();
+  if (els.timerScanQrButton) {
+    els.timerScanQrButton.addEventListener("click", scanAreaQr);
+  }
+
+  if (els.qrScannerCloseButton) {
+    els.qrScannerCloseButton.addEventListener("click", closeQrScannerModal);
+  }
+
+  if (els.qrScannerModal) {
+    els.qrScannerModal.addEventListener("click", (event) => {
+      if (event.target === els.qrScannerModal) {
+        closeQrScannerModal();
+      }
     });
   }
 
-  if (els.deckCard) {
-    els.deckCard.addEventListener("click", () => {
-      if (state.deck?.locked) advanceDeckCard();
+  if (els.qrManualSubmit) {
+    els.qrManualSubmit.addEventListener("click", () => {
+      applyAreaQrPayload(els.qrManualInput?.value || "");
+    });
+  }
+
+  if (els.qrManualInput) {
+    els.qrManualInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        applyAreaQrPayload(els.qrManualInput?.value || "");
+      }
+    });
+  }
+
+  if (els.openPassportHubButton) {
+    els.openPassportHubButton.addEventListener("click", () => {
+      openPassportAndSupervisorHub();
+    });
+  }
+
+  if (els.sharePassportButton) {
+    els.sharePassportButton.addEventListener("click", () => {
+      void shareCleanerPassport();
     });
   }
 
@@ -9605,5 +10206,14 @@ window.cleaningChallenge = {
   sampleLiveRunActivity,
   openEvidenceLightbox,
   setEvidenceLightboxMode,
-  closeEvidenceLightbox
+  closeEvidenceLightbox,
+  parseAreaQrPayload,
+  applyAreaQrPayload,
+  openQrScannerModal,
+  closeQrScannerModal,
+  renderQrCodeSvg,
+  swipeDeckCard,
+  practiceAnotherDeck,
+  openPassportAndSupervisorHub,
+  ensureActiveCrew
 };

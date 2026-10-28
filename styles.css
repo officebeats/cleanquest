@@ -3818,6 +3818,225 @@ body.lightbox-open {
   opacity: 0.38 !important;
   cursor: not-allowed !important;
 }
+
+/* Swipe Deck Drag/Tilt Stamps & Hint */
+.deck-swipe-hint {
+  padding: 6px 12px !important;
+  margin: 4px 0 8px !important;
+  border-radius: 999px !important;
+  background: rgba(10, 26, 42, 0.9) !important;
+  border: 1px solid rgba(72, 239, 255, 0.38) !important;
+  color: #bceeff !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  text-align: center !important;
+  letter-spacing: 0.03em !important;
+}
+
+#deckScreen .deck-card {
+  position: relative !important;
+  user-select: none !important;
+  touch-action: pan-y !important;
+  cursor: grab !important;
+  transition: transform 180ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 150ms ease !important;
+}
+
+#deckScreen .deck-card.swiping {
+  cursor: grabbing !important;
+  transition: none !important;
+}
+
+.deck-stamp-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  margin-bottom: 6px !important;
+  pointer-events: none !important;
+}
+
+.deck-stamp {
+  padding: 3px 10px !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.06em !important;
+  opacity: 0;
+  transition: opacity 120ms ease !important;
+}
+
+.deck-stamp-left {
+  border: 2px solid #fb7185 !important;
+  color: #fecdd3 !important;
+  background: rgba(159, 18, 57, 0.35) !important;
+}
+
+.deck-stamp-right {
+  border: 2px solid #39f5bc !important;
+  color: #d1fae5 !important;
+  background: rgba(6, 95, 70, 0.35) !important;
+}
+
+.deck-secondary-actions {
+  margin-top: 8px !important;
+}
+
+/* QR Station Scanner Modal */
+.qr-scanner-card {
+  width: min(860px, 95vw) !important;
+}
+
+.qr-scanner-grid {
+  display: grid !important;
+  grid-template-columns: minmax(210px, 260px) 1fr !important;
+  gap: 14px !important;
+  align-items: start !important;
+}
+
+@media (max-width: 680px) {
+  .qr-scanner-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.qr-camera-box {
+  position: relative !important;
+  padding: 12px !important;
+  border-radius: 12px !important;
+  background: #040b14 !important;
+  border: 1px solid rgba(72, 239, 255, 0.4) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 8px !important;
+  text-align: center !important;
+}
+
+.qr-scanner-video {
+  width: 100% !important;
+  max-height: 150px !important;
+  object-fit: cover !important;
+  border-radius: 8px !important;
+}
+
+.qr-scanner-laser {
+  width: 90% !important;
+  height: 2px !important;
+  background: linear-gradient(90deg, transparent, #39f5bc, #48efff, transparent) !important;
+  box-shadow: 0 0 10px #39f5bc !important;
+}
+
+.qr-controls-box {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+}
+
+.qr-sticker-quick-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)) !important;
+  gap: 6px !important;
+  max-height: 240px !important;
+  overflow-y: auto !important;
+}
+
+.qr-sticker-chip {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 8px !important;
+  border-radius: 10px !important;
+  background: rgba(12, 28, 44, 0.9) !important;
+  border: 1px solid rgba(72, 239, 255, 0.35) !important;
+  color: #e6f7ff !important;
+  text-align: left !important;
+  cursor: pointer !important;
+}
+
+.qr-sticker-chip:hover {
+  border-color: #39f5bc !important;
+  background: rgba(18, 42, 64, 0.95) !important;
+}
+
+.qr-mini-svg svg {
+  display: block !important;
+  border-radius: 4px !important;
+}
+
+.qr-sticker-meta {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+  min-width: 0 !important;
+}
+
+.qr-sticker-meta strong {
+  font-size: 11px !important;
+  color: #48efff !important;
+}
+
+.qr-sticker-meta small {
+  font-size: 11px !important;
+  color: #b8dce8 !important;
+}
+
+.qr-manual-row {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center !important;
+  flex-wrap: wrap !important;
+}
+
+.qr-manual-row input {
+  flex: 1 !important;
+  min-width: 170px !important;
+}
+
+.qr-status-error {
+  color: #fda4af !important;
+}
+
+/* Ensure 800x600 headless Chrome and short landscape screens keep #resultsContinue above fold */
+@media (max-height: 660px) {
+  #resultsScreen h2 {
+    margin: 0 0 2px !important;
+    font-size: 18px !important;
+  }
+  #resultsScreen .score-hero {
+    padding: 4px 10px !important;
+  }
+  #resultsScreen .score-hero > strong {
+    font-size: 26px !important;
+  }
+  #resultsScreen .result-grid,
+  #resultsScreen #offlineScoreNote,
+  #resultsScreen #analysisDisclaimer {
+    display: none !important;
+  }
+  #resultsScreen #resultsBody {
+    gap: 4px !important;
+  }
+  #resultsScreen #scoreBreakdownCard,
+  #resultsScreen .finding-card,
+  #resultsScreen .identity-panel,
+  #resultsScreen .dispute-panel {
+    padding: 4px 8px !important;
+    margin: 0 !important;
+  }
+  #resultsScreen .evidence-grid .evidence-image-wrap,
+  #resultsScreen .evidence-grid .evidence-image-wrap > img {
+    height: 68px !important;
+    min-height: 68px !important;
+    max-height: 68px !important;
+  }
+  #resultsScreen .results-cta-bar,
+  #resultsScreen .sticky-cta {
+    margin-top: 2px !important;
+    padding: 0 !important;
+  }
+  #resultsScreen #resultsContinue {
+    min-height: 38px !important;
+  }
+}
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

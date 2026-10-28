@@ -101,6 +101,15 @@
           >
             DAILY DECK
           </button>
+
+          <button
+            id="openPassportHubButton"
+            class="secondary-button hero-button"
+            type="button"
+            data-i18n="openPassportHub"
+          >
+            🪪 PASSPORT, CREW &amp; SUPERVISOR
+          </button>
         </div>
 
         <div id="ftueSummaryBar" class="ftue-summary-bar hologram-card hidden">
@@ -382,6 +391,7 @@
             </select>
           </label>
           <div id="timerSpotPills" class="timer-spot-pills" role="group" aria-label="Quick Spot Selection"></div>
+          <button id="timerScanQrButton" class="ghost-toggle-chip" type="button" data-i18n="scanAreaQrAction">⌗ SCAN QR</button>
           <span id="timerSpotRuleBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
         </div>
 
@@ -1022,8 +1032,15 @@
         <h2 data-i18n="deckTitle">DAILY DECK</h2>
 
         <p id="deckStreak" class="fine-print"></p>
+        <div id="deckSwipeHint" class="deck-swipe-hint" data-i18n="deckSwipeHint">
+          ⟵ DRAG / SWIPE LEFT = MISS &nbsp;·&nbsp; DRAG / SWIPE RIGHT = RIGHT CALL ⟶
+        </div>
 
-        <div id="deckCard" class="deck-card hologram-card">
+        <div id="deckCard" class="deck-card hologram-card" aria-describedby="deckSwipeHint">
+          <div class="deck-stamp-row" aria-hidden="true">
+            <span id="deckStampLeft" class="deck-stamp deck-stamp-left">⟵ MISS</span>
+            <span id="deckStampRight" class="deck-stamp deck-stamp-right">RIGHT CALL ⟶</span>
+          </div>
           <div class="section-label" id="deckCategory">SURFACE</div>
           <p id="deckText"></p>
           <p id="deckProgress" class="fine-print"></p>
@@ -1032,14 +1049,14 @@
         <p id="deckFeedback" class="deck-feedback"></p>
         <div id="deckSponsorSlot" class="sponsor-slot hidden" aria-live="polite"></div>
 
-        <div class="settings-row">
+        <div class="settings-row deck-actions-row">
           <button
             id="deckLeft"
             class="secondary-button"
             type="button"
             data-i18n="deckMiss"
           >
-            ◀ MISS
+            ⟵ SWIPE LEFT (MISS)
           </button>
           <button
             id="deckRight"
@@ -1047,18 +1064,36 @@
             type="button"
             data-i18n="deckRight"
           >
-            RIGHT CALL ▶
+            SWIPE RIGHT (RIGHT CALL) ⟶
           </button>
         </div>
 
-        <button
-          id="deckDone"
-          class="primary-button hidden"
-          type="button"
-          data-i18n="settingsDone"
-        >
-          DONE
-        </button>
+        <div class="settings-row deck-secondary-actions">
+          <button
+            id="deckNextButton"
+            class="secondary-button hidden"
+            type="button"
+            data-i18n="deckNextCard"
+          >
+            NEXT CARD ⟶
+          </button>
+          <button
+            id="deckPracticeAgain"
+            class="secondary-button hidden"
+            type="button"
+            data-i18n="deckPracticeAgain"
+          >
+            🔄 PRACTICE ANOTHER 5 CARDS
+          </button>
+          <button
+            id="deckDone"
+            class="primary-button hidden"
+            type="button"
+            data-i18n="settingsDone"
+          >
+            DONE
+          </button>
+        </div>
       </div>
     </section>
 
@@ -1088,6 +1123,33 @@
         <div id="lightboxGhostControl" class="lightbox-ghost-control hidden">
           <label for="lightboxGhostSlider">BEFORE SHADOW OVERLAY OPACITY</label>
           <input id="lightboxGhostSlider" type="range" min="0" max="90" value="55" />
+        </div>
+      </div>
+    </div>
+
+    <!-- QR STATION SCANNER MODAL -->
+    <div id="qrScannerModal" class="evidence-lightbox-modal qr-scanner-modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Scan Station QR Sticker">
+      <div class="lightbox-card qr-scanner-card hologram-card">
+        <div class="lightbox-header">
+          <strong id="qrScannerTitle" data-i18n="qrModalTitle">⌗ SCAN STATION QR STICKER</strong>
+          <button id="qrScannerCloseButton" class="secondary-button compact-chip" type="button">✕ CLOSE</button>
+        </div>
+        <div class="qr-scanner-grid">
+          <div class="qr-camera-box">
+            <video id="qrScannerVideo" class="qr-scanner-video hidden" autoplay muted playsinline></video>
+            <div id="qrScannerLaser" class="qr-scanner-laser"></div>
+            <div id="qrScannerPreviewSvg" class="qr-scanner-preview-svg" aria-hidden="true"></div>
+            <small id="qrCameraStateNote" class="fine-print">Point camera at a CQ-QR station sticker or tap a verified station sticker below.</small>
+          </div>
+          <div class="qr-controls-box">
+            <div class="section-label">TAP A STATION QR STICKER OR ENTER CODE</div>
+            <div id="qrStickerQuickGrid" class="qr-sticker-quick-grid" role="group" aria-label="Station QR Stickers"></div>
+            <div class="qr-manual-row">
+              <input id="qrManualInput" class="pin-input" type="text" maxlength="64" placeholder="CQ-QR-OFFICE-BREAKROOM" aria-label="QR Code Payload" />
+              <button id="qrManualSubmit" class="primary-button compact-chip" type="button">APPLY QR CODE</button>
+            </div>
+            <p id="qrScannerStatus" class="fine-print" role="status">Format: CQ-QR-&lt;LEAGUE&gt;-&lt;AREA&gt; (e.g. CQ-QR-OFFICE-BREAKROOM)</p>
+          </div>
         </div>
       </div>
     </div>
