@@ -184,3 +184,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: announceGameVerdict now chains speakScoreNumber(weighted) 2.6s after the verdict clip (generation/mute guarded, EN number clips + synth fallback); requireAdminPledge() gates the four supervisor UI handlers (register site, print sticker, invite, assign pack) — unpledged clicks route to tab 11 with a warning instead of acting. Exported functions unchanged (persona/direct-API paths unaffected).
 - Evidence: node --check PASS; VM all-true incl. 5-tier verdict routing + score-number composition; CDP 6/6; personas 0 fails.
 - Blockers: none. Next: LOOP 9 consent disclosure copy.
+
+## LOOP 9 — Consent disclosure copy (pose / location / optional cloud) — DONE
+- Implemented: consentBody in EN/ES/PL + static index copy now disclose the optional on-device victory-pose photo, location only when shared, and optional provider transmission (photos/voice notes) when the user adds their own Settings key — replacing the inaccurate "surface only / browser only" claim. "Faces never identified" and "never for discipline" retained.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails (consent persona face-word check still green in all three languages).
+- Blockers: none. Next: LOOP 10 QR laser/stream polish + offline queue photo hygiene (downscale/cap/strip-on-score).
