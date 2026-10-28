@@ -1853,31 +1853,29 @@ h3 {
     height: min(65dvh, 650px);
     aspect-ratio: auto;
   }
-  #timerScreen .timer-panel { grid-column: 2; grid-row: 2; }
-  #timerScreen .complete-button { grid-column: 2; grid-row: 4; }
+  #timerScreen .timer-panel { grid-column: 2; grid-row: 2; margin: 0; }
+  #timerScreen .timer-actions { grid-column: 2; grid-row: 3; margin: 0; }
+  #timerScreen .complete-button { grid-column: 2; grid-row: 4; margin: 0; }
 }
 
 @media (min-width: 900px) {
   #cameraScreen .camera-content {
     display: grid;
     grid-template-columns: minmax(0, 1.6fr) minmax(260px, .7fr);
-    grid-template-rows: auto auto auto auto 1fr;
+    grid-template-rows: auto auto 1fr;
     gap: 12px 18px;
-    align-items: start;
+    align-items: center;
   }
-  #cameraScreen .camera-content > div:first-child { grid-column: 1 / -1; }
   #cameraScreen .camera-content > .camera-frame {
     grid-column: 1;
-    grid-row: 2 / 6;
+    grid-row: 1 / 4;
     min-height: min(65dvh, 650px);
     height: min(65dvh, 650px);
     aspect-ratio: auto;
+    margin: 0;
   }
-  #cameraScreen .camera-status-card { grid-column: 2; grid-row: 2; }
-  #cameraScreen #cameraContinue { grid-column: 2; grid-row: 3; }
-  #cameraScreen #continueWithoutCamera { grid-column: 2; grid-row: 4; }
-  #cameraScreen .privacy-note { grid-column: 2; grid-row: 5; }
-  #timerScreen .complete-button { grid-column: 2; grid-row: 4; }
+  #cameraScreen #cameraContinue { grid-column: 2; grid-row: 1; align-self: end; margin: 0; }
+  #cameraScreen #continueWithoutCamera { grid-column: 2; grid-row: 2; align-self: start; justify-self: center; margin: 0; }
 }
 
 /* Camera setup viewport fit: action buttons must never be below the fold */
@@ -2642,4 +2640,67 @@ h3 {
   font-weight: 700;
   color: var(--text);
   margin-bottom: 2px;
+}
+
+.ftue-summary-bar {
+  margin-top: 8px;
+  padding: 6px 10px;
+  border: 1px solid rgba(57, 245, 188, 0.32);
+  border-radius: 12px;
+  background: rgba(10, 27, 43, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.ftue-summary-bar .consent-status-badge {
+  margin: 0;
+  font-weight: 800;
+}
+
+.ftue-summary-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.after-align-banner {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  z-index: 6;
+  padding: 6px 10px;
+  border-radius: 10px;
+  background: rgba(2, 8, 17, 0.88);
+  border: 1px solid var(--green);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-align: center;
+  box-shadow: 0 0 18px rgba(57, 245, 188, 0.25);
+}
+
+.complete-button.align-ready {
+  border-color: var(--green) !important;
+  color: #001810 !important;
+  background: linear-gradient(105deg, #39f5bc, #24bfff) !important;
+  box-shadow: 0 0 24px rgba(57, 245, 188, 0.35) !important;
+}
+
+.consent-gate.needs-attention {
+  border-color: var(--yellow);
+  box-shadow: 0 0 20px rgba(255, 211, 92, 0.28);
+}
+
+.provider-option input[type="radio"],
+.consent-check-label input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px !important;
+  min-height: 0 !important;
+  flex: 0 0 18px !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }

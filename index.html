@@ -94,6 +94,13 @@
           DAILY DECK
         </button>
 
+        <div id="ftueSummaryBar" class="ftue-summary-bar hologram-card hidden">
+          <span id="ftueSummaryText" class="consent-status-badge">✓ Consent &amp; Pass active</span>
+          <div class="ftue-summary-actions">
+            <button id="editFtueButton" class="secondary-button compact-chip" type="button" data-i18n="editFtueAction">PASS / CONSENT</button>
+            <button id="howItWorksButton" class="secondary-button compact-chip" type="button" data-i18n="mountGuideAction">? MOUNT GUIDE</button>
+          </div>
+        </div>
 
         <section id="consentGate" class="consent-gate hologram-card" aria-label="First-run consent">
           <div class="consent-gate-head">
@@ -382,6 +389,9 @@
           </div>
 
           <img id="ghostOverlay" class="ghost-overlay hidden" alt="Before capture ghost alignment" />
+          <div id="afterAlignBanner" class="after-align-banner hidden" role="status" data-i18n="afterAlignPrompt">
+            GHOST ALIGNMENT: Match your Before angle, then tap CAPTURE AFTER &amp; SCORE
+          </div>
           <div id="captureFlash" class="capture-flash"></div>
 
           <div class="capture-status">
@@ -577,7 +587,7 @@
 
           <p id="offlineQueueNotice" class="fine-print hidden" role="status"></p>
 
-          <div class="pose-panel hologram-card">
+          <div id="posePanelCard" class="pose-panel hologram-card hidden">
             <div>
               <div class="section-label" data-i18n="victoryPose">VICTORY POSE</div>
               <strong id="styleScoreDisplay">-- / 10</strong>
@@ -600,7 +610,7 @@
             <img id="poseThumbnail" alt="Victory pose" />
           </div>
 
-          <div class="identity-panel hologram-card">
+          <div id="nameInputPanelCard" class="identity-panel hologram-card hidden">
             <label for="playerName" data-i18n="playerNameLabel">
               NAME / ALIAS
             </label>

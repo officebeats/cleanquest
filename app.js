@@ -360,6 +360,11 @@ const translations = {
     adminPanelTitle: "SUPERVISOR TOOLS (TRAINING & SITES — NEVER EDITS SCORES)",
     adminPledgeText: "Supervisor pledge: data is for training & recognition only, never discipline.",
     assignPackAction: "ASSIGN 5-DAY PACK",
+    editFtueAction: "PASS / CONSENT",
+    mountGuideAction: "? MOUNT GUIDE",
+    ftueActiveLabel: "✓ Consent & Pass active",
+    afterAlignPrompt: "GHOST ALIGNMENT: Match your Before angle, then tap CAPTURE AFTER & SCORE",
+    captureAfterAndScore: "CAPTURE AFTER & SCORE",
   },
 
   es: {
@@ -584,6 +589,11 @@ const translations = {
     adminPanelTitle: "HERRAMIENTAS DE SUPERVISIÓN (FORMACIÓN Y SITIOS — SIN EDITAR PUNTOS)",
     adminPledgeText: "Compromiso: los datos son solo para formación y reconocimiento, nunca disciplina.",
     assignPackAction: "ASIGNAR PAQUETE 5 DÍAS",
+    editFtueAction: "PASE / CONSENTIMIENTO",
+    mountGuideAction: "? GUÍA DE MONTAJE",
+    ftueActiveLabel: "✓ Consentimiento y Pase activos",
+    afterAlignPrompt: "ALINEACIÓN FANTASMA: Iguala el ángulo del Antes y toca CAPTURAR DESPUÉS Y PUNTUAR",
+    captureAfterAndScore: "CAPTURAR DESPUÉS Y PUNTUAR",
   },
 
   pl: {
@@ -808,6 +818,11 @@ const translations = {
     adminPanelTitle: "NARZĘDZIA NADZORU (SZKOLENIA I OBIEKTY — BEZ EDYCJI WYNIKÓW)",
     adminPledgeText: "Zobowiązanie: dane służą wyłącznie szkoleniu i uznaniu, nigdy dyscyplinie.",
     assignPackAction: "PRZYPISZ PAKIET 5 DNI",
+    editFtueAction: "KARTA / ZGODA",
+    mountGuideAction: "? INSTRUKCJA",
+    ftueActiveLabel: "✓ Zgoda i Karta aktywne",
+    afterAlignPrompt: "DOPASOWANIE DUCHA: Wyrównaj kadr ze zdjęciem Przed i dotknij ZRÓB ZDJĘCIE PO I OCEŃ",
+    captureAfterAndScore: "ZRÓB ZDJĘCIE PO I OCEŃ",
   }
 };
 
@@ -901,8 +916,10 @@ const state = {
     areaKey: "breakroom",
     assignedSpot: "Sink & counter",
     ghostEnabled: true,
-    dwellCreditSeconds: 0
+    dwellCreditSeconds: 0,
+    aligningAfter: false
   },
+  editingFtue: false,
   forceOfflineQueue: false,
 
   selfTest: {
@@ -1094,6 +1111,14 @@ const els = {
   assignTrainingPackSelect: document.getElementById("assignTrainingPackSelect"),
   assignTrainingPackButton: document.getElementById("assignTrainingPackButton"),
   adminPackStatus: document.getElementById("adminPackStatus")
+  ,
+  ftueSummaryBar: document.getElementById("ftueSummaryBar"),
+  ftueSummaryText: document.getElementById("ftueSummaryText"),
+  editFtueButton: document.getElementById("editFtueButton"),
+  howItWorksButton: document.getElementById("howItWorksButton"),
+  afterAlignBanner: document.getElementById("afterAlignBanner"),
+  posePanelCard: document.getElementById("posePanelCard"),
+  nameInputPanelCard: document.getElementById("nameInputPanelCard")
 };
 
 const COUNTABLE_CLASSES = new Set([
@@ -2891,9 +2916,16 @@ function resetCaptures() {
   state.captures.before = null;
   state.captures.after = null;
   state.captures.pose = null;
+  state.checkin.aligningAfter = false;
 
   updateCaptureIndicators();
   updateEvidenceThumbnails();
+
+  els.afterAlignBanner?.classList.add("hidden");
+  if (els.completeButton) {
+    els.completeButton.classList.remove("align-ready");
+    els.completeButton.textContent = t("complete");
+  }
 
   els.posePreviewWrap.classList.add("hidden");
   els.poseThumbnail.removeAttribute("src");
@@ -3215,6 +3247,38 @@ async function completeChallenge() {
   setAnalysisLoading(false);
   renderResults();
   announceResultSummary();
+}
+
+async function handleCompleteButtonTap() {
+  if (state.analysis.running) return;
+
+  // Two-step After capture per PDF p. 12:
+  // 1st tap stops clock and activates the Before ghost overlay so the angle matches.
+  // 2nd tap captures the After shot and scores the run.
+  if (state.captures.before && !state.checkin.aligningAfter) {
+    if (state.timer.running) {
+      pauseTimer();
+    }
+    state.checkin.aligningAfter = true;
+    state.checkin.ghostEnabled = true;
+    updateGhostOverlay();
+    els.afterAlignBanner?.classList.remove("hidden");
+    if (els.completeButton) {
+      els.completeButton.classList.add("align-ready");
+      els.completeButton.textContent = t("captureAfterAndScore");
+    }
+    playTone(760, 0.08);
+    return { step: "aligning_after", ghostActive: true };
+  }
+
+  state.checkin.aligningAfter = false;
+  els.afterAlignBanner?.classList.add("hidden");
+  if (els.completeButton) {
+    els.completeButton.classList.remove("align-ready");
+    els.completeButton.textContent = t("complete");
+  }
+  await completeChallenge();
+  return { step: "scored", ghostActive: false };
 }
 
 async function analyzeChallenge() {
@@ -5691,10 +5755,13 @@ function saveCompletedRun() {
 
   const entries = loadLeaderboard();
 
+  const profile = loadCleanerProfile();
+  const phoneSuffix = profile.phone ? profile.phone.replace(/\D/g, "").slice(-4) : "";
+  const autoAlias = phoneSuffix ? `Cleaner #${phoneSuffix}` : "";
   const name =
-    els.playerName.value.trim() ||
+    els.playerName?.value?.trim() ||
+    autoAlias ||
     t("defaultPlayer");
-
   if (!state.latestRunId) {
     state.latestRunId =
       generateRunId();
@@ -5927,6 +5994,7 @@ function hasConsent() {
 function setConsentAccepted(accepted = true) {
   try {
     if (accepted) {
+      state.editingFtue = false;
       localStorage.setItem(
         CONSENT_KEY,
         JSON.stringify({
@@ -5947,6 +6015,45 @@ function speakConsentAloud() {
   speakText(t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 });
 }
 
+const INSTRUCTIONS_SEEN_KEY = "cleanquest.instructionsSeen.v1";
+
+function hasSeenInstructions() {
+  try {
+    return localStorage.getItem(INSTRUCTIONS_SEEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function setInstructionsSeen(seen = true) {
+  try {
+    if (seen) localStorage.setItem(INSTRUCTIONS_SEEN_KEY, "1");
+    else localStorage.removeItem(INSTRUCTIONS_SEEN_KEY);
+  } catch {}
+  return hasSeenInstructions();
+}
+
+function syncFtueCollapseUI() {
+  const consentOk = hasConsent();
+  const pinOk = loadCleanerProfile().hasPin;
+  const showConsentCard = !consentOk || state.editingFtue;
+  const showPinCard = !pinOk || state.editingFtue;
+  els.consentGate?.classList.toggle("hidden", !showConsentCard);
+  els.cleanerPinBar?.classList.toggle("hidden", !showPinCard);
+  if (els.ftueSummaryBar) {
+    els.ftueSummaryBar.classList.toggle("hidden", !(consentOk || pinOk));
+  }
+  if (els.ftueSummaryText) {
+    const profile = loadCleanerProfile();
+    const phoneTag = profile.phone ? ` (${profile.phone})` : "";
+    els.ftueSummaryText.textContent = consentOk && pinOk
+      ? `${t("ftueActiveLabel")}${phoneTag}`
+      : consentOk
+        ? "✓ Consent active · Add 4-digit PIN optional"
+        : `✓ Pass saved${phoneTag} · Confirm consent before run`;
+  }
+}
+
 function syncConsentUI() {
   const accepted = hasConsent();
   if (els.consentCheckbox) {
@@ -5958,6 +6065,10 @@ function syncConsentUI() {
   if (els.consentStatusBadge) {
     els.consentStatusBadge.classList.toggle("hidden", !accepted);
   }
+  if (accepted) {
+    els.consentGate?.classList.remove("needs-attention");
+  }
+  syncFtueCollapseUI();
 }
 
 function cleanBarExplanation(run) {
@@ -6734,6 +6845,9 @@ function saveCleanerProfile(phone, pin, optInEmployerShare) {
   try {
     localStorage.setItem(CLEANER_PROFILE_KEY, JSON.stringify(next));
   } catch {}
+  if (cleanPin) {
+    state.editingFtue = false;
+  }
   syncCleanerPinUI();
   renderPersonalRecordUI();
   return loadCleanerProfile();
@@ -6778,6 +6892,7 @@ function syncCleanerPinUI() {
   if (els.optInShareCheckbox) {
     els.optInShareCheckbox.checked = profile.optInEmployerShare;
   }
+  syncFtueCollapseUI();
 }
 
 function renderPersonalRecordUI() {
@@ -7972,9 +8087,29 @@ function bindEvents() {
 
   els.welcomeContinue.addEventListener(
     "click",
-    () => {
+    async () => {
       unlockAudio();
+      if (!hasConsent()) {
+        if (els.consentCheckbox?.checked) {
+          setConsentAccepted(true);
+        } else {
+          state.editingFtue = true;
+          syncFtueCollapseUI();
+          els.consentGate?.classList.add("needs-attention");
+          els.consentCheckbox?.focus();
+          return;
+        }
+      }
+      state.editingFtue = false;
+      syncFtueCollapseUI();
       playAnnouncerCue();
+      if (hasSeenInstructions()) {
+        navigateTo("camera");
+        if (!state.demoMode) {
+          await ensureCameraReady();
+        }
+        return;
+      }
       navigateTo("instructions");
     }
   );
@@ -7983,6 +8118,7 @@ function bindEvents() {
     "click",
     async () => {
       stopSpeech();
+      setInstructionsSeen(true);
       navigateTo("camera");
 
       if (!state.demoMode) {
@@ -8040,7 +8176,7 @@ function bindEvents() {
 
   els.completeButton.addEventListener(
     "click",
-    completeChallenge
+    handleCompleteButtonTap
   );
 
   els.poseButton.addEventListener(
@@ -8304,6 +8440,19 @@ function bindEvents() {
       assignTrainingPack(els.assignTrainingPackSelect?.value || "dwell");
     });
   }
+
+  if (els.editFtueButton) {
+    els.editFtueButton.addEventListener("click", () => {
+      state.editingFtue = !state.editingFtue;
+      syncFtueCollapseUI();
+    });
+  }
+
+  if (els.howItWorksButton) {
+    els.howItWorksButton.addEventListener("click", () => {
+      navigateTo("instructions");
+    });
+  }
   window.addEventListener("online", () => {
     void processOfflineRunQueue();
   });
@@ -8345,6 +8494,10 @@ function initializeApp() {
 
   if (!DEBUG_MODE) {
     els.cameraTrackStatus?.classList.add("hidden");
+  }
+  if (DEBUG_MODE) {
+    els.posePanelCard?.classList.remove("hidden");
+    els.nameInputPanelCard?.classList.remove("hidden");
   }
 
   setHypeLevel(loadHypeLevel());
@@ -8476,5 +8629,9 @@ window.cleaningChallenge = {
   acceptAdminPledge,
   getTeamTrainingGaps,
   assignTrainingPack,
+  hasSeenInstructions,
+  setInstructionsSeen,
+  syncFtueCollapseUI,
+  handleCompleteButtonTap,
   copySelfTestReport
 };
