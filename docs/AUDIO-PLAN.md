@@ -1,10 +1,14 @@
 > **Status (overnight loop):** EN host audio is SHIPPED — 230 MP3s under
-> `assets/audio/en/` wired through `CLIPS_MANIFEST` (231 entries incl. 1 mock),
-> rendered offline (Piper verdict batches, then Kokoro-82M high-energy
-> game-show batches with broadcast mastering). ES/PL clips are not yet
-> rendered; synth fallback covers them. The plan below is the original
-> research/spec record. Parked: announcer-voice regen needs an operator
-> listen-back before replacing shipped clips (see `../OVERNIGHT-LOG.md`).
+> `assets/audio/en/` wired through `CLIPS_MANIFEST`, rendered offline
+> (Piper verdict batches, then Kokoro-82M high-energy game-show batches
+> with broadcast mastering). ES host audio is SHIPPED — 192 MP3s under
+> `assets/audio/es/` (all 11 beats from `HOST_LINES.es`, Piper
+> es_ES-sharvard-medium, loudnorm -19 LUFS). Voice attribution:
+> es_ES-sharvard-medium is CC BY 3.0 — credit: "es_ES-sharvard-medium
+> (Piper TTS voice)". PL clips are not yet rendered; synth fallback
+> covers PL. The plan below is the original research/spec record.
+> Parked: announcer-voice regen needs an operator listen-back before
+> replacing shipped clips (see `../OVERNIGHT-LOG.md`).
 
 # AUDIO PLAN — CleanQuest voice clips + SFX (research, no installs, no audio generated yet)
 
