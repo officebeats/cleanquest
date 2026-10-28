@@ -487,3 +487,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 71 — Commit-ledger sanity — DONE
 - Evidence: 69 commits since 23:00, every loop slice committed + pushed individually; working tree clean; origin/main == local HEAD.
 - Blockers: none.
+
+## LOOP 72 — Ignore coverage + workspace tidiness — DONE
+- Evidence: git status porcelain empty; .gitignore covers .venv/, tools/, *.wav (voice models check-ignored); no stray untracked artifacts after 70+ loops.
+- Blockers: none.
