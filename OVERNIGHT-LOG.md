@@ -131,3 +131,11 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Decisions: kept segue (real game-show sting→voice craft) and updated the /tmp throwaway harness instead of reverting; no clip re-render (current Kokoro exclamatory bank already matches new text; announcer-voice regen queued as Q6 with listen-back requirement).
 - Queued: Q6 Kokoro am_fenrir/am_puck announcer regen + human listen-back; Q1/Q3/Q4/Q5 unchanged from LOOP 1.
 - Blockers: none.
+
+## LOOP 3 — Q1 swipe-drag proof + Q3 maria-800x600 fix (11/11 green) — DONE
+- model: muse-wonder (reasoning/architect/evaluator) + muse-spark-1.3 (implementation); viewports: 1280x800 Orca + 800x600 headless CDP; gates: 3A syntax, 3B pointer-drag probes, 3C 6/6 + persona suite, 3D lint, VM harness.
+- Implemented (styles.css only): Q1 proven, no code change needed — synthetic PointerEvent drag-left on #deckCard shows live tilt (-40px/-2.4deg) + stamp ramp (0.67), release commits (locked, feedback, NEXT visible), locked-card drag ignored, auto-advance 0→1 resets transform/stamps, drag-right commits; Q3 maria fix — extended the existing max-height:660px block with camera/timer compaction (checkinBar padding/margin, frame min-height 0, timerSpotBar/panel padding, CTA margins), zero effect on contracted 1280/390/360 viewports.
+- Evidence: swipe-left/right handler proof in live Orca tab; node --check PASS; VM harness all-true; headless 6/6 PASS; personas 11/11 PASS (maria fold=true — Q3 fixed the pre-existing 800x600 artifact); deck screenshot legible (hint bar, Card 3 of 5, explicit buttons); lint clean.
+- Decisions: Q1 required no source change (handlers already correct) — proof committed as evidence only; Q3 minimal CSS inside the existing short-viewport block, no desktop/mobile geometry touched.
+- Queued: Q4 standards-compliant QR encoder or external-decode test; Q5 cosmetic (360 topbar, chip overflow, emoji tofu); Q6 Kokoro announcer regen + listen-back; Loop 4+ full 15-screen audit next.
+- Blockers: none.

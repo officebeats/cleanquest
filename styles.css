@@ -4036,6 +4036,28 @@ body.lightbox-open {
   #resultsScreen #resultsContinue {
     min-height: 38px !important;
   }
+  #cameraScreen #checkinBar {
+    margin-bottom: 2px !important;
+    padding: 4px 8px !important;
+    gap: 6px !important;
+  }
+  #cameraScreen .camera-frame {
+    min-height: 0 !important;
+  }
+  #cameraScreen #cameraContinue {
+    min-height: 40px !important;
+  }
+  #timerScreen #timerSpotBar {
+    padding: 3px 8px !important;
+    gap: 4px 8px !important;
+  }
+  #timerScreen .timer-panel {
+    padding: 4px 10px !important;
+  }
+  #timerScreen .timer-actions,
+  #timerScreen .complete-button {
+    margin-top: 2px !important;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *,
