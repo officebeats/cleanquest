@@ -384,3 +384,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Verified clean by reviewer (no action): placeholder parity across 290 keys x3, deck translations complete, language x consent interplay, pledge gating, weighted displays, rule-summary phrase coverage.
 - Evidence: node --check PASS; VM all-true; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 49 — Profile focus notes localized — DONE
+- Implemented: all 9 spot profiles (+ default) carry focusNote_es/focusNote_pl; findings[0] renders the localized note with EN fallback. Closes the last reviewer P3-6 remainder.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

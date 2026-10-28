@@ -4531,63 +4531,81 @@ const SPOT_LOGIC_PROFILES = {
     zoneWeight: 0.25,
     objectWeight: 0.2,
     ruleSummary: "55% SURFACE GLEAM · 25% ZONES · 20% ITEMS",
-    focusNote: "Grades basin/counter film removal and cleared counter items."
+    focusNote: "Grades basin/counter film removal and cleared counter items.",
+    focusNote_es: "Evalúa la eliminación de película en lavabo/encimera y los objetos retirados de la encimera.",
+    focusNote_pl: "Ocenia usuwanie filmu z umywalki/blatu i usunięte przedmioty z blatu."
   },
   "Sink & mirror counter": {
     surfaceWeight: 0.6,
     zoneWeight: 0.25,
     objectWeight: 0.15,
     ruleSummary: "60% MIRROR/BASIN GLEAM · 25% ZONES · 15% ITEMS",
-    focusNote: "Grades streak-free mirror/sink reflection and counter clearance."
+    focusNote: "Grades streak-free mirror/sink reflection and counter clearance.",
+    focusNote_es: "Evalúa el reflejo sin rayas en espejo/lavabo y el despeje de la encimera.",
+    focusNote_pl: "Ocenia odbicie bez smug w lustrze/umywalce i porządek na blacie."
   },
   "Workstation desk & shelf": {
     surfaceWeight: 0.35,
     zoneWeight: 0.25,
     objectWeight: 0.4,
     ruleSummary: "40% ITEM ORDER · 35% SURFACE · 25% ZONES",
-    focusNote: "Grades desk/bookshelf clutter organization and surface dust zones."
+    focusNote: "Grades desk/bookshelf clutter organization and surface dust zones.",
+    focusNote_es: "Evalúa la organización del desorden en escritorio/estantes y las zonas de polvo.",
+    focusNote_pl: "Ocenia organizację biurka/półek i strefy kurzu na powierzchniach."
   },
   "Workstation desk surface": {
     surfaceWeight: 0.35,
     zoneWeight: 0.25,
     objectWeight: 0.4,
     ruleSummary: "40% ITEM ORDER · 35% SURFACE · 25% ZONES",
-    focusNote: "Grades desk/bookshelf clutter organization and surface dust zones."
+    focusNote: "Grades desk/bookshelf clutter organization and surface dust zones.",
+    focusNote_es: "Evalúa la organización del desorden en escritorio/estantes y las zonas de polvo.",
+    focusNote_pl: "Ocenia organizację biurka/półek i strefy kurzu na powierzchniach."
   },
   "Tabletop & appliance front": {
     surfaceWeight: 0.5,
     zoneWeight: 0.25,
     objectWeight: 0.25,
     ruleSummary: "50% TABLE WIPE · 25% ZONES · 25% ITEMS",
-    focusNote: "Grades tabletop wipe uniformity and cleared cups/containers."
+    focusNote: "Grades tabletop wipe uniformity and cleared cups/containers.",
+    focusNote_es: "Evalúa la uniformidad de limpieza de la mesa y las tazas/envases retirados.",
+    focusNote_pl: "Ocenia równomierność czyszczenia blatu i usunięte kubki/pojemniki."
   },
   "Mirror, glass & handles": {
     surfaceWeight: 0.7,
     zoneWeight: 0.25,
     objectWeight: 0.05,
     ruleSummary: "70% STREAK-FREE GLASS · 25% ZONES · 5% ITEMS",
-    focusNote: "Grades reflection uniformity and high-touch handle zone clarity."
+    focusNote: "Grades reflection uniformity and high-touch handle zone clarity.",
+    focusNote_es: "Evalúa la uniformidad del reflejo y la claridad de manijas de alto contacto.",
+    focusNote_pl: "Ocenia równomierność odbicia i czystość stref klamek dotykowych."
   },
   "Entry glass & handles": {
     surfaceWeight: 0.7,
     zoneWeight: 0.25,
     objectWeight: 0.05,
     ruleSummary: "70% STREAK-FREE GLASS · 25% ZONES · 5% ITEMS",
-    focusNote: "Grades reflection uniformity and high-touch handle zone clarity."
+    focusNote: "Grades reflection uniformity and high-touch handle zone clarity.",
+    focusNote_es: "Evalúa la uniformidad del reflejo y la claridad de manijas de alto contacto.",
+    focusNote_pl: "Ocenia równomierność odbicia i czystość stref klamek dotykowych."
   },
   "Fixture row & partition": {
     surfaceWeight: 0.6,
     zoneWeight: 0.3,
     objectWeight: 0.1,
     ruleSummary: "60% FIXTURE GLEAM · 30% TOP-DOWN ZONES · 10% ITEMS",
-    focusNote: "Grades top-to-bottom fixture & partition surface pass."
+    focusNote: "Grades top-to-bottom fixture & partition surface pass.",
+    focusNote_es: "Evalúa la pasada de arriba abajo en aparatos y mamparas.",
+    focusNote_pl: "Ocenia przejście od góry do dołu po armaturze i przegrodach."
   },
   "Trash & floor zone": {
     surfaceWeight: 0.4,
     zoneWeight: 0.35,
     objectWeight: 0.25,
     ruleSummary: "40% FLOOR PASS · 35% ZONE COVERAGE · 25% DEBRIS",
-    focusNote: "Grades lower-zone debris clearance and floor pass uniformity."
+    focusNote: "Grades lower-zone debris clearance and floor pass uniformity.",
+    focusNote_es: "Evalúa el despeje de residuos en la zona baja y la uniformidad del piso.",
+    focusNote_pl: "Ocenia usuwanie odpadów w dolnej strefie i równomierność podłogi."
   }
 };
 
@@ -4626,7 +4644,9 @@ function getSpotScoringProfile(spotName = state.checkin?.assignedSpot) {
       zoneWeight: 0.25,
       objectWeight: 0.25,
       ruleSummary: "50% SURFACE · 25% ZONES · 25% ITEMS",
-      focusNote: "Grades visible surface improvement across 9 zones and item clearance."
+      focusNote: "Grades visible surface improvement across 9 zones and item clearance.",
+    focusNote_es: "Evalúa la mejora visible en 9 zonas y el despeje de objetos.",
+    focusNote_pl: "Ocenia widoczną poprawę w 9 strefach i usuwanie przedmiotów."
     }
   );
 }
@@ -4696,7 +4716,7 @@ function calculateLocalScore(
     : evidenceConfidence >= 0.68 ? "high" : "medium";
 
   const findings = [
-    `Spot [${state.checkin?.assignedSpot || "Station"}] (${localizedRuleSummary(profile)}): ${profile.focusNote}`
+    `Spot [${state.checkin?.assignedSpot || "Station"}] (${localizedRuleSummary(profile)}): ${profile[`focusNote_${state.language}`] || profile.focusNote}`
   ];
   if (!sceneValid) {
     findings.push(t("findingFraming"));
