@@ -326,6 +326,7 @@ const translations = {
     consentSavedNote: "✓ Consent recorded in this browser.",
     consistencyDefault: "Week 1 of 13 · On track",
     consistencyProgress: "Week {week} of {window} · {status}",
+    personalRecordSummary: "Personal Best: {best}% · Runs: {runs} · Streak: {streak}d · Week {week}/13",
     consistencyOnTrack: "On track",
     consistencyBuilding: "Building record",
     consistencyDisclaimer: "Benchmark consistency — never a certification",
@@ -601,6 +602,7 @@ const translations = {
     consentSavedNote: "✓ Consentimiento guardado en este navegador.",
     consistencyDefault: "Semana 1 de 13 · En camino",
     consistencyProgress: "Semana {week} de {window} · {status}",
+    personalRecordSummary: "Mejor marca: {best}% · Rondas: {runs} · Racha: {streak}d · Semana {week}/13",
     consistencyOnTrack: "En camino",
     consistencyBuilding: "Construyendo historial",
     consistencyDisclaimer: "Consistencia de referencia — nunca una certificación",
@@ -876,6 +878,7 @@ const translations = {
     consentSavedNote: "✓ Zgoda zapisana w tej przeglądarce.",
     consistencyDefault: "Tydzień 1 z 13 · Na dobrej drodze",
     consistencyProgress: "Tydzień {week} z {window} · {status}",
+    personalRecordSummary: "Rekord osobisty: {best}% · Biegi: {runs} · Seria: {streak} d · Tydzień {week}/13",
     consistencyOnTrack: "Na dobrej drodze",
     consistencyBuilding: "Budowanie historii",
     consistencyDisclaimer: "Regularność względem wzorca — nigdy certyfikacja",
@@ -8427,7 +8430,7 @@ function syncCleanerPinUI() {
 function renderPersonalRecordUI() {
   if (!els.personalRecordSummary) return;
   const rec = getPersonalRecord();
-  els.personalRecordSummary.textContent = `Personal Best: ${rec.personalBest}% · Runs: ${rec.totalRuns} · Streak: ${rec.streakDays}d · Week ${rec.consistencyWeek}/13`;
+  els.personalRecordSummary.textContent = t("personalRecordSummary", { best: rec.personalBest, runs: rec.totalRuns, streak: rec.streakDays, week: rec.consistencyWeek });
   if (els.optInShareCheckbox) {
     els.optInShareCheckbox.checked = rec.optInEmployerShare;
   }

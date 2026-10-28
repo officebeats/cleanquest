@@ -315,3 +315,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: matchup label, no-crew state, active-% badge, and default rival name now render via matchup* keys in EN/ES/PL (crew proper names untouched).
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 35 — Personal-record summary translated — DONE
+- Implemented: personal record line (best/runs/streak/week) now renders via personalRecordSummary keys in EN/ES/PL. Passport share text remains an English export document by design.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
