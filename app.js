@@ -330,6 +330,10 @@ const translations = {
     consistencyBuilding: "Building record",
     consistencyDisclaimer: "Benchmark consistency — never a certification",
     joinVirtualSquad: "SOLO? JOIN VIRTUAL SQUAD",
+    matchupNoCrew: "No crew active yet — join a 3–8 crew or tap Virtual Squad.",
+    matchupLabel: "{crew} avg {score}% ({badge}) vs. {opp} {oppScore}%",
+    matchupActive: "{pct}% active",
+    rivalCrewName: "Rival Night Crew",
     virtualSquadActive: "✓ VIRTUAL SQUAD ACTIVE",
     areaLabel: "AREA",
     assignedSpotPrefix: "SPOT:",
@@ -601,6 +605,10 @@ const translations = {
     consistencyBuilding: "Construyendo historial",
     consistencyDisclaimer: "Consistencia de referencia — nunca una certificación",
     joinVirtualSquad: "¿SOLO? UNIRSE A ESCUADRÓN VIRTUAL",
+    matchupNoCrew: "Aún no hay equipo activo: únete a un equipo de 3–8 o toca Escuadrón Virtual.",
+    matchupLabel: "{crew} prom. {score}% ({badge}) vs. {opp} {oppScore}%",
+    matchupActive: "{pct}% activo",
+    rivalCrewName: "Equipo Nocturno Rival",
     virtualSquadActive: "✓ ESCUADRÓN VIRTUAL ACTIVO",
     areaLabel: "ÁREA",
     assignedSpotPrefix: "PUNTO:",
@@ -872,6 +880,10 @@ const translations = {
     consistencyBuilding: "Budowanie historii",
     consistencyDisclaimer: "Regularność względem wzorca — nigdy certyfikacja",
     joinVirtualSquad: "SOLO? DOŁĄCZ DO WIRTUALNEJ EKIPY",
+    matchupNoCrew: "Brak aktywnej ekipy — dołącz do ekipy 3–8 lub dotknij Wirtualnej Ekipy.",
+    matchupLabel: "{crew} śr. {score}% ({badge}) vs. {opp} {oppScore}%",
+    matchupActive: "{pct}% aktywnych",
+    rivalCrewName: "Rywalizująca Ekipa Nocna",
     virtualSquadActive: "✓ WIRTUALNA EKIPA AKTYWNA",
     areaLabel: "STREFA",
     assignedSpotPrefix: "PUNKT:",
@@ -8111,7 +8123,7 @@ function getWeeklyMatchup(crewId, date = new Date()) {
       hasCrew: false,
       qualified: false,
       participationRate: 0,
-      label: "No crew active yet — join a 3–8 crew or tap Virtual Squad.",
+      label: t("matchupNoCrew"),
       score: 0,
       opponentScore: 0,
       mvp: null
@@ -8122,8 +8134,8 @@ function getWeeklyMatchup(crewId, date = new Date()) {
   const participation = getCrewParticipation(crew.id, date);
   const rival = store.crews.find((c) => c.id !== crew.id);
   const opponentScore = rival ? getCrewScore(rival.id, date) : 76;
-  const opponentName = rival ? rival.name : "Rival Night Crew";
-  const qualBadge = participation.qualified ? `${Math.round(participation.participationRate * 100)}% active` : `${Math.round(participation.participationRate * 100)}% active (<80%)`;
+  const opponentName = rival ? rival.name : t("rivalCrewName");
+  const qualBadge = `${t("matchupActive", { pct: Math.round(participation.participationRate * 100) })}${participation.qualified ? "" : " (<80%)"}`;
   return {
     hasCrew: true,
     crewId: crew.id,
@@ -8136,7 +8148,7 @@ function getWeeklyMatchup(crewId, date = new Date()) {
     qualified: participation.qualified,
     participationRate: participation.participationRate,
     mvp,
-    label: `${crew.name} avg ${score}% (${qualBadge}) vs. ${opponentName} ${opponentScore}%${mvp ? ` · MVP: ${mvp.member} (${mvp.score}%)` : ""}`
+    label: `${t("matchupLabel", { crew: crew.name, score, badge: qualBadge, opp: opponentName, oppScore: opponentScore })}${mvp ? ` · MVP: ${mvp.member} (${mvp.score}%)` : ""}`
   };
 }
 
