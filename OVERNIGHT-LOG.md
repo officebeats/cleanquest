@@ -475,3 +475,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 68 — Loudness consistency sample — DONE
 - Evidence: ffmpeg loudnorm measurement on EN/ES/PL samples (pass/start/consent): -18.8 to -20.0 LUFS integrated (1.2 dB spread around the -19 LUFS batch target) — new ES/PL batches match the shipped EN loudness standard.
 - Blockers: none.
+
+## LOOP 69 — Payload weight audit — DONE
+- Evidence: assets/audio totals EN 6.8 MB + ES 7.6 MB + PL 8.9 MB = 24 MB; git pack 15.8 MiB — comfortably within Pages limits; clips lazy-load per beat so first paint is unaffected.
+- Blockers: none.
