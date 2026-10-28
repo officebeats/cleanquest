@@ -503,3 +503,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 75 — Usage + gates checkpoint (02:01) — DONE
 - Evidence: usage page (last updated 2:01 AM): current window 0%, weekly 38% — displayed headroom unchanged after 70+ loops. CDP self-test 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 76 — ES/PL point/points glue clips — DONE
+- Implemented: glue-01/glue-02 (punto/puntos, punkt/punkty) rendered + wired for ES/PL, completing the speakScoreNumber clip vocabulary in all three languages (695 manifest clips available, 0 missing).
+- Evidence: parity 695/0; node --check PASS; CDP personas 0 fails.
+- Blockers: none.

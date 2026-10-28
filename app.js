@@ -2232,7 +2232,8 @@ const CLIPS_MANIFEST = {
     "pl:num-14": "available", "pl:num-15": "available", "pl:num-16": "available", "pl:num-17": "available",
     "pl:num-18": "available", "pl:num-19": "available", "pl:num-20": "available", "pl:num-30": "available",
     "pl:num-40": "available", "pl:num-50": "available", "pl:num-60": "available", "pl:num-70": "available",
-    "pl:num-80": "available", "pl:num-90": "available", "pl:num-100": "available", "pl:glue-00": "available"
+    "pl:num-80": "available", "pl:num-90": "available", "pl:num-100": "available", "pl:glue-00": "available",
+    "es:glue-01": "available", "es:glue-02": "available", "pl:glue-01": "available", "pl:glue-02": "available"
   }
 };
 
