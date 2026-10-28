@@ -467,3 +467,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 66 — ES/PL clip decode-integrity sweep — DONE
 - Evidence: ffmpeg full-decode of all 461 files under assets/audio/es + assets/audio/pl (host beats, nudge, consent, numbers/glue): 0 failures.
 - Blockers: none.
+
+## LOOP 67 — EN clip decode-integrity sweep — DONE
+- Evidence: ffmpeg full-decode of all 230 files under assets/audio/en: 0 failures. Combined with LOOP 66, all 691 manifest clips on disk are decode-verified.
+- Blockers: none.
