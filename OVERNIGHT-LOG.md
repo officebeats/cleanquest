@@ -438,3 +438,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: num-00..20/30..90/100 + glue-00 (percent) rendered for ES and PL (30 clips each) and wired; speakScoreNumber now composes native number clips in all three languages instead of synth-falling-back outside EN.
 - Evidence: parity 682 available / 0 missing (683 manifest entries); node --check PASS; CDP personas 0 fails.
 - Blockers: none.
+
+## LOOP 60 — Pages audio + usage checkpoint (01:07) — DONE
+- Evidence: Pages serves es/num-80, es/glue-00, pl/num-100, es/consent-00 (all 200; num-87 correctly 404 — 87 composes num-80 + num-07). Usage page (last updated 1:01 AM): current window 0%, weekly 38%.
+- Blockers: none.
