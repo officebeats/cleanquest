@@ -8783,6 +8783,8 @@ async function runPersonaSuite() {
 
   // Phase 1 persona: consent-first-timer (consent gate + read-aloud + default-off hype)
   try {
+    const savedEditingFtue = state.editingFtue;
+    const savedStep = state.cleanerFtueStep;
     setConsentAccepted(false);
     const beforeConsent = !hasConsent();
     const defaultHypeOff = loadHypeLevel() === "off";
@@ -8791,11 +8793,22 @@ async function runPersonaSuite() {
     const afterConsent = hasConsent();
     const consentCopy = String(t("consentBody")).toLowerCase();
     const statesNoFaces = consentCopy.includes("face") || consentCopy.includes("rostro") || consentCopy.includes("twarz");
+    setConsentAccepted(false);
+    syncConsentUI();
+    els.welcomeContinue?.click();
+    await new Promise((r) => setTimeout(r, 350));
+    const gatedNoAuto = !hasConsent()
+      && els.consentGate
+      && !els.consentGate.classList.contains("hidden");
+    state.editingFtue = savedEditingFtue;
+    state.cleanerFtueStep = savedStep;
+    setConsentAccepted(true);
+    syncConsentUI();
     push(
       "consent-first-timer",
       "First-time cleaner — plain-language consent gate + default-off host",
-      beforeConsent && afterConsent && defaultHypeOff && statesNoFaces,
-      `before=${beforeConsent} after=${afterConsent} defaultOff=${defaultHypeOff} noFaces=${statesNoFaces}`,
+      beforeConsent && afterConsent && defaultHypeOff && statesNoFaces && gatedNoAuto,
+      `before=${beforeConsent} after=${afterConsent} defaultOff=${defaultHypeOff} noFaces=${statesNoFaces} gated=${gatedNoAuto}`,
       ""
     );
   } catch (error) {
@@ -9440,7 +9453,12 @@ function bindEvents() {
     async () => {
       unlockAudio();
       if (!hasConsent()) {
-        setConsentAccepted(true);
+        state.editingFtue = true;
+        setCleanerFtueStep(3);
+        syncConsentUI();
+        els.consentGate?.classList.add("needs-attention");
+        els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+        return;
       }
       state.editingFtue = false;
       syncFtueCollapseUI();

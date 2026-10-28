@@ -147,3 +147,11 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Decisions: no topbar change (measured, not assumed); emoji tofu is headless-font-only, untreated; Q4 QR encoder + Q6 voice regen remain human-gated.
 - Queued: Q4 standards-compliant QR encoder or external-decode test; Q6 Kokoro announcer regen + human listen-back.
 - Blockers: none.
+
+## LOOP 5 — Consent-gate enforcement (Wonder-led, PDF-driven) — DONE
+- model: muse-wonder (reasoning/architect/evaluator) + muse-spark-1.3 (implementation); source: PDF Operating Standards (written consent before first recorded run; host hypes-only; honest scoring) cross-checked against mvp-gap-matrix P0 queue.
+- Implemented (app.js only): ACCEPT THE CHALLENGE with no consent now routes to consent step 3 (editingFtue, needs-attention, scrollIntoView) and returns — no auto-accept, no announcer, no navigation; existing checkbox→CONFIRM→setConsentAccepted flow untouched; consent-first-timer persona extended with real click-through gated assertion + state save/restore.
+- Evidence: node --check PASS; CDP 6/6 PASS; personas 12/12 PASS incl. gated=true (second consecutive zero-fail run); VM harness all-true; banned lint clean; Orca live: cleared→click→consent false/screen welcome/gate visible/editingFtue (after tab reload; first attempt caught stale-bundle false-pass); M1 consent confirm flow; M2 spot/QR; M3 timer/ghost; M4 score/lightbox/dispute; M5-M7 nav/mute/hype/clip; 390px consent-gate + results screenshots legible.
+- Decisions: Wonder ranked consent first (legal weight, tiny scope); verified stale-tab trap explicitly (CDP green ≠ tab green until reload); open-appeal 38px CTA overflow filed as sev-3 friction, not fixed tonight (relative-CTA was the earlier overlap cure; flipping back risks regression).
+- Queued: Q4 QR encoder proof; Q5 360 topbar (measured fine, no change), emoji tofu (headless-only); Q6 announcer regen + human listen-back; weighted headline (P0-3 display half) as next Wonder slice.
+- Blockers: none.
