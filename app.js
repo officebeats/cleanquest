@@ -6527,14 +6527,17 @@ function updateSavedRunStyleScore(styleScore) {
 }
 
 function sortLeaderboard(entries) {
+  // Public ranking uses the weighted total (Clean 50 / Technique 25 / Time 25);
+  // legacy entries without a weighted score fall back to raw cleanliness.
+  const rankScore = (e) => (Number.isFinite(e?.weightedScore) ? e.weightedScore : e?.cleanliness);
   return [...entries].sort((a, b) => {
     if (
-      Number(b.cleanliness) !==
-      Number(a.cleanliness)
+      Number(rankScore(b)) !==
+      Number(rankScore(a))
     ) {
       return (
-        (Number.isFinite(b.cleanliness) ? b.cleanliness : -1) -
-        (Number.isFinite(a.cleanliness) ? a.cleanliness : -1)
+        (Number.isFinite(rankScore(b)) ? rankScore(b) : -1) -
+        (Number.isFinite(rankScore(a)) ? rankScore(a) : -1)
       );
     }
 
@@ -6556,7 +6559,10 @@ function sortLeaderboard(entries) {
 }
 
 function visibleLeaderboard(entries, viewerRunId = state.latestRunId) {
-  const sorted = sortLeaderboard(Array.isArray(entries) ? entries : []);
+  // Practice runs (manual spot override, prizeEligible === false) never rank publicly.
+  // Legacy entries without the flag remain eligible.
+  const eligible = (Array.isArray(entries) ? entries : []).filter((e) => e && e.prizeEligible !== false);
+  const sorted = sortLeaderboard(eligible);
   const topN = CONFIG.leaderboard?.topN || 10;
   const ranked = sorted.map((entry, idx) => ({
     ...entry,
