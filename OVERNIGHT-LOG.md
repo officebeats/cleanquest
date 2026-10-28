@@ -345,3 +345,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: queue scored/awaiting badges and all QR scanner status messages (invalid, scanned, ready, demo/unsupported/unavailable notes) now render via i18n keys in EN/ES/PL.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 41 — Live Pages verification (overnight bundle) — DONE
+- Evidence: Pages 200; served app.js contains 25 hits across localizedDeckField/requireAdminPledge/qrOpenGeneration/personalRecordSummary/localizedRuleSummary; served deck.js has 31 text_es fields. Loops 6–40 are live for users.
+- Blockers: none.
