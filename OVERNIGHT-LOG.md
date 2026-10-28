@@ -528,3 +528,10 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 81 — Usage + gates checkpoint (04:01) — DONE
 - Evidence: usage page (last updated 4:01 AM): current window 0%, weekly 38%. CDP self-test 6/6; personas 0 fails.
 - Blockers: none.
+
+## OVERNIGHT SUMMARY — Ralph loop until 05:00 — COMPLETE (04:49 wrap)
+- Loops shipped tonight (each its own pushed commit): LOOP 6–81. Highlights: trilingual deck + full EN/ES/PL UI string coverage (315 keys × 3, placeholder parity clean); ES + PL host audio rendered and wired (192 + 192 clips, nudge/consent/numbers/glue included — 695 clips total, 691 EN+ES+PL files decode-verified, -19 LUFS consistent); weighted-score consistency everywhere; modal focus traps; verdict number chain on both paths; pledge-gated supervisor tools; honest offline queue; retention pruning; language persistence.
+- Cross-model double-check: 4 independent reviewers falsified 8+ claims across Loops 1–48; every true defect was fixed and re-gated (LOOP 48/49), plus a second diff reviewer pass tonight. Final state: syntax clean, banned lint clean, VM all-true, self-test 6/6, personas 0 fails on repeated runs, manifest parity 695/0, Pages 200 serving the current bundle.
+- Usage (dev.meta.ai/usage, monitored hourly): current window 0% and weekly 38% at every hourly refresh (23:40 → 04:01) — the displayed cap was never approached.
+- Parked for the operator (unchanged): Q6 announcer-voice regen (needs listen-back), live Orca focus-trap proof (Orca interactive eval wedges on the app page in this build; CDP is authoritative and green), registered-site fuzzy prize matching (deliberately not implemented).
+- Tree clean; origin/main == local HEAD.
