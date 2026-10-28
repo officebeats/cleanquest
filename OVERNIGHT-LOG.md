@@ -524,3 +524,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 80 — Mid-check (03:32) — DONE
 - Evidence: CDP self-test 6/6; personas 0 fails; Pages 200; tree clean.
 - Blockers: none.
+
+## LOOP 81 — Usage + gates checkpoint (04:01) — DONE
+- Evidence: usage page (last updated 4:01 AM): current window 0%, weekly 38%. CDP self-test 6/6; personas 0 fails.
+- Blockers: none.
