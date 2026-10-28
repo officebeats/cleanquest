@@ -215,3 +215,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: saveCompletedRun now enqueues the finished run (measured cleanliness, capped photos) when navigator.onLine === false or state.forceOfflineQueue is set — previously only the persona/API path ever queued. First-save only, alongside crew/inspection side-effects.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails; VM verdict/number green.
 - Blockers: none.
+
+## LOOP 15 — PIN local-lock honesty note — DONE
+- Implemented: PIN signup now states plainly (EN/ES/PL) that the phone + PIN are a local convenience lock stored on-device only and never sent anywhere.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails. Orca app-tab eval still runtime_timeout (bg_50); CDP remains the verification path tonight.
+- Blockers: Orca app-page eval wedged (Meta usage tab eval works; app tab close/create/status work).
