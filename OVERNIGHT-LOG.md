@@ -433,3 +433,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: consent body rendered as es:consent-00 / pl:consent-00 Piper clips; speakConsentAloud now takes the clip path in any language with an available consent clip (EN behavior unchanged, synth fallback retained).
 - Evidence: parity 622 available / 0 missing; node --check PASS; CDP personas 0 fails.
 - Blockers: none.
+
+## LOOP 59 — ES/PL number + percent clips for spoken verdict total — DONE
+- Implemented: num-00..20/30..90/100 + glue-00 (percent) rendered for ES and PL (30 clips each) and wired; speakScoreNumber now composes native number clips in all three languages instead of synth-falling-back outside EN.
+- Evidence: parity 682 available / 0 missing (683 manifest entries); node --check PASS; CDP personas 0 fails.
+- Blockers: none.

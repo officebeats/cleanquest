@@ -2192,7 +2192,22 @@ const CLIPS_MANIFEST = {
     "pl:start-20": "available", "pl:start-21": "available", "pl:start-22": "available", "pl:start-23": "available",
     "es:nudge-00": "available", "es:nudge-01": "available", "es:nudge-02": "available",
     "pl:nudge-00": "available", "pl:nudge-01": "available", "pl:nudge-02": "available",
-    "es:consent-00": "available", "pl:consent-00": "available"
+    "es:consent-00": "available", "pl:consent-00": "available",
+    "es:num-00": "available", "es:num-01": "available", "es:num-02": "available", "es:num-03": "available",
+    "es:num-04": "available", "es:num-05": "available", "es:num-06": "available", "es:num-07": "available",
+    "es:num-08": "available", "es:num-09": "available", "es:num-10": "available", "es:num-11": "available",
+    "es:num-12": "available", "es:num-13": "available", "es:num-14": "available", "es:num-15": "available",
+    "es:num-16": "available", "es:num-17": "available", "es:num-18": "available", "es:num-19": "available",
+    "es:num-20": "available", "es:num-30": "available", "es:num-40": "available", "es:num-50": "available",
+    "es:num-60": "available", "es:num-70": "available", "es:num-80": "available", "es:num-90": "available",
+    "es:num-100": "available", "es:glue-00": "available", "pl:num-00": "available", "pl:num-01": "available",
+    "pl:num-02": "available", "pl:num-03": "available", "pl:num-04": "available", "pl:num-05": "available",
+    "pl:num-06": "available", "pl:num-07": "available", "pl:num-08": "available", "pl:num-09": "available",
+    "pl:num-10": "available", "pl:num-11": "available", "pl:num-12": "available", "pl:num-13": "available",
+    "pl:num-14": "available", "pl:num-15": "available", "pl:num-16": "available", "pl:num-17": "available",
+    "pl:num-18": "available", "pl:num-19": "available", "pl:num-20": "available", "pl:num-30": "available",
+    "pl:num-40": "available", "pl:num-50": "available", "pl:num-60": "available", "pl:num-70": "available",
+    "pl:num-80": "available", "pl:num-90": "available", "pl:num-100": "available", "pl:glue-00": "available"
   }
 };
 
