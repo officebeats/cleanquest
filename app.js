@@ -7690,11 +7690,19 @@ function loadOfflineQueue() {
 function saveOfflineQueue(queue) {
   try {
     localStorage.setItem(OFFLINE_QUEUE_KEY, JSON.stringify(queue));
-  } catch {}
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function enqueueOfflineRun(runPayload = {}) {
   const queue = loadOfflineQueue();
+  // Photo hygiene: never persist oversized captures to localStorage.
+  const MAX_QUEUED_PHOTO_CHARS = 180000;
+  const queuedPhoto = (url) => (typeof url === "string" && url.length <= MAX_QUEUED_PHOTO_CHARS ? url : null);
+  const rawBefore = runPayload.beforeDataUrl || state.captures.before?.dataUrl || null;
+  const rawAfter = runPayload.afterDataUrl || state.captures.after?.dataUrl || null;
   const item = {
     id: runPayload.id || generateRunId(),
     queuedAt: new Date().toISOString(),
@@ -7703,11 +7711,14 @@ function enqueueOfflineRun(runPayload = {}) {
     assignedSpot: runPayload.assignedSpot || state.checkin.assignedSpot,
     elapsedMs: Number(runPayload.elapsedMs ?? state.timer.elapsedMs ?? 60000),
     cleanliness: Number.isFinite(Number(runPayload.cleanliness)) ? Number(runPayload.cleanliness) : null,
-    beforeDataUrl: runPayload.beforeDataUrl || state.captures.before?.dataUrl || null,
-    afterDataUrl: runPayload.afterDataUrl || state.captures.after?.dataUrl || null
+    beforeDataUrl: queuedPhoto(rawBefore),
+    afterDataUrl: queuedPhoto(rawAfter),
+    photosOmitted: Boolean((rawBefore && !queuedPhoto(rawBefore)) || (rawAfter && !queuedPhoto(rawAfter)))
   };
   queue.unshift(item);
-  saveOfflineQueue(queue);
+  // Cap retained queue so local storage cannot grow without bound.
+  const capped = queue.slice(0, 10);
+  item.saveFailed = !saveOfflineQueue(capped);
   renderOfflineQueue();
   renderOfflineQueueNotice();
   return item;
@@ -7723,6 +7734,10 @@ async function processOfflineRunQueue() {
       item.score = item.cleanliness;
       item.status = "scored";
       item.scoredAt = new Date().toISOString();
+      // Photos are evidence for scoring only; strip them once scored.
+      item.beforeDataUrl = null;
+      item.afterDataUrl = null;
+      item.photosStripped = true;
       scoredCount += 1;
     }
   }

@@ -189,3 +189,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: consentBody in EN/ES/PL + static index copy now disclose the optional on-device victory-pose photo, location only when shared, and optional provider transmission (photos/voice notes) when the user adds their own Settings key — replacing the inaccurate "surface only / browser only" claim. "Faces never identified" and "never for discipline" retained.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails (consent persona face-word check still green in all three languages).
 - Blockers: none. Next: LOOP 10 QR laser/stream polish + offline queue photo hygiene (downscale/cap/strip-on-score).
+
+## LOOP 10 — Offline queue photo hygiene — DONE
+- Implemented: queue capped at 10 retained runs; queued photos over 180k chars are omitted (flagged photosOmitted, score data retained); photos stripped on scoring (photosStripped); saveOfflineQueue returns success and enqueue surfaces saveFailed instead of silently swallowing quota errors.
+- Evidence: node --check PASS (after restoring an if-block brace caught by the checker); CDP 6/6; personas 0 fails (offline-queued persona still scores its measured run).
+- Blockers: none. Next: usage re-check + LOOP 11 (spectator exit control / demo polish as time allows).
