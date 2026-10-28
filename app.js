@@ -7421,14 +7421,18 @@ async function openQrScannerModal() {
   els.qrScannerModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("lightbox-open");
   els.qrScannerCloseButton?.focus?.();
-  const setQrNote = (msg) => {
+  const qrLaserEl = document.getElementById("qrScannerLaser");
+  const setQrNote = (msg, liveStream = false) => {
     if (els.qrCameraStateNote) els.qrCameraStateNote.textContent = msg;
     if (els.qrScannerStatus) els.qrScannerStatus.textContent = msg;
+    qrLaserEl?.classList.toggle("hidden", !liveStream);
   };
   if (state.demoMode) {
     setQrNote("Demo mode: tap a station sticker below or enter the CQ-QR code manually.");
   } else if (typeof window.BarcodeDetector !== "function") {
     setQrNote("Camera scanning is not supported in this browser — tap a station below or enter the code.");
+  } else {
+    qrLaserEl?.classList.remove("hidden");
   }
 
   if (!state.demoMode && navigator.mediaDevices?.getUserMedia) {
@@ -7447,6 +7451,7 @@ async function openQrScannerModal() {
         els.qrScannerVideo.srcObject = qrScannerStream;
         els.qrScannerVideo.classList.remove("hidden");
         await els.qrScannerVideo.play().catch(() => {});
+        qrLaserEl?.classList.remove("hidden");
         if (typeof window.BarcodeDetector === "function") {
           const detector = new window.BarcodeDetector({ formats: ["qr_code"] });
           const scanTick = async () => {
@@ -10011,6 +10016,26 @@ function bindEvents() {
   if (els.lightboxCloseButton) {
     els.lightboxCloseButton.addEventListener("click", closeEvidenceLightbox);
   }
+
+  // Focus trap: Tab cycles inside whichever modal is open (QR scanner / lightbox).
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Tab") return;
+    const modal = [els.qrScannerModal, els.evidenceLightboxModal]
+      .find((m) => m && !m.classList.contains("hidden"));
+    if (!modal) return;
+    const focusables = [...modal.querySelectorAll('button:not([disabled]), input:not([disabled]), select:not([disabled]), [href], [tabindex]:not([tabindex="-1"])')]
+      .filter((el) => el.getClientRects().length > 0 && getComputedStyle(el).visibility !== "hidden");
+    if (!focusables.length) return;
+    const first = focusables[0];
+    const last = focusables[focusables.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  });
   if (els.lightboxModeSplit) {
     els.lightboxModeSplit.addEventListener("click", () => setEvidenceLightboxMode("split"));
   }

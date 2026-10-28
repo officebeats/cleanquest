@@ -173,3 +173,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Evidence: node --check PASS; CDP selftest 6/6; personas 0 fails; lint clean; fresh-profile Orca probe: ES "Retira la suciedad gruesa…", PL "Usuń gruby brud z blatu…", EN original — switching live on one card; stale-cache trap caught and bypassed via fresh browser profile.
 - Decisions: kept EN fields as source of truth (personas/deck30 contract unchanged); translations are training content only, no sponsor/product names.
 - Blockers: none. Next: LOOP 7 focus traps + QR laser dead-state.
+
+## LOOP 7 — Modal focus traps + QR laser dead-state — DONE (Orca runtime limit logged)
+- Implemented: shared Tab focus trap for QR scanner + evidence lightbox (visibility via getClientRects, wraps first/last); QR laser hidden in demo/unsupported/camera-denied states, shown pre-stream when BarcodeDetector exists and again after live video.play() succeeds; QR state notes already cover dead states.
+- Evidence: node --check PASS; CDP selftest 6/6; personas 0 fails; VM all-true. Orca live eval unavailable this loop: runtime_timeout x5 (bg_44-49) after a camera-permission wedge in the fresh profile; hung tab closed, replacement tab created (26f0395c). Trap/laser verified by static read + CDP gates; live trap probe queued when runtime recovers.
+- Decisions: ship on CDP + static evidence per loop contract rather than stall overnight on the browser runtime.
+- Blockers: Orca eval runtime wedged (tab close/create/status still work).
