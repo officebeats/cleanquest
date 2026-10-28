@@ -369,3 +369,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: camera HUD state (LIVE/OFFLINE/STANDBY; DEMO is universal) now renders via hud* keys in EN/ES/PL. Remaining hardcoded JS strings are dev-only (self-test panel, MOCK chip).
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 46 — Default sponsor slots localized at render — DONE
+- Implemented: built-in default sponsor slots are flagged isDefault and rendered via sponsorHome/sponsorDeck i18n keys in EN/ES/PL; operator-entered custom slot text is never translated or altered.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails. Independent OvernightDiffReviewer spawned on loops 6–45 diff (read-only) — findings next loop.
+- Blockers: none.

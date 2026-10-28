@@ -378,6 +378,10 @@ const translations = {
     hypeChillLabel: "Chill — start, finish & verdict only",
     hypeFullLabel: "Full — all host hype beats",
     sponsoredBadge: "SPONSORED",
+    sponsorHomeTitle: "Restroom & Breakroom Spotlight Week",
+    sponsorHomeDetail: "Complete 3 verified shift runs for weekly crew bonus",
+    sponsorDeckTitle: "Suggested product category: Labeled pH-neutral or broad-spectrum surface solution",
+    sponsorDeckDetail: "Always match product type to surface",
     pinSignupTitle: "CLEANER PASS (PHONE + 4-DIGIT PIN)",
     stepLanguage: "1 · Language",
     stepPin: "2 · PIN",
@@ -682,6 +686,10 @@ const translations = {
     hypeChillLabel: "Suave — solo inicio, final y veredicto",
     hypeFullLabel: "Completo — toda la voz del anfitrión",
     sponsoredBadge: "PATROCINADO",
+    sponsorHomeTitle: "Semana destacada: baños y comedor",
+    sponsorHomeDetail: "Completa 3 rondas verificadas por turno para el bono semanal del equipo",
+    sponsorDeckTitle: "Categoría de producto sugerida: solución neutra o de amplio espectro etiquetada",
+    sponsorDeckDetail: "Siempre combina el tipo de producto con la superficie",
     pinSignupTitle: "PASE DE LIMPIEZA (TELÉFONO + PIN DE 4 DÍGITOS)",
     stepLanguage: "1 · Idioma",
     stepPin: "2 · PIN",
@@ -986,6 +994,10 @@ const translations = {
     hypeChillLabel: "Spokojny — tylko start, koniec i werdykt",
     hypeFullLabel: "Pełny — wszystkie kwestie prowadzącego",
     sponsoredBadge: "SPONSOROWANE",
+    sponsorHomeTitle: "Tydzień wyróżniony: łazienki i pokój socjalny",
+    sponsorHomeDetail: "Ukończ 3 zweryfikowane biegi na zmianę, aby zdobyć tygodniowy bonus ekipy",
+    sponsorDeckTitle: "Sugerowana kategoria: oznakowany roztwór neutralny lub o szerokim spektrum",
+    sponsorDeckDetail: "Zawsze dopasowuj rodzaj produktu do powierzchni",
     pinSignupTitle: "KARTA SPRZĄTACZA (TELEFON + 4-CYFROWY PIN)",
     stepLanguage: "1 · Język",
     stepPin: "2 · PIN",
@@ -8356,7 +8368,8 @@ function getSponsorSlot(slotKey) {
       }
     }
   } catch {}
-  return DEFAULT_SPONSOR_SLOTS[slotKey] || null;
+  const fallback = DEFAULT_SPONSOR_SLOTS[slotKey];
+  return fallback ? { ...fallback, isDefault: true } : null;
 }
 
 function setSponsorSlot(slotKey, payload) {
@@ -8401,7 +8414,9 @@ function renderHomeSponsorSlot() {
   badge.className = "sponsor-badge";
   badge.textContent = t("sponsoredBadge");
   const text = document.createElement("span");
-  text.textContent = `${slot.title}${slot.detail ? ` — ${slot.detail}` : ""}`;
+  text.textContent = slot.isDefault
+    ? `${t("sponsorHomeTitle")} — ${t("sponsorHomeDetail")}`
+    : `${slot.title}${slot.detail ? ` — ${slot.detail}` : ""}`;
   els.homeSponsorSlot.append(badge, text);
   els.homeSponsorSlot.classList.remove("hidden");
 }
@@ -8421,7 +8436,9 @@ function renderDeckSponsorSlot(showAfterAnswer, card) {
   badge.textContent = t("sponsoredBadge");
   const text = document.createElement("span");
   const catNote = card?.productType ? ` (${localizedDeckField(card, "productType")})` : card?.category ? ` (${card.category})` : "";
-  text.textContent = `${slot.title}${catNote}${slot.detail ? ` — ${slot.detail}` : ""}`;
+  text.textContent = slot.isDefault
+    ? `${t("sponsorDeckTitle")}${catNote} — ${t("sponsorDeckDetail")}`
+    : `${slot.title}${catNote}${slot.detail ? ` — ${slot.detail}` : ""}`;
   els.deckSponsorSlot.append(badge, text);
   els.deckSponsorSlot.classList.remove("hidden");
 }
