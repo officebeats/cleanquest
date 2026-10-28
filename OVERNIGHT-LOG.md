@@ -463,3 +463,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 65 — Placeholder-set parity audit — DONE
 - Evidence: scripted audit of all 27 templated i18n keys (gap/analytics/matchup/crew/pack/record templates): placeholder sets identical across EN/ES/PL, zero mismatches — t() replacements can never leak raw {tokens} in any language.
 - Blockers: none.
+
+## LOOP 66 — ES/PL clip decode-integrity sweep — DONE
+- Evidence: ffmpeg full-decode of all 461 files under assets/audio/es + assets/audio/pl (host beats, nudge, consent, numbers/glue): 0 failures.
+- Blockers: none.
