@@ -451,3 +451,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: speakSample now plays start-01 clips in ES/PL too; speakScoreNumber tracks currentAudio + speakGeneration so stopSpeech/mute stops number playback; Spanish 21–29 rendered as single-word clips (veintiuno…veintinueve) with compose special-case; input placeholders (PIN/site/invite) localized via data-i18n-placeholder; aria labels (back/settings/maximize/QR) localized via new data-i18n-aria pass in applyTranslations. Also re-applied LOOP 32's admin button attrs, which a stale-snapshot edit had silently dropped (caught by grep audit).
 - Evidence: parity 691 available / 0 missing; syntax + VM all-true; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 63 — i18n attr drop audit — DONE
+- Evidence: grep audit of index.html confirms every tonight-era data-i18n/data-i18n-placeholder/data-i18n-aria attribute is present (step/admin/lightbox/QR/SPOT/nudge/pack/register/invite/aria/pin keys all ≥1; spotLabel ×2 for camera+timer). The LOOP 32 drop found in LOOP 62 was the only loss.
+- Blockers: none.
