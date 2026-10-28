@@ -419,3 +419,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: tools/generate_batch_pl.py renders all 11 HOST_LINES.pl beats (192 clips, Piper pl_PL-gosia-medium CC0, same loudnorm pipeline, 7.5 MB) into assets/audio/pl/; manifest now 615 entries / 614 available / 0 missing across EN+ES+PL. All three languages play real host clips; synth is fallback only.
 - Evidence: parity 614/0; node --check PASS; VM all-true; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 56 — Usage + Pages audio checkpoint (01:00) — DONE
+- Evidence: Pages serves ES pass-00.mp3 (200) and, after the Pages build caught up, PL pass-00.mp3 (200) with pl:* entries in the served manifest — all three languages' host audio is live. Usage page (last updated 12:40 AM): current window 0%, weekly 38%.
+- Blockers: none.
