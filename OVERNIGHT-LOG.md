@@ -428,3 +428,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: the 3 ES and 3 PL idle-nudge lines are now real Piper clips (manifest 621 entries / 620 available / 0 missing), so the no-motion host warning speaks natively in all three languages instead of synth.
 - Evidence: parity 620/0; node --check PASS; CDP personas 0 fails.
 - Blockers: none.
+
+## LOOP 58 — ES/PL consent read-aloud clips — DONE
+- Implemented: consent body rendered as es:consent-00 / pl:consent-00 Piper clips; speakConsentAloud now takes the clip path in any language with an available consent clip (EN behavior unchanged, synth fallback retained).
+- Evidence: parity 622 available / 0 missing; node --check PASS; CDP personas 0 fails.
+- Blockers: none.

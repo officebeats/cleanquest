@@ -2191,7 +2191,8 @@ const CLIPS_MANIFEST = {
     "pl:start-16": "available", "pl:start-17": "available", "pl:start-18": "available", "pl:start-19": "available",
     "pl:start-20": "available", "pl:start-21": "available", "pl:start-22": "available", "pl:start-23": "available",
     "es:nudge-00": "available", "es:nudge-01": "available", "es:nudge-02": "available",
-    "pl:nudge-00": "available", "pl:nudge-01": "available", "pl:nudge-02": "available"
+    "pl:nudge-00": "available", "pl:nudge-01": "available", "pl:nudge-02": "available",
+    "es:consent-00": "available", "pl:consent-00": "available"
   }
 };
 
@@ -7191,8 +7192,9 @@ function setConsentAccepted(accepted = true) {
 }
 
 function speakConsentAloud() {
-  if (state.language === "en" && clipStatus("en", "consent", "00") === "available") {
-    playHostClip(clipUrlFor("en", "consent", "00"), t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 });
+  const lang = state.language || "en";
+  if (clipStatus(lang, "consent", "00") === "available") {
+    playHostClip(clipUrlFor(lang, "consent", "00"), t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 });
     return;
   }
   speakText(t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 });
