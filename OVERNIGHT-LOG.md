@@ -254,3 +254,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: admin crew list now also shows the active crew's seat fill (members/seats) and weekly participation % with 80%+ qualified marker, from live crew store data.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 23 — Language choice persists across loads — DONE
+- Implemented: setLanguage persists to localStorage (cleanquest.language.v1) and initializeApp restores the saved language (validated against translations, EN default) instead of hardcoding English every load. Consent language matching now works correctly across restarts.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

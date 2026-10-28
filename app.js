@@ -1276,11 +1276,22 @@ function applyTranslations() {
   }
 }
 
+const LANGUAGE_KEY = "cleanquest.language.v1";
+
+function loadSavedLanguage() {
+  try {
+    const saved = localStorage.getItem(LANGUAGE_KEY);
+    if (saved && translations[saved]) return saved;
+  } catch {}
+  return "en";
+}
+
 function setLanguage(language) {
   if (!translations[language]) return;
 
   stopSpeech();
   state.language = language;
+  try { localStorage.setItem(LANGUAGE_KEY, language); } catch {}
   state.voice.selectedVoice = chooseVoice(language);
   applyTranslations();
   if (state.deck) {
@@ -10386,7 +10397,7 @@ function initializeApp() {
     els.analysisMetaPanel?.classList.remove("hidden");
   }
   setHypeLevel(loadHypeLevel());
-  setLanguage("en");
+  setLanguage(loadSavedLanguage());
   syncConsentUI();
   syncCleanerPinUI();
   assignSpotForArea(state.checkin.areaKey, state.checkin.league);
