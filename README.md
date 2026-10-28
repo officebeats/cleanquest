@@ -34,8 +34,8 @@ Optional cloud features need keys, entered in the app's Settings screen and stor
 
 ## Tech
 
-- Vanilla JS app shell: screens for welcome, instructions, camera, timer, results, leaderboard, settings, records, and the daily deck
+- Vanilla JS app shell: 15 MVP screens (10 cleaner incl. trilingual swipe deck + supervisor panes 11–15) plus a spectator board
 - On-device vision: object detection plus pose pipeline for the style score
 - Meta Model API: Muse Spark structured scorecards, SAM 3.1 surface segmentation, voice transcription of spoken notes
 - Baseten: Spark Open as a second inference provider behind a toggle, with a run log as verification evidence
-- Daily swipe deck: 22 static training cards (surface / product / technique), streak tracked locally
+- Daily swipe deck: 30 static trilingual training cards (surface / product / technique), streak tracked locally

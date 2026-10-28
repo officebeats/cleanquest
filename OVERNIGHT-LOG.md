@@ -399,3 +399,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: docs/PRODUCT-PLAN.md now opens with a shipped-status banner pointing at the living ledger, loop contract, and parked-items list (docs-only).
 - Evidence: docs change only; CDP 6/6 confirmed in LOOP 50.
 - Blockers: none.
+
+## LOOP 52 — README tech facts refreshed — DONE
+- Implemented: README Tech section now states 15 MVP screens + spectator and 30 trilingual deck cards (was 9 screens / 22 cards). Required phrase count verified still exactly 1.
+- Evidence: grep checks only; no code touched.
+- Blockers: none.
