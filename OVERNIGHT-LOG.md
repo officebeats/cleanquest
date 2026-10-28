@@ -471,3 +471,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 67 — EN clip decode-integrity sweep — DONE
 - Evidence: ffmpeg full-decode of all 230 files under assets/audio/en: 0 failures. Combined with LOOP 66, all 691 manifest clips on disk are decode-verified.
 - Blockers: none.
+
+## LOOP 68 — Loudness consistency sample — DONE
+- Evidence: ffmpeg loudnorm measurement on EN/ES/PL samples (pass/start/consent): -18.8 to -20.0 LUFS integrated (1.2 dB spread around the -19 LUFS batch target) — new ES/PL batches match the shipped EN loudness standard.
+- Blockers: none.
