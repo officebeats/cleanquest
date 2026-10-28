@@ -178,6 +178,9 @@ const translations = {
     liveChallenge: "LIVE CHALLENGE",
     qualityFirst: "Quality first. Time second.",
     ready: "READY",
+    hudLive: "LIVE",
+    hudOffline: "OFFLINE",
+    hudStandby: "STANDBY",
     live: "LIVE",
     paused: "PAUSED",
     finished: "FINISHED",
@@ -479,6 +482,9 @@ const translations = {
     liveChallenge: "RETO EN VIVO",
     qualityFirst: "Calidad primero. Tiempo después.",
     ready: "LISTO",
+    hudLive: "EN VIVO",
+    hudOffline: "SIN CONEXIÓN",
+    hudStandby: "EN ESPERA",
     live: "EN VIVO",
     paused: "PAUSA",
     finished: "TERMINADO",
@@ -780,6 +786,9 @@ const translations = {
     liveChallenge: "WYZWANIE NA ŻYWO",
     qualityFirst: "Najpierw jakość. Potem czas.",
     ready: "GOTOWY",
+    hudLive: "NA ŻYWO",
+    hudOffline: "OFFLINE",
+    hudStandby: "GOTOWY",
     live: "NA ŻYWO",
     paused: "PAUZA",
     finished: "KONIEC",
@@ -3212,11 +3221,11 @@ function updateCameraUI() {
   if (demo) {
     els.cameraHudStatus.textContent = "DEMO";
   } else if (ready) {
-    els.cameraHudStatus.textContent = "LIVE";
+    els.cameraHudStatus.textContent = t("hudLive");
   } else if (hasError) {
-    els.cameraHudStatus.textContent = "OFFLINE";
+    els.cameraHudStatus.textContent = t("hudOffline");
   } else {
-    els.cameraHudStatus.textContent = "STANDBY";
+    els.cameraHudStatus.textContent = t("hudStandby");
   }
 
   updateTrackDebug();

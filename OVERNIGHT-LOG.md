@@ -364,3 +364,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: clean/technique/time bar detail explanations (including the <70% review-flag wording) now render via barDetail* keys in EN/ES/PL — they became visible on desktop in LOOP 30, now they're localized too.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails (appellant bars green).
 - Blockers: none.
+
+## LOOP 45 — Camera HUD status translated — DONE
+- Implemented: camera HUD state (LIVE/OFFLINE/STANDBY; DEMO is universal) now renders via hud* keys in EN/ES/PL. Remaining hardcoded JS strings are dev-only (self-test panel, MOCK chip).
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
