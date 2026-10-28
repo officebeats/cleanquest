@@ -8274,7 +8274,32 @@ function pruneExpiredRecords(maxAgeDays = CONFIG.retentionDays) {
       localStorage.setItem(INSPECTION_LOG_KEY, JSON.stringify(kept));
     } catch {}
   }
-  return { beforeCount: logs.length, afterCount: kept.length, prunedCount: logs.length - kept.length };
+  // Same retention window for scored queue items and closed appeals (open appeals exempt).
+  let queuePruned = 0;
+  try {
+    const queue = loadOfflineQueue();
+    const keptQueue = queue.filter((q) => {
+      if (q.status !== "scored") return true;
+      const tMs = Date.parse(q.scoredAt || q.queuedAt || "");
+      return Number.isFinite(tMs) && tMs >= cutoffMs;
+    });
+    queuePruned = queue.length - keptQueue.length;
+    if (queuePruned > 0) saveOfflineQueue(keptQueue);
+  } catch {}
+  let appealsPruned = 0;
+  try {
+    const appeals = readAppeals();
+    const keptAppeals = appeals.filter((a) => {
+      if (a.status === "open") return true;
+      const tMs = Date.parse(a.createdAt || a.timestamp || "");
+      return Number.isFinite(tMs) && tMs >= cutoffMs;
+    });
+    appealsPruned = appeals.length - keptAppeals.length;
+    if (appealsPruned > 0) {
+      localStorage.setItem(APPEALS_KEY, JSON.stringify(keptAppeals));
+    }
+  } catch {}
+  return { beforeCount: logs.length, afterCount: kept.length, prunedCount: logs.length - kept.length, queuePruned, appealsPruned };
 }
 
 function loadAdminStore() {
@@ -10281,6 +10306,7 @@ function bindEvents() {
 
 function initializeApp() {
   initializeSpeech();
+  try { pruneExpiredRecords(CONFIG.retentionDays); } catch {}
   bindEvents();
   loadLeaderboard();
 

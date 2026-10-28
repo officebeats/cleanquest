@@ -194,3 +194,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: queue capped at 10 retained runs; queued photos over 180k chars are omitted (flagged photosOmitted, score data retained); photos stripped on scoring (photosStripped); saveOfflineQueue returns success and enqueue surfaces saveFailed instead of silently swallowing quota errors.
 - Evidence: node --check PASS (after restoring an if-block brace caught by the checker); CDP 6/6; personas 0 fails (offline-queued persona still scores its measured run).
 - Blockers: none. Next: usage re-check + LOOP 11 (spectator exit control / demo polish as time allows).
+
+## LOOP 11 — Retention pruning across stores at startup — DONE
+- Implemented: pruneExpiredRecords now also prunes scored offline-queue items and closed appeals past the retention window (open appeals exempt, undated scored/closed items expire), and runs once at initializeApp in addition to openRecords.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
