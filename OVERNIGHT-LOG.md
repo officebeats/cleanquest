@@ -459,3 +459,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 64 — Translation key-parity audit — DONE
 - Evidence: scripted audit of app.js translations: 315 keys in EN, 315 in ES, 315 in PL, zero keys missing in any direction after tonight's ~60 added keys.
 - Blockers: none.
+
+## LOOP 65 — Placeholder-set parity audit — DONE
+- Evidence: scripted audit of all 27 templated i18n keys (gap/analytics/matchup/crew/pack/record templates): placeholder sets identical across EN/ES/PL, zero mismatches — t() replacements can never leak raw {tokens} in any language.
+- Blockers: none.
