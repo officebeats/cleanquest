@@ -4384,14 +4384,17 @@ function describeObjects(objects) {
       (counts[object.label] || 0) + 1;
   });
 
-  const labelFor = (name) => OBJECT_LABEL_I18N[state.language]?.[name] || name;
   return Object.entries(counts)
     .map(([name, count]) =>
       count > 1
-        ? `${count} ${labelFor(name)}`
-        : labelFor(name)
+        ? `${count} ${objectLabel(name)}`
+        : objectLabel(name)
     )
     .join(", ");
+}
+
+function objectLabel(name) {
+  return OBJECT_LABEL_I18N[state.language]?.[name] || name;
 }
 
 function analyzeSurfaceZones(beforeImage, afterImage, columns = 3, rows = 3) {
@@ -5569,7 +5572,7 @@ function renderDetectionOverlay(container, objects = [], remaining = false) {
     el.style.width = `${clamp(w / iw) * 100}%`;
     el.style.height = `${clamp(h / ih) * 100}%`;
     const label = document.createElement("span");
-    label.textContent = `${String(object.label || "OBJECT").toUpperCase()} ${Math.round(Number(object.score || 0) * 100)}%`;
+    label.textContent = `${objectLabel(String(object.label || "object")).toUpperCase()} ${Math.round(Number(object.score || 0) * 100)}%`;
     el.appendChild(label);
     container.appendChild(el);
   });

@@ -354,3 +354,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: describeObjects now maps the five countable classes (cup/bottle/bowl/cell phone/book) into ES/PL in findings text; detection labels themselves unchanged.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 43 — Evidence overlay labels localized — DONE
+- Implemented: shared objectLabel() helper now localizes detection-overlay labels on before/after evidence (same ES/PL map as findings); template typo in the plural branch caught by review and fixed before gates.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
