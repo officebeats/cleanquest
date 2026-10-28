@@ -6533,6 +6533,19 @@ function saveCompletedRun() {
       } catch {}
     }
     void recordInspection(name, entry);
+    // Production offline path: runs finished offline (or forced) queue for later scoring sync.
+    const isOffline = (typeof navigator !== "undefined" && navigator.onLine === false) || state.forceOfflineQueue;
+    if (isOffline) {
+      try {
+        enqueueOfflineRun({
+          id: entry.id,
+          cleanliness: entry.cleanliness,
+          elapsedMs: entry.timeMs,
+          beforeDataUrl: state.captures.before?.dataUrl || null,
+          afterDataUrl: state.captures.after?.dataUrl || null
+        });
+      } catch {}
+    }
   }
 
   return entry;

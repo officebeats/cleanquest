@@ -210,3 +210,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: FTUE step chips and admin tabs now set role=tab + aria-selected on switch; lightbox mode buttons set aria-pressed alongside .active.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 14 — Production offline enqueue path — DONE
+- Implemented: saveCompletedRun now enqueues the finished run (measured cleanliness, capped photos) when navigator.onLine === false or state.forceOfflineQueue is set — previously only the persona/API path ever queued. First-save only, alongside crew/inspection side-effects.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails; VM verdict/number green.
+- Blockers: none.
