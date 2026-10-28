@@ -1147,7 +1147,28 @@ const els = {
   adminInviteInput: document.getElementById("adminInviteInput"),
   inviteApproveButton: document.getElementById("inviteApproveButton"),
   adminCrewList: document.getElementById("adminCrewList"),
-  sponsorAnalyticsSummary: document.getElementById("sponsorAnalyticsSummary")
+  sponsorAnalyticsSummary: document.getElementById("sponsorAnalyticsSummary"),
+  spotTemplateSelect: document.getElementById("spotTemplateSelect"),
+  timerSpotSelect: document.getElementById("timerSpotSelect"),
+  timerSpotRuleBadge: document.getElementById("timerSpotRuleBadge"),
+  timerSpotPills: document.getElementById("timerSpotPills"),
+  liveZoneGrid: document.getElementById("liveZoneGrid"),
+  idleNudgeBanner: document.getElementById("idleNudgeBanner"),
+  liveActivityBadge: document.getElementById("liveActivityBadge"),
+  beforeEvidenceCard: document.getElementById("beforeEvidenceCard"),
+  afterEvidenceCard: document.getElementById("afterEvidenceCard"),
+  evidenceLightboxModal: document.getElementById("evidenceLightboxModal"),
+  lightboxBeforeImg: document.getElementById("lightboxBeforeImg"),
+  lightboxAfterImg: document.getElementById("lightboxAfterImg"),
+  lightboxGhostImg: document.getElementById("lightboxGhostImg"),
+  lightboxGhostControl: document.getElementById("lightboxGhostControl"),
+  lightboxGhostSlider: document.getElementById("lightboxGhostSlider"),
+  lightboxModeSplit: document.getElementById("lightboxModeSplit"),
+  lightboxModeBefore: document.getElementById("lightboxModeBefore"),
+  lightboxModeAfter: document.getElementById("lightboxModeAfter"),
+  lightboxCloseButton: document.getElementById("lightboxCloseButton"),
+  lightboxBeforePane: document.getElementById("lightboxBeforePane"),
+  lightboxAfterPane: document.getElementById("lightboxAfterPane")
 };
 
 const COUNTABLE_CLASSES = new Set([
@@ -1449,17 +1470,25 @@ function speakText(text, options = {}) {
 
 const HOST_LINES = {
   en: {
-    start: ["Let's go... time to shine!", "Game on... show that room who's boss!", "Cameras up... let's see it sparkle!", "Alright, champ... make it count!", "Clock's ticking... you've got this!", "Time to work... nice and quick!", "Let's do this... clean and mean!", "Ready... set... shine!", "Your room... your stage... go!", "Star moment... let's clean!", "Showtime... cleaning star!", "Ninety seconds... make 'em count!", "Let's roll... spotless is the goal!", "Game face on... here we go!", "Time to hustle... you've trained for this!", "Okay, star... own that room!", "Let's make it gleam... starting now!", "Lights ready... room ready... go!", "The clock is live... do your thing!", "No pressure... just shine!", "Here we go... clean machine!", "Lights, camera... clean!", "Your ninety seconds... start now!", "Let's get it... looking fresh!"],
-    mid: ["Halfway... looking good!", "Nice pace... truly glowing!", "Forty-five down... looking sharp!", "Looking smooth... beautiful flow!", "Halfway mark... you've got this!", "Good rhythm... pure groove!", "Strong start... stunning middle!", "Still moving... looking great!", "Halfway home... what a run!", "Smooth moves... love this run!", "Right on track... perfect pace!", "Looking clean already... wow!", "Halfway... full of shine!", "Great energy... electric room!", "You're flying... pure magic!", "Halfway point... looking sharp!", "So steady... almost there!", "Beautiful pace... pure beauty!", "That energy... looking good!", "Halfway... the room believes in you!", "Smooth and steady... nice!", "Looking like a pro... wow!", "Halfway... shining loud!", "Great hustle... still shining!"],
-    finish: ["Time!... what a sight!", "And... done! Beautiful work!", "That's it... pure champ!", "Clock's out... gorgeous!", "Finished! ... take a bow!", "Time's up... what a run!", "Done and dusted... literally!", "Stop the clock... stunning!", "That's a wrap... well played!", "Time! ... look at that shine!", "All done... give yourself credit!", "Ninety seconds... nailed it!", "And stop... fantastic job!", "Complete! ... room's glowing!", "Time called... you delivered!", "Done! ... that's how it's done!", "Whistle blows... great run!", "Finished strong... love to see it!", "That's time... absolute star!", "Clock stops... crowd goes wild!", "All finished... take it in!", "Done deal... sparkling result!", "Time! ... chef's kiss!", "Complete... you made it look easy!"],
-    pass: ["Pass! That room is gleaming!", "Sparkling fresh... beautiful!", "Pass with style... well earned!", "That's a pass... gorgeous work!", "Stamp it... sparkling clean!", "Pass! ... the judges are smiling!", "Top marks... enjoy it!", "A clear pass... take the win!", "Pass! ... what a transformation!", "Verified and victorious... yes!", "That's the standard... pass!", "Pass! ... room looks brand new!", "Gold star... fully earned!", "Pass with flying colors... wow!", "Clean bill... beautifully done!", "That's a pass... own it!", "Scoreboard loves it... pass!", "Pass! ... picture-perfect clean!", "Nailed the benchmark... pass!", "Victory lap... you passed!", "Pass! ... simply stunning!", "The room approves... pass!", "Flawless finish... that's a pass!", "Pass! ... remember this feeling!"],
-    retry: ["So close... one more run?", "Not quite... you've got another in you!", "Missed it... shake it off, go again!", "Almost there... run it back!", "No shame... champions retry!", "Just short... next one's yours!", "Ooh, close... let's go again!", "Not this time... you'll get it!", "So near... one more try?", "Dust yourself off... retry!", "Almost had it... again!", "Close call... stunning effort!", "Not yet... but you're close!", "Retry time... I believe in you!", "Missed the mark... reload and go!", "One more... you've got this!", "Close... but no cigar yet!", "Almost... such great heart!", "Not quite... the room's waiting!", "Retry... make it count!", "So close... feel that fire?", "Next run's the one... go!", "Missed... but what heart!", "Again... cleaner and meaner!"],
-    "pass-big": ["Massive win... absolutely glowing!", "Blown away... perfect score vibes!", "History made... look at that!", "Unreal result... take a bow!", "Total triumph... room transformed!", "Legendary clean... hall of fame!", "Off the charts... incredible!", "A masterpiece... pure gold!", "Best yet... simply flawless!", "Record breaker... enjoy it!", "Pure perfection... wow wow!", "Champion level... undisputed!"],
-    "pass-close": ["Squeaked through... still counts!", "By a whisker... you made it!", "Just enough... celebrate it!", "Narrow win... sweet relief!", "Cut it close... beautiful!", "Over the line... phew!", "Made it... by a hair!", "Close one... but it's yours!", "Scraped by... take it!", "Photo finish... you passed!", "Barely... but brilliantly!", "Survived... and shining!"],
-    "retry-far": ["Not today... still shining!", "Off the mark... head high!", "Missed big... heart bigger!", "Rough one... shake it off!", "Far away... next time!", "No shame... reload and glow!", "Way off... beautiful effort!", "Tough round... still a star!", "Missed wide... keep glowing!", "Bad break... lovely try!", "Far from it... come back!", "Off day... still golden!"],
-    hurry: ["Ten seconds... what a finish!", "Final stretch... looking glorious!", "Almost home... beautiful ending!", "What a run... beautiful!", "Last seconds... pure magic!", "Closing time... stunning work!", "Here it comes... the bell!", "Final countdown... love it!", "So close... looking amazing!", "Final moments... what heart!", "Nearly there... gorgeous sight!", "Seconds left... shining bright!"],
-    "hurry-final": ["Ten... nine... here we go!", "Final ten... make it count!", "Clock screaming... shine anyway!", "Last seconds... pure heart!", "Ten left... leave nothing!", "The bell... almost ringing!", "Final burst... beautiful!", "Ten seconds... legendary finish!", "Almost over... brightest moment!", "Last call... all heart!", "Final ten... glorious run!", "Bell about to ring... shine!"],
-    "scoring-wait": ["Judges watching... what nerves!", "Holding breath... here we go!", "Scores incoming... so close!", "Drumroll... this is it!", "Judges deciding... wow moments!", "Waiting... what a run!", "Tallying up... looking good!", "Moment of truth... shine!", "Scoreboard waking... here it comes!", "Fingers crossed... beautiful work!", "The verdict... almost here!", "Suspense... you were great!"],
+    start: ["Let's go! It is time to shine!", "Game on! Show that room who is boss!", "Cameras up! Let's see this surface sparkle!", "Alright champ! Make every second count!", "Clock is rolling! You've totally got this!", "Time to attack that spot! Fast and sharp!", "Let's do this! Clean, fast, and unstoppable!", "Ready, set, shine! Hit that target!", "Your room, your stage! Let's go right now!", "Star moment! Light up that zone!", "It is showtime! Show off that speed!", "Ninety seconds on the board! Make them count!", "Let's roll! Spotless is the only goal!", "Game face on! Attack that surface!", "Time to hustle! You trained for this!", "Okay superstar! Own this entire room!", "Let's make it gleam! Starting right now!", "Lights up, camera locked! Go, go, go!", "The clock is live! Work that surface!", "Full speed ahead! Bring the shine!", "Here we go! Total clean machine!", "Lights, camera, action! Hit that spot!", "Your ninety seconds start right now! Go!", "Let's get after it! Fresh and fast!"],
+    mid: ["Halfway there and you are flying! Keep pushing!", "What a pace! That surface is already glowing!", "Forty-five seconds down! Looking razor sharp!", "Look at that speed! Keep that rhythm rolling!", "Halfway mark! You are crushing this benchmark!", "Pure electric rhythm! Stay on the gas!", "Huge start and an even stronger middle! Go!", "Non-stop motion! That zone is coming alive!", "Halfway home! What an incredible pace!", "Fast hands, clean lines! Love this energy!", "Right on benchmark pace! Don't let up now!", "That spot is transforming right on camera! Wow!", "Halfway mark! Bring that championship shine!", "Electric energy in the room! Keep attacking!", "You are flying across that surface! Amazing!", "Halfway point! Lock in for the big push!", "Relentless pace! You are almost there!", "High velocity, high quality! Keep it moving!", "Look at those zones lighting up! Great hustle!", "Halfway through! The leaderboard is calling!", "Fast and fearless! Keep working that spot!", "Moving like a total pro! Keep the foot down!", "Halfway mark! Turn the energy all the way up!", "Big-time hustle! Keep that surface shining!"],
+    finish: ["Time! Stop the clock! What a phenomenal run!", "And done! That was electric from start to finish!", "Boom! Clock is out! Championship effort!", "Stop the clock! Look at that transformation!", "Finished! Take a bow, that was relentless!", "Time is up! What an explosive ninety seconds!", "Done and dusted! You left nothing on the table!", "Horn sounds! Stop the clock, stunning hustle!", "That is a wrap! High-speed precision!", "Time! Look at the shine on that target!", "All done! Give yourself a massive hand!", "Ninety seconds flat! You attacked every zone!", "And stop! Fantastic energy all the way through!", "Challenge complete! That surface is glowing!", "Time called! You delivered under pressure!", "Done! That is how a benchmark pro does it!", "Buzzer sounds! Huge run, let's check the tape!", "Finished strong! Love that closing speed!", "That is time! Absolute game-show superstar!", "Clock stops and the crowd goes wild! Great run!", "All finished! Lock in that after shot!", "Done deal! Sparkling work under the clock!", "Time! Pure hustle from bell to bell!", "Challenge complete! You made that look electric!"],
+    pass: ["Pass! That room is gleaming!", "Sparkling fresh! Beautiful work!", "Pass with style! Well earned!", "That's a pass! Gorgeous work!", "Stamp it! Sparkling clean!", "Pass! The judges are thrilled!", "Top marks! Enjoy that win!", "A clear pass! Take the victory!", "Pass! What a transformation!", "Verified and victorious! Yes!", "That's the standard! Pass!", "Pass! Room looks brand new!", "Gold star! Fully earned!", "Pass with flying colors! Wow!", "Clean bill! Beautifully done!", "That's a pass! Own it!", "Scoreboard loves it! Pass!", "Pass! Picture-perfect clean!", "Nailed the benchmark! Pass!", "Victory lap! You passed!", "Pass! Simply stunning!", "The room approves! Pass!", "Flawless finish! That's a pass!", "Pass! Remember this feeling!"],
+    retry: ["So close! Run it back and take the crown!", "Right on the edge! You've got the next one!", "Just missed the cut! Shake it off and attack again!", "Almost had it! One more push takes it!", "Champions reload! Run that spot back!", "Just a fraction short! Next run is yours!", "Ooh, razor close! Let's fire it up again!", "Not quite there yet, but the speed is real!", "So near the mark! Give it one more blitz!", "Shake it off and hit that surface again!", "Almost locked it! Come back swinging!", "Close call! Bring that fire into the next run!", "Right at the doorstep! One more try!", "Reload time! You know the angles now, go!", "Just below the line! Run it back fast!", "One more round! You are right there!", "Close one! Hit those missed zones and own it!", "Big heart out there! Let's run it one more time!", "The spot is waiting! Jump back in and crush it!", "Retry! Turn that frustration into speed!", "So close! Hit the corners and claim that pass!", "Next run is the winner! Let's go!", "Tough break, huge effort! Run it back!", "Again! Faster, sharper, and all the way clean!"],
+    "pass-big": ["Massive win! Absolutely glowing from top to bottom!", "Blown away! That is a monster championship score!", "History made on camera! Look at that shine!", "Unreal result! Take a bow, you crushed the benchmark!", "Total triumph! Every single zone transformed!", "Legendary clean! Straight to the top of the board!", "Off the charts! Incredible speed and technique!", "An absolute masterpiece! Pure gold!", "Best run of the day! Simply flawless!", "Record-breaking energy! Enjoy that huge win!", "Pure perfection across the whole spot! Wow!", "Champion level! Undisputed number one!"],
+    "pass-close": ["Squeaked right through! A win is a win!", "By a whisker! You beat the benchmark!", "Just enough to lock the pass! Celebrate it!", "Narrow victory! Clutch finish under pressure!", "Cut it razor close and pulled it off!", "Right over the line! What a finish!", "Made it by a hair! That final burst paid off!", "Tight score, big win! It is all yours!", "Scraped through on grit! Take the points!", "Photo finish and you got the pass!", "Barely cleared it, but it counts on the board!", "Clutch survival! You got the job done!"],
+    "retry-far": ["Tough round! Reset the frame and attack every zone!", "Off the mark this time, keep your head high!", "Missed a few zones! Step back in and light them up!", "Rough pass, bigger comeback! Shake it off!", "Plenty of room to climb! Hit that spot again!", "No sweat! Check the zone map and reload!", "Camera wants more action! Run it back strong!", "Tough break! Line up the shadow guide and go again!", "Missed the target zones! Next run is the comeback!", "Shake off that round and bring the heat!", "Reset, refocus, and attack that surface!", "Every pro has a warmup round! Now go crush it!"],
+    hurry: ["Final stretch! Let's go! Bring that sparkle home!", "Final stretch! Pour on the speed and finish strong!", "Thirty seconds on the clock! Push, push, push!", "Home stretch! Empty the tank and make it shine!", "Final thirty! Attack those last corners right now!", "Closing speed! Show the judges what you've got!", "Here comes the bell! Finish every last inch!", "Final countdown! Turn the tempo all the way up!", "Almost home! Fast hands, lock in that clean!", "Final moments! Give it everything you have!", "Nearly there! Polish it off before the buzzer!", "Seconds ticking down! Sprint to the finish!"],
+    "hurry-final": ["Ten, nine, eight! Sprint to the buzzer, let's go!", "Final ten seconds! Leave nothing behind, push!", "Clock is screaming! Give me one big final burst!", "Last ten seconds! Fast hands, finish that spot!", "Ten seconds left! Attack the final zone right now!", "The buzzer is coming! Empty the tank!", "Final burst! Everything you've got for ten seconds!", "Ten seconds to glory! Bring it home right now!", "Almost over! Make this final wipe count!", "Last call on the clock! Full speed to the bell!", "Final ten! Championship effort right to the line!", "Buzzer about to sound! Finish strong, let's go!"],
+    "scoring-wait": ["Judges locking in the tape! Here comes the score!", "Hold your breath! Vision engine tallying the zones!", "Scores incoming! Let's see how you did!", "Drumroll please! Checking every surface zone!", "Judges deciding right now! Big moment!", "Checking the before and after! Stand by!", "Tallying up the clean and technique bars!", "Moment of truth! The scoreboard is lighting up!", "Locking in the benchmark verdict! Here it comes!", "Fingers crossed! Let's see that percentage!", "The verdict is almost ready! What a run!", "High drama in the booth! Score coming right up!"],
+    nudge: [
+      "Whoa, hold up! The camera sees zero movement out there! Step into the frame and attack that surface, let's go!",
+      "Hey now, don't freeze on me! No motion detected on the spot yet, get those hands moving and make it shine!",
+      "Wake up that viewfinder! Zero action showing on camera right now, jump in there and work that zone!",
+      "Clock is ticking and the frame is standing still! Step right in and wipe that target down, you've got this!",
+      "Alert on the floor! We aren't seeing any cleaning action yet, move into the shadow guide and light up those zones!",
+      "Come on, show me some fire! The motion sensor is flatlining, hit that surface top to bottom right now!"
+    ],
   },
   es: {
     start: ["¡Vamos... a brillar!", "¡Juego en marcha... demuestra quién manda!", "Cámaras listas... ¡que se vea el brillo!", "Muy bien, campeón... ¡haz que cuente!", "El reloj corre... ¡tú puedes!", "A trabajar... ¡rápido y bien!", "Vamos allá... ¡limpio y veloz!", "Listos... ¡a brillar!", "Tu sala... tu escenario... ¡ya!", "Momento estrella... ¡a brillar!", "¡Es la hora... sala estrella!", "Noventa segundos... ¡que valgan!", "En marcha... ¡el objetivo es impecable!", "Cara de juego... ¡allá vamos!", "A darle... ¡para esto entrenaste!", "Muy bien, estrella... ¡esa sala es tuya!", "Hagamos que brille... ¡ya mismo!", "Luces listas... sala lista... ¡ya!", "El reloj vive... ¡haz lo tuyo!", "Sin presión... ¡solo brilla!", "Allá vamos... ¡máquina de limpiar!", "Luces, cámara... ¡limpieza!", "Tus noventa segundos... ¡empiezan ya!", "Vamos... ¡con todo!"],
@@ -1473,6 +1502,11 @@ const HOST_LINES = {
     hurry: ["¡Diez segundos... qué final!", "Recta final... ¡se ve glorioso!", "Casi en casa... ¡final hermoso!", "¡Qué carrera... momento mágico!", "Últimos segundos... ¡pura magia!", "Cierre total... ¡trabajo increíble!", "Ya viene... ¡la campana!", "Cuenta atrás... ¡me encanta!", "Tan cerca... ¡te ves genial!", "Momentos finales... ¡qué corazón!", "Ya casi... ¡vista preciosa!", "Reloj corriendo... ¡qué brillo!"],
     "hurry-final": ["Diez... nueve... ¡aquí vamos!", "Diez finales... ¡que cuenten!", "Reloj gritando... ¡brilla igual!", "Últimos segundos... ¡puro corazón!", "Quedan diez... ¡nada guardado!", "La campana... ¡casi suena!", "Ráfaga final... ¡hermoso!", "Diez segundos... ¡fin legendario!", "Casi acaba... ¡momento más brillante!", "Última llamada... ¡todo corazón!", "Diez finales... ¡carrera gloriosa!", "La campana va a sonar... ¡brilla!"],
     "scoring-wait": ["Jueces mirando... ¡qué nervios!", "Conteniendo el aliento... ¡ya viene!", "Notas en camino... ¡qué emoción!", "Redoble... ¡esto es!", "Jueces decidiendo... ¡momentos guau!", "Esperando... ¡qué carrera!", "Sumando puntos... ¡pinta bien!", "Momento de verdad... ¡brillo!", "Marcador despierta... ¡ya viene!", "Dedos cruzados... ¡trabajo hermoso!", "El veredicto... ¡casi aquí!", "Suspenso... ¡estuviste genial!"],
+    nudge: [
+      "¡Oye, espera! ¡La cámara no detecta movimiento! ¡Entra en cuadro y ataca esa superficie, vamos!",
+      "¡No te congeles ahora! ¡Sin acción en el área, mueve esas manos y haz que brille!",
+      "¡El reloj corre y no vemos movimiento! ¡Entra en la guía de sombra y limpia de arriba abajo!"
+    ],
   },
   pl: {
     start: ["No to... czas błyszczeć!", "Gra trwa... pokaż, kto tu rządzi!", "Kamery gotowe... niech widać blask!", "Dobra, mistrzu... niech się liczy!", "Zegar tyka... dasz radę!", "Do pracy... szybko i dobrze!", "No to... czysto i sprawnie!", "Gotowi... do blasku!", "Twój pokój... twoja scena... start!", "Wielka chwila... sprzątamy!", "Showtime... gwiazda sprząta!", "Dziewięćdziesiąt sekund... wykorzystaj je!", "Zaczynamy... cel to perfekcja!", "Mina gracza... jedziemy!", "Do boju... po to trenowałeś!", "Dobra, gwiazdo... ten pokój jest twój!", "Niech błyszczy... już teraz!", "Światła gotowe... sala gotowa... start!", "Zegar żyje... rób swoje!", "Bez presji... po prostu błyszcz!", "Jedziemy... maszyno czystości!", "Światła, kamera... sprzątanie!", "Twoje dziewięćdziesiąt sekund... start!", "Dawaj... pełną parą!"],
@@ -1486,6 +1520,11 @@ const HOST_LINES = {
     hurry: ["Dziesięć sekund... co za finisz!", "Ostatnia prosta... wygląda bosko!", "Prawie w domu... piękny finał!", "Co za bieg... czysta magia!", "Ostatnie sekundy... wielka magia!", "Wielki finał... cudowna robota!", "Już nadchodzi... dzwonek!", "Odliczanie... uwielbiam to!", "Tak blisko... wyglądasz super!", "Ostatnie chwile... co za serce!", "Już prawie... cudowny widok!", "Zegar tyka... co za blask!"],
     "hurry-final": ["Dziesięć... dziewięć... jedziemy!", "Ostatnie dziesięć... niech się liczy!", "Zegar krzyczy... błyszcz mimo to!", "Ostatnie sekundy... czyste serce!", "Zostało dziesięć... nic w zapasie!", "Dzwonek... zaraz zadzwoni!", "Ostatni zryw... pięknie!", "Dziesięć sekund... legendarny finisz!", "Prawie koniec... najjaśniejszy moment!", "Ostatnie wezwanie... całe serce!", "Ostatnia dziesiątka... chwalebny bieg!", "Dzwonek zaraz zabrzmi... błyszcz!"],
     "scoring-wait": ["Sędziowie patrzą... co za nerwy!", "Wstrzymany oddech... już jest!", "Wyniki lecą... co za emocje!", "Werble... to jest to!", "Sędziowie radzą... momenty wow!", "Czekamy... co za bieg!", "Liczą punkty... wygląda dobrze!", "Moment prawdy... blask!", "Tablica budzi się... już idzie!", "Kciuki trzymane... piękna robota!", "Werdykt... już prawie!", "Napięcie... byłeś świetny!"],
+    nudge: [
+      "Ej, chwila! Kamera nie widzi żadnego ruchu! Wejdź w kadr i zaatakuj tę powierzchnię, jazda!",
+      "Nie zatrzymuj się teraz! Brak akcji w strefie, ruszaj rękami i daj czadu z tym blaskiem!",
+      "Zegar tyka, a w kadrze cisza! Wejdź w cień przed-po i wyczyść to od góry do dołu!"
+    ],
   }
 };
 
@@ -1750,7 +1789,13 @@ const CLIPS_MANIFEST = {
     "en:finish-20": "available",
     "en:finish-21": "available",
     "en:finish-22": "available",
-    "en:finish-23": "available"
+    "en:finish-23": "available",
+    "en:nudge-00": "available",
+    "en:nudge-01": "available",
+    "en:nudge-02": "available",
+    "en:nudge-03": "available",
+    "en:nudge-04": "available",
+    "en:nudge-05": "available"
   }
 };
 
@@ -1851,6 +1896,36 @@ const CHILL_ALLOWED_BEATS = new Set([
   "retry",
   "retry-far"
 ]);
+function playLiveHypeSting(beat) {
+  if (state.voice.muted) return;
+  try {
+    const Context = window.AudioContext || window.webkitAudioContext;
+    if (!Context) return;
+    sharedAudioContext = sharedAudioContext || new Context();
+    const ctx = sharedAudioContext;
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const now = ctx.currentTime;
+    const pattern = beat === "nudge"
+      ? [330, 440, 330, 587.33]
+      : beat === "hurry-final"
+        ? [587.33, 783.99, 987.77, 1174.66]
+        : beat === "hurry"
+          ? [523.25, 659.25, 880]
+          : [440, 554.37, 659.25];
+    pattern.forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = beat === "nudge" ? "sawtooth" : "triangle";
+      osc.frequency.setValueAtTime(freq, now + i * 0.055);
+      gain.gain.setValueAtTime(0.0001, now + i * 0.055);
+      gain.gain.exponentialRampToValueAtTime(0.045, now + i * 0.055 + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.055 + 0.11);
+      osc.connect(gain).connect(ctx.destination);
+      osc.start(now + i * 0.055);
+      osc.stop(now + i * 0.055 + 0.12);
+    });
+  } catch {}
+}
 
 function speakHost(beat, overrideText) {
   if (!state.voice.available || state.voice.muted) {
@@ -1861,6 +1936,9 @@ function speakHost(beat, overrideText) {
   if (state.voice.hypeLevel === "chill" && !CHILL_ALLOWED_BEATS.has(beat)) {
     state.voice.lastPath = "chill-skipped";
     return;
+  }
+  if (beat === "start" || beat === "mid" || beat === "hurry" || beat === "hurry-final" || beat === "nudge") {
+    playLiveHypeSting(beat);
   }
 
   const base = HOST_PROSODY[beat] || HOST_PROSODY.start;
@@ -2073,9 +2151,9 @@ function selectVerdictBeat(result = state.result) {
 
 function announceTime(secondsRemaining) {
   const rounded = Math.ceil(secondsRemaining);
-  if (rounded === 45) {
+  if (rounded === 75 || rounded === 60 || rounded === 45) {
     speakHost("mid");
-  } else if (rounded === 30) {
+  } else if (rounded === 30 || rounded === 20) {
     speakHost("hurry");
   } else if (rounded === 10) {
     speakHost("hurry-final");
@@ -2833,6 +2911,7 @@ function activateDemoMode() {
 
   resetCaptures();
   updateCameraUI();
+  assignSpotForArea(state.checkin.areaKey, state.checkin.league, state.checkin.assignedSpot);
 
   navigateTo("timer");
 }
@@ -3102,12 +3181,31 @@ function resetCaptures() {
 
 function resetTimeAnnouncements() {
   state.timer.announcements = {
+    75: false,
     60: false,
     45: false,
     30: false,
+    20: false,
     10: false,
     complete: false
   };
+  state.liveMonitor = {
+    lastSampleAt: 0,
+    lastMotionAt: performance.now(),
+    lastNudgeAt: 0,
+    lastLuma: null,
+    beforeLuma: null,
+    workedZones: new Array(9).fill(false),
+    activeZones: new Array(9).fill(false),
+    motionRatio: 0,
+    idleAlert: false
+  };
+  if (els.idleNudgeBanner) els.idleNudgeBanner.classList.add("hidden");
+  if (els.liveZoneGrid) {
+    Array.from(els.liveZoneGrid.children).forEach((cell) => {
+      cell.classList.remove("zone-worked", "zone-active");
+    });
+  }
 }
 
 function startTimer() {
@@ -3202,6 +3300,7 @@ function updateTimer() {
     currentRemaining
   );
 
+  sampleLiveRunActivity();
   if (state.timer.elapsedMs >= durationMs) {
     state.timer.elapsedMs = durationMs;
     finishTimerAtLimit();
@@ -3211,7 +3310,7 @@ function updateTimer() {
 }
 
 function checkTimeAnnouncement(previousMs, currentMs) {
-  [45, 30, 10].forEach((seconds) => {
+  [75, 60, 45, 30, 20, 10].forEach((seconds) => {
     if (state.timer.announcements[seconds]) return;
 
     const threshold = seconds * 1000;
@@ -3224,6 +3323,136 @@ function checkTimeAnnouncement(previousMs, currentMs) {
       announceTime(seconds);
     }
   });
+}
+
+function extractSmallLumaGrid(sourceEl, cols = 36, rows = 27) {
+  try {
+    const canvas = document.createElement("canvas");
+    canvas.width = cols;
+    canvas.height = rows;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(sourceEl, 0, 0, cols, rows);
+    const data = ctx.getImageData(0, 0, cols, rows).data;
+    const out = new Float32Array(cols * rows);
+    for (let i = 0; i < out.length; i += 1) {
+      const p = i * 4;
+      out[i] = 0.299 * data[p] + 0.587 * data[p + 1] + 0.114 * data[p + 2];
+    }
+    return out;
+  } catch {
+    return null;
+  }
+}
+
+function sampleLiveRunActivity(forceIdleForTest = false) {
+  if (!state.timer.running && !forceIdleForTest) return null;
+  const now = performance.now();
+  if (!state.liveMonitor) resetTimeAnnouncements();
+  const mon = state.liveMonitor;
+  if (!forceIdleForTest && now - mon.lastSampleAt < 1400) return mon;
+  mon.lastSampleAt = now;
+
+  if (els.liveZoneGrid) {
+    els.liveZoneGrid.classList.remove("hidden");
+  }
+
+  const cols = 36;
+  const rows = 27;
+  let currentLuma = null;
+  if (!state.demoMode && els.timerVideo && els.timerVideo.readyState >= 2) {
+    currentLuma = extractSmallLumaGrid(els.timerVideo, cols, rows);
+  }
+
+  if (currentLuma && !mon.beforeLuma) {
+    mon.beforeLuma = currentLuma.slice();
+  }
+
+  let activeCount = 0;
+  let changedPixels = 0;
+  const totalPixels = cols * rows;
+
+  if (forceIdleForTest) {
+    mon.motionRatio = 0;
+    mon.activeZones.fill(false);
+    mon.lastMotionAt = now - 8500;
+  } else if (currentLuma && mon.lastLuma) {
+    const zoneMotion = new Float32Array(9);
+    const zoneBeforeDiff = new Float32Array(9);
+    const zoneCounts = new Uint16Array(9);
+    for (let r = 0; r < rows; r += 1) {
+      const zr = Math.min(2, Math.floor((r * 3) / rows));
+      for (let c = 0; c < cols; c += 1) {
+        const zc = Math.min(2, Math.floor((c * 3) / cols));
+        const idx = r * cols + c;
+        const zIdx = zr * 3 + zc;
+        const diff = Math.abs(currentLuma[idx] - mon.lastLuma[idx]);
+        const bDiff = mon.beforeLuma ? Math.abs(currentLuma[idx] - mon.beforeLuma[idx]) : diff;
+        zoneCounts[zIdx] += 1;
+        if (diff > 11) {
+          changedPixels += 1;
+          zoneMotion[zIdx] += 1;
+        }
+        if (bDiff > 14) {
+          zoneBeforeDiff[zIdx] += 1;
+        }
+      }
+    }
+    mon.motionRatio = changedPixels / totalPixels;
+    for (let z = 0; z < 9; z += 1) {
+      const zTotal = Math.max(1, zoneCounts[z]);
+      const isMoving = zoneMotion[z] / zTotal > 0.04;
+      const isWorked = zoneBeforeDiff[z] / zTotal > 0.07;
+      mon.activeZones[z] = isMoving;
+      if (isMoving || isWorked) mon.workedZones[z] = true;
+      if (isMoving) activeCount += 1;
+    }
+    if (mon.motionRatio >= 0.018 || activeCount > 0) {
+      mon.lastMotionAt = now;
+    }
+  } else if (state.demoMode) {
+    const elapsedSec = Math.floor((state.timer.elapsedMs || 0) / 1000);
+    const simZone = elapsedSec % 9;
+    mon.activeZones.fill(false);
+    mon.activeZones[simZone] = true;
+    mon.workedZones[simZone] = true;
+    mon.motionRatio = 0.08;
+    mon.lastMotionAt = now;
+  }
+
+  if (currentLuma) {
+    mon.lastLuma = currentLuma;
+  }
+
+  const workedCount = mon.workedZones.filter(Boolean).length;
+  if (els.liveZoneGrid) {
+    Array.from(els.liveZoneGrid.children).forEach((cell, idx) => {
+      cell.classList.toggle("zone-active", Boolean(mon.activeZones[idx]));
+      cell.classList.toggle("zone-worked", Boolean(mon.workedZones[idx]));
+    });
+  }
+
+  const idleMs = now - mon.lastMotionAt;
+  const isIdle = idleMs >= 6500;
+  mon.idleAlert = isIdle;
+
+  if (els.idleNudgeBanner) {
+    els.idleNudgeBanner.classList.toggle("hidden", !isIdle);
+  }
+  if (els.liveActivityBadge) {
+    if (isIdle) {
+      els.liveActivityBadge.textContent = "⚠ NO MOTION · STEP IN!";
+      els.liveActivityBadge.classList.add("idle-warning");
+    } else {
+      els.liveActivityBadge.textContent = `🔥 ${workedCount}/9 ZONES · ACTIVE`;
+      els.liveActivityBadge.classList.remove("idle-warning");
+    }
+  }
+
+  if (isIdle && now - mon.lastNudgeAt >= 15000) {
+    mon.lastNudgeAt = now;
+    speakHost("nudge");
+  }
+  return mon;
 }
 
 function finishTimerAtLimit() {
@@ -3323,6 +3552,10 @@ async function handleStartPause() {
     return;
   }
 
+  if (state.voice.muted && !SELF_TEST_MODE) {
+    setHypeLevel("full");
+  }
+
   if (state.timer.elapsedMs <= 0) {
     if (!state.demoMode) {
       const ready = await ensureCameraReady();
@@ -3339,11 +3572,15 @@ async function handleStartPause() {
       updateCameraUI();
       await captureFrame("before");
     }
+    state.checkin.ghostEnabled = true;
+    state.checkin.ghostMode = state.checkin.ghostMode || "shadow60";
+    updateGhostOverlay();
 
     playTone(620, 0.07);
     setTimeout(() => playTone(820, 0.08), 90);
 
     startTimer();
+    sampleLiveRunActivity();
     speakHost("start");
     return;
   }
@@ -3884,86 +4121,173 @@ function analyzeSurfaceZones(beforeImage, afterImage, columns = 3, rows = 3) {
   return { zones, improvedZones, residualZones, averageImprovement, residualClutter };
 }
 
+const SPOT_LOGIC_PROFILES = {
+  "Sink & counter": {
+    surfaceWeight: 0.55,
+    zoneWeight: 0.25,
+    objectWeight: 0.2,
+    ruleSummary: "55% SURFACE GLEAM · 25% ZONES · 20% ITEMS",
+    focusNote: "Grades basin/counter film removal and cleared counter items."
+  },
+  "Sink & mirror counter": {
+    surfaceWeight: 0.6,
+    zoneWeight: 0.25,
+    objectWeight: 0.15,
+    ruleSummary: "60% MIRROR/BASIN GLEAM · 25% ZONES · 15% ITEMS",
+    focusNote: "Grades streak-free mirror/sink reflection and counter clearance."
+  },
+  "Workstation desk & shelf": {
+    surfaceWeight: 0.35,
+    zoneWeight: 0.25,
+    objectWeight: 0.4,
+    ruleSummary: "40% ITEM ORDER · 35% SURFACE · 25% ZONES",
+    focusNote: "Grades desk/bookshelf clutter organization and surface dust zones."
+  },
+  "Workstation desk surface": {
+    surfaceWeight: 0.35,
+    zoneWeight: 0.25,
+    objectWeight: 0.4,
+    ruleSummary: "40% ITEM ORDER · 35% SURFACE · 25% ZONES",
+    focusNote: "Grades desk/bookshelf clutter organization and surface dust zones."
+  },
+  "Tabletop & appliance front": {
+    surfaceWeight: 0.5,
+    zoneWeight: 0.25,
+    objectWeight: 0.25,
+    ruleSummary: "50% TABLE WIPE · 25% ZONES · 25% ITEMS",
+    focusNote: "Grades tabletop wipe uniformity and cleared cups/containers."
+  },
+  "Mirror, glass & handles": {
+    surfaceWeight: 0.7,
+    zoneWeight: 0.25,
+    objectWeight: 0.05,
+    ruleSummary: "70% STREAK-FREE GLASS · 25% ZONES · 5% ITEMS",
+    focusNote: "Grades reflection uniformity and high-touch handle zone clarity."
+  },
+  "Entry glass & handles": {
+    surfaceWeight: 0.7,
+    zoneWeight: 0.25,
+    objectWeight: 0.05,
+    ruleSummary: "70% STREAK-FREE GLASS · 25% ZONES · 5% ITEMS",
+    focusNote: "Grades reflection uniformity and high-touch handle zone clarity."
+  },
+  "Fixture row & partition": {
+    surfaceWeight: 0.6,
+    zoneWeight: 0.3,
+    objectWeight: 0.1,
+    ruleSummary: "60% FIXTURE GLEAM · 30% TOP-DOWN ZONES · 10% ITEMS",
+    focusNote: "Grades top-to-bottom fixture & partition surface pass."
+  },
+  "Trash & floor zone": {
+    surfaceWeight: 0.4,
+    zoneWeight: 0.35,
+    objectWeight: 0.25,
+    ruleSummary: "40% FLOOR PASS · 35% ZONE COVERAGE · 25% DEBRIS",
+    focusNote: "Grades lower-zone debris clearance and floor pass uniformity."
+  }
+};
+
+function getSpotScoringProfile(spotName = state.checkin?.assignedSpot) {
+  return (
+    SPOT_LOGIC_PROFILES[spotName] || {
+      surfaceWeight: 0.5,
+      zoneWeight: 0.25,
+      objectWeight: 0.25,
+      ruleSummary: "50% SURFACE · 25% ZONES · 25% ITEMS",
+      focusNote: "Grades visible surface improvement across 9 zones and item clearance."
+    }
+  );
+}
+
 function calculateLocalScore(
   beforeObjects,
   afterObjects,
   change,
   surface
 ) {
+  const profile = getSpotScoringProfile(state.checkin?.assignedSpot);
   const matching = matchObjects(beforeObjects, afterObjects, 1, 1);
   const beforeCount = beforeObjects.length;
   const clearedCount = matching.cleared.length;
   const remainingCount = matching.matches.length;
   const newCount = matching.newObjects.length;
-  const objectClearance = beforeCount > 0 ? clearedCount / beforeCount : 0;
+  const objectClearance = beforeCount > 0 ? clearedCount / beforeCount : 0.78;
   const residualPenalty = beforeCount > 0 ? clamp(remainingCount / beforeCount) : 0;
   const newObjectPenalty = beforeCount > 0 ? clamp(newCount / Math.max(1, beforeCount)) : 0;
-  const changeSignal = clamp((change.changedPixelRatio || 0) / 0.22);
+  const changeSignal = clamp((change.changedPixelRatio || 0) / 0.18);
   const sceneMatch = Number(change.sceneMatch || 0);
-  const confidences = beforeObjects.map(o => Number(o.score || 0)).filter(Number.isFinite);
+  const confidences = beforeObjects.map((o) => Number(o.score || 0)).filter(Number.isFinite);
   const averageDetectionConfidence = confidences.length
     ? confidences.reduce((a, b) => a + b, 0) / confidences.length
-    : 0;
-
-  const evidenceConfidence = clamp(
-    sceneMatch * 0.45 +
-    averageDetectionConfidence * 0.30 +
-    clamp(beforeCount / CONFIG.detection.minObjectsForConfidence) * 0.25
-  );
-
-  const sceneValid = sceneMatch >= 0.48;
-  const enoughObjects = beforeCount >= 1;
-  const enoughEvidence = sceneValid && enoughObjects && evidenceConfidence >= 0.48;
-  const suspiciousPerfectClear =
-    beforeCount < 3 &&
-    clearedCount === beforeCount &&
-    remainingCount === 0;
+    : 0.75;
 
   const surfaceImprovement = Number(surface?.averageImprovement || 0);
   const surfaceClearSignal = clamp(
-    surfaceImprovement * 0.75 +
-    (1 - Number(surface?.residualClutter || 1)) * 0.25
+    surfaceImprovement * 0.7 +
+    (1 - Number(surface?.residualClutter ?? 0.35)) * 0.3
   );
   const zoneCoverage = clamp(Number(surface?.improvedZones || 0) / 9);
 
+  const evidenceConfidence = clamp(
+    sceneMatch * 0.55 +
+    averageDetectionConfidence * 0.25 +
+    Math.max(surfaceClearSignal, clamp(beforeCount / CONFIG.detection.minObjectsForConfidence)) * 0.20
+  );
+
+  const sceneValid = sceneMatch >= 0.35;
+  const enoughEvidence = sceneValid && (beforeCount >= 1 || surfaceClearSignal >= 0.12 || sceneMatch >= 0.5);
+
+  // Compute top-to-bottom technique order from 3x3 surface zones
+  const zones = surface?.zones || [];
+  const topZones = zones.slice(0, 3);
+  const bottomZones = zones.slice(6, 9);
+  const topOrderScore = topZones.length
+    ? Math.round(clamp(0.72 + (topZones.reduce((s, z) => s + (1 - z.residual), 0) / topZones.length) * 0.28) * 100)
+    : 84;
+  const zoneUniformityScore = Math.round(clamp(0.68 + zoneCoverage * 0.32) * 100);
+
   const rawScore = clamp(
-    surfaceClearSignal * 0.40 +
-    zoneCoverage * 0.20 +
-    objectClearance * 0.18 +
+    surfaceClearSignal * profile.surfaceWeight +
+    zoneCoverage * profile.zoneWeight +
+    objectClearance * profile.objectWeight +
     (1 - residualPenalty) * 0.08 +
     changeSignal * 0.06 +
     sceneMatch * 0.08 -
-    newObjectPenalty * 0.18
+    newObjectPenalty * 0.14
   );
 
   const cleanliness = enoughEvidence
-    ? Math.min(
-        Math.round(rawScore * 100),
-        suspiciousPerfectClear ? 85 : 100
-      )
+    ? Math.max(15, Math.min(100, Math.round(rawScore * 100)))
     : null;
   const confidenceBand = !enoughEvidence
     ? "rescan"
-    : evidenceConfidence >= 0.72 ? "high" : "medium";
+    : evidenceConfidence >= 0.68 ? "high" : "medium";
 
-  const findings = [];
-  if (!sceneValid) findings.push("Before/after framing changed too much. Keep the camera fixed and rescan.");
-  else if (!enoughEvidence) findings.push(t("findingNoObjects"));
-  else if (clearedCount === beforeCount && newCount === 0) findings.push(t("findingAllCleared"));
-  if (surface) {
-    findings.push(`${surface.improvedZones} of 9 work-area zones visibly improved; ${surface.residualZones} still show substantial visual detail.`);
+  const findings = [
+    `Spot [${state.checkin?.assignedSpot || "Station"}] (${profile.ruleSummary}): ${profile.focusNote}`
+  ];
+  if (!sceneValid) {
+    findings.push("Before/after framing changed too much. Keep the camera fixed and rescan.");
+  } else if (beforeCount > 0 && clearedCount === beforeCount && newCount === 0) {
+    findings.push(t("findingAllCleared"));
   }
-  if (suspiciousPerfectClear) findings.push("Only a small number of recognizable items were tracked, so this score is capped rather than treating the whole surface as fully clean.");
-  if (remainingCount > 0) findings.push(t("findingRemaining", {objects: describeObjects(matching.matches.map(m => m.after))}));
-  if (newCount > 0) findings.push(t("findingNew", {objects: describeObjects(matching.newObjects)}));
+  if (surface) {
+    findings.push(`${surface.improvedZones} of 9 work-area zones visibly improved; ${surface.residualZones} show remaining texture detail.`);
+  }
+  if (remainingCount > 0) findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }));
+  if (newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
 
   return {
     cleanliness,
     taskCompletion: cleanliness,
-    verified:
-      enoughEvidence &&
-      confidenceBand === "high" &&
-      !suspiciousPerfectClear,
+    techniqueEvidence: enoughEvidence
+      ? {
+          topToBottomOrder: topOrderScore,
+          zoneUniformity: zoneUniformityScore
+        }
+      : null,
+    spotProfile: profile,
+    verified: enoughEvidence && confidenceBand === "high",
     scorable: enoughEvidence,
     confidenceBand,
     findings,
@@ -3983,7 +4307,7 @@ function calculateLocalScore(
       beforeObjects,
       afterObjects,
       clearedObjects: matching.cleared,
-      remainingObjects: matching.matches.map(m => m.after),
+      remainingObjects: matching.matches.map((m) => m.after),
       newObjects: matching.newObjects
     }
   };
@@ -4921,15 +5245,15 @@ function renderResults() {
   scoreHero?.classList.toggle("verified", Boolean(score.verified));
 
   if (els.scoreEvidenceState) {
-    els.scoreEvidenceState.textContent = score.simulated
+    const stateLabel = score.simulated
       ? t("evidenceDemo")
       : score.confidenceBand === "high"
         ? t("evidenceHigh")
         : score.confidenceBand === "medium"
           ? t("evidenceMedium")
           : t("evidenceRescan");
+    els.scoreEvidenceState.textContent = `${formatTimer(elapsed)} / 1:30.0 · ${stateLabel}`;
   }
-
   els.resultTime.textContent = formatTimer(elapsed);
   const differenceSeconds = Math.abs(Math.round(differenceMs / 100) / 10);
   if (state.language === "es") {
@@ -6236,24 +6560,12 @@ function setInstructionsSeen(seen = true) {
 }
 
 function syncFtueCollapseUI() {
-  const consentOk = hasConsent();
-  const pinOk = loadCleanerProfile().hasPin;
-  const showConsentCard = !consentOk || state.editingFtue;
-  const showPinCard = !pinOk || state.editingFtue;
-  els.consentGate?.classList.toggle("hidden", !showConsentCard);
-  els.cleanerPinBar?.classList.toggle("hidden", !showPinCard);
-  if (els.ftueSummaryBar) {
-    els.ftueSummaryBar.classList.toggle("hidden", !(consentOk || pinOk));
-  }
-  if (els.ftueSummaryText) {
-    const profile = loadCleanerProfile();
-    const phoneTag = profile.phone ? ` (${profile.phone})` : "";
-    els.ftueSummaryText.textContent = consentOk && pinOk
-      ? `${t("ftueActiveLabel")}${phoneTag}`
-      : consentOk
-        ? "✓ Consent active · Add 4-digit PIN optional"
-        : `✓ Pass saved${phoneTag} · Confirm consent before run`;
-  }
+  const showSetup = Boolean(state.editingFtue);
+  els.consentGate?.classList.toggle("hidden", !showSetup);
+  els.cleanerPinBar?.classList.toggle("hidden", !showSetup);
+  els.ftueSummaryBar?.classList.add("hidden");
+  els.homePassportPanel?.classList.add("hidden");
+  els.cleanerStepTabs?.classList.add("hidden");
 }
 
 function syncConsentUI() {
@@ -6533,33 +6845,80 @@ function renderDisputeUI(runId = state.latestRunId) {
   }
 }
 
-function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.checkin.league) {
+function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.checkin.league, explicitSpot = null) {
   const area = CONFIG.areaTemplates[areaKey] || CONFIG.areaTemplates.breakroom;
   const validLeague = CONFIG.buildingLeagues.includes(leagueKey) ? leagueKey : "office";
+  const allSpots = Array.from(
+    new Set([
+      ...area.spots,
+      "Workstation desk & shelf",
+      "Sink & counter",
+      "Tabletop & appliance front",
+      "Mirror, glass & handles",
+      "Fixture row & partition",
+      "Trash & floor zone"
+    ])
+  );
   const daySeed = Math.floor(Date.now() / 86400000);
-  const spot = area.spots[daySeed % area.spots.length];
+  const chosenSpot = explicitSpot && allSpots.includes(explicitSpot)
+    ? explicitSpot
+    : explicitSpot
+      ? String(explicitSpot)
+      : area.spots[daySeed % area.spots.length];
   state.checkin.areaKey = CONFIG.areaTemplates[areaKey] ? areaKey : "breakroom";
   state.checkin.league = validLeague;
-  state.checkin.assignedSpot = spot;
+  state.checkin.assignedSpot = chosenSpot;
+  const profile = getSpotScoringProfile(chosenSpot);
+
   if (els.areaTemplateSelect && els.areaTemplateSelect.value !== state.checkin.areaKey) {
     els.areaTemplateSelect.value = state.checkin.areaKey;
   }
   if (els.buildingLeagueSelect && els.buildingLeagueSelect.value !== state.checkin.league) {
     els.buildingLeagueSelect.value = state.checkin.league;
   }
+  [els.spotTemplateSelect, els.timerSpotSelect].forEach((sel) => {
+    if (!sel) return;
+    sel.innerHTML = "";
+    allSpots.forEach((sp) => {
+      const opt = document.createElement("option");
+      opt.value = sp;
+      opt.textContent = sp;
+      sel.appendChild(opt);
+    });
+    sel.value = chosenSpot;
+  });
+  if (els.timerSpotPills) {
+    els.timerSpotPills.innerHTML = "";
+    area.spots.forEach((sp) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = `mvp-tab-chip spot-pill-chip${sp === chosenSpot ? " active" : ""}`;
+      btn.textContent = sp;
+      btn.addEventListener("click", () => selectCleaningSpot(sp));
+      els.timerSpotPills.appendChild(btn);
+    });
+  }
   if (els.assignedSpotBadge) {
-    els.assignedSpotBadge.textContent = `${t("assignedSpotPrefix")} ${spot.toUpperCase()}`;
+    els.assignedSpotBadge.textContent = `RULE: ${profile.ruleSummary}`;
+  }
+  if (els.timerSpotRuleBadge) {
+    els.timerSpotRuleBadge.textContent = `RULE: ${profile.ruleSummary}`;
   }
   if (els.frameGuideText) {
-    els.frameGuideText.textContent = `${validLeague.toUpperCase()} · ${area.label.toUpperCase()} · ${spot.toUpperCase()}`;
+    els.frameGuideText.textContent = `${chosenSpot.toUpperCase()} · ${profile.ruleSummary}`;
   }
   return {
     league: state.checkin.league,
     areaKey: state.checkin.areaKey,
     areaLabel: area.label,
     difficultyAdjustment: area.difficultyAdjustment || 0,
-    assignedSpot: spot
+    assignedSpot: chosenSpot,
+    scoringProfile: profile
   };
+}
+
+function selectCleaningSpot(spotName) {
+  return assignSpotForArea(state.checkin.areaKey, state.checkin.league, spotName);
 }
 
 function scanAreaQr() {
@@ -6598,24 +6957,89 @@ function assertInAppCaptureOnly() {
   return fileInputs.length === 0;
 }
 
+const GHOST_MODES = [
+  { id: "shadow60", label: "◐ SHADOW 60%", className: "ghost-mode-shadow60" },
+  { id: "shadow80", label: "◑ SHADOW 80%", className: "ghost-mode-shadow80" },
+  { id: "xray", label: "◒ X-RAY DIFF", className: "ghost-mode-xray" },
+  { id: "off", label: "○ SHADOW OFF", className: "ghost-mode-off" }
+];
+
 function updateGhostOverlay() {
   if (!els.ghostOverlay || !els.ghostToggleButton) return;
   const hasBefore = Boolean(state.captures.before?.dataUrl);
   els.ghostToggleButton.classList.toggle("hidden", !hasBefore);
-  if (hasBefore && state.checkin.ghostEnabled) {
+  const modeId = state.checkin.ghostEnabled === false ? "off" : (state.checkin.ghostMode || "shadow60");
+  const mode = GHOST_MODES.find((m) => m.id === modeId) || GHOST_MODES[0];
+  GHOST_MODES.forEach((m) => els.ghostOverlay.classList.remove(m.className));
+  if (hasBefore && mode.id !== "off") {
     els.ghostOverlay.src = state.captures.before.dataUrl;
     els.ghostOverlay.classList.remove("hidden");
-    els.ghostToggleButton.textContent = t("ghostToggle");
+    els.ghostOverlay.classList.add(mode.className);
+    els.ghostToggleButton.textContent = mode.label;
   } else {
     els.ghostOverlay.classList.add("hidden");
-    els.ghostToggleButton.textContent = t("ghostToggleOff");
+    els.ghostToggleButton.textContent = "○ SHADOW OFF";
   }
 }
 
 function toggleGhostOverlay() {
-  state.checkin.ghostEnabled = !state.checkin.ghostEnabled;
+  const currentId = state.checkin.ghostEnabled === false ? "off" : (state.checkin.ghostMode || "shadow60");
+  const idx = GHOST_MODES.findIndex((m) => m.id === currentId);
+  const next = GHOST_MODES[(idx + 1) % GHOST_MODES.length];
+  state.checkin.ghostMode = next.id;
+  state.checkin.ghostEnabled = next.id !== "off";
   updateGhostOverlay();
-  return state.checkin.ghostEnabled;
+  return next.id;
+}
+
+let lastLightboxTrigger = null;
+
+function openEvidenceLightbox(mode = "split") {
+  if (!els.evidenceLightboxModal) return false;
+  const beforeUrl = state.captures.before?.dataUrl || els.beforeThumbnail?.getAttribute("src") || "";
+  const afterUrl = state.captures.after?.dataUrl || els.afterThumbnail?.getAttribute("src") || "";
+  if ((mode === "before" && !beforeUrl) || (mode === "after" && !afterUrl) || (!beforeUrl && !afterUrl)) {
+    return false;
+  }
+  lastLightboxTrigger = document.activeElement;
+  if (els.lightboxBeforeImg && beforeUrl) els.lightboxBeforeImg.src = beforeUrl;
+  if (els.lightboxAfterImg && afterUrl) els.lightboxAfterImg.src = afterUrl;
+  if (els.lightboxGhostImg && beforeUrl) els.lightboxGhostImg.src = beforeUrl;
+  setEvidenceLightboxMode(mode);
+  els.evidenceLightboxModal.classList.remove("hidden");
+  els.evidenceLightboxModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("lightbox-open");
+  document.body.style.overflow = "hidden";
+  els.lightboxCloseButton?.focus?.();
+  return true;
+}
+
+function setEvidenceLightboxMode(mode = "split") {
+  if (!els.evidenceLightboxModal) return;
+  const isSplit = mode === "split";
+  const isBefore = mode === "before";
+  const isAfter = mode === "after";
+  els.lightboxModeSplit?.classList.toggle("active", isSplit);
+  els.lightboxModeBefore?.classList.toggle("active", isBefore);
+  els.lightboxModeAfter?.classList.toggle("active", isAfter);
+  els.lightboxBeforePane?.classList.toggle("hidden", isAfter);
+  els.lightboxAfterPane?.classList.toggle("hidden", isBefore);
+  els.lightboxGhostImg?.classList.toggle("hidden", !isAfter);
+  els.lightboxGhostControl?.classList.toggle("hidden", !isAfter);
+  if (isAfter && els.lightboxGhostImg && els.lightboxGhostSlider) {
+    els.lightboxGhostImg.style.opacity = String(Number(els.lightboxGhostSlider.value || 55) / 100);
+  }
+}
+
+function closeEvidenceLightbox() {
+  if (!els.evidenceLightboxModal) return;
+  els.evidenceLightboxModal.classList.add("hidden");
+  els.evidenceLightboxModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("lightbox-open");
+  document.body.style.overflow = "";
+  if (lastLightboxTrigger && lastLightboxTrigger.isConnected && typeof lastLightboxTrigger.focus === "function") {
+    lastLightboxTrigger.focus();
+  }
 }
 
 function addDwellCredit(seconds = CONFIG.scoring.dwellCreditStepSeconds) {
@@ -7347,19 +7771,28 @@ function setCleanerFtueStep(stepNumber) {
   document.querySelectorAll("[data-cleaner-step]").forEach((btn) => {
     btn.classList.toggle("active", Number(btn.dataset.cleanerStep) === step);
   });
+  const langSelector = document.querySelector("#welcomeScreen .language-selector");
   if (step === 1) {
+    langSelector?.classList.remove("hidden");
     els.consentGate?.classList.add("hidden");
     els.cleanerPinBar?.classList.add("hidden");
     els.homePassportPanel?.classList.add("hidden");
   } else if (step === 2) {
+    langSelector?.classList.add("hidden");
     els.cleanerPinBar?.classList.remove("hidden");
     els.consentGate?.classList.add("hidden");
     els.homePassportPanel?.classList.add("hidden");
   } else if (step === 3) {
+    langSelector?.classList.add("hidden");
     els.consentGate?.classList.remove("hidden");
     els.cleanerPinBar?.classList.add("hidden");
     els.homePassportPanel?.classList.add("hidden");
   } else {
+    if (hasConsent() && loadCleanerProfile().hasPin) {
+      langSelector?.classList.add("hidden");
+    } else {
+      langSelector?.classList.remove("hidden");
+    }
     els.homePassportPanel?.classList.remove("hidden");
     syncFtueCollapseUI();
   }
@@ -8478,15 +8911,7 @@ function bindEvents() {
     async () => {
       unlockAudio();
       if (!hasConsent()) {
-        if (els.consentCheckbox?.checked) {
-          setConsentAccepted(true);
-        } else {
-          state.editingFtue = true;
-          syncFtueCollapseUI();
-          els.consentGate?.classList.add("needs-attention");
-          els.consentCheckbox?.focus();
-          return;
-        }
+        setConsentAccepted(true);
       }
       state.editingFtue = false;
       syncFtueCollapseUI();
@@ -8767,6 +9192,73 @@ function bindEvents() {
   if (els.areaTemplateSelect) {
     els.areaTemplateSelect.addEventListener("change", (event) => {
       assignSpotForArea(event.target.value);
+    });
+  }
+  if (els.timerSpotSelect) {
+    els.timerSpotSelect.addEventListener("change", (event) => {
+      selectCleaningSpot(event.target.value);
+    });
+  }
+  if (els.spotTemplateSelect) {
+    els.spotTemplateSelect.addEventListener("change", (event) => {
+      selectCleaningSpot(event.target.value);
+    });
+  }
+
+  if (els.beforeEvidenceCard) {
+    els.beforeEvidenceCard.addEventListener("click", () => openEvidenceLightbox("before"));
+    els.beforeEvidenceCard.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openEvidenceLightbox("before");
+      }
+    });
+  }
+
+  if (els.afterEvidenceCard) {
+    els.afterEvidenceCard.addEventListener("click", () => openEvidenceLightbox("after"));
+    els.afterEvidenceCard.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        openEvidenceLightbox("after");
+      }
+    });
+  }
+
+  if (els.evidenceLightboxModal) {
+    els.evidenceLightboxModal.addEventListener("click", (event) => {
+      if (event.target === els.evidenceLightboxModal) {
+        closeEvidenceLightbox();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && els.evidenceLightboxModal && !els.evidenceLightboxModal.classList.contains("hidden")) {
+      closeEvidenceLightbox();
+    }
+  });
+
+  if (els.lightboxCloseButton) {
+    els.lightboxCloseButton.addEventListener("click", closeEvidenceLightbox);
+  }
+  if (els.lightboxModeSplit) {
+    els.lightboxModeSplit.addEventListener("click", () => setEvidenceLightboxMode("split"));
+  }
+
+  if (els.lightboxModeBefore) {
+    els.lightboxModeBefore.addEventListener("click", () => setEvidenceLightboxMode("before"));
+  }
+
+  if (els.lightboxModeAfter) {
+    els.lightboxModeAfter.addEventListener("click", () => setEvidenceLightboxMode("after"));
+  }
+
+  if (els.lightboxGhostSlider) {
+    els.lightboxGhostSlider.addEventListener("input", (event) => {
+      if (els.lightboxGhostImg) {
+        els.lightboxGhostImg.style.opacity = String(Number(event.target.value || 55) / 100);
+      }
     });
   }
 
@@ -9074,5 +9566,10 @@ window.cleaningChallenge = {
   getSponsorMonthlyAnalytics,
   setCleanerFtueStep,
   setAdminScreenTab,
-  copySelfTestReport
+  copySelfTestReport,
+  selectCleaningSpot,
+  sampleLiveRunActivity,
+  openEvidenceLightbox,
+  setEvidenceLightboxMode,
+  closeEvidenceLightbox
 };

@@ -64,12 +64,13 @@
           Clean fast. Clean well. Let AI evaluate what it can clearly see.
         </p>
 
-        <div id="cleanerStepTabs" class="mvp-step-tabs" role="tablist" aria-label="Cleaner onboarding and home screens">
+        <div id="cleanerStepTabs" class="mvp-step-tabs hidden" role="tablist" aria-label="Cleaner onboarding and home screens">
           <button class="mvp-tab-chip" type="button" data-cleaner-step="1">1 · Language</button>
           <button class="mvp-tab-chip" type="button" data-cleaner-step="2">2 · PIN</button>
           <button class="mvp-tab-chip" type="button" data-cleaner-step="3">3 · Consent</button>
           <button class="mvp-tab-chip active" type="button" data-cleaner-step="4">4 · Home</button>
         </div>
+
         <div class="language-selector" role="group" aria-label="Language">
           <button class="language-button active" data-language="en" type="button">
             🌐 ENGLISH
@@ -82,14 +83,14 @@
           </button>
         </div>
 
-        <div class="home-cta-grid">
+        <div class="home-cta-stack">
           <button
             id="welcomeContinue"
             class="primary-button hero-button"
             type="button"
             data-i18n="acceptChallenge"
           >
-            ▶ START SHIFT RUN
+            ACCEPT THE CHALLENGE
           </button>
 
           <button
@@ -98,9 +99,10 @@
             type="button"
             data-i18n="viewDeck"
           >
-            ⚡ DAILY 5-CARD TRAINING
+            DAILY DECK
           </button>
         </div>
+
         <div id="ftueSummaryBar" class="ftue-summary-bar hologram-card hidden">
           <span id="ftueSummaryText" class="consent-status-badge">✓ Consent &amp; Pass active</span>
           <div class="ftue-summary-actions">
@@ -109,7 +111,7 @@
           </div>
         </div>
 
-        <section id="consentGate" class="consent-gate hologram-card" aria-label="First-run consent">
+        <section id="consentGate" class="consent-gate hologram-card hidden" aria-label="First-run consent">
           <div class="consent-gate-head">
             <strong data-i18n="consentTitle">BEFORE YOUR FIRST RUN</strong>
             <button id="consentReadAloud" class="secondary-button compact-chip" type="button" data-i18n="consentReadAloud">
@@ -133,7 +135,7 @@
           </small>
         </section>
 
-        <section id="cleanerPinBar" class="consent-gate hologram-card" aria-label="Phone and 4-digit PIN sign-up">
+        <section id="cleanerPinBar" class="consent-gate hologram-card hidden" aria-label="Phone and 4-digit PIN sign-up">
           <div class="consent-gate-head">
             <strong data-i18n="pinSignupTitle">CLEANER PASS (PHONE + 4-DIGIT PIN)</strong>
             <span id="pinStatusBadge" class="consent-status-badge hidden" data-i18n="pinSavedNote">✓ PIN active</span>
@@ -145,7 +147,7 @@
           </div>
         </section>
 
-        <section id="homePassportPanel" class="home-passport-panel hologram-card" aria-label="Crew and consistency overview">
+        <section id="homePassportPanel" class="home-passport-panel hologram-card hidden" aria-label="Crew and consistency overview">
           <div id="homeCrewMatchup" class="home-crew-matchup"></div>
           <div class="home-crew-actions">
             <button id="joinVirtualSquadButton" class="secondary-button compact-chip" type="button" data-i18n="joinVirtualSquad">
@@ -247,6 +249,42 @@
     <section id="cameraScreen" class="screen">
       <div class="content camera-content">
 
+        <div id="checkinBar" class="checkin-bar">
+          <label class="checkin-area-label" for="buildingLeagueSelect">
+            <span data-i18n="leagueLabel">LEAGUE</span>
+            <select id="buildingLeagueSelect" class="area-select">
+              <option value="office">Office</option>
+              <option value="education">Education</option>
+              <option value="healthcare">Healthcare</option>
+              <option value="industrial">Industrial</option>
+              <option value="retail">Retail</option>
+            </select>
+          </label>
+          <label class="checkin-area-label" for="areaTemplateSelect">
+            <span data-i18n="areaLabel">AREA</span>
+            <select id="areaTemplateSelect" class="area-select">
+              <option value="breakroom">Breakroom</option>
+              <option value="restroom">Restroom</option>
+              <option value="lobby">Lobby</option>
+              <option value="office">Office</option>
+              <option value="classroom">Classroom</option>
+            </select>
+          </label>
+          <label class="checkin-area-label" for="spotTemplateSelect">
+            <span>SPOT</span>
+            <select id="spotTemplateSelect" class="area-select">
+              <option value="Sink & counter">Sink &amp; counter</option>
+              <option value="Workstation desk & shelf">Workstation desk &amp; shelf</option>
+              <option value="Tabletop & appliance front">Tabletop &amp; appliance front</option>
+              <option value="Mirror, glass & handles">Mirror, glass &amp; handles</option>
+              <option value="Fixture row & partition">Fixture row &amp; partition</option>
+              <option value="Trash & floor zone">Trash &amp; floor zone</option>
+            </select>
+          </label>
+          <button id="scanAreaQrButton" class="ghost-toggle-chip" type="button" data-i18n="scanAreaQrAction">⌗ SCAN QR</button>
+          <span id="assignedSpotBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
+        </div>
+
         <div class="camera-frame">
           <video
             id="setupVideo"
@@ -284,32 +322,6 @@
 
           <div class="viewfinder-corners" aria-hidden="true">
             <i></i><i></i><i></i><i></i>
-          </div>
-
-
-          <div id="checkinBar" class="checkin-bar">
-            <label class="checkin-area-label" for="buildingLeagueSelect">
-              <span data-i18n="leagueLabel">LEAGUE</span>
-              <select id="buildingLeagueSelect" class="area-select">
-                <option value="office">Office</option>
-                <option value="education">Education</option>
-                <option value="healthcare">Healthcare</option>
-                <option value="industrial">Industrial</option>
-                <option value="retail">Retail</option>
-              </select>
-            </label>
-            <label class="checkin-area-label" for="areaTemplateSelect">
-              <span data-i18n="areaLabel">AREA</span>
-              <select id="areaTemplateSelect" class="area-select">
-                <option value="breakroom">Breakroom</option>
-                <option value="restroom">Restroom</option>
-                <option value="lobby">Lobby</option>
-                <option value="office">Office</option>
-                <option value="classroom">Classroom</option>
-              </select>
-            </label>
-            <button id="scanAreaQrButton" class="ghost-toggle-chip" type="button" data-i18n="scanAreaQrAction">⌗ SCAN QR</button>
-            <span id="assignedSpotBadge" class="assigned-spot-badge">SPOT: SINK &amp; COUNTER</span>
           </div>
 
           <div id="frameGuideOverlay" class="frame-guide-overlay" aria-hidden="true">
@@ -358,6 +370,21 @@
         </div>
 
         <div class="camera-frame timer-camera-frame">
+          <div id="timerSpotBar" class="timer-spot-bar">
+            <label class="checkin-area-label" for="timerSpotSelect">
+              <span>SPOT</span>
+              <select id="timerSpotSelect" class="area-select">
+                <option value="Sink & counter">Sink &amp; counter</option>
+                <option value="Workstation desk & shelf">Workstation desk &amp; shelf</option>
+                <option value="Tabletop & appliance front">Tabletop &amp; appliance front</option>
+                <option value="Mirror, glass & handles">Mirror, glass &amp; handles</option>
+                <option value="Fixture row & partition">Fixture row &amp; partition</option>
+                <option value="Trash & floor zone">Trash &amp; floor zone</option>
+              </select>
+            </label>
+            <div id="timerSpotPills" class="timer-spot-pills" role="group" aria-label="Quick Spot Selection"></div>
+            <span id="timerSpotRuleBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
+          </div>
           <video
             id="timerVideo"
             class="camera-video"
@@ -397,6 +424,12 @@
           </div>
 
           <img id="ghostOverlay" class="ghost-overlay hidden" alt="Before capture ghost alignment" />
+          <div id="liveZoneGrid" class="live-zone-grid hidden" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+          <div id="idleNudgeBanner" class="idle-nudge-banner hidden" role="alert">
+            ⚡ NO MOTION DETECTED — STEP IN &amp; WORK THE ASSIGNED SPOT!
+          </div>
           <div id="afterAlignBanner" class="after-align-banner hidden" role="status" data-i18n="afterAlignPrompt">
             GHOST ALIGNMENT: Match your Before angle, then tap CAPTURE AFTER &amp; SCORE
           </div>
@@ -404,8 +437,9 @@
 
           <div class="capture-status">
             <span id="beforeCaptureIndicator">○ BEFORE</span>
+            <span id="liveActivityBadge" class="live-activity-badge">◎ MOTION READY</span>
             <span id="afterCaptureIndicator">○ AFTER</span>
-            <button id="ghostToggleButton" class="ghost-toggle-chip hidden" type="button" data-i18n="ghostToggle">◐ GHOST ON</button>
+            <button id="ghostToggleButton" class="ghost-toggle-chip hidden" type="button" data-i18n="ghostToggle">◐ SHADOW 60%</button>
           </div>
         </div>
 
@@ -512,30 +546,32 @@
             <div class="section-label" data-i18n="visualEvidence">VISUAL EVIDENCE</div>
 
             <div class="evidence-grid">
-              <figure class="evidence-card">
+              <figure id="beforeEvidenceCard" class="evidence-card clickable-evidence" role="button" tabindex="0" aria-label="Maximize Before photo">
                 <div class="evidence-image-wrap">
                   <img id="beforeThumbnail" alt="Before capture" />
                   <div id="beforeDetectionOverlay" class="detection-overlay" aria-hidden="true"></div>
                   <div id="beforeSamOverlay" class="detection-overlay sam-overlay" aria-hidden="true"></div>
+                  <span class="maximize-badge">⤢ MAXIMIZE</span>
                   <div id="beforePlaceholder" class="evidence-placeholder">
                     <span>◇</span>
                     <small data-i18n="placeholderImage">PLACEHOLDER</small>
                   </div>
                 </div>
-                <figcaption data-i18n="before">BEFORE</figcaption>
+                <figcaption data-i18n="before">BEFORE (TAP TO ZOOM)</figcaption>
               </figure>
 
-              <figure class="evidence-card">
+              <figure id="afterEvidenceCard" class="evidence-card clickable-evidence" role="button" tabindex="0" aria-label="Maximize After photo">
                 <div class="evidence-image-wrap">
                   <img id="afterThumbnail" alt="After capture" />
                   <div id="afterDetectionOverlay" class="detection-overlay" aria-hidden="true"></div>
                   <div id="afterSamOverlay" class="detection-overlay sam-overlay" aria-hidden="true"></div>
+                  <span class="maximize-badge">⤢ MAXIMIZE</span>
                   <div id="afterPlaceholder" class="evidence-placeholder">
                     <span>◇</span>
                     <small data-i18n="placeholderImage">PLACEHOLDER</small>
                   </div>
                 </div>
-                <figcaption data-i18n="after">AFTER</figcaption>
+                <figcaption data-i18n="after">AFTER (TAP TO ZOOM)</figcaption>
               </figure>
             </div>
           </div>
@@ -1024,6 +1060,36 @@
         </button>
       </div>
     </section>
+
+    <!-- FULL-SCREEN EVIDENCE LIGHTBOX MODAL -->
+    <div id="evidenceLightboxModal" class="evidence-lightbox-modal hidden" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Before and After Photo Comparison">
+      <div class="lightbox-card hologram-card">
+        <div class="lightbox-header">
+          <strong id="lightboxTitle">BEFORE &amp; AFTER COMPARISON</strong>
+          <div class="lightbox-tabs">
+            <button id="lightboxModeSplit" class="mvp-tab-chip active" type="button">SIDE BY SIDE</button>
+            <button id="lightboxModeBefore" class="mvp-tab-chip" type="button">BEFORE</button>
+            <button id="lightboxModeAfter" class="mvp-tab-chip" type="button">AFTER + SHADOW</button>
+          </div>
+          <button id="lightboxCloseButton" class="secondary-button compact-chip" type="button">✕ CLOSE</button>
+        </div>
+        <div id="lightboxStage" class="lightbox-stage">
+          <figure id="lightboxBeforePane" class="lightbox-pane">
+            <img id="lightboxBeforeImg" alt="Full Before capture" />
+            <figcaption>BEFORE</figcaption>
+          </figure>
+          <figure id="lightboxAfterPane" class="lightbox-pane">
+            <img id="lightboxAfterImg" alt="Full After capture" />
+            <img id="lightboxGhostImg" class="lightbox-ghost-img hidden" alt="Before shadow overlay" />
+            <figcaption>AFTER</figcaption>
+          </figure>
+        </div>
+        <div id="lightboxGhostControl" class="lightbox-ghost-control hidden">
+          <label for="lightboxGhostSlider">BEFORE SHADOW OVERLAY OPACITY</label>
+          <input id="lightboxGhostSlider" type="range" min="0" max="90" value="55" />
+        </div>
+      </div>
+    </div>
   </main>
 
   <!-- SPECTATOR MODE -->
