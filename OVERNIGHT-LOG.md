@@ -220,3 +220,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: PIN signup now states plainly (EN/ES/PL) that the phone + PIN are a local convenience lock stored on-device only and never sent anywhere.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails. Orca app-tab eval still runtime_timeout (bg_50); CDP remains the verification path tonight.
 - Blockers: Orca app-page eval wedged (Meta usage tab eval works; app tab close/create/status work).
+
+## LOOP 16 — Tabpanel semantics — DONE
+- Implemented: admin panes 11–15 and lightbox before/after panes now carry role=tabpanel with aria-hidden synced to visibility on every switch.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

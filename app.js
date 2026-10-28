@@ -7669,6 +7669,10 @@ function setEvidenceLightboxMode(mode = "split") {
   els.lightboxModeAfter?.setAttribute("aria-pressed", String(isAfter));
   els.lightboxBeforePane?.classList.toggle("hidden", isAfter || !beforeUrl);
   els.lightboxAfterPane?.classList.toggle("hidden", isBefore || !afterUrl);
+  els.lightboxBeforePane?.setAttribute("role", "tabpanel");
+  els.lightboxAfterPane?.setAttribute("role", "tabpanel");
+  els.lightboxBeforePane?.setAttribute("aria-hidden", String(isAfter || !beforeUrl));
+  els.lightboxAfterPane?.setAttribute("aria-hidden", String(isBefore || !afterUrl));
   els.lightboxGhostImg?.classList.toggle("hidden", !isAfter || !beforeUrl);
   els.lightboxGhostControl?.classList.toggle("hidden", !isAfter || !beforeUrl);
   document.getElementById("lightboxStage")?.classList.toggle("single-pane-mode", !isSplit);
@@ -8531,6 +8535,10 @@ function setAdminScreenTab(tabNumber = 11) {
   });
   [11, 12, 13, 14, 15].forEach((n) => {
     const pane = document.getElementById(`adminPane${n}`);
+    if (pane) {
+      pane.setAttribute("role", "tabpanel");
+      pane.setAttribute("aria-hidden", String(n !== tab));
+    }
     pane?.classList.toggle("hidden", n !== tab);
   });
   renderAdminDashboard();
