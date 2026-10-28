@@ -369,22 +369,23 @@
           </div>
         </div>
 
+        <div id="timerSpotBar" class="timer-spot-bar">
+          <label class="checkin-area-label" for="timerSpotSelect">
+            <span>SPOT</span>
+            <select id="timerSpotSelect" class="area-select">
+              <option value="Sink & counter">Sink &amp; counter</option>
+              <option value="Workstation desk & shelf">Workstation desk &amp; shelf</option>
+              <option value="Tabletop & appliance front">Tabletop &amp; appliance front</option>
+              <option value="Mirror, glass & handles">Mirror, glass &amp; handles</option>
+              <option value="Fixture row & partition">Fixture row &amp; partition</option>
+              <option value="Trash & floor zone">Trash &amp; floor zone</option>
+            </select>
+          </label>
+          <div id="timerSpotPills" class="timer-spot-pills" role="group" aria-label="Quick Spot Selection"></div>
+          <span id="timerSpotRuleBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
+        </div>
+
         <div class="camera-frame timer-camera-frame">
-          <div id="timerSpotBar" class="timer-spot-bar">
-            <label class="checkin-area-label" for="timerSpotSelect">
-              <span>SPOT</span>
-              <select id="timerSpotSelect" class="area-select">
-                <option value="Sink & counter">Sink &amp; counter</option>
-                <option value="Workstation desk & shelf">Workstation desk &amp; shelf</option>
-                <option value="Tabletop & appliance front">Tabletop &amp; appliance front</option>
-                <option value="Mirror, glass & handles">Mirror, glass &amp; handles</option>
-                <option value="Fixture row & partition">Fixture row &amp; partition</option>
-                <option value="Trash & floor zone">Trash &amp; floor zone</option>
-              </select>
-            </label>
-            <div id="timerSpotPills" class="timer-spot-pills" role="group" aria-label="Quick Spot Selection"></div>
-            <span id="timerSpotRuleBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
-          </div>
           <video
             id="timerVideo"
             class="camera-video"

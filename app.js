@@ -7002,10 +7002,35 @@ function openEvidenceLightbox(mode = "split") {
     return false;
   }
   lastLightboxTrigger = document.activeElement;
-  if (els.lightboxBeforeImg && beforeUrl) els.lightboxBeforeImg.src = beforeUrl;
-  if (els.lightboxAfterImg && afterUrl) els.lightboxAfterImg.src = afterUrl;
-  if (els.lightboxGhostImg && beforeUrl) els.lightboxGhostImg.src = beforeUrl;
-  setEvidenceLightboxMode(mode);
+  if (els.lightboxBeforeImg) {
+    if (beforeUrl) els.lightboxBeforeImg.src = beforeUrl;
+    else els.lightboxBeforeImg.removeAttribute("src");
+  }
+  if (els.lightboxAfterImg) {
+    if (afterUrl) els.lightboxAfterImg.src = afterUrl;
+    else els.lightboxAfterImg.removeAttribute("src");
+  }
+  if (els.lightboxGhostImg) {
+    if (beforeUrl) els.lightboxGhostImg.src = beforeUrl;
+    else els.lightboxGhostImg.removeAttribute("src");
+  }
+  if (els.lightboxModeBefore) {
+    els.lightboxModeBefore.disabled = !beforeUrl;
+    els.lightboxModeBefore.setAttribute("aria-disabled", String(!beforeUrl));
+  }
+  if (els.lightboxModeAfter) {
+    els.lightboxModeAfter.disabled = !afterUrl;
+    els.lightboxModeAfter.setAttribute("aria-disabled", String(!afterUrl));
+  }
+  if (els.lightboxModeSplit) {
+    const canSplit = Boolean(beforeUrl && afterUrl);
+    els.lightboxModeSplit.disabled = !canSplit;
+    els.lightboxModeSplit.setAttribute("aria-disabled", String(!canSplit));
+  }
+  const initialMode = mode === "split" && !(beforeUrl && afterUrl)
+    ? (beforeUrl ? "before" : "after")
+    : mode;
+  setEvidenceLightboxMode(initialMode);
   els.evidenceLightboxModal.classList.remove("hidden");
   els.evidenceLightboxModal.setAttribute("aria-hidden", "false");
   document.body.classList.add("lightbox-open");
@@ -7015,20 +7040,29 @@ function openEvidenceLightbox(mode = "split") {
 }
 
 function setEvidenceLightboxMode(mode = "split") {
-  if (!els.evidenceLightboxModal) return;
-  const isSplit = mode === "split";
-  const isBefore = mode === "before";
-  const isAfter = mode === "after";
+  if (!els.evidenceLightboxModal) return false;
+  const beforeUrl = state.captures.before?.dataUrl || els.beforeThumbnail?.getAttribute("src") || "";
+  const afterUrl = state.captures.after?.dataUrl || els.afterThumbnail?.getAttribute("src") || "";
+  if (!beforeUrl && !afterUrl) return false;
+  let effectiveMode = mode;
+  if (effectiveMode === "before" && !beforeUrl) effectiveMode = afterUrl ? "after" : "split";
+  if (effectiveMode === "after" && !afterUrl) effectiveMode = beforeUrl ? "before" : "split";
+  if (effectiveMode === "split" && !(beforeUrl && afterUrl)) effectiveMode = beforeUrl ? "before" : "after";
+  const isSplit = effectiveMode === "split";
+  const isBefore = effectiveMode === "before";
+  const isAfter = effectiveMode === "after";
   els.lightboxModeSplit?.classList.toggle("active", isSplit);
   els.lightboxModeBefore?.classList.toggle("active", isBefore);
   els.lightboxModeAfter?.classList.toggle("active", isAfter);
-  els.lightboxBeforePane?.classList.toggle("hidden", isAfter);
-  els.lightboxAfterPane?.classList.toggle("hidden", isBefore);
-  els.lightboxGhostImg?.classList.toggle("hidden", !isAfter);
-  els.lightboxGhostControl?.classList.toggle("hidden", !isAfter);
+  els.lightboxBeforePane?.classList.toggle("hidden", isAfter || !beforeUrl);
+  els.lightboxAfterPane?.classList.toggle("hidden", isBefore || !afterUrl);
+  els.lightboxGhostImg?.classList.toggle("hidden", !isAfter || !beforeUrl);
+  els.lightboxGhostControl?.classList.toggle("hidden", !isAfter || !beforeUrl);
+  document.getElementById("lightboxStage")?.classList.toggle("single-pane-mode", !isSplit);
   if (isAfter && els.lightboxGhostImg && els.lightboxGhostSlider) {
     els.lightboxGhostImg.style.opacity = String(Number(els.lightboxGhostSlider.value || 55) / 100);
   }
+  return true;
 }
 
 function closeEvidenceLightbox() {
