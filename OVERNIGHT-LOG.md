@@ -294,3 +294,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: .score-bar-detail now displays (11px) on larger screens so every bar explains itself; still hidden ≤640px to protect the phone fold. Usage checkpoint: current window still reads 0% / weekly 38% (page lags up to an hour). Orca app-tab eval still runtime_timeout (bg_51) — CDP remains authoritative.
 - Evidence: CDP 6/6; personas 0 fails.
 - Blockers: Orca app-page eval wedged.
+
+## LOOP 31 — Result findings translated + repo hygiene verified — DONE
+- Implemented: findingFraming, findingZones, findingDemoStation keys in EN/ES/PL wired into local-score and demo-score findings (remaining strings already used t()).
+- Hygiene verified: README "powered by Muse at scale" exactly once; zero .onnx/.wav/node_modules tracked; 230 EN clips tracked.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
