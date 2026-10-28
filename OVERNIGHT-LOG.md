@@ -394,3 +394,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: docs/HANDOFF.md updated — 15-screen map (was 9), 30 trilingual deck cards (was 22), 231-entry manifest (was 154), persona count 12 + hermetic contract, new code anchors (QR, crew pipeline, weighted score, segue/broadcast chain), verification commands (syntax/VM/CDP/lint), and Current task now points at the Ralph loop + parked human-gated items.
 - Evidence: CDP 6/6 confirmed before commit; docs-only change plus this log.
 - Blockers: none.
+
+## LOOP 51 — Product plan status banner — DONE
+- Implemented: docs/PRODUCT-PLAN.md now opens with a shipped-status banner pointing at the living ledger, loop contract, and parked-items list (docs-only).
+- Evidence: docs change only; CDP 6/6 confirmed in LOOP 50.
+- Blockers: none.
