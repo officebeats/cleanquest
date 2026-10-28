@@ -328,6 +328,8 @@ const translations = {
     consistencyProgress: "Week {week} of {window} · {status}",
     personalRecordSummary: "Personal Best: {best}% · Runs: {runs} · Streak: {streak}d · Week {week}/13",
     consistencyOnTrack: "On track",
+    gapSummary: "Where: {where} · How: {how} · When: {when} · Who: {who} · Knowledge gaps: surface={surface}, technique={technique}, product={product} · Recommended pack: {pack} (one tap to assign below)",
+    analyticsSummary: "Monthly Sponsor Analytics (Anonymized): {cleaners} active cleaners · {runs} runs · {impressions} impressions · {accuracy}% category accuracy",
     consistencyBuilding: "Building record",
     consistencyDisclaimer: "Benchmark consistency — never a certification",
     joinVirtualSquad: "SOLO? JOIN VIRTUAL SQUAD",
@@ -607,6 +609,8 @@ const translations = {
     consistencyProgress: "Semana {week} de {window} · {status}",
     personalRecordSummary: "Mejor marca: {best}% · Rondas: {runs} · Racha: {streak}d · Semana {week}/13",
     consistencyOnTrack: "En camino",
+    gapSummary: "Dónde: {where} · Cómo: {how} · Cuándo: {when} · Quién: {who} · Brechas: superficie={surface}, técnica={technique}, producto={product} · Paquete recomendado: {pack} (un toque para asignar abajo)",
+    analyticsSummary: "Analítica mensual de patrocinador (anonimizada): {cleaners} limpiadores activos · {runs} rondas · {impressions} impresiones · {accuracy}% de precisión por categoría",
     consistencyBuilding: "Construyendo historial",
     consistencyDisclaimer: "Consistencia de referencia — nunca una certificación",
     joinVirtualSquad: "¿SOLO? UNIRSE A ESCUADRÓN VIRTUAL",
@@ -886,6 +890,8 @@ const translations = {
     consistencyProgress: "Tydzień {week} z {window} · {status}",
     personalRecordSummary: "Rekord osobisty: {best}% · Biegi: {runs} · Seria: {streak} d · Tydzień {week}/13",
     consistencyOnTrack: "Na dobrej drodze",
+    gapSummary: "Gdzie: {where} · Jak: {how} · Kiedy: {when} · Kto: {who} · Luki wiedzy: powierzchnia={surface}, technika={technique}, produkt={product} · Polecany pakiet: {pack} (jedno dotknięcie poniżej)",
+    analyticsSummary: "Miesięczna analityka sponsora (anonimowa): {cleaners} aktywnych sprzątaczy · {runs} biegów · {impressions} wyświetleń · {accuracy}% trafności kategorii",
     consistencyBuilding: "Budowanie historii",
     consistencyDisclaimer: "Regularność względem wzorca — nigdy certyfikacja",
     joinVirtualSquad: "SOLO? DOŁĄCZ DO WIRTUALNEJ EKIPY",
@@ -8748,13 +8754,13 @@ function renderAdminDashboard() {
     els.adminCrewList.textContent = `${t("approvedLabel", { n: adminStore.approvedMembers.length })} ${adminStore.approvedMembers.join(", ")}${crewNote}`;
   }
   if (els.adminGapSummary) {
-    els.adminGapSummary.textContent = `Where: ${gaps.where} · How: ${gaps.how} · When: ${gaps.when} · Who: ${gaps.who} · Knowledge gaps: surface=${gaps.categoryMissCounts.surface}, technique=${gaps.categoryMissCounts.technique}, product=${gaps.categoryMissCounts.product} · Recommended pack: ${gaps.recommendedPack} (one tap to assign below)`;
+    els.adminGapSummary.textContent = t("gapSummary", { where: gaps.where, how: gaps.how, when: gaps.when, who: gaps.who, surface: gaps.categoryMissCounts.surface, technique: gaps.categoryMissCounts.technique, product: gaps.categoryMissCounts.product, pack: gaps.recommendedPack });
   }
   if (els.assignTrainingPackSelect && gaps.recommendedPack) {
     els.assignTrainingPackSelect.value = gaps.recommendedPack;
   }
   if (els.sponsorAnalyticsSummary) {
-    els.sponsorAnalyticsSummary.textContent = `Monthly Sponsor Analytics (Anonymized): ${analytics.activeCleaners} active cleaners · ${analytics.runsCompleted} runs · ${analytics.sponsorImpressions} impressions · ${analytics.categoryAccuracyPercent}% category accuracy`;
+    els.sponsorAnalyticsSummary.textContent = t("analyticsSummary", { cleaners: analytics.activeCleaners, runs: analytics.runsCompleted, impressions: analytics.sponsorImpressions, accuracy: analytics.categoryAccuracyPercent });
   }
 }
 

@@ -325,3 +325,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: assigned-packs and approved-members prefixes on the supervisor dashboard now render via i18n keys in EN/ES/PL.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 37 — Gap + analytics summary templates translated — DONE
+- Implemented: supervisor gap summary (Where/How/When/Who/knowledge/recommended) and anonymized analytics summary now render via templated i18n keys in EN/ES/PL.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
