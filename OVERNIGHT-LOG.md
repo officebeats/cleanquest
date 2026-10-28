@@ -455,3 +455,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 63 — i18n attr drop audit — DONE
 - Evidence: grep audit of index.html confirms every tonight-era data-i18n/data-i18n-placeholder/data-i18n-aria attribute is present (step/admin/lightbox/QR/SPOT/nudge/pack/register/invite/aria/pin keys all ≥1; spotLabel ×2 for camera+timer). The LOOP 32 drop found in LOOP 62 was the only loss.
 - Blockers: none.
+
+## LOOP 64 — Translation key-parity audit — DONE
+- Evidence: scripted audit of app.js translations: 315 keys in EN, 315 in ES, 315 in PL, zero keys missing in any direction after tonight's ~60 added keys.
+- Blockers: none.
