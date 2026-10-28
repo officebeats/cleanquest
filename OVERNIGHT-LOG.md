@@ -508,3 +508,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: glue-01/glue-02 (punto/puntos, punkt/punkty) rendered + wired for ES/PL, completing the speakScoreNumber clip vocabulary in all three languages (695 manifest clips available, 0 missing).
 - Evidence: parity 695/0; node --check PASS; CDP personas 0 fails.
 - Blockers: none.
+
+## LOOP 77 — Pages verification, completed vocabulary — DONE
+- Evidence: Pages serves es/glue-01 and pl/glue-02 (200) — the full EN/ES/PL clip vocabulary (695 clips) is live.
+- Blockers: none.
