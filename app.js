@@ -276,6 +276,9 @@ const translations = {
     hostVoiceTitle: "HOST VOICE",
     viewDeck: "DAILY DECK",
     deckTitle: "DAILY DECK",
+    deckCatSurface: "SURFACE",
+    deckCatProduct: "PRODUCT",
+    deckCatTechnique: "TECHNIQUE",
     deckRight: "SWIPE RIGHT (RIGHT CALL) ⟶",
     deckMiss: "⟵ SWIPE LEFT (MISS)",
     deckCorrect: "Correct call.",
@@ -535,6 +538,9 @@ const translations = {
     hostVoiceTitle: "VOZ DEL ANFITRIÓN",
     viewDeck: "MAZO DIARIO",
     deckTitle: "MAZO DIARIO",
+    deckCatSurface: "SUPERFICIE",
+    deckCatProduct: "PRODUCTO",
+    deckCatTechnique: "TÉCNICA",
     deckRight: "DESLIZA DERECHA (ACIERTA) ⟶",
     deckMiss: "⟵ DESLIZA IZQUIERDA (FALLO)",
     deckCorrect: "Buena decisión.",
@@ -794,6 +800,9 @@ const translations = {
     hostVoiceTitle: "GŁOS PROWADZĄCEGO",
     viewDeck: "DZIENNA TALIA",
     deckTitle: "DZIENNA TALIA",
+    deckCatSurface: "POWIERZCHNIA",
+    deckCatProduct: "PRODUKT",
+    deckCatTechnique: "TECHNIKA",
     deckRight: "PRZESUŃ W PRAWO (DOBRZE) ⟶",
     deckMiss: "⟵ PRZESUŃ W LEWO (BŁĄD)",
     deckCorrect: "Dobra decyzja.",
@@ -6464,7 +6473,7 @@ function renderDeck() {
   const card = deck.order[deck.index];
   const catRaw = String(card.category || "").toLowerCase();
   const catIcon = catRaw === "surface" ? "🧽 " : catRaw === "product" ? "🧪 " : "⚡ ";
-  if (els.deckCategory) els.deckCategory.textContent = `${catIcon}${catRaw.toUpperCase()}`;
+  if (els.deckCategory) els.deckCategory.textContent = `${catIcon}${t(catRaw === "surface" ? "deckCatSurface" : catRaw === "product" ? "deckCatProduct" : "deckCatTechnique")}`;
   if (els.deckText) els.deckText.textContent = localizedDeckField(card, "text");
   if (els.deckProgress) {
     els.deckProgress.textContent = t("deckCardOf", { i: deck.index + 1, n: deck.order.length });

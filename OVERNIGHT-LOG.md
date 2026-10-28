@@ -284,3 +284,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: localizedRuleSummary() phrase-maps scoring-profile summaries into ES/PL (longest-phrase-first) and is used at check-in badge, timer badge, frame guide, and QR-applied badge. Weights/percentages unchanged.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 29 — Deck category labels translated — DONE
+- Implemented: deck category badge (surface/product/technique) now renders via deckCat* keys in EN/ES/PL instead of raw uppercase English.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.
