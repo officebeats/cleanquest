@@ -330,3 +330,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Implemented: supervisor gap summary (Where/How/When/Who/knowledge/recommended) and anonymized analytics summary now render via templated i18n keys in EN/ES/PL.
 - Evidence: node --check PASS; CDP 6/6; personas 0 fails.
 - Blockers: none.
+
+## LOOP 38 — Crew seat/participation note translated — DONE
+- Implemented: admin crew note (name, seat fill, participation %, qualified marker) now renders via crewNote/crewQualified keys in EN/ES/PL.
+- Evidence: node --check PASS; CDP 6/6; personas 0 fails.
+- Blockers: none.

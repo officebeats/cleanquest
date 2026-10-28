@@ -341,6 +341,8 @@ const translations = {
     assignedPacksLabel: "Assigned packs:",
     assignedPacksNone: "Assigned packs: none yet",
     approvedLabel: "Approved ({n}):",
+    crewNote: " · Crew: {name} {members}/{seats} seats · Participation {pct}%{qual}",
+    crewQualified: " (80%+ qualified)",
     areaLabel: "AREA",
     assignedSpotPrefix: "SPOT:",
     frameGuidePrompt: "ALIGN ASSIGNED SPOT IN FRAME",
@@ -622,6 +624,8 @@ const translations = {
     assignedPacksLabel: "Paquetes asignados:",
     assignedPacksNone: "Paquetes asignados: ninguno aún",
     approvedLabel: "Aprobados ({n}):",
+    crewNote: " · Equipo: {name} {members}/{seats} lugares · Participación {pct}%{qual}",
+    crewQualified: " (calificado 80%+)",
     areaLabel: "ÁREA",
     assignedSpotPrefix: "PUNTO:",
     frameGuidePrompt: "ALINEA EL PUNTO ASIGNADO EN EL MARCO",
@@ -903,6 +907,8 @@ const translations = {
     assignedPacksLabel: "Przypisane pakiety:",
     assignedPacksNone: "Przypisane pakiety: brak",
     approvedLabel: "Zatwierdzeni ({n}):",
+    crewNote: " · Ekipa: {name} {members}/{seats} miejsc · Udział {pct}%{qual}",
+    crewQualified: " (kwalifikacja 80%+)",
     areaLabel: "STREFA",
     assignedSpotPrefix: "PUNKT:",
     frameGuidePrompt: "USTAW PRZYPISANY PUNKT W RAMCE",
@@ -8749,7 +8755,7 @@ function renderAdminDashboard() {
     const activeCrew = crewStore.crews.find((c) => c.id === crewStore.activeCrewId) || crewStore.crews[0];
     const part = activeCrew ? getCrewParticipation(activeCrew.id) : null;
     const crewNote = activeCrew
-      ? ` · Crew: ${activeCrew.name} ${activeCrew.members.length}/${activeCrew.seats} seats · Participation ${Math.round((part?.participationRate || 0) * 100)}%${part?.qualified ? " (80%+ qualified)" : ""}`
+      ? t("crewNote", { name: activeCrew.name, members: activeCrew.members.length, seats: activeCrew.seats, pct: Math.round((part?.participationRate || 0) * 100), qual: part?.qualified ? t("crewQualified") : "" })
       : "";
     els.adminCrewList.textContent = `${t("approvedLabel", { n: adminStore.approvedMembers.length })} ${adminStore.approvedMembers.join(", ")}${crewNote}`;
   }
