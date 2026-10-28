@@ -483,3 +483,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## LOOP 70 — Full-repo sponsor-name sweep — DONE
 - Evidence: per-term grep across all tracked files: the internal document's three sponsor/standards names appear in 0 files. (Settings provider names are the app's own inference providers, pre-existing design, not sponsor placements.) README required phrase still exactly 1.
 - Blockers: none.
+
+## LOOP 71 — Commit-ledger sanity — DONE
+- Evidence: 69 commits since 23:00, every loop slice committed + pushed individually; working tree clean; origin/main == local HEAD.
+- Blockers: none.
