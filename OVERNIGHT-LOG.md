@@ -541,3 +541,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Rejected with rationale: single trapModal+inert refactor (modals live inside #appShell — inert would inert the dialogs themselves; the shared single Tab listener already covers both); LOOP14 enqueue-on-scored-runs (queue is first-save-only per run id and never re-saves leaderboard/crew, so no double count); usage-spend alarm (usage page read-only monitored all night: 0% current window at every hourly refresh).
 - Evidence: syntax + lint clean; parity 696 available / 0 missing; VM all-true; single CDP run 6/6 + 0 persona fails.
 - Blockers: none.
+
+## LOOP 83 — Mobile impeccable pass (judge verdict) — DONE
+- Evidence: 48 fresh-profile screenshots (12 screens x 2 sizes x 2 languages) inspected against a 4-bar rubric (no h-overflow/clip, primary CTAs in fold, no modal traps, ES readable). Fixes shipped in styles.css only: camera 4-row grid + static checkin (was absolute, covering the viewfinder), 2-col compact checkin, leaderboard header/row shrink at <=380px, demo watermark + capture-status wrap, 360 topbar padding/brand. Before/after: viewfinder was invisible below the fold; now frame+SPOT+CTAs all fit 390x844 and 360x740. Also fixed in passing: QR open() ReferenceError (dropped const) + added open/close/laser/apply coverage to the CDP harness — stale-bundle false-pass taught us to close/reopen the browser instead of trusting DOM-only probes.
+- Blockers: none (remaining cosmetics: timer capture-strip badge overlap, noted, non-blocking).

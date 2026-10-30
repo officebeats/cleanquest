@@ -7902,6 +7902,7 @@ async function openQrScannerModal() {
   qrOpenInFlight = true;
   const myGeneration = ++qrOpenGeneration;
   lastQrTrigger = document.activeElement;
+  const currentCode = `CQ-QR-${state.checkin.league.toUpperCase()}-${state.checkin.areaKey.toUpperCase()}`;
   if (els.qrManualInput) {
     els.qrManualInput.value = currentCode;
   }

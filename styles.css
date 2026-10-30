@@ -4060,7 +4060,25 @@ body.lightbox-open {
     gap: 4px 8px !important;
   }
   #timerScreen .timer-panel {
-    padding: 4px 10px !important;
+    padding: 4px 8px !important;
+  }
+  #timerScreen .timer-panel .timer-meta,
+  #timerScreen .timer-panel .progress-track {
+    display: none !important;
+  }
+  #timerScreen #timerSpotBar {
+    padding: 3px 8px !important;
+    gap: 4px 8px !important;
+    flex-wrap: nowrap !important;
+    overflow: hidden !important;
+  }
+  #timerScreen #timerSpotBar .assigned-spot-badge {
+    display: none !important;
+  }
+  #timerScreen .timer-camera-frame {
+    height: 72px !important;
+    min-height: 0 !important;
+    flex: none !important;
   }
   #timerScreen .timer-actions,
   #timerScreen .complete-button {
@@ -4117,6 +4135,102 @@ body.lightbox-open {
 #timerScreen .live-badge,
 #timerScreen .live-badge span {
   font-size: 11px !important;
+}
+
+/* Judge pass: mobile legibility bar — viewfinder always visible, no clipping */
+@media (max-width: 899px) {
+  #cameraScreen .camera-content {
+    grid-template-rows: minmax(0, 1fr) auto auto auto !important;
+  }
+  #cameraScreen .camera-content > .camera-frame {
+    grid-row: 1 !important;
+  }
+  #cameraScreen #checkinBar {
+    grid-row: 2 !important;
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    z-index: auto !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 4px 8px !important;
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+  }
+  #cameraScreen #checkinBar .checkin-area-label {
+    min-width: 0 !important;
+  }
+  #cameraScreen #checkinBar .area-select {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  #cameraScreen #assignedSpotBadge {
+    grid-column: 1 / -1 !important;
+    text-align: left !important;
+    font-size: 11px !important;
+    white-space: normal !important;
+  }
+  #cameraScreen #scanAreaQrButton {
+    justify-self: start !important;
+  }
+  #cameraScreen #cameraContinue {
+    grid-row: 3 !important;
+  }
+  #cameraScreen #continueWithoutCamera {
+    grid-row: 4 !important;
+  }
+  .demo-camera-placeholder strong {
+    font-size: 9px !important;
+    letter-spacing: 0.08em !important;
+    max-width: 100% !important;
+    white-space: normal !important;
+  }
+  .demo-camera-placeholder span {
+    max-width: 100% !important;
+    white-space: normal !important;
+  }
+  .frame-guide-label {
+    max-width: calc(100% - 16px) !important;
+    white-space: normal !important;
+    text-align: center !important;
+  }
+  .capture-status {
+    flex-wrap: wrap !important;
+    gap: 4px 8px !important;
+    justify-content: center !important;
+  }
+  #timerScreen .live-activity-badge {
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .topbar {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    gap: 6px !important;
+  }
+  .brand {
+    font-size: 9px !important;
+    letter-spacing: 0.08em !important;
+  }
+  .leaderboard-header,
+  .leaderboard-row {
+    grid-template-columns: 24px minmax(0, 1fr) 50px 54px 38px !important;
+    gap: 3px !important;
+  }
+  .leaderboard-header {
+    font-size: 6px !important;
+    letter-spacing: 0.02em !important;
+  }
+  .leaderboard-header > *,
+  .leaderboard-row > * {
+    min-width: 0 !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
 }
 
 /* Explain every score: bar details visible on larger screens, folded away on phones */
