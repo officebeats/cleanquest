@@ -6002,6 +6002,7 @@ button.btn-pop-active::before {
 
 #deckScreen .deck-feedback.is-correct,
 #deckScreen .deck-feedback.is-wrong {
+  flex: 0 0 auto !important;
   max-height: none !important;
   height: auto !important;
   overflow: visible !important;
@@ -6027,6 +6028,7 @@ button.btn-pop-active::before {
 
 /* Illustrated Sponsor Logo Ad Banner (3:1 standard ad aspect ratio) */
 .sponsor-slot {
+  flex: 0 0 auto !important;
   display: flex !important;
   flex-wrap: wrap !important;
   align-items: center !important;
