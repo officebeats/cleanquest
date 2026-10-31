@@ -179,6 +179,7 @@
       <li>Layout audit: 9/9 mobile screens at 360×740 (zero sub-44px layout targets, zero h-scroll, primary CTAs in-fold) + desktop 1440×900 pass (zero sub-44, zero h-scroll).</li>
       <li>Independent judge + advisor reviews run against the operating standards; all blockers fixed and re-verified (forced-unmute removed and tones mute-gated; live zone spoilers neutralized; judge-demo cloud egress blocked; demo/sample runs excluded from ranking, personal best, and sponsor counts; offline queue re-scores on reconnect).</li>
       <li><code>node --check</code> clean; detector 8 → 1 low advisory; no secrets in repo; banned-token grep clean.</li>
+      <li>Self-test 6/6 PASS; persona suite 9/11 — both fails (<em>dana</em> record check, <em>fold</em> CTA check) reproduce identically on the pre-change tree: the harness runs headless at 800×600, below the 360×740 supported floor, so they are pre-existing viewport artifacts, not regressions. All 9 supported-viewport mobile audits and the desktop pass are green.</li>
       <li>Report screenshots are the app itself (390×844 mobile, 1440×900 desktop), captured 2026-10-31; leaderboard/spectator demo rows disclosed.</li>
     </ul>
   </section>
