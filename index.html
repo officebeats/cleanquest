@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css?v=20261031" />
 </head>
 
 <body>
@@ -113,7 +113,7 @@
         </div>
 
         <div id="ftueSummaryBar" class="ftue-summary-bar hologram-card hidden">
-          <span id="ftueSummaryText" class="consent-status-badge">✓ Consent &amp; Pass active</span>
+          <span id="ftueSummaryText" class="consent-status-badge" data-i18n="ftueActiveLabel">✓ Consent &amp; Pass active</span>
           <div class="ftue-summary-actions">
             <button id="editFtueButton" class="secondary-button compact-chip" type="button" data-i18n="editFtueAction">PASS / CONSENT</button>
             <button id="howItWorksButton" class="secondary-button compact-chip" type="button" data-i18n="mountGuideAction">? MOUNT GUIDE</button>
@@ -563,7 +563,7 @@
                   <img id="beforeThumbnail" alt="Before capture" />
                   <div id="beforeDetectionOverlay" class="detection-overlay" aria-hidden="true"></div>
                   <div id="beforeSamOverlay" class="detection-overlay sam-overlay" aria-hidden="true"></div>
-                  <span class="maximize-badge">⤢ MAXIMIZE</span>
+                  <span class="maximize-badge" data-i18n="maximizeBadge">⤢ MAXIMIZE</span>
                   <div id="beforePlaceholder" class="evidence-placeholder">
                     <span>◇</span>
                     <small data-i18n="placeholderImage">PLACEHOLDER</small>
@@ -577,7 +577,7 @@
                   <img id="afterThumbnail" alt="After capture" />
                   <div id="afterDetectionOverlay" class="detection-overlay" aria-hidden="true"></div>
                   <div id="afterSamOverlay" class="detection-overlay sam-overlay" aria-hidden="true"></div>
-                  <span class="maximize-badge">⤢ MAXIMIZE</span>
+                  <span class="maximize-badge" data-i18n="maximizeBadge">⤢ MAXIMIZE</span>
                   <div id="afterPlaceholder" class="evidence-placeholder">
                     <span>◇</span>
                     <small data-i18n="placeholderImage">PLACEHOLDER</small>
@@ -1040,8 +1040,8 @@
 
         <div id="deckCard" class="deck-card hologram-card" aria-describedby="deckSwipeHint">
           <div class="deck-stamp-row" aria-hidden="true">
-            <span id="deckStampLeft" class="deck-stamp deck-stamp-left">⟵ MISS</span>
-            <span id="deckStampRight" class="deck-stamp deck-stamp-right">RIGHT CALL ⟶</span>
+            <span id="deckStampLeft" class="deck-stamp deck-stamp-left" data-i18n="deckStampLeft">⟵ MISS</span>
+            <span id="deckStampRight" class="deck-stamp deck-stamp-right" data-i18n="deckStampRight">RIGHT CALL ⟶</span>
           </div>
           <div class="section-label" id="deckCategory">SURFACE</div>
           <p id="deckText"></p>
@@ -1114,16 +1114,16 @@
         <div id="lightboxStage" class="lightbox-stage">
           <figure id="lightboxBeforePane" class="lightbox-pane">
             <img id="lightboxBeforeImg" alt="Full Before capture" />
-            <figcaption>BEFORE</figcaption>
+            <figcaption data-i18n="before">BEFORE</figcaption>
           </figure>
           <figure id="lightboxAfterPane" class="lightbox-pane">
             <img id="lightboxAfterImg" alt="Full After capture" />
             <img id="lightboxGhostImg" class="lightbox-ghost-img hidden" alt="Before shadow overlay" />
-            <figcaption>AFTER</figcaption>
+            <figcaption data-i18n="after">AFTER</figcaption>
           </figure>
         </div>
         <div id="lightboxGhostControl" class="lightbox-ghost-control hidden">
-          <label for="lightboxGhostSlider">BEFORE SHADOW OVERLAY OPACITY</label>
+          <label for="lightboxGhostSlider" data-i18n="lightboxGhostOpacity">BEFORE SHADOW OVERLAY OPACITY</label>
           <input id="lightboxGhostSlider" type="range" min="0" max="90" value="55" />
         </div>
       </div>
@@ -1134,7 +1134,7 @@
       <div class="lightbox-card qr-scanner-card hologram-card">
         <div class="lightbox-header">
           <strong id="qrScannerTitle" data-i18n="qrModalTitle">⌗ SCAN STATION QR STICKER</strong>
-          <button id="qrScannerCloseButton" class="secondary-button compact-chip" type="button">✕ CLOSE</button>
+          <button id="qrScannerCloseButton" class="secondary-button compact-chip" type="button" data-i18n="lightboxClose">✕ CLOSE</button>
         </div>
         <div class="qr-scanner-grid">
           <div class="qr-camera-box">
@@ -1186,7 +1186,7 @@
     </div>
   </section>
 
-  <script src="deck.js?v=20261028"></script>
-  <script src="app.js?v=20261028"></script>
+  <script src="deck.js?v=20261031"></script>
+  <script src="app.js?v=20261031"></script>
 </body>
 </html>

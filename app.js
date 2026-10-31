@@ -467,6 +467,11 @@ const translations = {
     lightboxClose: "✕ CLOSE",
     qrTapStation: "TAP A STATION QR STICKER OR ENTER CODE",
     qrApply: "APPLY QR CODE",
+    maximizeBadge: "⤢ MAXIMIZE",
+    lightboxGhostOpacity: "BEFORE SHADOW OVERLAY OPACITY",
+    deckStampLeft: "⟵ MISS",
+    deckStampRight: "RIGHT CALL ⟶",
+    openSupervisorTools: "📋 OPEN INSPECTION LOG & SUPERVISOR TOOLS (11–15) →",
   },
 
   es: {
@@ -798,6 +803,11 @@ const translations = {
     lightboxClose: "✕ CERRAR",
     qrTapStation: "TOCA UNA ETIQUETA QR DE ESTACIÓN O INGRESA EL CÓDIGO",
     qrApply: "APLICAR CÓDIGO QR",
+    maximizeBadge: "⤢ AMPLIAR",
+    lightboxGhostOpacity: "OPACIDAD DE LA SOMBRA DEL ANTES",
+    deckStampLeft: "⟵ FALLO",
+    deckStampRight: "ACIERTA ⟶",
+    openSupervisorTools: "📋 ABRIR REGISTRO Y HERRAMIENTAS DE SUPERVISIÓN (11–15) →",
   },
 
   pl: {
@@ -1129,6 +1139,11 @@ const translations = {
     lightboxClose: "✕ ZAMKNIJ",
     qrTapStation: "DOTKNIJ NAKLEJKI QR STACJI LUB WPISZ KOD",
     qrApply: "ZASTOSUJ KOD QR",
+    maximizeBadge: "⤢ POWIĘKSZ",
+    lightboxGhostOpacity: "PRZEZROCZYSTOŚĆ CIENIA PRZED",
+    deckStampLeft: "⟵ BŁĄD",
+    deckStampRight: "DOBRZE ⟶",
+    openSupervisorTools: "📋 OTWÓRZ DZIENNIK I NARZĘDZIA NADZORU (11–15) →",
   }
 };
 
@@ -1554,6 +1569,17 @@ function applyTranslations() {
   if (SPECTATOR_MODE) {
     renderSpectatorLeaderboard();
   }
+
+  try {
+    renderCrewAndConsistencyUI();
+    renderHomeSponsorSlot();
+    renderAdminDashboard();
+    renderInspectionLog();
+    renderOfflineQueue();
+    if (state.screen === "leaderboard") {
+      renderLeaderboard();
+    }
+  } catch {}
 }
 
 const LANGUAGE_KEY = "cleanquest.language.v1";
@@ -2862,6 +2888,19 @@ function navigateTo(screen) {
 
   if (screen === "leaderboard") {
     renderLeaderboard();
+  }
+
+  if (screen === "deck") {
+    if (!state.deck || !state.deck.order?.length) {
+      state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false, answeredCurrent: false };
+    }
+    renderDeck();
+  }
+
+  if (screen === "records") {
+    renderInspectionLog();
+    renderOfflineQueue();
+    renderAdminDashboard();
   }
 
   window.scrollTo({ top: 0, behavior: "auto" });
@@ -7304,7 +7343,8 @@ function openPassportAndSupervisorHub() {
       supBtn.className = "secondary-button compact-chip";
       supBtn.style.marginTop = "8px";
       supBtn.style.width = "100%";
-      supBtn.textContent = "📋 OPEN INSPECTION LOG & SUPERVISOR TOOLS (11–15) →";
+      supBtn.dataset.i18n = "openSupervisorTools";
+      supBtn.textContent = t("openSupervisorTools");
       supBtn.addEventListener("click", () => openRecords());
       els.homePassportPanel.appendChild(supBtn);
     }

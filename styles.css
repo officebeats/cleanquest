@@ -4137,13 +4137,94 @@ body.lightbox-open {
   font-size: 11px !important;
 }
 
-/* Judge pass: mobile legibility bar — viewfinder always visible, no clipping */
+/* Judge pass: mobile & desktop legibility bar — viewfinder always visible, zero clipping */
+.mvp-step-tabs {
+  flex-wrap: wrap !important;
+}
+
+.mvp-tab-chip {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  text-align: center !important;
+}
+
+.pin-row {
+  flex-wrap: wrap !important;
+}
+
+.pin-row > .area-select,
+.pin-row > .pin-input {
+  flex: 1 1 150px !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+
+.leaderboard-header,
+.leaderboard-row {
+  grid-template-columns: 28px minmax(0, 1fr) 68px 68px 52px !important;
+  gap: 8px !important;
+}
+
+.leaderboard-header > span:nth-child(n+3),
+.spectator-column-headings > span:nth-child(n+3) {
+  text-align: right !important;
+}
+
+@media (min-width: 900px) {
+  #settingsScreen .content {
+    max-width: 920px !important;
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px 16px !important;
+    align-items: start !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+  #settingsScreen h2,
+  #settingsScreen .sticky-cta {
+    grid-column: 1 / -1 !important;
+  }
+  #settingsScreen .identity-panel {
+    margin: 0 !important;
+  }
+  #resultsScreen .content {
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+  #resultsScreen h2 {
+    margin: 0 0 6px !important;
+    font-size: 28px !important;
+  }
+  #resultsBody {
+    gap: 8px 16px !important;
+  }
+  .sticky-cta {
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 20 !important;
+    padding: 6px 0 !important;
+    background: linear-gradient(180deg, transparent, rgba(1, 5, 12, 0.95) 35%) !important;
+  }
+}
+
 @media (max-width: 899px) {
+  #cameraScreen.active {
+    height: calc(100dvh - 58px) !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
   #cameraScreen .camera-content {
+    height: 100% !important;
+    min-height: 0 !important;
+    padding: 6px 10px max(8px, env(safe-area-inset-bottom)) !important;
+    gap: 6px !important;
     grid-template-rows: minmax(0, 1fr) auto auto auto !important;
   }
   #cameraScreen .camera-content > .camera-frame {
     grid-row: 1 !important;
+    min-height: 180px !important;
+    border: 1px solid rgba(74, 226, 255, 0.25) !important;
+    border-radius: 14px !important;
   }
   #cameraScreen #checkinBar {
     grid-row: 2 !important;
@@ -4157,6 +4238,7 @@ body.lightbox-open {
     gap: 4px 8px !important;
     padding: 6px 8px !important;
     font-size: 12px !important;
+    margin-bottom: 0 !important;
   }
   #cameraScreen #checkinBar .checkin-area-label {
     min-width: 0 !important;
@@ -4179,6 +4261,13 @@ body.lightbox-open {
   }
   #cameraScreen #continueWithoutCamera {
     grid-row: 4 !important;
+  }
+  #timerScreen .demo-camera-placeholder {
+    padding-bottom: 58px !important;
+    gap: 4px !important;
+  }
+  #timerScreen .demo-camera-placeholder .placeholder-icon {
+    font-size: 30px !important;
   }
   .demo-camera-placeholder strong {
     font-size: 9px !important;
@@ -4217,11 +4306,11 @@ body.lightbox-open {
   }
   .leaderboard-header,
   .leaderboard-row {
-    grid-template-columns: 24px minmax(0, 1fr) 50px 54px 38px !important;
-    gap: 3px !important;
+    grid-template-columns: 24px minmax(0, 1fr) 56px 56px 42px !important;
+    gap: 4px !important;
   }
   .leaderboard-header {
-    font-size: 6px !important;
+    font-size: 10px !important;
     letter-spacing: 0.02em !important;
   }
   .leaderboard-header > *,
