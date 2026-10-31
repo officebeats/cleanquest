@@ -4733,6 +4733,7 @@ select:focus-visible {
   #settingsScreen .content,
   #deckScreen .content {
     max-height: calc(100dvh - 58px) !important;
+    overflow-y: auto !important;
   }
   .sticky-cta,
   #resultsScreen .results-cta-bar {

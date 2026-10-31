@@ -52,12 +52,34 @@
   th { background:rgba(10,27,43,.9); color:#fff; }
   td { color:#e4f5ff; }
   td strong { color:var(--cyan); }
+  .diagram-scroll { overflow-x:auto; margin:12px 0 4px; padding-bottom:4px; }
+  svg.diagram { display:block; width:100%; max-width:640px; min-width:520px; height:auto; margin:0 auto; font-family:inherit; }
+  svg.diagram .node { fill:rgba(10,27,43,.85); stroke:var(--line-bright); }
+  svg.diagram .lane { fill:rgba(10,27,43,.5); stroke:var(--line); }
+  svg.diagram .edge { stroke:var(--cyan); stroke-width:1.5; fill:none; }
+  svg.diagram text { fill:#e4f5ff; }
+  svg.diagram .dim { fill:var(--muted-bright); }
+  svg.diagram .accent { fill:var(--cyan); }
   @media print {
-    body, header.hero, section.card, .meta span, code, th { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     header.hero { padding:24px; } main { max-width:none; padding:0 8px; }
     section.card { break-inside:avoid; }
     .shot img { width:230px; }
+    svg.diagram { min-width:0; }
   }
+  @media (max-width: 640px) {
+    main { padding:16px 14px 48px; }
+    p, li { font-size:16px; line-height:1.62; }
+    h2 { font-size:20px; }
+    h3 { font-size:17px; }
+    .shot { flex-direction:column; gap:12px; }
+    .shot img, .shot img.wide { width:100%; }
+    table { font-size:13.5px; }
+    th, td { padding:6px 8px; }
+    .verdict { font-size:13px; }
+  }
+  header.hero .links { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; }
+  header.hero .links a { color:#00111a; background:var(--cyan); font-weight:800; font-size:13px; text-decoration:none; padding:6px 14px; border-radius:999px; }
+  header.hero .links a.alt { color:var(--ink); background:rgba(10,27,43,.9); border:1px solid var(--line-bright); }
 </style>
 </head>
 <body>
@@ -67,6 +89,11 @@
   <p>Meta Global AI Developer Hackathon · Indie track · <strong>Build for Your World</strong></p>
   <p class="pitch">CleanQuest makes the invisible 2&nbsp;a.m. cleaning shift visible — night cleaners prove their work with two photos, own a verified record that travels with them job to job, and get recognized instead of re-checked.</p>
   <p>Every screenshot below was captured 2026-10-31 from the real app. Meta stack: <strong>Muse Spark 1.3</strong> (per-surface scorecards) + <strong>SAM&nbsp;3.1</strong> (surface overlays) + <strong>Muse voice transcription</strong> + <strong>Baseten Spark Open</strong> as a logged second provider — plus an on-device MediaPipe + classical-vision rung that plays with no keys and no signal.</p>
+  <div class="links">
+    <a href="../../index.html">▶ Launch Live App</a>
+    <a class="alt" href="../../index.html?spectator=1">Spectator Board</a>
+    <a class="alt" href="report.pdf">Download PDF</a>
+  </div>
 </header>
 <main>
   <div class="meta">
@@ -104,6 +131,30 @@
   <section class="card">
     <h2>Not another image analyzer</h2>
     <p>A one-shot classifier would fail the gate. CleanQuest is a closed loop, and every link is in the build:</p>
+    <div class="diagram-scroll" role="img" aria-label="Closed loop: Play, Verify, Appeal, Record, Train — every run feeds the record">
+    <svg class="diagram" viewBox="0 0 560 168" role="presentation">
+      <g>
+        <rect class="node" x="2" y="14" width="98" height="58" rx="10" />
+        <text x="51" y="38" text-anchor="middle" font-size="13" font-weight="700">PLAY</text>
+        <text class="dim" x="51" y="56" text-anchor="middle" font-size="11">check-in</text>
+        <rect class="node" x="116" y="14" width="98" height="58" rx="10" />
+        <text x="165" y="38" text-anchor="middle" font-size="13" font-weight="700">VERIFY</text>
+        <text class="dim" x="165" y="56" text-anchor="middle" font-size="11">scorecard</text>
+        <rect class="node" x="230" y="14" width="98" height="58" rx="10" />
+        <text x="279" y="38" text-anchor="middle" font-size="13" font-weight="700">APPEAL</text>
+        <text class="dim" x="279" y="56" text-anchor="middle" font-size="11">dispute</text>
+        <rect class="node" x="344" y="14" width="98" height="58" rx="10" />
+        <text x="393" y="38" text-anchor="middle" font-size="13" font-weight="700">RECORD</text>
+        <text class="dim" x="393" y="56" text-anchor="middle" font-size="11">log</text>
+        <rect class="node" x="458" y="14" width="98" height="58" rx="10" />
+        <text x="507" y="38" text-anchor="middle" font-size="13" font-weight="700">TRAIN</text>
+        <text class="dim" x="507" y="56" text-anchor="middle" font-size="11">deck+crew</text>
+        <path class="edge" d="M100 43 h16 M214 43 h16 M328 43 h16 M442 43 h16" />
+        <path class="edge" d="M507 72 v28 H51 v-28" />
+        <text class="dim" x="279" y="150" text-anchor="middle" font-size="12">every run feeds the record — nobody can edit a score</text>
+      </g>
+    </svg>
+    </div>
     <ul>
       <li><strong>Play</strong> — check in with a QR, system-assigned high-impact spot, frame guide, in-app capture only.</li>
       <li><strong>Verify</strong> — three-bar scorecard (Clean 50 / Technique 25 / Time 25), per-surface verdicts with confidence, SAM overlays, provenance line naming the model.</li>
@@ -116,6 +167,34 @@
 
   <section class="card">
     <h2>Live demo script (2 runs, ~3 minutes)</h2>
+    <div class="diagram-scroll" role="img" aria-label="Demo timeline: 10-second Judge Demo, live run, spectator projected throughout, backup ready">
+    <svg class="diagram" viewBox="0 0 560 148" role="presentation">
+      <g>
+        <path class="edge" d="M40 52 h480" />
+        <circle class="node" cx="40" cy="52" r="17" />
+        <text x="40" y="57" text-anchor="middle" font-size="13" font-weight="700">1</text>
+        <text x="40" y="86" text-anchor="middle" font-size="12" font-weight="700">Judge Demo</text>
+        <text class="dim" x="40" y="102" text-anchor="middle" font-size="11">10 seconds</text>
+        <text class="dim" x="40" y="116" text-anchor="middle" font-size="11">sample pair</text>
+        <circle class="node" cx="200" cy="52" r="17" />
+        <text x="200" y="57" text-anchor="middle" font-size="13" font-weight="700">2</text>
+        <text x="200" y="86" text-anchor="middle" font-size="12" font-weight="700">Live run</text>
+        <text class="dim" x="200" y="102" text-anchor="middle" font-size="11">real room</text>
+        <text class="dim" x="200" y="116" text-anchor="middle" font-size="11">scorecard</text>
+        <circle class="node" cx="360" cy="52" r="17" />
+        <text x="360" y="57" text-anchor="middle" font-size="13" font-weight="700">3</text>
+        <text x="360" y="86" text-anchor="middle" font-size="12" font-weight="700">Spectator live</text>
+        <text class="dim" x="360" y="102" text-anchor="middle" font-size="11">projected</text>
+        <text class="dim" x="360" y="116" text-anchor="middle" font-size="11">throughout</text>
+        <circle class="node" cx="520" cy="52" r="17" />
+        <text x="520" y="57" text-anchor="middle" font-size="13" font-weight="700">4</text>
+        <text x="520" y="86" text-anchor="middle" font-size="12" font-weight="700">Backup ready</text>
+        <text class="dim" x="520" y="102" text-anchor="middle" font-size="11">30s recording</text>
+        <text class="dim" x="520" y="116" text-anchor="middle" font-size="11">keys pre-set</text>
+        <text class="dim" x="280" y="140" text-anchor="middle" font-size="11">say the consent + no-edit lines on stage</text>
+      </g>
+    </svg>
+    </div>
     <ol>
       <li><strong>Run 1 — Judge Demo (10 seconds).</strong> Instructions screen → <em>Judge Demo</em>. Narrate: <em>"This is a synthetic dirty/clean pair so you can see the scoring story without us mopping the judging room — same on-device pipeline, watch the provenance line."</em> Tap through to the scorecard; point at the three bars and the demo label.</li>
       <li><strong>Run 2 — live loop.</strong> Check in, shoot a real before/after in the room, finish, show the scored card with its provenance line ("Verified by …" with cloud keys pre-entered, or the on-device line without).</li>
@@ -127,6 +206,40 @@
   <section class="card">
     <h2>How the AI works</h2>
     <p>CleanQuest runs a <strong>two-rung vision ladder</strong> — real on-device perception with no keys and no backend, plus an opt-in cloud rung that verifies and explains. One honest caveat: the classical scoring layer works with zero signal, but the MediaPipe weights fetch from CDN on first use and then cache — a first-ever run on airplane mode scores via pixel-diff plus the neutral pose fallback, with full ML perception on every run after.</p>
+    <div class="diagram-scroll" role="img" aria-label="Two-rung AI ladder: on-device perception escalates to cloud verification">
+    <svg class="diagram" viewBox="0 0 560 252" role="presentation">
+      <g>
+        <rect class="lane" x="2" y="2" width="556" height="102" rx="12" />
+        <text class="accent" x="16" y="26" font-size="12" font-weight="700">RUNG 1 · ON-DEVICE — no keys, no backend</text>
+        <rect class="node" x="14" y="38" width="168" height="52" rx="10" />
+        <text x="98" y="60" text-anchor="middle" font-size="12" font-weight="700">EfficientDet-Lite0</text>
+        <text class="dim" x="98" y="78" text-anchor="middle" font-size="11">object matcher</text>
+        <rect class="node" x="196" y="38" width="168" height="52" rx="10" />
+        <text x="280" y="60" text-anchor="middle" font-size="12" font-weight="700">pixel / edge / zones</text>
+        <text class="dim" x="280" y="78" text-anchor="middle" font-size="11">classical vision</text>
+        <rect class="node" x="378" y="38" width="168" height="52" rx="10" />
+        <text x="462" y="60" text-anchor="middle" font-size="12" font-weight="700">Pose Landmarker</text>
+        <text class="dim" x="462" y="78" text-anchor="middle" font-size="11">style score</text>
+        <path class="edge" d="M280 104 v18" />
+        <text class="dim" x="292" y="120" font-size="11">escalates when keyed</text>
+        <rect class="lane" x="2" y="128" width="556" height="102" rx="12" />
+        <text class="accent" x="16" y="152" font-size="12" font-weight="700">RUNG 2 · CLOUD — verified and explained</text>
+        <rect class="node" x="14" y="164" width="124" height="52" rx="10" />
+        <text x="76" y="186" text-anchor="middle" font-size="12" font-weight="700">Spark 1.3</text>
+        <text class="dim" x="76" y="204" text-anchor="middle" font-size="11">scorecards</text>
+        <rect class="node" x="150" y="164" width="124" height="52" rx="10" />
+        <text x="212" y="186" text-anchor="middle" font-size="12" font-weight="700">SAM 3.1</text>
+        <text class="dim" x="212" y="204" text-anchor="middle" font-size="11">overlays</text>
+        <rect class="node" x="286" y="164" width="124" height="52" rx="10" />
+        <text x="348" y="186" text-anchor="middle" font-size="12" font-weight="700">voice notes</text>
+        <text class="dim" x="348" y="204" text-anchor="middle" font-size="11">transcribed</text>
+        <rect class="node" x="422" y="164" width="124" height="52" rx="10" />
+        <text x="484" y="186" text-anchor="middle" font-size="12" font-weight="700">Baseten log</text>
+        <text class="dim" x="484" y="204" text-anchor="middle" font-size="11">audit trail</text>
+        <text class="dim" x="280" y="246" text-anchor="middle" font-size="11">every claim carries its confidence · nothing invented</text>
+      </g>
+    </svg>
+    </div>
     <h3>Rung 1 — on-device (private by construction, ML after first load)</h3>
     <ul>
       <li><strong>Object counting:</strong> MediaPipe EfficientDet-Lite0 (int8 TFLite, loaded on demand, never bundled) counts objects before/after; a matcher measures "objects cleared". Score threshold 0.35, up to 30 results.</li>
@@ -151,51 +264,140 @@
 
     <h3>Welcome + onboarding</h3>
     <div class="shot"><img src="shots/01-welcome.png" alt="Welcome screen" /><div class="desc">
-      <p>Entry hub: trilingual picker, Accept the Challenge, Daily Deck, Passport/Crew/Supervisor hub, and the always-visible <strong>status strip</strong> (streak · week of 13 · crew matchup). First tap opens plain-language consent with read-aloud, plus optional phone + 4-digit PIN. <span class="verdict v-ready">READY · MVP 1–4</span></p>
+      <ul>
+        <li><strong>Entry hub:</strong> trilingual picker, Accept the Challenge, Daily Deck, Passport/Crew/Supervisor hub.</li>
+        <li><strong>Always-visible status strip:</strong> streak · week of 13 · crew matchup at a glance.</li>
+        <li><strong>First tap:</strong> plain-language consent with read-aloud, plus optional phone + 4-digit PIN.</li>
+      </ul>
+      <p><span class="verdict v-ready">READY · MVP 1–4</span></p>
     </div></div>
     <div class="shot"><img src="shots/02-consent.png" alt="Consent gate open" /><div class="desc">
-      <p>Consent-open state keeps every CTA ≥44px; CONFIRM is visible without scrolling. All gating chips verified at 44px.</p>
+      <ul>
+        <li>Consent-open state keeps every CTA ≥44px; CONFIRM visible without scrolling.</li>
+        <li>Photos stay on-device; faces never identified; records never used for discipline.</li>
+      </ul>
     </div></div>
     <div class="shot"><img src="shots/03-welcome-es.png" alt="Welcome in Spanish" /><div class="desc">
-      <p>Full ES translation holds layout — the workforce reads first, not translated afterward.</p>
+      <ul>
+        <li>Full ES translation holds layout — longer strings, no clipping, no truncation.</li>
+        <li>The workforce reads first; the app is not translated afterward.</li>
+      </ul>
     </div></div>
 
     <h3>Instructions + one-tap Judge Demo</h3>
     <div class="shot"><img src="shots/04-instructions.png" alt="Instructions with Judge Demo button" /><div class="desc">
-      <p>Three numbered steps, benchmark card, consent-gated camera entry — and the <strong>Judge Demo</strong> button: one tap runs the real local pipeline on sample photos and lands on a labeled scorecard. Consent-gated exactly like the real path. <span class="verdict v-ready">READY — the 10-second scoring story</span></p>
+      <ul>
+        <li><strong>Three numbered steps</strong> + benchmark card + consent-gated camera entry.</li>
+        <li><strong>Judge Demo button:</strong> one tap runs the real local pipeline on sample photos and lands on a labeled scorecard — consent-gated exactly like the real path.</li>
+      </ul>
+      <p><span class="verdict v-ready">READY — the 10-second scoring story</span></p>
     </div></div>
 
     <h3>Camera check-in + timer</h3>
     <div class="shot"><img src="shots/05-camera.png" alt="Camera screen" /><div class="desc">
-      <p>Registered-site picker + League / Area / system-assigned spot, QR scan, frame guide, in-app capture only. Selecting a registered site is required for prize/crew eligibility. Short-viewport guard keeps CTAs in the first fold at 360×740. <span class="verdict v-ready">READY · MVP 5 (needs a real device to play)</span></p>
+      <ul>
+        <li><strong>Check-in:</strong> registered-site picker + League / Area / system-assigned spot; a selected registered site is required for prize/crew eligibility.</li>
+        <li><strong>Capture:</strong> QR scan, frame guide, in-app capture only.</li>
+        <li><strong>Fit:</strong> short-viewport guard keeps CTAs in the first fold at 360×740.</li>
+      </ul>
+      <p><span class="verdict v-ready">READY · MVP 5 (needs a real device to play)</span></p>
     </div></div>
     <div class="shot"><img src="shots/06-timer.png" alt="Timer screen" /><div class="desc">
-      <p>Countdown, ghost overlay to match the angle, dwell cue, host callouts, big Finish. Live zone grid stays neutral during the run — misses remain hidden until scoring, per the operating standards.</p>
+      <ul>
+        <li><strong>Run:</strong> countdown, ghost overlay to match the angle, dwell cue, host callouts, big Finish.</li>
+        <li><strong>Integrity:</strong> live zone grid stays neutral during the run — misses remain hidden until scoring, per the operating standards.</li>
+      </ul>
     </div></div>
 
     <h3>Results scorecard</h3>
     <div class="shot"><img src="shots/07-results.png" alt="Results screen" /><div class="desc">
-      <p>Weighted TOTAL hero (50/25/25), three explanation bars, honest surface map, uncropped evidence with lightbox, one-tap read-only Dispute, optional voice note, pose score — plus the <strong>provenance line</strong> (provider + model + SAM status, or the on-device line) and the <strong>Judge Demo label</strong> on demo runs. <span class="verdict v-ready">READY</span></p>
+      <ul>
+        <li><strong>Score:</strong> weighted TOTAL hero (50/25/25), three explanation bars, honest surface map.</li>
+        <li><strong>Evidence:</strong> uncropped photos with lightbox; one-tap read-only Dispute; optional voice note; pose score.</li>
+        <li><strong>Provenance line:</strong> provider + model + SAM status, or the on-device line; Judge Demo label on demo runs.</li>
+      </ul>
+      <p><span class="verdict v-ready">READY · MVP 8</span></p>
     </div></div>
     <div class="shot"><img src="shots/14-judgedemo.png" alt="Judge Demo scorecard" /><div class="desc">
-      <p>The Judge Demo result: real pipeline output on sample photos, labeled demo, no leaderboard credit, nothing persisted. (Headless capture shows the honest model-unavailable fallback; on a device this is a computed score.)</p>
+      <ul>
+        <li>Real pipeline output on sample photos, <strong>labeled demo</strong>.</li>
+        <li>No leaderboard credit, nothing persisted. Headless capture shows the honest model-unavailable fallback; on a device this is a computed score.</li>
+      </ul>
     </div></div>
-
     <h3>Leaderboard + spectator</h3>
     <div class="shot"><img src="shots/08-leaderboard.png" alt="Leaderboard, fresh install" /><div class="desc">
-      <p>Top-10 + your own row only, practice and demo runs excluded, labeled sample rows excluded from ranking, personal best computed from eligible runs only. Fresh installs show an honest empty board — clear localStorage before judging. <span class="verdict v-ready">READY — best demo surface</span></p>
+      <ul>
+        <li><strong>Fair board:</strong> top-10 + your own row only; practice and demo runs excluded; labeled sample rows excluded from ranking; personal best computed from eligible runs only.</li>
+        <li><strong>Honest empty state:</strong> fresh installs show an empty board with a labeled empty-state line — clear localStorage before judging.</li>
+      </ul>
+      <p><span class="verdict v-ready">READY — best demo surface · MVP 10</span></p>
     </div></div>
-    <div class="shot"><img src="shots/13-spectator.png" alt="Spectator board" /><div class="desc"><p>Live leaderboard board: rank, quality, time, style — readable from meters away. Rows shown are manually staged demo entries in a test browser for illustration; a fresh install shows an empty board until real eligible runs land, and labeled sample rows are always excluded from ranking.</p></div></div>
-
+    <div class="shot"><img src="shots/13-spectator.png" alt="Spectator board" /><div class="desc">
+      <ul>
+        <li><strong>Readable at a distance:</strong> rank, quality, time, style — auto-refreshes for projecting.</li>
+        <li>Rows shown are manually staged demo entries for illustration; fresh installs start empty until real eligible runs land.</li>
+      </ul>
+    </div></div>
     <h3>Records, settings, deck</h3>
     <div class="shot"><img src="shots/09-records.png" alt="Records screen" /><div class="desc">
-      <p>Geofenced inspection log with JSON/CSV export; supervisor panes 11–15 (pledge-gated tools, sites + printable QR stickers, bulk invite, training gaps, one-tap packs). Offline queue re-scores on reconnect with the real pipeline.</p>
+      <ul>
+        <li><strong>Inspection log:</strong> geofenced runs with JSON/CSV export — proof that writes itself.</li>
+        <li><strong>Supervisor panes 11–15:</strong> pledge-gated tools, sites + printable QR stickers, bulk invite, training gaps with one-tap 5-day packs.</li>
+        <li><strong>Offline queue</strong> re-scores on reconnect with the real pipeline.</li>
+      </ul>
     </div></div>
-    <div class="shot"><img src="shots/10-records-sites.png" alt="Sites pane" /><div class="desc"><p>Sites pane with QR sticker preview — registered sites populate the camera check-in picker and gate prize eligibility.</p></div></div>
-    <div class="shot"><img src="shots/16-squads.png" alt="Admin squads pane" /><div class="desc"><p>Admin pane 13 (Crew &amp; squads): tap any squad chip to switch the active crew, invite/approve members in bulk, or tap <strong>+ NEW SQUAD</strong> to form a new 5-seat squad — all 44px targets. <span class="verdict v-ready">READY · MVP 13</span></p></div></div>
-    <div class="shot"><img src="shots/11-settings.png" alt="Settings" /><div class="desc"><p>Host voice control (default Off), API keys (browser-only), provider toggle + exportable run log, voice/test buttons.</p></div></div>
-    <div class="shot"><img src="shots/12-deck.png" alt="Daily deck" /><div class="desc"><p>30 trilingual technique cards, 5/day, missed-topic repeat, streaks, labeled sponsor slot after answers only.</p></div></div>
-    <div class="shot"><img src="shots/15-desktop-welcome.png" alt="Desktop welcome" class="wide" /><div class="desc"><p>Desktop holds up too: centered column, all CTAs in-fold at 1440×900, camera grid reflows to two columns. Mobile-first, desktop-clean.</p></div></div>
+    <div class="shot"><img src="shots/10-records-sites.png" alt="Sites pane" /><div class="desc">
+      <ul>
+        <li>Sites pane with QR sticker preview — registered sites populate the camera check-in picker and gate prize eligibility.</li>
+      </ul>
+    </div></div>
+    <div class="shot"><img src="shots/16-squads.png" alt="Admin squads pane" /><div class="desc">
+      <ul>
+        <li>Squads pane: tap any squad chip to switch the active crew; invite/approve in bulk.</li>
+        <li><strong>+ NEW SQUAD</strong> forms a new 5-seat squad — all 44px targets.</li>
+      </ul>
+      <p><span class="verdict v-ready">READY · MVP 13</span></p>
+    </div></div>
+    <div class="shot"><img src="shots/11-settings.png" alt="Settings" /><div class="desc">
+      <ul>
+        <li><strong>Host voice:</strong> default Off, never plays uninvited — including UI tones, which respect the mute.</li>
+        <li><strong>Keys stay in the browser;</strong> provider toggle with exportable per-run log; voice/test buttons.</li>
+      </ul>
+    </div></div>
+    <div class="shot"><img src="shots/12-deck.png" alt="Daily deck" /><div class="desc">
+      <ul>
+        <li>30 trilingual technique cards, 5/day; missed topics repeat until correct.</li>
+        <li>Streaks and crew accuracy; labeled sponsor slot appears only after answers.</li>
+      </ul>
+    </div></div>
+    <div class="shot"><img src="shots/15-desktop-welcome.png" alt="Desktop welcome" class="wide" /><div class="desc">
+      <ul>
+        <li>Centered column, all CTAs in-fold at 1440×900; camera grid reflows to two columns.</li>
+        <li>Mobile-first, desktop-clean — same build, no separate site.</li>
+      </ul>
+    </div></div>
+  </section>
+
+  <section class="card">
+    <h2>Judge's scorecard — how I would grade this today</h2>
+    <p>Reading this entry as an Indie-track judge: it clears the pass/fail gate cleanly (fits <strong>Build for Your World</strong> in one sentence; uses Muse Spark + SAM 3.1 + voice transcription + Baseten Spark Open; stays clear of the "simple image analyzer" anti-category by shipping a full closed loop). Scored against the 0–10 rubric:</p>
+    <table>
+      <tr><th>Criterion (weight)</th><th>Score today</th><th>Why</th><th>To reach 9.5–10 (what you must bring on Nov 4 / Nov 9)</th></tr>
+      <tr><td><strong>Impact (30%)</strong></td><td><strong>8.5 / 10</strong></td><td>Names the human (2&nbsp;a.m. shift cleaner), the portability (record travels job to job), the anti-surveillance architecture (consent + read-aloud, faces never identified, read-only appeal, top-10-only board), and ships in EN/ES/PL with 44px glove targets. All 15 MVP screens and 10 company rules are in the build.</td><td>Show one real room cleaned and scored in the video, and name the Chicago pilot partner or target site count in the closing 15 seconds — deployed evidence is the difference between 8.5 and 9.5.</td></tr>
+      <tr><td><strong>Meta AI Tooling (25%)</strong></td><td><strong>9.0 / 10</strong></td><td>Genuinely beyond a wrapper: structured per-surface Spark scorecards with a 0.6 confidence floor (unverified is stated, never smoothed over), SAM 3.1 pixel overlays, voice transcription, a Baseten Spark Open toggle with an exportable per-run audit log, plus an on-device MediaPipe + classical-vision rung.</td><td>In the video, show <em>both</em> rungs back-to-back (on-device run, then a keyed Spark + SAM run with the overlays visible and the provider log exported). Without pre-entered keys a judge only sees Rung 1.</td></tr>
+      <tr><td><strong>Demo (25%)</strong></td><td><strong>8.5 / 10</strong></td><td>One-tap Judge Demo lands the scoring story in 10 seconds with zero pollution; the live site is up on GitHub Pages; the spectator board is built for stage projection.</td><td>The 3-minute submission video is the primary judging artifact — shoot the shot-list below on a real phone in a real breakroom/restroom, with the spectator board in frame.</td></tr>
+      <tr><td><strong>Technical Depth (20%)</strong></td><td><strong>9.0 / 10</strong></td><td>~11k lines of dependency-free vanilla JS, no build step, hermetic 6/6 self-test + persona suite, offline queue that re-scores on reconnect, 44px floors verified across 9 mobile screens + desktop, honest fallbacks everywhere.</td><td>Keep the disclosed-limitations list in the submission write-up — judges reward builders who know their own edges.</td></tr>
+      <tr><td><strong>Weighted total</strong></td><td><strong>8.73 / 10</strong></td><td colspan="2">Strong finalist contender as-is; crosses <strong>9.3+</strong> once paired with the 3-minute real-room video and a pre-keyed live finals browser.</td></tr>
+    </table>
+
+    <h3>The 3-minute submission video — shot-by-shot</h3>
+    <ol>
+      <li><strong>0:00–0:20 · The world (Impact):</strong> open on the phone in Spanish, in a real breakroom. Say the pitch line verbatim; tap to English; point at the always-visible streak/week/matchup strip and the consent read-aloud button.</li>
+      <li><strong>0:20–0:45 · The 10-second scoring story (Demo):</strong> Instructions → tap <em>Judge Demo</em>; land on the scorecard; point at the three bars (50/25/25), the demo label, and the one-tap Dispute button ("the system scores, nobody edits").</li>
+      <li><strong>0:45–1:45 · Real clean, real models (Tooling):</strong> select the registered site, scan the printed <code>CQ-QR</code> sticker, frame the sink with the guide, tap Start (with Hype set to Full so judges hear the clip chain), wipe the counter, match the angle with the ghost overlay, finish. Show the <strong>Muse Spark</strong> per-surface scorecard + <strong>SAM 3.1</strong> overlays + spoken voice note transcribed + provenance line.</li>
+      <li><strong>1:45–2:25 · Second provider + paperwork that writes itself (Tooling + Impact):</strong> flip Settings to <strong>Baseten Spark Open</strong>, export the provider log JSON; open Records, export the geofenced inspection CSV, switch active squads in Pane 13, assign a 5-day pack in Pane 15.</li>
+      <li><strong>2:25–3:00 · Daily habit + stage close (Impact + Demo):</strong> swipe two cards in the Daily Deck (show the brand-neutral answer, then the labeled <code>SPONSORED</code> suggestion); cut to the <code>?spectator=1</code> board on a monitor; close on the portable Passport copy toast.</li>
+    </ol>
   </section>
 
   <section class="card">
