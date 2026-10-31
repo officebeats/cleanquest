@@ -2906,7 +2906,7 @@ function stopSpeech() {
   } catch {}
 }
 
-const HYPE_LEVEL_KEY = "cleanquest.hypeLevel.v1";
+const HYPE_LEVEL_KEY = "cleanquest.hypeLevel.v2";
 
 function loadHypeLevel() {
   try {
@@ -2916,13 +2916,15 @@ function loadHypeLevel() {
   return "full";
 }
 
-function setHypeLevel(level) {
+function setHypeLevel(level, persist = true) {
   const normalized = level === "full" || level === "chill" ? level : "off";
   state.voice.hypeLevel = normalized;
   state.voice.muted = normalized === "off";
-  try {
-    localStorage.setItem(HYPE_LEVEL_KEY, normalized);
-  } catch {}
+  if (persist) {
+    try {
+      localStorage.setItem(HYPE_LEVEL_KEY, normalized);
+    } catch {}
+  }
   if (state.voice.muted) {
     stopSpeech();
     stopDiscoHouseGroove();
@@ -10797,7 +10799,6 @@ function bindEvents() {
         syncConsentUI();
         els.consentGate?.classList.add("needs-attention");
         els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "nearest" });
-        if (!SELFTEST_MODE) speakConsentAloud();
         return;
       }
       state.editingFtue = false;
@@ -11532,7 +11533,7 @@ function initializeApp() {
     els.proofGridPanel?.classList.remove("hidden");
     els.analysisMetaPanel?.classList.remove("hidden");
   }
-  setHypeLevel(loadHypeLevel());
+  setHypeLevel(loadHypeLevel(), false);
   setLanguage(loadSavedLanguage());
   syncConsentUI();
   syncCleanerPinUI();
@@ -11553,6 +11554,32 @@ function initializeApp() {
   navigateTo("welcome");
   updateCaptureIndicators();
   updateCameraUI();
+
+  if (!SELFTEST_MODE && !state.voice.muted) {
+    setTimeout(() => {
+      if (!state.voice.muted && state.screen === "welcome") {
+        speakHost("start");
+      }
+    }, 180);
+    let initialGestureHandled = false;
+    const onFirstGesture = () => {
+      if (initialGestureHandled) return;
+      initialGestureHandled = true;
+      document.removeEventListener("pointerdown", onFirstGesture, true);
+      document.removeEventListener("keydown", onFirstGesture, true);
+      unlockAudio();
+      if (state.voice.muted || SELFTEST_MODE) return;
+      if (!state.voice.currentAudio) {
+        if (state.editingFtue && state.cleanerFtueStep === 3 && !hasConsent()) {
+          speakConsentAloud();
+        } else if (state.screen === "welcome") {
+          speakHost("start");
+        }
+      }
+    };
+    document.addEventListener("pointerdown", onFirstGesture, true);
+    document.addEventListener("keydown", onFirstGesture, true);
+  }
 }
 
 initializeApp();
