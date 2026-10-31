@@ -8537,8 +8537,9 @@ function answerDeck(pick) {
 
   if (els.deckStampLeft) els.deckStampLeft.style.opacity = pick === "miss" ? "1" : "0";
   if (els.deckStampRight) els.deckStampRight.style.opacity = pick === "right" ? "1" : "0";
+  els.deckLeft?.classList.add("hidden");
+  els.deckRight?.classList.add("hidden");
   els.deckNextButton?.classList.remove("hidden");
-
   const catRaw = String(card?.category || "").toLowerCase();
   renderDeckIllustration(catRaw, false, hit ? "hit" : "miss");
   if (els.deckCard) {

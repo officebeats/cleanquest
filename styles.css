@@ -6002,12 +6002,15 @@ button.btn-pop-active::before {
 
 #deckScreen .deck-feedback.is-correct,
 #deckScreen .deck-feedback.is-wrong {
-  padding: 10px 14px !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding: 8px 12px !important;
   border-radius: 12px !important;
-  font-size: 14.5px !important;
+  font-size: 13.5px !important;
   font-weight: 700 !important;
-  line-height: 1.42 !important;
-  margin: 6px 0 !important;
+  line-height: 1.38 !important;
+  margin: 4px 0 !important;
   background: rgba(10, 28, 46, 0.92) !important;
   border: 1px solid rgba(99, 218, 255, 0.38) !important;
 }
@@ -6025,18 +6028,20 @@ button.btn-pop-active::before {
 /* Illustrated Sponsor Logo Ad Banner (3:1 standard ad aspect ratio) */
 .sponsor-slot {
   display: flex !important;
+  flex-wrap: wrap !important;
   align-items: center !important;
-  gap: 10px !important;
+  gap: 6px 10px !important;
   padding: 8px 12px !important;
+  margin: 4px 0 !important;
   border-radius: 12px !important;
   background: rgba(8, 24, 40, 0.92) !important;
   border: 1px solid rgba(255, 211, 92, 0.38) !important;
 }
 
 .sponsor-logo-wrap {
-  flex: 0 0 144px;
-  width: 144px;
-  height: 45px;
+  flex: 0 0 136px;
+  width: 136px;
+  height: 42px;
 }
 
 .sponsor-logo-svg {
@@ -6046,8 +6051,10 @@ button.btn-pop-active::before {
 }
 
 .sponsor-copy-text {
-  font-size: 13.5px !important;
-  line-height: 1.38 !important;
+  flex: 1 1 100% !important;
+  width: 100% !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
   color: #e4f5ff !important;
 }
 
