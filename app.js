@@ -479,7 +479,7 @@ const translations = {
     lightboxClose: "✕ CLOSE",
     qrTapStation: "TAP A STATION QR STICKER OR ENTER CODE",
     qrApply: "APPLY QR CODE",
-    maximizeBadge: "⤢ MAXIMIZE",
+    maximizeBadge: "⤢",
     lightboxGhostOpacity: "BEFORE SHADOW OVERLAY OPACITY",
     deckStampLeft: "⟵ MISS",
     deckStampRight: "RIGHT CALL ⟶",
@@ -840,7 +840,7 @@ const translations = {
     lightboxClose: "✕ CERRAR",
     qrTapStation: "TOCA UNA ETIQUETA QR DE ESTACIÓN O INGRESA EL CÓDIGO",
     qrApply: "APLICAR CÓDIGO QR",
-    maximizeBadge: "⤢ AMPLIAR",
+    maximizeBadge: "⤢",
     lightboxGhostOpacity: "OPACIDAD DE LA SOMBRA DEL ANTES",
     deckStampLeft: "⟵ FALLO",
     deckStampRight: "ACIERTA ⟶",
@@ -1201,7 +1201,7 @@ const translations = {
     lightboxClose: "✕ ZAMKNIJ",
     qrTapStation: "DOTKNIJ NAKLEJKI QR STACJI LUB WPISZ KOD",
     qrApply: "ZASTOSUJ KOD QR",
-    maximizeBadge: "⤢ POWIĘKSZ",
+    maximizeBadge: "⤢",
     lightboxGhostOpacity: "PRZEZROCZYSTOŚĆ CIENIA PRZED",
     deckStampLeft: "⟵ BŁĄD",
     deckStampRight: "DOBRZE ⟶",
@@ -4356,7 +4356,7 @@ function renderVerifyProvenance() {
   el.classList.add("hidden");
   el.textContent = "";
   const ai = state.result?.ai;
-  if (!ai) return;
+  if (!ai || ai.judgeDemo) return;
   if (ai.verified?.status === "verified") {
     const sam = ai.sam?.status === "overlays" ? t("verifyProvenanceSamSuffix") : "";
     el.textContent = t("verifyProvenanceVerified", {
@@ -5085,9 +5085,7 @@ function calculateLocalScore(
     ? "rescan"
     : evidenceConfidence >= 0.68 ? "high" : "medium";
 
-  const findings = [
-    `Spot [${state.checkin?.assignedSpot || "Station"}] (${localizedRuleSummary(profile)}): ${profile[`focusNote_${state.language}`] || profile.focusNote}`
-  ];
+  const findings = [];
   if (!sceneValid) {
     findings.push(t("findingFraming"));
   } else if (beforeCount > 0 && clearedCount === beforeCount && newCount === 0) {
@@ -5098,7 +5096,9 @@ function calculateLocalScore(
   }
   if (remainingCount > 0) findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }));
   if (newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
-
+  if (!findings.length) {
+    findings.push(profile[`focusNote_${state.language}`] || profile.focusNote);
+  }
   return {
     cleanliness,
     taskCompletion: cleanliness,
@@ -7771,14 +7771,19 @@ function renderScoreBreakdown(runInput) {
   });
   if (els.surfaceGradeMap) {
     els.surfaceGradeMap.innerHTML = "";
-    const surfaces = gradeRunSurfaces(runInput || state.result?.ai);
-    surfaces.forEach((s) => {
-      const chip = document.createElement("span");
-      chip.className = `surface-grade-chip ${s.grade}`;
-      const gradeLabel = s.grade === "clean" ? t("gradeClean") : s.grade === "partly" ? t("gradePartly") : t("gradeMissed");
-      chip.textContent = `${localizedSpotName(s.name)}: ${gradeLabel}`;
-      els.surfaceGradeMap.appendChild(chip);
-    });
+    const activeAi = runInput || state.result?.ai;
+    const hasCloudCard = activeAi?.verified?.status === "verified";
+    els.surfaceGradeMap.classList.toggle("hidden", Boolean(hasCloudCard));
+    if (!hasCloudCard) {
+      const surfaces = gradeRunSurfaces(activeAi);
+      surfaces.forEach((s) => {
+        const chip = document.createElement("span");
+        chip.className = `surface-grade-chip ${s.grade}`;
+        const gradeLabel = s.grade === "clean" ? t("gradeClean") : s.grade === "partly" ? t("gradePartly") : t("gradeMissed");
+        chip.textContent = `${localizedSpotName(s.name)}: ${gradeLabel}`;
+        els.surfaceGradeMap.appendChild(chip);
+      });
+    }
   }
   return Object.freeze(bars);
 }

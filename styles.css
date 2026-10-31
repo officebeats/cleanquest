@@ -3498,18 +3498,54 @@ p {
 
 .maximize-badge {
   position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
+  top: 6px !important;
+  right: 6px !important;
   z-index: 5 !important;
-  padding: 4px 9px !important;
-  border-radius: 999px !important;
-  background: rgba(6, 16, 28, 0.88) !important;
-  border: 1px solid rgba(72, 239, 255, 0.65) !important;
-  color: #48efff !important;
-  font-size: 11px !important;
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 50% !important;
+  background: rgba(4, 12, 22, 0.78) !important;
+  border: 1px solid rgba(99, 218, 255, 0.35) !important;
+  color: #bfefff !important;
+  font-size: 12px !important;
   font-weight: 800 !important;
-  letter-spacing: 0.04em !important;
   pointer-events: none !important;
+}
+
+#resultsScreen #scoreBreakdownCard > .section-label,
+#resultsScreen #scoreBreakdownCard:not(:has(.score-bar-item)),
+#resultsScreen .evidence-section > .section-label,
+#resultsScreen .finding-card .finding-label,
+#resultsScreen .results-actions-grid .dispute-row > .section-label {
+  display: none !important;
+}
+
+#resultsScreen .finding-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 2px 4px !important;
+}
+
+#resultsScreen .results-actions-grid .identity-panel,
+#resultsScreen .results-actions-grid .dispute-panel {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+#resultsScreen .results-actions-grid .dispute-row {
+  display: flex !important;
+}
+
+#resultsScreen #voiceRecordButton,
+#resultsScreen #disputeButton {
+  width: 100% !important;
+  justify-content: center !important;
 }
 
 .evidence-lightbox-modal {
@@ -4599,25 +4635,25 @@ select:focus-visible {
 
   /* Results screen: 16:9 thumbnails without black bars, side-by-side actions, zero sticky-CTA overlap */
   #resultsScreen .content {
-    padding-top: 6px !important;
-    padding-bottom: 6px !important;
+    padding-top: 8px !important;
+    padding-bottom: 10px !important;
   }
   #resultsScreen h2 {
     font-size: 20px !important;
-    margin: 0 0 2px !important;
+    margin: 0 0 6px !important;
   }
   #resultsScreen #resultsBody {
     display: flex !important;
     flex-direction: column !important;
-    gap: 4px !important;
+    gap: 8px !important;
   }
   #resultsScreen .score-hero {
-    padding: 4px 10px !important;
+    padding: 8px 14px !important;
     margin: 0 !important;
     min-height: 0 !important;
   }
   #resultsScreen .score-hero > strong {
-    font-size: 28px !important;
+    font-size: 32px !important;
     line-height: 1 !important;
   }
   #resultsScreen .score-evidence-state {
@@ -4635,38 +4671,37 @@ select:focus-visible {
   #resultsScreen .result-card strong {
     font-size: 15px !important;
   }
-  #resultsScreen #scoreBreakdownCard,
-  #resultsScreen .finding-card,
-  #resultsScreen .identity-panel,
-  #resultsScreen .dispute-panel {
-    padding: 4px 8px !important;
+  #resultsScreen #scoreBreakdownCard {
+    padding: 10px 12px !important;
     margin: 0 !important;
   }
   #resultsScreen .evidence-section {
     margin: 0 !important;
   }
   #resultsScreen .evidence-grid {
-    gap: 6px !important;
-    margin-top: 2px !important;
+    gap: 8px !important;
+    margin-top: 0 !important;
   }
   #resultsScreen .evidence-grid .evidence-image-wrap {
     aspect-ratio: 16 / 9 !important;
-    height: 68px !important;
-    min-height: 68px !important;
-    max-height: 68px !important;
+    height: 92px !important;
+    min-height: 92px !important;
+    max-height: 92px !important;
+    overflow: hidden !important;
   }
   #resultsScreen .evidence-grid .evidence-image-wrap > img {
-    height: 68px !important;
-    max-height: 68px !important;
+    height: 92px !important;
+    max-height: 92px !important;
   }
   #resultsScreen .evidence-card figcaption {
-    padding: 2px 6px !important;
+    padding: 4px 8px !important;
     font-size: 11px !important;
   }
   #resultsScreen .finding-card p {
-    font-size: 12px !important;
-    line-height: 1.34 !important;
-    margin: 2px 0 0 !important;
+    font-size: 13px !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+    color: var(--muted-bright) !important;
   }
   #resultsScreen #analysisDisclaimer {
     display: none !important;
@@ -4674,30 +4709,34 @@ select:focus-visible {
   #resultsScreen .results-actions-grid {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
-    gap: 6px !important;
-    margin: 0 !important;
+    gap: 8px !important;
+    margin: 2px 0 0 !important;
   }
   #resultsScreen .dispute-row {
     flex-wrap: wrap !important;
     gap: 4px !important;
   }
   #resultsScreen .results-actions-grid .compact-chip {
-    min-height: 40px !important;
+    min-height: 44px !important;
     padding: 6px 10px !important;
     font-size: 12px !important;
   }
   #resultsScreen .results-actions-grid small.fine-print {
-    font-size: 12px !important;
-    line-height: 1.32 !important;
-    margin-top: 2px !important;
+    display: block !important;
+    font-size: 11px !important;
+    line-height: 1.3 !important;
+    margin-top: 4px !important;
+    color: var(--muted) !important;
+    text-align: center !important;
   }
   #resultsScreen .results-cta-bar,
   #resultsScreen .sticky-cta {
-    margin-top: 2px !important;
-    padding: 2px 0 0 !important;
+    margin-top: 4px !important;
+    padding: 6px 0 max(4px, env(safe-area-inset-bottom)) !important;
+    background: #02060e !important;
   }
   #resultsScreen #resultsContinue {
-    min-height: 44px !important;
+    min-height: 48px !important;
   }
 
   /* Settings screen: Host Voice first, compact 2-col grid, zero sticky-CTA overlap */
