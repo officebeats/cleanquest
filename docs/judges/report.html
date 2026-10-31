@@ -61,6 +61,7 @@
   svg.diagram .dim { fill:var(--muted-bright); }
   svg.diagram .accent { fill:var(--cyan); }
   @media print {
+    body, header.hero, section.card, .meta span, code, th, .verdict, header.hero .links a, svg.diagram .node, svg.diagram .lane { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
     header.hero { padding:24px; } main { max-width:none; padding:0 8px; }
     section.card { break-inside:avoid; }
     .shot img { width:230px; }
