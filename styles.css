@@ -4951,14 +4951,30 @@ select:focus-visible {
   height: 20px;
 }
 
-/* Camera Check-In: clean top-labeled 2-col station selector, zero ragged left edges */
+/* Camera Check-In: clean top-labeled station selector with Lottie badge & QR icon */
 #cameraScreen #checkinBar {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 8px 10px !important;
   padding: 10px 12px !important;
   border-radius: 14px !important;
-  background: rgba(8, 22, 36, 0.88) !important;
+  background: rgba(8, 22, 36, 0.92) !important;
+  border: 1px solid rgba(72, 239, 255, 0.42) !important;
+}
+
+.checkin-station-head {
+  grid-column: 1 / -1 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.checkin-station-head .checkin-site-label {
+  flex: 1 1 auto !important;
+}
+
+.checkin-lottie-svg {
+  flex: 0 0 26px;
 }
 
 #cameraScreen #checkinBar .checkin-area-label {
@@ -4970,32 +4986,35 @@ select:focus-visible {
 }
 
 #cameraScreen #checkinBar .checkin-area-label > span {
-  font-size: 11px !important;
+  font-size: 12.5px !important;
   font-weight: 850 !important;
-  letter-spacing: 0.08em !important;
+  letter-spacing: 0.06em !important;
   color: var(--cyan) !important;
 }
 
-#cameraScreen #checkinBar .checkin-site-label {
+#cameraScreen #checkinBar .area-select {
+  font-size: 15.5px !important;
+  font-weight: 800 !important;
+  min-height: 44px !important;
+  padding: 6px 10px !important;
+}
+
+.checkin-spot-qr-row {
   grid-column: 1 / -1 !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: 8px !important;
 }
 
-#cameraScreen #checkinBar label[for="spotTemplateSelect"] {
-  grid-column: 1 / 2 !important;
+.checkin-spot-qr-row .checkin-spot-full {
+  flex: 1 1 auto !important;
 }
 
-#cameraScreen #scanAreaQrButton {
-  grid-column: 2 / 3 !important;
-  justify-self: end !important;
-  align-self: end !important;
-  width: 100% !important;
-  max-width: 56px !important;
-}
-
-#cameraScreen #assignedSpotBadge {
+#cameraScreen #assignedSpotBadge,
+#timerScreen #timerSpotRuleBadge,
+#timerScreen #timerSpotBar > label[for="timerSpotSelect"] {
   display: none !important;
 }
-
 /* Results screen: crisp legibility, single action button, zero verbose paragraphs */
 #resultsScreen #disputePanel,
 #resultsScreen #judgeDemoNote,
@@ -5437,27 +5456,338 @@ select:focus-visible {
   gap: 2px;
   min-width: 44px;
 }
-/* Staggered Screen Entrance Cascade (zero vertical layout shift for instant CTA reachability) */
+/* Staggered Screen Entrance Cascade (starts 6px higher so bottom CTAs never exceed resting fold) */
 .screen.screen-enter-cascade > .content > * {
-  animation: screen-item-rise 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  animation: screen-item-rise 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
+.screen.screen-enter-cascade > .content > *:nth-child(1) { animation-delay: 0ms; }
+.screen.screen-enter-cascade > .content > *:nth-child(2) { animation-delay: 40ms; }
+.screen.screen-enter-cascade > .content > *:nth-child(3) { animation-delay: 80ms; }
+.screen.screen-enter-cascade > .content > *:nth-child(4) { animation-delay: 115ms; }
 
 @keyframes screen-item-rise {
-  0% { opacity: 0.78; filter: brightness(1.18); }
-  100% { opacity: 1; filter: brightness(1); }
+  0% { opacity: 0.72; transform: translateY(-6px); filter: brightness(1.15); }
+  100% { opacity: 1; transform: translateY(0); filter: brightness(1); }
 }
 
-/* Gamified Button Pop & Radial Ripple */
+/* Gamified Screen Transition Holographic Sweep Portal */
+.screen-transition-portal {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9990;
+  opacity: 0;
+  background: linear-gradient(115deg, transparent 20%, rgba(69, 234, 255, 0.18) 48%, rgba(57, 245, 188, 0.24) 52%, transparent 80%);
+  transform: translateX(-120%);
+}
+
+.screen-transition-portal.portal-sweep {
+  animation: portal-laser-wipe 420ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes portal-laser-wipe {
+  0% { opacity: 0.95; transform: translateX(-110%); }
+  65% { opacity: 0.75; }
+  100% { opacity: 0; transform: translateX(110%); }
+}
+
+/* Gamified Button Pop & Radial Ripple using --tap-x / --tap-y */
+button {
+  position: relative;
+  overflow: hidden;
+}
+
 button.btn-pop-active {
   animation: btn-spring-pop 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  background-image: radial-gradient(circle 90px at var(--tap-x, 50%) var(--tap-y, 50%), rgba(255, 255, 255, 0.32), transparent 70%);
 }
 
 @keyframes btn-spring-pop {
-  0% { transform: scale(0.94); }
+  0% { transform: scale(0.95); }
   55% { transform: scale(1.03); }
   100% { transform: scale(1); }
 }
 
+.button-sparkle-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9995;
+  overflow: hidden;
+}
+
+.btn-sparkle-dot {
+  position: fixed;
+  font-size: 16px;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  animation: btn-sparkle-fly 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes btn-sparkle-fly {
+  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--sx)), calc(-50% + var(--sy))) scale(1.15); opacity: 0; }
+}
+
+.screen-title-with-lottie {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-lottie-svg {
+  flex: 0 0 28px;
+}
+
+/* Results 5-Tier Verdict Audio Summary Pill & High-Legibility Breakdown */
+#resultsScreen .score-hero {
+  flex-wrap: wrap !important;
+}
+
+.verdict-audio-pill {
+  flex: 1 1 100% !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  margin-top: 8px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(8, 26, 44, 0.88);
+  border: 1px solid rgba(69, 234, 255, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.verdict-audio-pill[data-tier="pass-big"] { border-color: rgba(57, 245, 188, 0.75); box-shadow: 0 0 18px rgba(57, 245, 188, 0.22); }
+.verdict-audio-pill[data-tier="pass-close"] { border-color: rgba(255, 211, 92, 0.65); }
+.verdict-audio-pill[data-tier="retry"],
+.verdict-audio-pill[data-tier="retry-far"] { border-color: rgba(255, 159, 90, 0.65); }
+
+.verdict-replay-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(99, 218, 255, 0.35);
+  background: rgba(14, 42, 68, 0.85);
+  color: #f0fbff;
+  font-size: 12px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.verdict-tier-badge {
+  color: #ffd35c;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.verdict-waveform {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.verdict-waveform i {
+  display: block;
+  width: 2.5px;
+  height: 4px;
+  border-radius: 2px;
+  background: #39f5bc;
+}
+
+.verdict-audio-pill.is-playing .verdict-waveform i:nth-child(1) { animation: eq-bounce 0.36s ease-in-out infinite alternate; }
+.verdict-audio-pill.is-playing .verdict-waveform i:nth-child(2) { animation: eq-bounce 0.28s ease-in-out 0.08s infinite alternate; background: #45eaff; }
+.verdict-audio-pill.is-playing .verdict-waveform i:nth-child(3) { animation: eq-bounce 0.32s ease-in-out 0.16s infinite alternate; background: #ffd35c; }
+.verdict-audio-pill.is-playing .verdict-waveform i:nth-child(4) { animation: eq-bounce 0.26s ease-in-out 0.05s infinite alternate; }
+.verdict-audio-pill.is-playing .verdict-waveform i:nth-child(5) { animation: eq-bounce 0.38s ease-in-out 0.12s infinite alternate; }
+
+.verdict-transcript-line {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #dff6ff;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Timer & Results High-Legibility Enhancements Across All Viewports */
+#timerScreen .timer-spot-pills {
+  display: flex !important;
+  flex: 1 1 auto !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+
+#timerScreen .spot-pill-chip {
+  min-height: 40px !important;
+  padding: 5px 12px !important;
+  font-size: 13.5px !important;
+  font-weight: 850 !important;
+  border-radius: 999px !important;
+}
+
+#timerScreen #liveActivityBadge {
+  white-space: nowrap !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 5px 14px !important;
+  border-radius: 999px !important;
+  font-size: 12.5px !important;
+  font-weight: 850 !important;
+  height: auto !important;
+  min-height: 28px !important;
+}
+
+#timerScreen #dwellCueText {
+  font-size: 14px !important;
+  font-weight: 650 !important;
+  color: #e6f7ff !important;
+  line-height: 1.38 !important;
+}
+
+#timerScreen #dwellCreditButton {
+  min-height: 40px !important;
+  padding: 6px 12px !important;
+  font-size: 13.5px !important;
+  font-weight: 900 !important;
+  color: #041824 !important;
+  background: linear-gradient(135deg, #39f5bc, #45eaff) !important;
+  border: none !important;
+  border-radius: 10px !important;
+}
+
+#resultsScreen .score-breakdown-bars {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 8px !important;
+}
+
+#resultsScreen .score-bar-detail {
+  margin: 3px 0 0 !important;
+  font-size: 14.5px !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  color: #d8f3ff !important;
+}
+
+#resultsScreen #offlineScoreNote,
+#resultsScreen #analysisDisclaimer {
+  display: none !important;
+}
+
+/* FULL-CANVAS RESPONSIVE DESKTOP LAYOUT (@media min-width: 900px) — 100% Above the Fold */
+@media (min-width: 900px) {
+  .app-shell {
+    width: min(1360px, calc(100vw - 32px)) !important;
+    max-width: 1360px !important;
+  }
+  .screen > .content {
+    width: 100% !important;
+    max-width: 1280px !important;
+    padding: 14px 24px !important;
+  }
+  #welcomeScreen .content {
+    max-width: 1020px !important;
+    justify-content: center !important;
+  }
+  #welcomeScreen h1 {
+    font-size: clamp(44px, 4.8vw, 64px) !important;
+  }
+  #welcomeScreen .hero-copy {
+    font-size: 20px !important;
+    max-width: 780px !important;
+  }
+  #welcomeScreen .primary-button,
+  #welcomeScreen .secondary-button {
+    min-height: 54px !important;
+    font-size: 17px !important;
+  }
+  #instructionsScreen .instruction-list {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 18px !important;
+  }
+  #instructionsScreen .instruction-card h3 {
+    font-size: 21px !important;
+  }
+  #instructionsScreen .instruction-card p {
+    font-size: 16.5px !important;
+    line-height: 1.5 !important;
+  }
+  /* Camera Check-In Desktop: Camera on Left (100% above fold), Station Picker + Actions on Right */
+  #cameraScreen .camera-content {
+    display: grid !important;
+    grid-template-columns: 1.35fr 1fr !important;
+    grid-template-rows: auto auto 1fr !important;
+    gap: 16px 22px !important;
+    align-items: start !important;
+    max-height: calc(100dvh - 76px) !important;
+  }
+  #cameraScreen .camera-content > .camera-frame {
+    grid-column: 1 !important;
+    grid-row: 1 / 4 !important;
+    height: calc(100dvh - 116px) !important;
+    max-height: 600px !important;
+    min-height: 320px !important;
+    aspect-ratio: auto !important;
+  }
+  #cameraScreen #checkinBar {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    margin-bottom: 0 !important;
+  }
+  #cameraScreen #cameraContinue {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    min-height: 54px !important;
+    font-size: 17px !important;
+  }
+  #cameraScreen #continueWithoutCamera {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+    align-self: start !important;
+    min-height: 48px !important;
+    font-size: 15px !important;
+  }
+  /* Timer Screen Desktop: Bounded Camera on Left, Bold Timer + Controls on Right */
+  #timerScreen .timer-content {
+    grid-template-columns: 1.35fr 1fr !important;
+    gap: 10px 22px !important;
+    max-height: calc(100dvh - 76px) !important;
+  }
+  #timerScreen .timer-camera-frame {
+    height: calc(100dvh - 205px) !important;
+    max-height: 520px !important;
+    min-height: 280px !important;
+    aspect-ratio: auto !important;
+  }
+  /* Leaderboard, Deck, Records, Settings Full-Canvas Desktop */
+  #leaderboardScreen .content,
+  #recordsScreen .content,
+  #settingsScreen .content {
+    max-width: 1180px !important;
+  }
+  #leaderboardScreen .crew-summary-bar {
+    font-size: 16.5px !important;
+    padding: 12px 18px !important;
+  }
+  #leaderboardScreen .leaderboard-list {
+    max-height: calc(100dvh - 380px) !important;
+  }
+  #leaderboardScreen .leaderboard-row {
+    font-size: 17px !important;
+    padding: 12px 18px !important;
+  }
+  #deckScreen .content {
+    max-width: 880px !important;
+  }
+}
 /* Daily Deck Ambient Floaters, Cleaning Confetti & Beat Thump */
 .deck-ambient-floaters {
   position: absolute;
@@ -5576,6 +5906,8 @@ button.btn-pop-active {
 }
 
 @media (max-height: 660px) {
+  #resultsScreen .verdict-audio-pill,
+  #resultsScreen .score-bar-detail,
   #settingsScreen .music-streaming-bar,
   #settingsScreen .music-stream-drawer,
   #deckScreen .deck-illustration,

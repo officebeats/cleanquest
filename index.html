@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031-9" />
+  <link rel="stylesheet" href="styles.css?v=20261031-11" />
 </head>
 
 <body>
@@ -64,7 +64,7 @@
         </div>
 
         <p id="welcomeBody" class="hero-copy" data-i18n="welcomeBody">
-          Clean fast. Clean well. Let AI evaluate what it can clearly see.
+          Tap Start and clean — AI auto-captures live frames during the countdown, tracks every surface zone, and calls the action in real time.
         </p>
 
         <div id="cleanerStepTabs" class="mvp-step-tabs hidden" role="tablist" aria-label="Cleaner onboarding and home screens">
@@ -312,49 +312,58 @@
       <div class="content camera-content">
 
         <div id="checkinBar" class="checkin-bar">
-          <label class="checkin-area-label checkin-site-label" for="siteSelect">
-            <span data-i18n="siteLabel">SITE</span>
-            <select id="siteSelect" class="area-select"></select>
-          </label>
+          <div class="checkin-station-head">
+            <svg class="checkin-lottie-svg" viewBox="0 0 36 36" width="26" height="26" aria-hidden="true">
+              <circle cx="18" cy="18" r="14" fill="rgba(69,234,255,0.14)" stroke="#45eaff" stroke-width="1.6" stroke-dasharray="4 3" class="lottie-orbit"/>
+              <circle class="lottie-pulse" cx="18" cy="18" r="5" fill="#39f5bc"/>
+              <path class="lottie-sparkle" d="M27 8 l1.6 4 l4 1.6 l-4 1.6 l-1.6 4 l-1.6-4 l-4-1.6 l4-1.6 z" fill="#ffd35c"/>
+            </svg>
+            <label class="checkin-area-label checkin-site-label" for="siteSelect">
+              <span data-i18n="siteLabel">📍 SITE</span>
+              <select id="siteSelect" class="area-select"></select>
+            </label>
+          </div>
           <label class="checkin-area-label" for="buildingLeagueSelect">
-            <span data-i18n="leagueLabel">LEAGUE</span>
+            <span data-i18n="leagueLabel">🏢 BUILDING</span>
             <select id="buildingLeagueSelect" class="area-select">
-              <option value="office" data-i18n="leagueOffice">Office</option>
-              <option value="education" data-i18n="leagueEducation">Education</option>
-              <option value="healthcare" data-i18n="leagueHealthcare">Healthcare</option>
-              <option value="industrial" data-i18n="leagueIndustrial">Industrial</option>
-              <option value="retail" data-i18n="leagueRetail">Retail</option>
+              <option value="office" data-i18n="leagueOffice">🏢 Office</option>
+              <option value="education" data-i18n="leagueEducation">🏫 Education</option>
+              <option value="healthcare" data-i18n="leagueHealthcare">🏥 Healthcare</option>
+              <option value="industrial" data-i18n="leagueIndustrial">🏭 Industrial</option>
+              <option value="retail" data-i18n="leagueRetail">🛍️ Retail</option>
             </select>
           </label>
           <label class="checkin-area-label" for="areaTemplateSelect">
-            <span data-i18n="areaLabel">AREA</span>
+            <span data-i18n="areaLabel">🚪 AREA</span>
             <select id="areaTemplateSelect" class="area-select">
-              <option value="breakroom" data-i18n="areaBreakroom">Breakroom</option>
-              <option value="restroom" data-i18n="areaRestroom">Restroom</option>
-              <option value="lobby" data-i18n="areaLobby">Lobby</option>
-              <option value="office" data-i18n="areaOffice">Office</option>
-              <option value="classroom" data-i18n="areaClassroom">Classroom</option>
+              <option value="breakroom" data-i18n="areaBreakroom">☕ Breakroom</option>
+              <option value="restroom" data-i18n="areaRestroom">🚻 Restroom</option>
+              <option value="lobby" data-i18n="areaLobby">🛋️ Lobby</option>
+              <option value="office" data-i18n="areaOffice">💼 Office</option>
+              <option value="classroom" data-i18n="areaClassroom">🎓 Classroom</option>
             </select>
           </label>
-          <label class="checkin-area-label" for="spotTemplateSelect">
-            <span data-i18n="spotLabel">SPOT</span>
-            <select id="spotTemplateSelect" class="area-select">
-              <option value="Sink & counter">Sink &amp; counter</option>
-              <option value="Workstation desk & shelf">Workstation desk &amp; shelf</option>
-              <option value="Tabletop & appliance front">Tabletop &amp; appliance front</option>
-              <option value="Mirror, glass & handles">Mirror, glass &amp; handles</option>
-              <option value="Fixture row & partition">Fixture row &amp; partition</option>
-              <option value="Trash & floor zone">Trash &amp; floor zone</option>
-            </select>
-          </label>
-          <button id="scanAreaQrButton" class="ghost-toggle-chip qr-icon-btn" type="button" aria-label="Scan QR" data-i18n-aria="scanAreaQrAction" title="Scan QR">
-            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
-              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
-              <path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h.01"></path>
-            </svg>
-          </button>
+          <div class="checkin-spot-qr-row">
+            <label class="checkin-area-label checkin-spot-full" for="spotTemplateSelect">
+              <span data-i18n="spotLabel">🎯 SPOT TO CLEAN</span>
+              <select id="spotTemplateSelect" class="area-select">
+                <option value="Sink & counter">🚰 Sink &amp; counter</option>
+                <option value="Workstation desk & shelf">🖥️ Workstation desk &amp; shelf</option>
+                <option value="Tabletop & appliance front">🍽️ Tabletop &amp; appliance front</option>
+                <option value="Mirror, glass & handles">🪞 Mirror, glass &amp; handles</option>
+                <option value="Fixture row & partition">🚽 Fixture row &amp; partition</option>
+                <option value="Trash & floor zone">🗑️ Trash &amp; floor zone</option>
+              </select>
+            </label>
+            <button id="scanAreaQrButton" class="ghost-toggle-chip qr-icon-btn" type="button" aria-label="Scan QR" data-i18n-aria="scanAreaQrAction" title="Scan QR">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                <path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h.01"></path>
+              </svg>
+            </button>
+          </div>
           <span id="assignedSpotBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
         </div>
 
@@ -431,7 +440,12 @@
     <section id="timerScreen" class="screen">
       <div class="content timer-content">
         <div class="timer-header">
-          <div>
+          <div class="screen-title-with-lottie">
+            <svg class="header-lottie-svg" viewBox="0 0 36 36" width="30" height="30" aria-hidden="true">
+              <circle cx="18" cy="19" r="12" fill="rgba(69,234,255,0.14)" stroke="#45eaff" stroke-width="2"/>
+              <line class="lottie-orbit" x1="18" y1="19" x2="18" y2="11" stroke="#ffd35c" stroke-width="2.2" stroke-linecap="round"/>
+              <circle class="lottie-bubble" cx="29" cy="9" r="3" fill="#39f5bc"/>
+            </svg>
             <h2 data-i18n="qualityFirst">Quality first. Time second.</h2>
           </div>
 
@@ -579,8 +593,14 @@
     <!-- RESULTS -->
     <section id="resultsScreen" class="screen">
       <div class="content results-content">
-        <h2 data-i18n="challengeComplete">Challenge complete</h2>
-
+        <div class="screen-title-with-lottie">
+          <svg class="header-lottie-svg" viewBox="0 0 36 36" width="30" height="30" aria-hidden="true">
+            <path class="lottie-float" d="M10 9 h16 v8 a8 8 0 0 1 -16 0 z" fill="#ffd35c" stroke="#fff" stroke-width="1.4"/>
+            <rect x="15" y="25" width="6" height="4" rx="1" fill="#39f5bc"/>
+            <path class="lottie-sparkle" d="M29 7 l1.8 4.2 l4.2 1.8 l-4.2 1.8 l-1.8 4.2 l-1.8-4.2 l-4.2-1.8 l4.2-1.8 z" fill="#45eaff"/>
+          </svg>
+          <h2 data-i18n="challengeComplete">Challenge complete</h2>
+        </div>
         <div id="analysisLoading" class="analysis-loading hidden">
           <div class="scanner-loader large">
             <span></span>
@@ -597,6 +617,14 @@
             <span data-i18n="visibleCleanliness">VISUAL CLEAN SCORE</span>
             <strong id="cleanlinessScore">--</strong>
             <small id="scoreEvidenceState" class="score-evidence-state">WAITING FOR EVIDENCE</small>
+            <div id="verdictAudioPill" class="verdict-audio-pill" data-tier="pass">
+              <button id="replaySummaryButton" type="button" class="verdict-replay-btn" aria-label="Replay audio summary">
+                <span class="verdict-waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+                <span id="verdictSummaryBadge" class="verdict-tier-badge">✨ A-RANK</span>
+                <span id="replaySummaryLabel" data-i18n="replaySummary">🔊 REPLAY SUMMARY</span>
+              </button>
+              <p id="verdictTranscriptLine" class="verdict-transcript-line" aria-live="polite"></p>
+            </div>
           </div>
 
           <div class="result-grid">
@@ -812,8 +840,13 @@
     <!-- LEADERBOARD -->
     <section id="leaderboardScreen" class="screen">
       <div class="content">
-        <h2 data-i18n="leaderboard">Leaderboard</h2>
-
+        <div class="screen-title-with-lottie">
+          <svg class="header-lottie-svg" viewBox="0 0 36 36" width="28" height="28" aria-hidden="true">
+            <path class="lottie-float" d="M6 26 l3-13 l9 6 l9-6 l3 13 z" fill="#ffd35c" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+            <circle class="lottie-pulse" cx="18" cy="9" r="2.5" fill="#39f5bc"/>
+          </svg>
+          <h2 data-i18n="leaderboard">Leaderboard</h2>
+        </div>
         <div id="crewLeaderboardSummary" class="crew-summary-bar hologram-card"></div>
         <div id="personalRecordBar" class="crew-summary-bar hologram-card">
           <div class="consent-gate-head">
@@ -875,8 +908,13 @@
     <!-- RECORDS -->
     <section id="recordsScreen" class="screen">
       <div class="content">
-        <h2 data-i18n="recordsTitle">INSPECTION LOG</h2>
-
+        <div class="screen-title-with-lottie">
+          <svg class="header-lottie-svg" viewBox="0 0 36 36" width="28" height="28" aria-hidden="true">
+            <rect x="8" y="6" width="20" height="24" rx="4" fill="rgba(69,234,255,0.16)" stroke="#45eaff" stroke-width="2"/>
+            <path class="lottie-pulse" d="M13 18 l3.5 3.5 l7-7" fill="none" stroke="#39f5bc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <h2 data-i18n="recordsTitle">INSPECTION LOG</h2>
+        </div>
         <div id="offlineQueueSection" class="offline-queue-section hologram-card hidden">
           <div class="section-label" data-i18n="offlineQueueTitle">OFFLINE RUN QUEUE (AWAITING SCORE)</div>
           <div id="offlineQueueList" class="provider-log"></div>
@@ -980,8 +1018,13 @@
     <!-- SETTINGS -->
     <section id="settingsScreen" class="screen">
       <div class="content">
-        <h2 data-i18n="settingsTitle">SETTINGS</h2>
-
+        <div class="screen-title-with-lottie">
+          <svg class="header-lottie-svg" viewBox="0 0 36 36" width="28" height="28" aria-hidden="true">
+            <circle cx="18" cy="18" r="11" fill="rgba(119,103,255,0.18)" stroke="#45eaff" stroke-width="2" stroke-dasharray="5 3" class="lottie-orbit"/>
+            <circle class="lottie-pulse" cx="18" cy="18" r="4" fill="#39f5bc"/>
+          </svg>
+          <h2 data-i18n="settingsTitle">SETTINGS</h2>
+        </div>
         <div id="settingsHostVoicePanel" class="identity-panel hologram-card">
           <span data-i18n="hostVoiceTitle">HOST VOICE</span>
           <div class="hype-level-group" role="radiogroup" aria-label="Host hype level">
@@ -1322,7 +1365,9 @@
     </div>
   </section>
 
-  <script src="deck.js?v=20261031-9"></script>
-  <script src="app.js?v=20261031-9"></script>
+  <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
+  <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
+  <script src="deck.js?v=20261031-11"></script>
+  <script src="app.js?v=20261031-11"></script>
 </body>
 </html>

@@ -142,7 +142,7 @@ const translations = {
     aiPoweredChallenge: "AI-POWERED SPEED CHALLENGE",
     beatThe: "Beat the",
     certificationTime: "Benchmark Time",
-    welcomeBody: "Take two photos — before and after. Your verified record travels with you, job to job.",
+    welcomeBody: "Tap Start and clean — AI auto-captures live frames during the countdown, tracks every surface zone, and calls the action in real time.",
     homeStatusLine: "🔥 Streak {streak} · Week {week} of 13 · {matchup}",
     welcomeDisclaimer: "Prototype experience. Benchmark only — never a certification.",
     acceptChallenge: "ACCEPT THE CHALLENGE",
@@ -466,11 +466,15 @@ const translations = {
     captureAfterAndScore: "CAPTURE AFTER & SCORE",
     scanAreaQrAction: "⌗ SCAN QR",
     qrScannedPrefix: "✓ QR SPOT:",
-    spotLabel: "SPOT",
+    spotLabel: "🎯 SPOT",
+    siteLabel: "📍 SITE",
+    leagueLabel: "🏢 BUILDING",
+    areaLabel: "🚪 AREA",
+    replaySummary: "🔊 REPLAY SUMMARY",
     rulePrefix: "RULE:",
     idleNudge: "⚡ NO MOTION DETECTED — STEP IN & WORK THE ASSIGNED SPOT!",
     noMotionBadge: "⚠ NO MOTION · STEP IN!",
-    zonesActive: "🔥 {n}/9 ZONES · ACTIVE",
+    zonesActive: "📸 AUTO-SNAP · {n}/9 ZONES ACTIVE",
     sharePassportAction: "🪪 SHARE PASSPORT",
     passportCopiedNote: "✓ Verified Benchmark Passport copied to share!",
     deckSwipeHint: "⟵ DRAG / SWIPE LEFT = MISS  ·  DRAG / SWIPE RIGHT = RIGHT CALL ⟶",
@@ -489,16 +493,16 @@ const translations = {
     deckStampLeft: "⟵ MISS",
     deckStampRight: "RIGHT CALL ⟶",
     openSupervisorTools: "📋 OPEN INSPECTION LOG & SUPERVISOR TOOLS (11–15) →",
-    leagueOffice: "Office",
-    leagueEducation: "Education",
-    leagueHealthcare: "Healthcare",
-    leagueIndustrial: "Industrial",
-    leagueRetail: "Retail",
-    areaBreakroom: "Breakroom",
-    areaRestroom: "Restroom",
-    areaLobby: "Lobby",
-    areaOffice: "Office",
-    areaClassroom: "Classroom",
+    leagueOffice: "🏢 Office",
+    leagueEducation: "🏫 Education",
+    leagueHealthcare: "🏥 Healthcare",
+    leagueIndustrial: "🏭 Industrial",
+    leagueRetail: "🛍️ Retail",
+    areaBreakroom: "☕ Breakroom",
+    areaRestroom: "🚻 Restroom",
+    areaLobby: "🛋️ Lobby",
+    areaOffice: "💼 Office",
+    areaClassroom: "🎓 Classroom",
     gradeClean: "CLEAN",
     gradePartly: "PARTLY CLEAN",
     gradeMissed: "MISSED",
@@ -508,7 +512,7 @@ const translations = {
     aiPoweredChallenge: "RETO DE VELOCIDAD CON IA",
     beatThe: "Supera el",
     certificationTime: "Tiempo de Referencia",
-    welcomeBody: "Toma dos fotos — antes y después. Tu registro verificado te acompaña, trabajo tras trabajo.",
+    welcomeBody: "Toca Iniciar y limpia — la IA captura cuadros automáticamente durante la cuenta regresiva y narra tu progreso en vivo.",
     homeStatusLine: "🔥 Racha {streak} · Semana {week} de 13 · {matchup}",
     welcomeDisclaimer: "Experiencia prototipo. Solo referencia — nunca una certificación.",
     acceptChallenge: "ACEPTAR EL RETO",
@@ -832,11 +836,15 @@ const translations = {
     captureAfterAndScore: "CAPTURAR DESPUÉS Y PUNTUAR",
     scanAreaQrAction: "⌗ ESCANEAR QR",
     qrScannedPrefix: "✓ QR PUNTO:",
-    spotLabel: "PUNTO",
+    spotLabel: "🎯 PUNTO",
+    siteLabel: "📍 SITIO",
+    leagueLabel: "🏢 EDIFICIO",
+    areaLabel: "🚪 ÁREA",
+    replaySummary: "🔊 REPETIR RESUMEN",
     rulePrefix: "REGLA:",
     idleNudge: "⚡ SIN MOVIMIENTO DETECTADO — ¡ENTRA Y TRABAJA EL PUNTO ASIGNADO!",
     noMotionBadge: "⚠ SIN MOVIMIENTO · ¡ENTRA!",
-    zonesActive: "🔥 {n}/9 ZONAS · ACTIVO",
+    zonesActive: "📸 AUTO-CAPTURA · {n}/9 ZONAS ACTIVAS",
     sharePassportAction: "🪪 COMPARTIR PASAPORTE",
     passportCopiedNote: "✓ ¡Pasaporte de referencia copiado para compartir!",
     deckSwipeHint: "⟵ DESLIZA IZQUIERDA = FALLO  ·  DESLIZA DERECHA = ACIERTA ⟶",
@@ -855,16 +863,16 @@ const translations = {
     deckStampLeft: "⟵ FALLO",
     deckStampRight: "ACIERTA ⟶",
     openSupervisorTools: "📋 ABRIR REGISTRO Y HERRAMIENTAS DE SUPERVISIÓN (11–15) →",
-    leagueOffice: "Oficina",
-    leagueEducation: "Educación",
-    leagueHealthcare: "Salud",
-    leagueIndustrial: "Industrial",
-    leagueRetail: "Comercio",
-    areaBreakroom: "Sala de descanso",
-    areaRestroom: "Baño",
-    areaLobby: "Vestíbulo",
-    areaOffice: "Oficina",
-    areaClassroom: "Aula",
+    leagueOffice: "🏢 Oficina",
+    leagueEducation: "🏫 Educación",
+    leagueHealthcare: "🏥 Salud",
+    leagueIndustrial: "🏭 Industrial",
+    leagueRetail: "🛍️ Comercio",
+    areaBreakroom: "☕ Sala de descanso",
+    areaRestroom: "🚻 Baño",
+    areaLobby: "🛋️ Vestíbulo",
+    areaOffice: "💼 Oficina",
+    areaClassroom: "🎓 Aula",
     gradeClean: "LIMPIO",
     gradePartly: "PARCIAL",
     gradeMissed: "OMITIDO",
@@ -874,7 +882,7 @@ const translations = {
     aiPoweredChallenge: "WYZWANIE SZYBKOŚCIOWE Z AI",
     beatThe: "Pokonaj",
     certificationTime: "Czas Referencyjny",
-    welcomeBody: "Zrób dwa zdjęcia — przed i po. Twój zweryfikowany rekord idzie z Tobą z pracy do pracy.",
+    welcomeBody: "Naciśnij Start i sprzątaj — AI automatycznie rejestruje klatki podczas odliczania i komentuje postępy na żywo.",
     homeStatusLine: "🔥 Seria {streak} · Tydzień {week} z 13 · {matchup}",
     welcomeDisclaimer: "Wersja prototypowa. Tylko punkt odniesienia — nigdy certyfikacja.",
     acceptChallenge: "PODEJMIJ WYZWANIE",
@@ -1198,11 +1206,15 @@ const translations = {
     captureAfterAndScore: "ZRÓB ZDJĘCIE PO I OCEŃ",
     scanAreaQrAction: "⌗ SKANUJ QR",
     qrScannedPrefix: "✓ QR PUNKT:",
-    spotLabel: "PUNKT",
+    spotLabel: "🎯 MIEJSCE",
+    siteLabel: "📍 OBIEKT",
+    leagueLabel: "🏢 BUDYNEK",
+    areaLabel: "🚪 STREFA",
+    replaySummary: "🔊 ODTWÓRZ PODSUMOWANIE",
     rulePrefix: "ZASADA:",
     idleNudge: "⚡ BRAK RUCHU — WEJDŹ I PRACUJ NAD PRZYPISANYM PUNKTEM!",
     noMotionBadge: "⚠ BRAK RUCHU · WEJDŹ!",
-    zonesActive: "🔥 {n}/9 STREF · AKTYWNE",
+    zonesActive: "📸 AUTO-KADR · {n}/9 STREF AKTYWNYCH",
     sharePassportAction: "🪪 UDOSTĘPNIJ PASZPORT",
     passportCopiedNote: "✓ Zweryfikowany paszport skopiowany!",
     deckSwipeHint: "⟵ PRZESUŃ W LEWO = BŁĄD  ·  PRZESUŃ W PRAWO = DOBRZE ⟶",
@@ -1221,16 +1233,16 @@ const translations = {
     deckStampLeft: "⟵ BŁĄD",
     deckStampRight: "DOBRZE ⟶",
     openSupervisorTools: "📋 OTWÓRZ DZIENNIK I NARZĘDZIA NADZORU (11–15) →",
-    leagueOffice: "Biuro",
-    leagueEducation: "Edukacja",
-    leagueHealthcare: "Zdrowie",
-    leagueIndustrial: "Przemysł",
-    leagueRetail: "Handel",
-    areaBreakroom: "Pokój socjalny",
-    areaRestroom: "Łazienka",
-    areaLobby: "Hol",
-    areaOffice: "Biuro",
-    areaClassroom: "Sala lekcyjna",
+    leagueOffice: "🏢 Biuro",
+    leagueEducation: "🏫 Edukacja",
+    leagueHealthcare: "🏥 Zdrowie",
+    leagueIndustrial: "🏭 Przemysł",
+    leagueRetail: "🛍️ Handel",
+    areaBreakroom: "☕ Pokój socjalny",
+    areaRestroom: "🚻 Łazienka",
+    areaLobby: "🛋️ Hol",
+    areaOffice: "💼 Biuro",
+    areaClassroom: "🎓 Sala lekcyjna",
     gradeClean: "CZYSTO",
     gradePartly: "CZĘŚCIOWO",
     gradeMissed: "POMINIĘTO",
@@ -2446,48 +2458,48 @@ function attachBroadcastStudioChain(audioEl) {
     const ctx = sharedAudioContext;
     if (ctx.state === "suspended") ctx.resume().catch(() => {});
     const source = ctx.createMediaElementSource(audioEl);
+    // Warm FM-broadcast studio chain without metallic comb-filter slapback delay
     const lowWarmth = ctx.createBiquadFilter();
     lowWarmth.type = "lowshelf";
-    lowWarmth.frequency.value = 190;
-    lowWarmth.gain.value = 3.5;
+    lowWarmth.frequency.value = 175;
+    lowWarmth.gain.value = 3.2;
     const presence = ctx.createBiquadFilter();
-    presence.type = "peaking";
-    presence.frequency.value = 3200;
-    presence.Q.value = 1.1;
-    presence.gain.value = 5.5;
+    presence.type = "highshelf";
+    presence.frequency.value = 4400;
+    presence.gain.value = 2.6;
     const comp = ctx.createDynamicsCompressor();
-    comp.threshold.value = -18;
-    comp.knee.value = 12;
-    comp.ratio.value = 3.5;
-    comp.attack.value = 0.004;
-    comp.release.value = 0.12;
-    const slapDelay = ctx.createDelay(0.2);
-    slapDelay.delayTime.value = 0.062;
-    const slapGain = ctx.createGain();
-    slapGain.gain.value = 0.17;
+    comp.threshold.value = -16;
+    comp.knee.value = 10;
+    comp.ratio.value = 3.0;
+    comp.attack.value = 0.005;
+    comp.release.value = 0.14;
     const masterGain = ctx.createGain();
-    masterGain.gain.value = 1.18;
+    masterGain.gain.value = 1.22;
     source.connect(lowWarmth);
     lowWarmth.connect(presence);
     presence.connect(comp);
     comp.connect(masterGain);
-    comp.connect(slapDelay);
-    slapDelay.connect(slapGain);
-    slapGain.connect(masterGain);
     masterGain.connect(ctx.destination);
     state.voice.lastBroadcastChain = true;
-    audioEl._cqNodes = [source, lowWarmth, presence, comp, slapDelay, slapGain, masterGain];
+    audioEl._cqNodes = [source, lowWarmth, presence, comp, masterGain];
     return true;
   } catch {
     return false;
   }
 }
 
-function playHostClip(url, fallbackText, prosody, beat = "start") {
+function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null) {
   try {
     const audio = new Audio(url);
     state.voice.currentAudio = audio;
-    const targetRate = Number(prosody?.rate) ? Math.max(0.92, Math.min(1.18, Number(prosody.rate))) : 1.04;
+    // Disable WSOLA time-stretching pitch preservation so upbeat rates never sound phase-vocoded/robotic
+    const isUpbeatBeat = beat === "mid" || beat === "hurry" || beat === "hurry-final" || beat === "pass-big" || beat === "pass" || beat === "start";
+    const targetRate = isUpbeatBeat ? 1.04 : Number(prosody?.rate) ? Math.max(0.95, Math.min(1.06, Number(prosody.rate))) : 1.02;
+    try {
+      audio.preservesPitch = false;
+      audio.mozPreservesPitch = false;
+      audio.webkitPreservesPitch = false;
+    } catch {}
     audio.playbackRate = targetRate;
     audio.volume = 1.0;
     attachBroadcastStudioChain(audio);
@@ -2501,19 +2513,27 @@ function playHostClip(url, fallbackText, prosody, beat = "start") {
       try {
         URL.revokeObjectURL(audio.src);
       } catch {}
+      if (typeof onDone === "function") onDone();
     };
 
     audio.onerror = () => {
       cleanup();
       speakText(fallbackText, prosody);
+      if (typeof onDone === "function") setTimeout(onDone, 900);
     };
 
     const played = audio.play();
     if (played && typeof played.catch === "function") {
-      played.catch(() => speakText(fallbackText, prosody));
+      played.catch(() => {
+        speakText(fallbackText, prosody);
+        if (typeof onDone === "function") setTimeout(onDone, 900);
+      });
     }
+    return audio;
   } catch {
     speakText(fallbackText, prosody);
+    if (typeof onDone === "function") setTimeout(onDone, 900);
+    return null;
   }
 }
 
@@ -2694,8 +2714,11 @@ function composeScoreClipIds(value, unit = "percent", lang = state.language || "
   return parts;
 }
 
-function speakScoreNumber(value, unit = "percent") {
-  if (!state.voice.available || state.voice.muted) return [];
+function speakScoreNumber(value, unit = "percent", onComplete = null) {
+  if (!state.voice.available || state.voice.muted) {
+    if (typeof onComplete === "function") onComplete();
+    return [];
+  }
   const lang = state.language || "en";
   const parts = composeScoreClipIds(value, unit, lang);
   const canUseClips = parts.every((p) => clipStatus(lang, p.beat, p.id) === "available");
@@ -2704,63 +2727,229 @@ function speakScoreNumber(value, unit = "percent") {
     const scheduledGeneration = state.voice.speakGeneration || 0;
     let idx = 0;
     const next = () => {
-      if (idx >= urls.length || state.voice.muted) return;
-      if ((state.voice.speakGeneration || 0) !== scheduledGeneration) return;
+      if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGeneration) return;
+      if (idx >= urls.length) {
+        if (typeof onComplete === "function") onComplete();
+        return;
+      }
       const url = urls[idx++];
       try {
         const audio = new Audio(url);
+        try {
+          audio.preservesPitch = false;
+          audio.webkitPreservesPitch = false;
+        } catch {}
+        audio.playbackRate = 1.04;
+        attachBroadcastStudioChain(audio);
         state.voice.currentAudio = audio;
         audio.onended = () => {
+          try { (audio._cqNodes || []).forEach((n) => n.disconnect()); } catch {}
           if (state.voice.currentAudio === audio) state.voice.currentAudio = null;
           next();
         };
-        audio.onerror = () => speakText(`${Math.round(Number(value) || 0)}%`);
+        audio.onerror = () => {
+          speakText(`${Math.round(Number(value) || 0)}%`);
+          if (typeof onComplete === "function") setTimeout(onComplete, 600);
+        };
         const p = audio.play();
-        if (p && typeof p.catch === "function") p.catch(() => {});
-      } catch {}
+        if (p && typeof p.catch === "function") p.catch(() => {
+          if (typeof onComplete === "function") onComplete();
+        });
+      } catch {
+        if (typeof onComplete === "function") onComplete();
+      }
     };
     next();
     return urls;
   }
   speakText(`${Math.round(Number(value) || 0)}%`);
+  if (typeof onComplete === "function") setTimeout(onComplete, 700);
   return [];
+}
+
+function playScoreTick(ratio = 0.5) {
+  if (state.voice.muted || SELFTEST_MODE) return;
+  try {
+    const ctx = ensureDiscoAudioGraph();
+    if (!ctx) return;
+    const dest = discoMaster || ctx.destination;
+    const now = ctx.currentTime;
+    const scalePool = [349.23, 392.0, 415.3, 466.16, 523.25, 587.33, 622.25, 698.46, 783.99, 830.61, 932.33, 1046.5, 1174.66, 1244.51, 1396.91, 1567.98];
+    const idx = Math.min(scalePool.length - 1, Math.max(0, Math.floor(ratio * scalePool.length)));
+    const freq = scalePool[idx];
+    const osc = ctx.createOscillator();
+    const bell = ctx.createOscillator();
+    const flt = ctx.createBiquadFilter();
+    const g = ctx.createGain();
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(freq, now);
+    bell.type = "sine";
+    bell.frequency.setValueAtTime(freq * 2.998, now);
+    flt.type = "bandpass";
+    flt.frequency.setValueAtTime(950 + ratio * 2400, now);
+    flt.Q.setValueAtTime(2.8, now);
+    g.gain.setValueAtTime(0.0001, now);
+    g.gain.linearRampToValueAtTime(0.05 * (0.65 + 0.35 * ratio), now + 0.003);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + 0.04);
+    osc.connect(flt);
+    bell.connect(flt);
+    flt.connect(g);
+    g.connect(dest);
+    osc.start(now);
+    bell.start(now);
+    osc.stop(now + 0.045);
+    bell.stop(now + 0.045);
+  } catch {}
 }
 
 function playVerdictSfx(beat) {
   if (state.voice.muted) return;
   try {
-    const Context = window.AudioContext || window.webkitAudioContext;
-    if (!Context) return;
-    sharedAudioContext = sharedAudioContext || new Context();
-    const ctx = sharedAudioContext;
+    const ctx = ensureDiscoAudioGraph();
+    if (!ctx) return;
     if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const dest = discoMaster || ctx.destination;
     const now = ctx.currentTime;
-    if (beat && beat.startsWith("pass")) {
-      const notes = beat === "pass-big" ? [523.25, 659.25, 783.99, 1046.5] : [523.25, 659.25, 783.99];
-      notes.forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = "triangle";
-        osc.frequency.setValueAtTime(freq, now + i * 0.09);
-        gain.gain.setValueAtTime(0.0001, now + i * 0.09);
-        gain.gain.exponentialRampToValueAtTime(0.06, now + i * 0.09 + 0.015);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.09 + 0.14);
-        osc.connect(gain).connect(ctx.destination);
-        osc.start(now + i * 0.09);
-        osc.stop(now + i * 0.09 + 0.15);
+    if (beat === "pass-big") {
+      // Tier 1 (S-Rank 85-100%): Euphoric Disclosure/Nu-Disco Brass Fanfare (Abmaj9 -> Bb13 -> Cmaj9#11) + Bell Cascade + Shimmer
+      const chords = [
+        { t: 0.0, dur: 0.16, notes: [207.65, 261.63, 311.13, 392.0, 466.16] },
+        { t: 0.17, dur: 0.16, notes: [233.08, 293.66, 349.23, 440.0, 587.33] },
+        { t: 0.34, dur: 0.58, notes: [261.63, 329.63, 392.0, 493.88, 587.33, 739.99] }
+      ];
+      chords.forEach((ch) => {
+        const flt = ctx.createBiquadFilter();
+        const g = ctx.createGain();
+        flt.type = "lowpass";
+        flt.Q.setValueAtTime(3.2, now + ch.t);
+        flt.frequency.setValueAtTime(450, now + ch.t);
+        flt.frequency.exponentialRampToValueAtTime(3600, now + ch.t + 0.045);
+        flt.frequency.exponentialRampToValueAtTime(950, now + ch.t + ch.dur);
+        g.gain.setValueAtTime(0.0001, now + ch.t);
+        g.gain.linearRampToValueAtTime(0.062, now + ch.t + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + ch.t + ch.dur);
+        flt.connect(g).connect(dest);
+        ch.notes.forEach((freq, idx) => {
+          const o = ctx.createOscillator();
+          o.type = idx % 2 === 0 ? "sawtooth" : "triangle";
+          o.frequency.setValueAtTime(freq, now + ch.t);
+          o.detune.setValueAtTime((idx - 2) * 7, now + ch.t);
+          o.connect(flt);
+          o.start(now + ch.t);
+          o.stop(now + ch.t + ch.dur + 0.01);
+        });
+      });
+      [523.25, 659.25, 783.99, 987.77, 1174.66, 1567.98, 2093.0].forEach((freq, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = "triangle";
+        o.frequency.setValueAtTime(freq, now + 0.35 + i * 0.055);
+        g.gain.setValueAtTime(0.05, now + 0.35 + i * 0.055);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.35 + i * 0.055 + 0.22);
+        o.connect(g).connect(dest);
+        o.start(now + 0.35 + i * 0.055);
+        o.stop(now + 0.35 + i * 0.055 + 0.23);
+      });
+      triggerNoiseBurst(ctx, dest, now + 0.2, 0.72, "bandpass", 2200, 1.8, 0.09);
+    } else if (beat === "pass") {
+      // Tier 2 (A-Rank 75-84%): Upbeat House Maj9 Chord Lift + 4-Note Rising Arp
+      [
+        { t: 0.0, dur: 0.17, notes: [207.65, 261.63, 311.13, 392.0, 466.16] },
+        { t: 0.19, dur: 0.48, notes: [155.56, 233.08, 293.66, 349.23, 466.16] }
+      ].forEach((ch) => {
+        const flt = ctx.createBiquadFilter();
+        const g = ctx.createGain();
+        flt.type = "lowpass";
+        flt.frequency.setValueAtTime(520, now + ch.t);
+        flt.frequency.exponentialRampToValueAtTime(2900, now + ch.t + 0.04);
+        flt.frequency.exponentialRampToValueAtTime(850, now + ch.t + ch.dur);
+        g.gain.setValueAtTime(0.055, now + ch.t);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + ch.t + ch.dur);
+        flt.connect(g).connect(dest);
+        ch.notes.forEach((freq, idx) => {
+          const o = ctx.createOscillator();
+          o.type = idx % 2 === 0 ? "sawtooth" : "triangle";
+          o.frequency.setValueAtTime(freq, now + ch.t);
+          o.connect(flt);
+          o.start(now + ch.t);
+          o.stop(now + ch.t + ch.dur + 0.01);
+        });
+      });
+      [466.16, 587.33, 698.46, 932.33].forEach((freq, i) => {
+        const o = ctx.createOscillator();
+        const g = ctx.createGain();
+        o.type = "triangle";
+        o.frequency.setValueAtTime(freq, now + 0.12 + i * 0.075);
+        g.gain.setValueAtTime(0.06, now + 0.12 + i * 0.075);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + 0.12 + i * 0.075 + 0.18);
+        o.connect(g).connect(dest);
+        o.start(now + 0.12 + i * 0.075);
+        o.stop(now + 0.12 + i * 0.075 + 0.19);
+      });
+    } else if (beat === "pass-close") {
+      // Tier 3 (B-Rank 70-74%): Tense Gsus4 -> Warm Gmaj7 Relief Resolution + Exhale
+      [
+        { t: 0.0, dur: 0.24, notes: [196.0, 261.63, 293.66, 392.0] },
+        { t: 0.24, dur: 0.46, notes: [196.0, 246.94, 293.66, 369.99] }
+      ].forEach((ch) => {
+        ch.notes.forEach((freq) => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = "triangle";
+          o.frequency.setValueAtTime(freq, now + ch.t);
+          g.gain.setValueAtTime(0.052, now + ch.t);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + ch.t + ch.dur);
+          o.connect(g).connect(dest);
+          o.start(now + ch.t);
+          o.stop(now + ch.t + ch.dur + 0.01);
+        });
+      });
+      triggerNoiseBurst(ctx, dest, now + 0.24, 0.22, "bandpass", 1600, 1.8, 0.07);
+    } else if (beat === "retry") {
+      // Tier 4 (C-Rank 56-69%): Sympathetic Descending Rhodes Sigh (Fm9 -> Ebmaj7 -> Dbmaj7) + Upward 5th Rally Lift
+      [
+        { t: 0.0, dur: 0.2, notes: [261.63, 311.13, 392.0] },
+        { t: 0.2, dur: 0.2, notes: [233.08, 293.66, 349.23] },
+        { t: 0.4, dur: 0.28, notes: [207.65, 261.63, 311.13] },
+        { t: 0.56, dur: 0.26, notes: [622.25, 830.61] }
+      ].forEach((ch) => {
+        ch.notes.forEach((freq) => {
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = "triangle";
+          o.frequency.setValueAtTime(freq, now + ch.t);
+          g.gain.setValueAtTime(0.048, now + ch.t);
+          g.gain.exponentialRampToValueAtTime(0.0001, now + ch.t + ch.dur);
+          o.connect(g).connect(dest);
+          o.start(now + ch.t);
+          o.stop(now + ch.t + ch.dur + 0.01);
+        });
       });
     } else {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(160, now);
-      osc.frequency.linearRampToValueAtTime(135, now + 0.25);
-      gain.gain.setValueAtTime(0.0001, now);
-      gain.gain.exponentialRampToValueAtTime(0.04, now + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.26);
-      osc.connect(gain).connect(ctx.destination);
-      osc.start(now);
-      osc.stop(now + 0.28);
+      // Tier 5 (D-Rank <=55%): Playful Theatrical Wah-Wah Drop (Bb3 -> A3 -> Ab3) + Upbeat Shake-It-Off Snare Tap
+      [
+        { t: 0.0, dur: 0.16, f1: 233.08, f2: 220.0 },
+        { t: 0.17, dur: 0.16, f1: 220.0, f2: 207.65 },
+        { t: 0.34, dur: 0.28, f1: 207.65, f2: 146.83 }
+      ].forEach((n) => {
+        const o = ctx.createOscillator();
+        const flt = ctx.createBiquadFilter();
+        const g = ctx.createGain();
+        o.type = "triangle";
+        o.frequency.setValueAtTime(n.f1, now + n.t);
+        o.frequency.exponentialRampToValueAtTime(n.f2, now + n.t + n.dur);
+        flt.type = "bandpass";
+        flt.frequency.setValueAtTime(650, now + n.t);
+        flt.frequency.exponentialRampToValueAtTime(1600, now + n.t + 0.05);
+        flt.frequency.exponentialRampToValueAtTime(480, now + n.t + n.dur);
+        flt.Q.setValueAtTime(3.2, now + n.t);
+        g.gain.setValueAtTime(0.065, now + n.t);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + n.t + n.dur);
+        o.connect(flt).connect(g).connect(dest);
+        o.start(now + n.t);
+        o.stop(now + n.t + n.dur + 0.01);
+      });
+      triggerNoiseBurst(ctx, dest, now + 0.64, 0.09, "bandpass", 1300, 1.4, 0.16);
     }
   } catch {}
 }
@@ -2769,11 +2958,14 @@ function selectVerdictBeat(result = state.result) {
   const ai = result?.ai;
   const tiers = CONFIG.verdictTiers;
   const isVerified = ai?.verified?.status === "verified";
+  const weighted = result === state.result ? computeWeightedRunScore() : null;
   const numericScore = isVerified && Number.isFinite(Number(ai.verified.overall))
     ? Number(ai.verified.overall)
-    : Number.isFinite(Number(ai?.cleanliness))
-      ? Number(ai.cleanliness)
-      : null;
+    : Number.isFinite(weighted)
+      ? Number(weighted)
+      : Number.isFinite(Number(ai?.cleanliness))
+        ? Number(ai.cleanliness)
+        : null;
 
   const isRetry = isVerified
     ? ai.verified.verdict === "retry"
@@ -2842,6 +3034,15 @@ function buildVerdictText(result = state.result) {
   };
 }
 
+function tierRankLabel(beat, score) {
+  const pct = Number.isFinite(score) ? ` · ${Math.round(score)}%` : "";
+  if (beat === "pass-big") return `🏆 S-RANK · SUPERSTAR${pct}`;
+  if (beat === "pass") return `✨ A-RANK · CLEAN WINNER${pct}`;
+  if (beat === "pass-close") return `😅 B-RANK · PHOTO FINISH${pct}`;
+  if (beat === "retry") return `🔥 C-RANK · SO CLOSE${pct}`;
+  return `💪 D-RANK · WARMUP ROUND${pct}`;
+}
+
 function announceGameVerdict() {
   if (!state.result) return;
 
@@ -2849,30 +3050,129 @@ function announceGameVerdict() {
   const beat = selectVerdictBeat(state.result);
   const isVerified = ai?.verified?.status === "verified";
   const customHype = isVerified && ai?.verified?.hypeLine ? String(ai.verified.hypeLine) : "";
+  const weighted = computeWeightedRunScore();
+  const spokenScore = Number.isFinite(weighted)
+    ? weighted
+    : Number.isFinite(Number(ai?.cleanliness))
+      ? Number(ai.cleanliness)
+      : null;
 
   state.voice.lastVerdictBeat = beat;
-  playVerdictSfx(beat);
+  const pill = document.getElementById("verdictAudioPill");
+  const badge = document.getElementById("verdictSummaryBadge");
+  const transcriptEl = document.getElementById("verdictTranscriptLine");
+  if (pill) pill.dataset.tier = beat;
+  if (badge) badge.textContent = tierRankLabel(beat, spokenScore);
 
-  // Schedule the weighted number first so BOTH verdict paths announce it.
-  const weighted = computeWeightedRunScore();
-  const spokenScore = Number.isFinite(weighted) ? weighted
-    : Number.isFinite(Number(ai?.cleanliness)) ? Number(ai.cleanliness) : null;
-  if (spokenScore !== null && !state.voice.muted) {
-    const scheduledGeneration = state.voice.speakGeneration || 0;
-    setTimeout(() => {
-      if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGeneration) return;
-      speakScoreNumber(spokenScore, "percent");
-    }, 3000);
-  }
+  const pickedVerdict = pickHostLine(beat, state.language);
+  const pickedFinish = beat.startsWith("pass") ? pickHostLine("finish", state.language) : null;
+  const summaryCaption = [
+    spokenScore !== null ? `${Math.round(spokenScore)}%` : null,
+    customHype || pickedVerdict?.text || "",
+    pickedFinish?.text || ""
+  ].filter(Boolean).join(" — ");
+  if (transcriptEl) transcriptEl.textContent = summaryCaption;
 
-  if (customHype) {
-    speakHost(beat, customHype);
+  if (SELFTEST_MODE) {
+    playVerdictSfx(beat);
+    if (customHype) speakHost(beat, customHype);
+    else speakHost(beat);
     return;
   }
 
-  speakHost(beat);
-}
+  // Choreographed Results Sequence:
+  // 1. Score Count-Up Roll (0% -> spokenScore% over 550ms with rising Dorian pluck ticks)
+  // 2. 5-Tier Musical Stinger (playVerdictSfx)
+  // 3. Gapless Chained Voice Summary: [Spoken Score %] -> [Tier Reaction Clip] -> [Finish Celebration Clip]
+  const scheduledGen = state.voice.speakGeneration || 0;
+  pill?.classList.add("is-playing");
+  if (spokenScore !== null && els.cleanlinessScore && ai?.scorable !== false) {
+    const startTs = performance.now();
+    const durMs = 540;
+    let lastTickVal = -1;
+    let lastTickAt = 0;
+    const stepCountUp = (nowTs) => {
+      if ((state.voice.speakGeneration || 0) !== scheduledGen) return;
+      const u = Math.min(1, Math.max(0, (nowTs - startTs) / durMs));
+      const eased = 1 - Math.pow(1 - u, 3);
+      const cur = Math.round(eased * spokenScore);
+      els.cleanlinessScore.textContent = `${cur}%`;
+      if (cur !== lastTickVal && nowTs - lastTickAt >= 42) {
+        lastTickVal = cur;
+        lastTickAt = nowTs;
+        playScoreTick(u);
+      }
+      if (u < 1) {
+        requestAnimationFrame(stepCountUp);
+      } else {
+        els.cleanlinessScore.textContent = `${spokenScore}%`;
+      }
+    };
+    requestAnimationFrame(stepCountUp);
+  }
 
+  setTimeout(() => {
+    if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGen) {
+      pill?.classList.remove("is-playing");
+      return;
+    }
+    playVerdictSfx(beat);
+    setTimeout(() => {
+      if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGen) {
+        pill?.classList.remove("is-playing");
+        return;
+      }
+      const playVerdictAndFinish = () => {
+        if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGen) {
+          pill?.classList.remove("is-playing");
+          return;
+        }
+        if (customHype) {
+          speakHost(beat, customHype);
+          setTimeout(() => pill?.classList.remove("is-playing"), 2200);
+          return;
+        }
+        const base = HOST_PROSODY[beat] || HOST_PROSODY.start;
+        if (pickedVerdict?.text && clipStatus(state.language, beat, pickedVerdict.id) === "available") {
+          state.voice.lastPath = "clip";
+          playHostClip(
+            clipUrlFor(state.language, beat, pickedVerdict.id),
+            pickedVerdict.text,
+            { rate: base.rate, pitch: base.pitch },
+            beat,
+            () => {
+              if (pickedFinish?.text && !state.voice.muted && (state.voice.speakGeneration || 0) === scheduledGen && clipStatus(state.language, "finish", pickedFinish.id) === "available") {
+                setTimeout(() => {
+                  if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGen) return;
+                  playHostClip(
+                    clipUrlFor(state.language, "finish", pickedFinish.id),
+                    pickedFinish.text,
+                    { rate: 1.04, pitch: 1.04 },
+                    "finish",
+                    () => pill?.classList.remove("is-playing")
+                  );
+                }, 140);
+              } else {
+                pill?.classList.remove("is-playing");
+              }
+            }
+          );
+        } else {
+          speakHost(beat);
+          setTimeout(() => pill?.classList.remove("is-playing"), 2200);
+        }
+      };
+
+      if (spokenScore !== null) {
+        speakScoreNumber(spokenScore, "percent", () => {
+          setTimeout(playVerdictAndFinish, 140);
+        });
+      } else {
+        playVerdictAndFinish();
+      }
+    }, 340);
+  }, 540);
+}
 function requireAdminPledge() {
   if (loadAdminStore().pledgeAccepted) return true;
   setAdminScreenTab(11);
@@ -2928,7 +3228,7 @@ function setHypeLevel(level, persist = true) {
   if (state.voice.muted) {
     stopSpeech();
     stopDiscoHouseGroove();
-  } else if ((state.screen === "deck" || (state.screen === "timer" && state.timer.running)) && state.voice.discoEnabled !== false) {
+  } else if (state.voice.discoEnabled !== false && ["deck", "instructions", "camera", "timer", "results", "leaderboard"].includes(state.screen)) {
     startDiscoHouseGroove();
   }
   updateMuteButton();
@@ -3137,17 +3437,21 @@ function startDiscoHouseGroove() {
         return;
       }
       const dest = discoMaster || discoCtx.destination;
-      const step64 = discoStep % 64;
+      const step128 = discoStep % 128;
+      const step64 = step128 % 64;
       const step = step64 % 16;
       const bar = Math.floor(step64 / 16);
+      const bar8 = Math.floor(step128 / 16);
+      const isTurnaroundBar = bar8 === 3 || bar8 === 7;
+      const sectionCutoffMult = 0.85 + (bar8 / 7) * 0.65;
       const swingOffset = step % 2 === 1 ? trk.swingSec : 0;
       const now = discoCtx.currentTime + swingOffset;
       const screenMix = state.screen === "deck" ? 1.0 : state.screen === "results" || state.screen === "leaderboard" ? 0.58 : 0.38;
       const duck = (state.voice.currentAudio ? 0.22 : 1.0) * screenMix;
-      const isKickStep = step % 4 === 0 || (bar % 2 === 1 && step === 14);
+      const isKickStep = step % 4 === 0 || (isTurnaroundBar && (step === 14 || step === 15));
       const sidechain = step % 4 === 0 ? 0.40 : step % 4 === 1 ? 0.78 : 1.0;
 
-      // 1. PUNCHY DISCLOSURE UKG / DEEP-HOUSE KICK (Sub + Mid-Punch + Beater Click)
+      // 1. PUNCHY DISCLOSURE UKG / DEEP-HOUSE KICK + BAR 4/8 TOM TURNAROUND FILLS
       if (isKickStep) {
         const kVel = (step % 4 === 0 ? 0.72 : 0.44) * duck;
         const kickSub = discoCtx.createOscillator();
@@ -3180,6 +3484,19 @@ function startDiscoHouseGroove() {
           void els.deckCard.offsetWidth;
           els.deckCard.classList.add("beat-thump");
         }
+      }
+      if (isTurnaroundBar && step >= 12) {
+        const tomFreq = [260, 215, 175, 140][step - 12] || 180;
+        const tomOsc = discoCtx.createOscillator();
+        const tomGain = discoCtx.createGain();
+        tomOsc.type = "triangle";
+        tomOsc.frequency.setValueAtTime(tomFreq, now);
+        tomOsc.frequency.exponentialRampToValueAtTime(tomFreq * 0.52, now + 0.09);
+        tomGain.gain.setValueAtTime(0.28 * duck, now);
+        tomGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+        tomOsc.connect(tomGain).connect(dest);
+        tomOsc.start(now);
+        tomOsc.stop(now + 0.11);
       }
 
       // 2. LAYERED 909 HANDCLAP + RIM/SNARE ON BEATS 2 & 4
@@ -3222,7 +3539,7 @@ function startDiscoHouseGroove() {
         triggerNoiseBurst(discoCtx, dest, now, 0.034, "highpass", 8600, 0.8, 0.11 * duck);
       }
 
-      // 4. DISCLOSURE DEEP SUB + KORG M1 ORGAN-2 / FM PERCUSSIVE BASSLINE
+      // 4. TRACK-DISTINCT BASS ENGINE (Latch Sub/Juno vs White Noise M1/Acid vs Omen Slap-Octave)
       const bassFreq = trk.bassPattern[step64];
       if (bassFreq > 0) {
         const bGainAmt = 0.44 * duck * sidechain;
@@ -3238,23 +3555,23 @@ function startDiscoHouseGroove() {
 
         const m1Osc = discoCtx.createOscillator();
         const m1Gain = discoCtx.createGain();
-        m1Osc.type = "sine";
-        m1Osc.frequency.setValueAtTime(bassFreq * 2.998, now);
-        m1Gain.gain.setValueAtTime(bGainAmt * 0.46, now);
-        m1Gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+        m1Osc.type = trk.id === "omen" ? "triangle" : "sine";
+        m1Osc.frequency.setValueAtTime(bassFreq * (trk.id === "whitenoise" ? 2.998 : trk.id === "omen" ? 2.0 : 1.998), now);
+        m1Gain.gain.setValueAtTime(bGainAmt * (trk.id === "whitenoise" ? 0.56 : 0.42), now);
+        m1Gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
         m1Osc.connect(m1Gain).connect(dest);
         m1Osc.start(now);
-        m1Osc.stop(now + 0.07);
+        m1Osc.stop(now + 0.075);
 
         const sawOsc = discoCtx.createOscillator();
         const sawFlt = discoCtx.createBiquadFilter();
         const sawGain = discoCtx.createGain();
-        sawOsc.type = "sawtooth";
+        sawOsc.type = trk.id === "omen" ? "square" : "sawtooth";
         sawOsc.frequency.setValueAtTime(bassFreq, now);
         sawFlt.type = "lowpass";
-        sawFlt.Q.setValueAtTime(6.0, now);
+        sawFlt.Q.setValueAtTime(trk.id === "whitenoise" ? 8.2 : 5.8, now);
         sawFlt.frequency.setValueAtTime(160, now);
-        sawFlt.frequency.exponentialRampToValueAtTime(1750, now + 0.018);
+        sawFlt.frequency.exponentialRampToValueAtTime(1650 * sectionCutoffMult, now + 0.018);
         sawFlt.frequency.exponentialRampToValueAtTime(220, now + 0.115);
         sawGain.gain.setValueAtTime(bGainAmt * 0.62, now);
         sawGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
@@ -3263,7 +3580,7 @@ function startDiscoHouseGroove() {
         sawOsc.stop(now + 0.125);
       }
 
-      // 5. SIGNATURE LATCH POLYRHYTHMIC JUNO-106 CHORD STUTTER & TOP BELL PLUCK
+      // 5. SIGNATURE LATCH 6/8 POLYRHYTHMIC CHORD STUTTER & BELL PLUCK
       if (trk.stabSteps.includes(step)) {
         const chord = trk.chordVoicings[bar];
         const stabDur = step === 6 || step === 14 ? 0.21 : 0.15;
@@ -3272,33 +3589,46 @@ function startDiscoHouseGroove() {
         chordFlt.type = "lowpass";
         chordFlt.Q.setValueAtTime(2.8, now);
         chordFlt.frequency.setValueAtTime(480, now);
-        chordFlt.frequency.exponentialRampToValueAtTime(2950, now + 0.042);
+        chordFlt.frequency.exponentialRampToValueAtTime(2750 * sectionCutoffMult, now + 0.042);
         chordFlt.frequency.exponentialRampToValueAtTime(760, now + stabDur);
         chordGain.gain.setValueAtTime(0.052 * duck * sidechain, now);
         chordGain.gain.exponentialRampToValueAtTime(0.001, now + stabDur);
         chordFlt.connect(chordGain).connect(dest);
         chord.forEach((freq, idx) => {
           const cOsc = discoCtx.createOscillator();
-          cOsc.type = idx % 2 === 0 ? "sawtooth" : "triangle";
+          cOsc.type = trk.id === "omen" ? "triangle" : idx % 2 === 0 ? "sawtooth" : "triangle";
           cOsc.frequency.setValueAtTime(freq, now);
           cOsc.detune.setValueAtTime((idx - 2) * 7, now);
           cOsc.connect(chordFlt);
           cOsc.start(now);
           cOsc.stop(now + stabDur + 0.01);
         });
+        if (trk.id === "latch") {
+          // Signature Latch high bell pluck on top note of each 6/8 chord stutter
+          const topFreq = chord[chord.length - 1] * 2;
+          const pOsc = discoCtx.createOscillator();
+          const pGain = discoCtx.createGain();
+          pOsc.type = "triangle";
+          pOsc.frequency.setValueAtTime(topFreq, now);
+          pGain.gain.setValueAtTime(0.042 * duck * sidechain, now);
+          pGain.gain.exponentialRampToValueAtTime(0.0008, now + 0.11);
+          pOsc.connect(pGain).connect(dest);
+          pOsc.start(now);
+          pOsc.stop(now + 0.12);
+        }
       }
 
-      // 6. DISCLOSURE PITCH-GLIDING VOCAL-CHOP / SYNTH LEAD HOOK & STRINGS
+      // 6. DISCLOSURE PITCH-GLIDING VOCAL-CHOP / SYNTH LEAD HOOK & STRINGS (Section B swells in bars 4..7)
       const leadFreq = trk.leadHook[step64];
-      if (leadFreq > 0) {
+      if (leadFreq > 0 && (bar8 >= 1 || step % 3 === 0)) {
         const lOsc = discoCtx.createOscillator();
         const lFlt = discoCtx.createBiquadFilter();
         const lGain = discoCtx.createGain();
-        lOsc.type = "sawtooth";
+        lOsc.type = trk.id === "latch" ? "sawtooth" : trk.id === "whitenoise" ? "square" : "triangle";
         lOsc.frequency.setValueAtTime(leadFreq * 0.94, now);
         lOsc.frequency.exponentialRampToValueAtTime(leadFreq, now + 0.024);
         lFlt.type = "bandpass";
-        lFlt.frequency.setValueAtTime(1750, now);
+        lFlt.frequency.setValueAtTime(1750 * sectionCutoffMult, now);
         lFlt.Q.setValueAtTime(2.1, now);
         lGain.gain.setValueAtTime(0.078 * duck * sidechain, now);
         lGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
@@ -3448,6 +3778,12 @@ function navigateTo(screen) {
     activeScreenEl.classList.remove("screen-enter-cascade");
     void activeScreenEl.offsetWidth;
     activeScreenEl.classList.add("screen-enter-cascade");
+  }
+  const portal = document.getElementById("screenTransitionPortal");
+  if (portal && !SELFTEST_MODE) {
+    portal.classList.remove("portal-sweep");
+    void portal.offsetWidth;
+    portal.classList.add("portal-sweep");
   }
   if (!state.voice.muted && !SELFTEST_MODE) {
     if (screen === "instructions" || screen === "camera" || (screen === "timer" && !state.timer.running)) {
@@ -4621,9 +4957,14 @@ function sampleLiveRunActivity(forceIdleForTest = false) {
       els.liveActivityBadge.textContent = t("noMotionBadge");
       els.liveActivityBadge.classList.add("idle-warning");
     } else {
-      els.liveActivityBadge.textContent = t("liveChallenge");
+      els.liveActivityBadge.textContent = workedCount > 0 ? t("zonesActive", { n: workedCount }) : t("liveChallenge");
       els.liveActivityBadge.classList.remove("idle-warning");
     }
+  }
+
+  if (!isIdle && workedCount >= 4 && !mon.midProgressSpoken && !SELFTEST_MODE) {
+    mon.midProgressSpoken = true;
+    speakHost("mid");
   }
 
   if (isIdle && now - mon.lastNudgeAt >= 15000) {
@@ -4821,6 +5162,7 @@ async function runJudgeDemo() {
   state.judgeDemo = false;
   els.judgeDemoNote?.classList.remove("hidden");
   renderResults();
+  announceResultSummary();
 }
 
 function renderVerifyProvenance() {
@@ -8310,7 +8652,7 @@ function techniqueBarExplanation(run) {
     score: avg,
     display: `${avg}%`,
     sources,
-    detail: t("barDetailTechnique", { sources: sources.map((s) => t({ dwellTime: "srcDwellTime", topToBottomOrder: "srcTopToBottomOrder", surfaceOrder: "srcSurfaceOrder", techniqueScore: "srcTechniqueScore" }[s] || "") || s).join(", ") })
+    detail: t("barDetailTechnique", { sources: sources.map((s) => t({ dwellTime: "srcDwellTime", topToBottomOrder: "srcTopToBottomOrder", surfaceOrder: "srcSurfaceOrder", techniqueScore: "srcTechniqueScore" }[s] || "") || (s === "zoneUniformity" ? "even coverage" : s)).join(", ") })
   };
 }
 
@@ -8490,11 +8832,27 @@ const SPOT_TRANSLATIONS = {
   }
 };
 
+function spotIconFor(spotName) {
+  const s = String(spotName || "").toLowerCase();
+  if (s.includes("sink") || s.includes("basin")) return "🚰";
+  if (s.includes("mirror") || s.includes("glass")) return "🪞";
+  if (s.includes("trash") || s.includes("floor") || s.includes("mat")) return "🗑️";
+  if (s.includes("fixture") || s.includes("partition") || s.includes("stall")) return "🚽";
+  if (s.includes("table") || s.includes("appliance")) return "🍽️";
+  if (s.includes("board") || s.includes("student")) return "📋";
+  if (s.includes("door") || s.includes("entry")) return "🚪";
+  return "🖥️";
+}
+
 function localizedSpotName(spotName) {
   const raw = String(spotName || "");
-  if (state.language === "es" && SPOT_TRANSLATIONS.es[raw]) return SPOT_TRANSLATIONS.es[raw];
-  if (state.language === "pl" && SPOT_TRANSLATIONS.pl[raw]) return SPOT_TRANSLATIONS.pl[raw];
-  return raw;
+  const icon = spotIconFor(raw);
+  const label = state.language === "es" && SPOT_TRANSLATIONS.es[raw]
+    ? SPOT_TRANSLATIONS.es[raw]
+    : state.language === "pl" && SPOT_TRANSLATIONS.pl[raw]
+      ? SPOT_TRANSLATIONS.pl[raw]
+      : raw;
+  return label.startsWith(icon) ? label : `${icon} ${label}`;
 }
 
 function readAppeals() {
@@ -8610,7 +8968,7 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
     els.timerSpotRuleBadge.textContent = `${t("rulePrefix")} ${localizedRuleSummary(profile)}`;
   }
   if (els.frameGuideText) {
-    els.frameGuideText.textContent = `${localizedSpotName(chosenSpot).toUpperCase()} · ${localizedRuleSummary(profile)}`;
+    els.frameGuideText.textContent = `${localizedSpotName(chosenSpot)}`;
   }
   return {
     league: state.checkin.league,
@@ -11949,7 +12307,14 @@ function bindEvents() {
       renderMusicStreamEmbed(val);
     });
   }
-  // Global gamified button micro-interactions (radial ripple + cleaning sparkle burst on primary actions)
+  const replaySummaryBtn = document.getElementById("replaySummaryButton");
+  if (replaySummaryBtn) {
+    replaySummaryBtn.addEventListener("click", () => {
+      if (state.voice.muted) setHypeLevel("full");
+      announceGameVerdict();
+    });
+  }
+  // Global gamified button micro-interactions (radial ripple + cleaning sparkle burst + WebAudio harmonic pluck)
   document.addEventListener("pointerdown", (event) => {
     const btn = event.target?.closest?.("button, .clickable-evidence, .mvp-tab-chip");
     if (!btn || btn.disabled) return;
@@ -11961,6 +12326,28 @@ function bindEvents() {
     btn.classList.remove("btn-pop-active");
     void btn.offsetWidth;
     btn.classList.add("btn-pop-active");
+    if (!SELFTEST_MODE && !state.voice.muted) {
+      playTone(btn.classList.contains("primary-button") ? 740 : 587.33, 0.032);
+    }
+    if (!SELFTEST_MODE && (btn.classList.contains("primary-button") || btn.classList.contains("spot-pill-chip") || btn.id === "replaySummaryButton")) {
+      const layer = document.getElementById("buttonSparkleLayer");
+      if (layer && layer.childElementCount < 24) {
+        const glyphs = ["✨", "🫧", "💧", "⭐"];
+        for (let i = 0; i < 6; i += 1) {
+          const sp = document.createElement("span");
+          sp.className = "btn-sparkle-dot";
+          sp.textContent = glyphs[i % glyphs.length];
+          const ang = (Math.PI * 2 * i) / 6 + (Math.random() * 0.4 - 0.2);
+          const dist = 28 + (i % 2) * 18;
+          sp.style.left = `${Math.round(event.clientX)}px`;
+          sp.style.top = `${Math.round(event.clientY)}px`;
+          sp.style.setProperty("--sx", `${Math.round(Math.cos(ang) * dist)}px`);
+          sp.style.setProperty("--sy", `${Math.round(Math.sin(ang) * dist - 10)}px`);
+          layer.appendChild(sp);
+          setTimeout(() => sp.remove(), 520);
+        }
+      }
+    }
   }, { passive: true });
   window.addEventListener("online", () => {
     void processOfflineRunQueue();
