@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031-11" />
+  <link rel="stylesheet" href="styles.css?v=20261031-13" />
 </head>
 
 <body>
@@ -1069,44 +1069,51 @@
 
         <div id="settingsKeysPanel" class="identity-panel hologram-card">
           <p class="settings-keys-explain" data-i18n="settingsKeysExplain">
-            Optional cloud upgrade: unlocks verified per-surface AI scorecards, SAM 3.1 surface highlights, and voice-note transcription. Not required to play — the game works on-device without keys.
+            Optional cloud upgrade: sign in with 1-click SSO or paste a key from Google Gemini, OpenAI, Claude, Groq, Meta, or Baseten to unlock verified scorecards, surface boxes, neural voice, and transcription.
           </p>
+          <div class="sso-quick-bar">
+            <button id="openRouterSsoButton" class="primary-button compact-chip sso-hero-btn" type="button">
+              ⚡ 1-CLICK SIGN IN (GOOGLE / GITHUB SSO)
+            </button>
+            <a class="get-key-link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Gemini Free Key (Google Login) ↗</a>
+            <a class="get-key-link" href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">OpenAI Key ↗</a>
+            <a class="get-key-link" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer">Claude Key ↗</a>
+          </div>
           <div class="settings-keys-grid">
             <div>
               <div class="key-label-row">
                 <label for="metaApiKey" data-i18n="settingsMetaKey">
-                  Meta Model API key
+                  Smart AI Key (Gemini / OpenAI / Claude / Meta)
                 </label>
-                <a class="get-key-link" href="https://dev.meta.ai/" target="_blank" rel="noopener noreferrer" data-i18n="getMetaKeyLink">Get key ↗</a>
+                <a class="get-key-link" href="https://dev.meta.ai/" target="_blank" rel="noopener noreferrer" data-i18n="getMetaKeyLink">Meta Key ↗</a>
               </div>
               <input
                 id="metaApiKey"
                 type="password"
-                maxlength="200"
+                maxlength="240"
                 autocomplete="off"
                 spellcheck="false"
-                placeholder="••••••••"
+                placeholder="AIza… / sk-… / sk-ant-… / Meta key"
               />
             </div>
 
             <div>
               <div class="key-label-row">
                 <label for="basetenApiKey" data-i18n="settingsBasetenKey">
-                  Baseten API key
+                  Baseten / Secondary Key
                 </label>
                 <a class="get-key-link" href="https://app.baseten.co/settings/api_keys" target="_blank" rel="noopener noreferrer" data-i18n="getBasetenKeyLink">Get key ↗</a>
               </div>
               <input
                 id="basetenApiKey"
                 type="password"
-                maxlength="200"
+                maxlength="240"
                 autocomplete="off"
                 spellcheck="false"
                 placeholder="••••••••"
               />
             </div>
           </div>
-
           <small data-i18n="settingsKeysNote">
             Keys stay in this browser only and are never shared.
           </small>
@@ -1137,15 +1144,17 @@
         </div>
 
         <div class="identity-panel hologram-card">
-          <span data-i18n="settingsProvider">Inference provider</span>
-          <label class="provider-option">
-            <input type="radio" name="inferenceProvider" value="meta" checked />
-            <span>Meta Model API</span>
-          </label>
-          <label class="provider-option">
-            <input type="radio" name="inferenceProvider" value="baseten" />
-            <span>Baseten (Spark Open)</span>
-          </label>
+          <span data-i18n="settingsProvider">Inference provider (auto-detects key prefix)</span>
+          <div class="provider-radio-grid">
+            <label class="provider-option">
+              <input type="radio" name="inferenceProvider" value="meta" checked />
+              <span>Auto / Meta / Gemini / OpenAI / Claude</span>
+            </label>
+            <label class="provider-option">
+              <input type="radio" name="inferenceProvider" value="baseten" />
+              <span>Baseten (Spark Open)</span>
+            </label>
+          </div>
         </div>
 
         <div class="identity-panel hologram-card">
@@ -1224,10 +1233,11 @@
               <span id="deckProgress" class="deck-card-counter">Card 1 of 5</span>
             </div>
             <div id="deckIllustration" class="deck-illustration" aria-hidden="true"></div>
+            <div id="deckVerdictStamp" class="deck-verdict-stamp hidden" aria-live="polite"></div>
             <p id="deckText"></p>
           </div>
         </div>
-        <p id="deckFeedback" class="deck-feedback"></p>
+        <div id="deckFeedback" class="deck-feedback"></div>
         <div id="deckSponsorSlot" class="sponsor-slot hidden" aria-live="polite"></div>
 
         <div class="settings-row deck-actions-row">
@@ -1252,7 +1262,7 @@
         <div class="settings-row deck-secondary-actions">
           <button
             id="deckNextButton"
-            class="secondary-button hidden"
+            class="primary-button hidden"
             type="button"
             data-i18n="deckNextCard"
           >
@@ -1365,9 +1375,10 @@
     </div>
   </section>
 
+  <canvas id="arcadeFxCanvas" class="arcade-fx-canvas" aria-hidden="true"></canvas>
   <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
   <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
-  <script src="deck.js?v=20261031-11"></script>
-  <script src="app.js?v=20261031-11"></script>
+  <script src="deck.js?v=20261031-13"></script>
+  <script src="app.js?v=20261031-13"></script>
 </body>
 </html>

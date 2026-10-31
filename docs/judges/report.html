@@ -745,41 +745,39 @@
       </div></div>
 
       <div class="shot"><img src="shots/11-settings.png" alt="Settings" /><div class="desc">
-        <h4>Settings, 3-Track Disclosure Music Switcher &amp; Dual Providers</h4>
+        <h4>Settings, 1-Click SSO, Multi-Lab AI &amp; Voice Architecture</h4>
         <ul>
-          <li><strong>Screen contents &amp; controls:</strong>
+          <li><strong>1-Click SSO &amp; Multi-Lab Key Auto-Detection:</strong>
             <ul>
-              <li>Plain-English explanation of what API keys unlock, plus 1-tap <code>Get key ↗</code> hyperlinks to <code>dev.meta.ai</code> and Baseten right beside each aligned input.</li>
-              <li><strong>3-Track Disclosure-Style House Switcher:</strong> 1-tap track cycler across the 3 built-in WebAudio tracks (<code>1/3 · Latch Groove</code> default, <code>2/3 · White Noise</code>, <code>3/3 · Omen Velvet</code>), with Spotify / Apple Music playlist embed support pre-wired behind a feature flag.</li>
+              <li><strong>1-Click Sign In (Google / GitHub SSO via OpenRouter PKCE):</strong> Serverless OAuth 2.0 PKCE flow that mints a browser key in 1 click without copying strings (whereas OpenAI consumer ChatGPT Plus subscriptions do not permit third-party OAuth API access).</li>
+              <li><strong>Auto-Detecting Smart Key Input:</strong> Accepts <strong>Google Gemini 2.5 Flash</strong> (<code>AIza…</code>, 1-click free key via Google login), <strong>OpenAI</strong> (<code>sk-…</code>), <strong>Anthropic Claude Sonnet 4</strong> (<code>sk-ant-…</code>), <strong>Groq Llama 4</strong> (<code>gsk_…</code>), <strong>Meta Model API</strong>, and <strong>Baseten</strong>.</li>
             </ul>
           </li>
-          <li><strong>Security &amp; acoustics:</strong>
+          <li><strong>Local VITS/Kokoro Voice vs. Cloud Neural Voice:</strong>
             <ul>
-              <li>Zero keys in repo; voice auto-plays by default while background house music automatically sidechain-ducks under host speech.</li>
+              <li>Offline mode ships 651 pre-rendered trilingual MP3s (Piper VITS &amp; Kokoro-82M) for zero-key play; we removed the 62ms comb-filter slapback delay, disabled WSOLA pitch-stretching (<code>preservesPitch = false</code>), and enforced a strict <strong>Single-Voice Mutex</strong> (<code>activeVoiceAudios</code>) so two voices can never overlap.</li>
             </ul>
           </li>
         </ul>
-        <span class="verdict v-ready">READY · DUAL PROVIDER</span>
+        <span class="verdict v-ready">READY · 1-CLICK SSO + 6 LABS</span>
       </div></div>
 
       <div class="shot"><img src="shots/12-deck.png" alt="Daily deck" /><div class="desc">
-        <h4>Trilingual Daily Swipe Deck (Screen 9)</h4>
+        <h4>AAA Gamified Daily Swipe Deck &amp; Sponsor Logo Banner (Screen 9)</h4>
         <ul>
-          <li><strong>Gamification, cleaning-industry drag confetti &amp; 3 Disclosure-style tracks:</strong>
+          <li><strong>AAA Widescreen Dioramas, Verdict Stamps &amp; 60fps Pixel/Confetti FX:</strong>
             <ul>
-              <li>3D perspective-stacked card deck with a 5-pip glowing progress bar, animated flickering flame streak pill, and a live <strong>3-Track Disclosure-Style UKG / Deep-House Synthesizer</strong> (defaulting to the <em>Latch</em> 122 BPM polyrhythmic instrumental + <em>White Noise</em> + <em>Omen Velvet</em>) labeled <code>MUSIC</code> with a <code>1/3 ⏭</code> track cycler!</li>
-              <li><strong>Interactive Cleaning Confetti &amp; Lottie-Style Vector Scenes:</strong> 6 ambient floating soap bubbles/sparkles/droplets that shake with drag velocity, live drag-shake cleaning confetti bursts, and animated vector scenes (scrubbing sponge + foam trail, spray bottle + sloshing flask, pro squeegee sweep).</li>
+              <li>Widescreen 3-panel animated SVG dioramas (pH gauge + spray trigger + bubbling flask + chrome fixture shield) that react dynamically on selection with a slamming <code>✨ NAILED IT! +100 XP</code> or <code>⚠️ TRICK CALL!</code> stamp, 60fps Canvas pixel explosions on button taps, and dual 3D ribbon/bubble confetti cannons!</li>
             </ul>
           </li>
-          <li><strong>Learning &amp; sponsor rules:</strong>
+          <li><strong>Illustrated 3:1 Sponsor Logo Banner &amp; Learning Rules:</strong>
             <ul>
-              <li>Answers are strictly brand-neutral product types; missed topics repeat in future sessions (private to the cleaner); labeled <code>SPONSORED</code> suggestions appear only after answering.</li>
+              <li>Answers are strictly brand-neutral product types; post-answer <code>SPONSORED</code> slot renders an illustrated <strong>3:1 aspect-ratio Sponsor Logo Crest (<code>SPONSOR LOGO · YOUR BRAND</code>)</strong> alongside the generic category suggestion.</li>
             </ul>
           </li>
         </ul>
-        <span class="verdict v-ready">READY · MVP 9</span>
+        <span class="verdict v-ready">READY · AAA DECK + SPONSOR LOGO</span>
       </div></div>
-
       <div class="shot full-span"><img src="shots/15-desktop-welcome.png" alt="Desktop welcome" class="wide" /><div class="desc">
         <h4>Desktop &amp; Wide-Screen Responsiveness (1440×900)</h4>
         <ul>

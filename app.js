@@ -1879,9 +1879,38 @@ function playAnnouncerCue() {
   } catch {}
 }
 
+const activeVoiceAudios = new Set();
+
+function killAllActiveVoiceAudios() {
+  activeVoiceAudios.forEach((a) => {
+    try {
+      a.onended = null;
+      a.onerror = null;
+      a.pause();
+      a.currentTime = 0;
+      (a._cqNodes || []).forEach((n) => {
+        try { n.disconnect(); } catch {}
+      });
+    } catch {}
+  });
+  activeVoiceAudios.clear();
+  if (state.voice.currentAudio) {
+    try {
+      state.voice.currentAudio.onended = null;
+      state.voice.currentAudio.onerror = null;
+      state.voice.currentAudio.pause();
+    } catch {}
+    state.voice.currentAudio = null;
+  }
+  try {
+    window.speechSynthesis?.cancel?.();
+  } catch {}
+}
+
 function speakText(text, options = {}) {
   const force = Boolean(options.force);
   if (!state.voice.available || (!force && state.voice.muted) || !text) return;
+  killAllActiveVoiceAudios();
   const requestId = ++announcerRequestId;
   const synth = window.speechSynthesis;
   let started = false;
@@ -2490,7 +2519,9 @@ function attachBroadcastStudioChain(audioEl) {
 
 function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null) {
   try {
+    killAllActiveVoiceAudios();
     const audio = new Audio(url);
+    activeVoiceAudios.add(audio);
     state.voice.currentAudio = audio;
     // Disable WSOLA time-stretching pitch preservation so upbeat rates never sound phase-vocoded/robotic
     const isUpbeatBeat = beat === "mid" || beat === "hurry" || beat === "hurry-final" || beat === "pass-big" || beat === "pass" || beat === "start";
@@ -2505,6 +2536,7 @@ function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null)
     attachBroadcastStudioChain(audio);
 
     const cleanup = () => {
+      activeVoiceAudios.delete(audio);
       try { (audio._cqNodes || []).forEach((n) => n.disconnect()); } catch {}
       if (state.voice.currentAudio === audio) state.voice.currentAudio = null;
     };
@@ -2587,6 +2619,8 @@ function speakHost(beat, overrideText) {
     state.voice.lastPath = "chill-skipped";
     return;
   }
+  // Cancel any currently playing or pending scheduled voice line so two voices never overlap
+  stopSpeech();
   const isLiveBeat = beat === "start" || beat === "mid" || beat === "hurry" || beat === "hurry-final" || beat === "nudge";
   if (isLiveBeat) {
     playLiveHypeSting(beat);
@@ -2734,7 +2768,9 @@ function speakScoreNumber(value, unit = "percent", onComplete = null) {
       }
       const url = urls[idx++];
       try {
+        killAllActiveVoiceAudios();
         const audio = new Audio(url);
+        activeVoiceAudios.add(audio);
         try {
           audio.preservesPitch = false;
           audio.webkitPreservesPitch = false;
@@ -2743,6 +2779,7 @@ function speakScoreNumber(value, unit = "percent", onComplete = null) {
         attachBroadcastStudioChain(audio);
         state.voice.currentAudio = audio;
         audio.onended = () => {
+          activeVoiceAudios.delete(audio);
           try { (audio._cqNodes || []).forEach((n) => n.disconnect()); } catch {}
           if (state.voice.currentAudio === audio) state.voice.currentAudio = null;
           next();
@@ -3045,7 +3082,7 @@ function tierRankLabel(beat, score) {
 
 function announceGameVerdict() {
   if (!state.result) return;
-
+  stopSpeech();
   const ai = state.result.ai;
   const beat = selectVerdictBeat(state.result);
   const isVerified = ai?.verified?.status === "verified";
@@ -3086,6 +3123,9 @@ function announceGameVerdict() {
   // 3. Gapless Chained Voice Summary: [Spoken Score %] -> [Tier Reaction Clip] -> [Finish Celebration Clip]
   const scheduledGen = state.voice.speakGeneration || 0;
   pill?.classList.add("is-playing");
+  if (!SELFTEST_MODE) {
+    triggerArcadeFx(beat.startsWith("pass") ? "confetti" : "pixels");
+  }
   if (spokenScore !== null && els.cleanlinessScore && ai?.scorable !== false) {
     const startTs = performance.now();
     const durMs = 540;
@@ -3194,16 +3234,8 @@ function announceStyleScore(score) {
 function stopSpeech() {
   announcerRequestId += 1;
   state.voice.speakGeneration = (state.voice.speakGeneration || 0) + 1;
-  if (state.voice.currentAudio) {
-    try { state.voice.currentAudio.pause(); } catch {}
-    state.voice.currentAudio = null;
-  }
+  killAllActiveVoiceAudios();
   showAnnouncerStatus("");
-  if (!state.voice.available) return;
-
-  try {
-    window.speechSynthesis.cancel();
-  } catch {}
 }
 
 const HYPE_LEVEL_KEY = "cleanquest.hypeLevel.v2";
@@ -3784,6 +3816,7 @@ function navigateTo(screen) {
     portal.classList.remove("portal-sweep");
     void portal.offsetWidth;
     portal.classList.add("portal-sweep");
+    triggerArcadeFx("portal");
   }
   if (!state.voice.muted && !SELFTEST_MODE) {
     if (screen === "instructions" || screen === "camera" || (screen === "timer" && !state.timer.running)) {
@@ -6189,6 +6222,13 @@ function sanitizeScorecard(parsed) {
 
     const confidence = Number(entry.confidence);
     const score = Math.round(Number(entry.score));
+    let box = null;
+    const rawBox = entry.box_2d || entry.box;
+    if (Array.isArray(rawBox) && rawBox.length === 4 && rawBox.every((n) => Number.isFinite(Number(n)))) {
+      const nums = rawBox.map(Number);
+      const scale = nums.some((n) => n > 1.5) ? 1000 : 1;
+      box = { x1: nums[1] / scale, y1: nums[0] / scale, x2: nums[3] / scale, y2: nums[2] / scale, w: 1, h: 1 };
+    }
 
     surfaces.push({
       name: entry.name,
@@ -6196,11 +6236,10 @@ function sanitizeScorecard(parsed) {
       missed: Array.isArray(entry.missed)
         ? entry.missed.filter((item) => typeof item === "string").slice(0, 8)
         : [],
-      verified: Number.isFinite(confidence) && confidence >= CONFIG.cloud.minSurfaceConfidence
+      verified: Number.isFinite(confidence) && confidence >= CONFIG.cloud.minSurfaceConfidence,
+      box
     });
   }
-
-  if (!surfaces.length) return null;
 
   const overall = Math.round(Number(parsed.overall));
   const hypeWords = String(parsed.hype_line || "").split(/\s+/).filter(Boolean).slice(0, 20);
@@ -6285,6 +6324,17 @@ function exportProviderLog() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+function detectProviderFromKey(rawKey) {
+  const k = String(rawKey || "").trim();
+  if (!k) return "meta";
+  if (k.startsWith("AIza")) return "gemini";
+  if (k.startsWith("sk-ant-")) return "anthropic";
+  if (k.startsWith("sk-or-")) return "openrouter";
+  if (k.startsWith("gsk_")) return "groq";
+  if (k.startsWith("sk-proj-") || k.startsWith("sk-svcacct-") || /^sk-[A-Za-z0-9]{20,}/.test(k)) return "openai";
+  return "meta";
+}
+
 function getScorecardTarget(settings) {
   if (settings.provider === "baseten") {
     return {
@@ -6295,7 +6345,52 @@ function getScorecardTarget(settings) {
       role: "system"
     };
   }
-
+  const detected = detectProviderFromKey(settings.metaKey);
+  if (detected === "gemini") {
+    return {
+      provider: "gemini",
+      url: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+      model: "gemini-2.5-flash",
+      key: settings.metaKey,
+      role: "system"
+    };
+  }
+  if (detected === "openai") {
+    return {
+      provider: "openai",
+      url: "https://api.openai.com/v1/chat/completions",
+      model: "gpt-4o-mini",
+      key: settings.metaKey,
+      role: "system"
+    };
+  }
+  if (detected === "anthropic") {
+    return {
+      provider: "anthropic",
+      url: "https://api.anthropic.com/v1/messages",
+      model: "claude-sonnet-4-20250514",
+      key: settings.metaKey,
+      role: "user"
+    };
+  }
+  if (detected === "groq") {
+    return {
+      provider: "groq",
+      url: "https://api.groq.com/openai/v1/chat/completions",
+      model: "meta-llama/llama-4-scout-17b-16e-instruct",
+      key: settings.metaKey,
+      role: "system"
+    };
+  }
+  if (detected === "openrouter") {
+    return {
+      provider: "openrouter",
+      url: "https://openrouter.ai/api/v1/chat/completions",
+      model: "google/gemini-2.5-flash",
+      key: settings.metaKey,
+      role: "system"
+    };
+  }
   return {
     provider: "meta",
     url: CONFIG.cloud.endpoint,
@@ -6303,6 +6398,58 @@ function getScorecardTarget(settings) {
     key: settings.metaKey,
     role: "developer"
   };
+}
+
+async function startOpenRouterOAuth() {
+  try {
+    const array = new Uint8Array(32);
+    crypto.getRandomValues(array);
+    const codeVerifier = btoa(String.fromCharCode(...array))
+      .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    const hashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(codeVerifier));
+    const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(hashBuffer)))
+      .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+    sessionStorage.setItem("cleanquest.openrouter.verifier", codeVerifier);
+    const callbackUrl = window.location.origin + window.location.pathname;
+    const authUrl = new URL("https://openrouter.ai/auth");
+    authUrl.searchParams.set("callback_url", callbackUrl);
+    authUrl.searchParams.set("code_challenge", codeChallenge);
+    authUrl.searchParams.set("code_challenge_method", "S256");
+    window.location.href = authUrl.toString();
+  } catch {}
+}
+
+async function handleOpenRouterCallbackIfPresent() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    if (!code) return;
+    const codeVerifier = sessionStorage.getItem("cleanquest.openrouter.verifier");
+    sessionStorage.removeItem("cleanquest.openrouter.verifier");
+    const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
+    window.history.replaceState({}, document.title, cleanUrl);
+    const resp = await fetch("https://openrouter.ai/api/v1/auth/keys", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        code,
+        code_verifier: codeVerifier || undefined,
+        code_challenge_method: codeVerifier ? "S256" : undefined
+      })
+    });
+    if (resp.ok) {
+      const data = await resp.json();
+      if (data?.key) {
+        const current = loadCloudSettings();
+        localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify({
+          metaKey: data.key,
+          basetenKey: current.basetenKey || "",
+          provider: "meta"
+        }));
+        refreshSettingsInputs();
+      }
+    }
+  } catch {}
 }
 
 async function getVerifiedScore(aiResult, before, after) {
@@ -6659,9 +6806,13 @@ async function getSamOverlays(aiResult, before, after) {
         requestSurfaceBoxes(before?.dataUrl, name),
         requestSurfaceBoxes(after?.dataUrl, name)
       ]);
-      surfaces[name] = { before: beforeBoxes, after: afterBoxes };
+      const surfObj = aiResult.verified.surfaces.find((s) => s.name === name);
+      const fallbackBox = surfObj?.box ? [surfObj.box] : [];
+      surfaces[name] = {
+        before: beforeBoxes.length ? beforeBoxes : fallbackBox,
+        after: afterBoxes.length ? afterBoxes : fallbackBox
+      };
     }
-
     return { status: "overlays", surfaces };
   } catch {
     return { status: "error" };
@@ -7439,6 +7590,23 @@ async function transcribeVoiceNote(blob) {
 
     const wav = await voiceBlobToWav(blob);
     if (!wav) return null;
+    const detected = detectProviderFromKey(settings.metaKey);
+    if (detected === "openai" || detected === "groq") {
+      const form = new FormData();
+      form.append("file", wav, "note.wav");
+      form.append("model", detected === "groq" ? "whisper-large-v3-turbo" : "whisper-1");
+      const endpoint = detected === "groq"
+        ? "https://api.groq.com/openai/v1/audio/transcriptions"
+        : "https://api.openai.com/v1/audio/transcriptions";
+      const r = await fetch(endpoint, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${settings.metaKey}` },
+        body: form
+      });
+      if (!r.ok) return null;
+      const j = await r.json().catch(() => null);
+      return j?.text?.trim() || null;
+    }
 
     const controller = new AbortController();
     const timeout = setTimeout(
@@ -7925,87 +8093,275 @@ function spawnDragShakeConfetti(dx, velocity = 12) {
   }
 }
 
-function renderDeckIllustration(catRaw, finished = false) {
+let arcadeFxParticles = [];
+let arcadeFxRafId = null;
+
+function triggerArcadeFx(mode = "pixels", opts = {}) {
+  if (SELFTEST_MODE) return;
+  const canvas = document.getElementById("arcadeFxCanvas");
+  if (!canvas) return;
+  const w = window.innerWidth || 390;
+  const h = window.innerHeight || 844;
+  if (canvas.width !== w || canvas.height !== h) {
+    canvas.width = w;
+    canvas.height = h;
+  }
+  const cx = Number.isFinite(opts.x) ? opts.x : w * 0.5;
+  const cy = Number.isFinite(opts.y) ? opts.y : h * 0.45;
+  const palette = opts.palette || ["#45eaff", "#39f5bc", "#ffd35c", "#c084fc", "#ff5b76", "#ffffff"];
+  if (arcadeFxParticles.length > 160) arcadeFxParticles.splice(0, 60);
+
+  if (mode === "pixels") {
+    arcadeFxParticles.push({
+      kind: "ring", x: cx, y: cy, r: 6, maxR: 58, alpha: 0.9, color: palette[0]
+    });
+    for (let i = 0; i < 18; i += 1) {
+      const ang = (Math.PI * 2 * i) / 18 + (Math.random() * 0.35 - 0.17);
+      const spd = 2.4 + Math.random() * 5.6;
+      arcadeFxParticles.push({
+        kind: i % 4 === 0 ? "star" : "pixel",
+        x: cx, y: cy,
+        vx: Math.cos(ang) * spd,
+        vy: Math.sin(ang) * spd - 1.4,
+        g: 0.18,
+        size: i % 3 === 0 ? 7 : 5,
+        rot: Math.random() * Math.PI * 2,
+        vrot: (Math.random() - 0.5) * 0.25,
+        alpha: 1,
+        decay: 0.026 + Math.random() * 0.015,
+        color: palette[i % palette.length]
+      });
+    }
+  } else if (mode === "confetti") {
+    for (let i = 0; i < 42; i += 1) {
+      const fromLeft = i % 2 === 0;
+      const startX = fromLeft ? w * 0.15 : w * 0.85;
+      const startY = h * 0.58;
+      const vx = (fromLeft ? 1 : -1) * (2.5 + Math.random() * 6.5) + (Math.random() - 0.5) * 2;
+      const vy = -6.5 - Math.random() * 6.5;
+      const kinds = ["ribbon", "star", "bubble", "pixel"];
+      arcadeFxParticles.push({
+        kind: kinds[i % kinds.length],
+        x: startX, y: startY,
+        vx, vy,
+        g: 0.19,
+        size: 7 + (i % 4) * 2,
+        rot: Math.random() * Math.PI * 2,
+        vrot: (Math.random() - 0.5) * 0.22,
+        alpha: 1,
+        decay: 0.014 + Math.random() * 0.01,
+        color: palette[i % palette.length]
+      });
+    }
+  } else if (mode === "bubbles") {
+    for (let i = 0; i < 16; i += 1) {
+      const ang = (Math.PI * 2 * i) / 16 + (Math.random() * 0.3 - 0.15);
+      const spd = 1.8 + Math.random() * 4.2;
+      arcadeFxParticles.push({
+        kind: i % 3 === 0 ? "star" : "bubble",
+        x: cx + (Math.random() * 40 - 20),
+        y: cy + (Math.random() * 24 - 12),
+        vx: Math.cos(ang) * spd,
+        vy: Math.sin(ang) * spd - 2.2,
+        g: -0.04,
+        size: 6 + (i % 4) * 2.5,
+        rot: 0, vrot: 0.08,
+        alpha: 0.95,
+        decay: 0.022,
+        color: palette[i % palette.length]
+      });
+    }
+  } else if (mode === "portal") {
+    for (let i = 0; i < 22; i += 1) {
+      const ang = (Math.PI * 2 * i) / 22;
+      const spd = 4.5 + (i % 3) * 2.8;
+      arcadeFxParticles.push({
+        kind: i % 2 === 0 ? "star" : "pixel",
+        x: w * 0.5, y: h * 0.42,
+        vx: Math.cos(ang) * spd,
+        vy: Math.sin(ang) * spd,
+        g: 0,
+        size: 6,
+        rot: ang, vrot: 0.15,
+        alpha: 0.92,
+        decay: 0.032,
+        color: palette[i % palette.length]
+      });
+    }
+  }
+
+  if (!arcadeFxRafId) {
+    const stepFx = () => {
+      const ctx = canvas.getContext("2d");
+      if (!ctx) { arcadeFxRafId = null; return; }
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = arcadeFxParticles.length - 1; i >= 0; i -= 1) {
+        const p = arcadeFxParticles[i];
+        if (p.kind === "ring") {
+          p.r += (p.maxR - p.r) * 0.22;
+          p.alpha -= 0.06;
+          if (p.alpha <= 0.02) { arcadeFxParticles.splice(i, 1); continue; }
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.strokeStyle = p.color;
+          ctx.lineWidth = 2.5;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+          continue;
+        }
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.g;
+        p.vx *= 0.985;
+        p.rot += p.vrot;
+        p.alpha -= p.decay;
+        if (p.alpha <= 0.02) { arcadeFxParticles.splice(i, 1); continue; }
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        if (p.kind === "bubble") {
+          ctx.strokeStyle = p.color;
+          ctx.fillStyle = "rgba(69, 234, 255, 0.18)";
+          ctx.lineWidth = 1.8;
+          ctx.beginPath();
+          ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.stroke();
+          ctx.fillStyle = "#ffffff";
+          ctx.beginPath();
+          ctx.arc(-p.size * 0.32, -p.size * 0.32, p.size * 0.24, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (p.kind === "star") {
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          const s = p.size * 1.25;
+          ctx.moveTo(0, -s);
+          ctx.lineTo(s * 0.32, -s * 0.32);
+          ctx.lineTo(s, 0);
+          ctx.lineTo(s * 0.32, s * 0.32);
+          ctx.lineTo(0, s);
+          ctx.lineTo(-s * 0.32, s * 0.32);
+          ctx.lineTo(-s, 0);
+          ctx.lineTo(-s * 0.32, -s * 0.32);
+          ctx.closePath();
+          ctx.fill();
+        } else if (p.kind === "ribbon") {
+          ctx.fillStyle = p.color;
+          const flutter = Math.cos(p.rot * 2) * p.size * 0.65;
+          ctx.fillRect(-p.size * 0.7, -flutter * 0.5, p.size * 1.4, Math.max(3, Math.abs(flutter)));
+        } else {
+          ctx.fillStyle = p.color;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 6;
+          ctx.fillRect(-p.size * 0.5, -p.size * 0.5, p.size, p.size);
+        }
+        ctx.restore();
+      }
+      if (arcadeFxParticles.length > 0) {
+        arcadeFxRafId = requestAnimationFrame(stepFx);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        arcadeFxRafId = null;
+      }
+    };
+    arcadeFxRafId = requestAnimationFrame(stepFx);
+  }
+}
+
+function renderDeckIllustration(catRaw, finished = false, verdictState = null) {
   populateDeckAmbientFloaters();
   const el = document.getElementById("deckIllustration");
   if (!el) return;
+  const accentStroke = verdictState === "hit" ? "#39f5bc" : verdictState === "miss" ? "#ff5b76" : "#45eaff";
   if (finished) {
-    el.innerHTML = `<svg viewBox="0 0 240 104" role="presentation">
+    el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
       <defs>
         <linearGradient id="trophyGold" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0%" stop-color="#ffe57f"/><stop offset="100%" stop-color="#ff9f1c"/>
         </linearGradient>
       </defs>
-      <circle cx="120" cy="52" r="42" fill="rgba(57,245,188,0.15)" stroke="#39f5bc" stroke-width="2" stroke-dasharray="6 4" class="sparkle-spin"/>
+      <rect x="14" y="10" width="412" height="92" rx="16" fill="rgba(12,40,64,0.65)" stroke="#39f5bc" stroke-width="1.8"/>
+      <circle cx="220" cy="56" r="42" fill="rgba(57,245,188,0.16)" stroke="#39f5bc" stroke-width="2" stroke-dasharray="6 4" class="lottie-orbit"/>
       <g class="sweep-arc">
-        <path d="M96 28 h48 v18 c0 14-10 24-24 24 s-24-10-24-24 z" fill="url(#trophyGold)" stroke="#fff" stroke-width="1.5"/>
-        <path d="M96 32 h-10 c0 10 4 16 12 16 M144 32 h10 c0 10-4 16-12 16" fill="none" stroke="#ffd35c" stroke-width="2.5" stroke-linecap="round"/>
-        <rect x="114" y="70" width="12" height="10" rx="2" fill="#ffd35c"/>
-        <rect x="102" y="80" width="36" height="6" rx="3" fill="#39f5bc"/>
+        <path d="M196 30 h48 v18 c0 14-10 24-24 24 s-24-10-24-24 z" fill="url(#trophyGold)" stroke="#fff" stroke-width="1.5"/>
+        <path d="M196 34 h-10 c0 10 4 16 12 16 M244 34 h10 c0 10-4 16-12 16" fill="none" stroke="#ffd35c" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="214" y="72" width="12" height="10" rx="2" fill="#ffd35c"/>
+        <rect x="202" y="82" width="36" height="6" rx="3" fill="#39f5bc"/>
       </g>
-      <path class="sparkle-spin" d="M64 26 l4 10 l10 4 l-10 4 l-4 10 l-4-10 l-10-4 l10-4 z" fill="#ffd35c"/>
-      <path class="sparkle-spin" d="M178 24 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#45eaff" style="animation-delay:.35s"/>
-      <circle class="bubble-rise" cx="76" cy="74" r="6" fill="rgba(69,234,255,0.35)" stroke="#45eaff" stroke-width="1.5"/>
-      <circle class="bubble-rise" cx="168" cy="70" r="5" fill="rgba(57,245,188,0.35)" stroke="#39f5bc" stroke-width="1.5" style="animation-delay:.4s"/>
+      <path class="sparkle-spin" d="M84 32 l5 12 l12 5 l-12 5 l-5 12 l-5-12 l-12-5 l12-5 z" fill="#ffd35c"/>
+      <path class="sparkle-spin" d="M356 30 l4.5 11 l11 4.5 l-11 4.5 l-4.5 11 l-4.5-11 l-11-4.5 l11-4.5 z" fill="#45eaff" style="animation-delay:.35s"/>
+      <circle class="bubble-rise" cx="136" cy="76" r="7" fill="rgba(69,234,255,0.35)" stroke="#45eaff" stroke-width="1.6"/>
+      <circle class="bubble-rise" cx="304" cy="72" r="6" fill="rgba(57,245,188,0.35)" stroke="#39f5bc" stroke-width="1.6" style="animation-delay:.4s"/>
     </svg>`;
     return;
   }
   if (catRaw === "product") {
-    el.innerHTML = `<svg viewBox="0 0 240 104" role="presentation">
-      <ellipse cx="120" cy="88" rx="64" ry="8" fill="rgba(69,234,255,0.2)"/>
-      <!-- Animated Spray Nozzle + Mist -->
+    el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
+      <!-- Left Wing: Animated pH Chemistry Meter -->
+      <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <text x="66" y="36" text-anchor="middle" fill="#9bdfff" font-size="10" font-weight="800">pH MATCH</text>
+      <path d="M36 72 a30 30 0 0 1 60 0" fill="none" stroke="rgba(69,234,255,0.3)" stroke-width="6" stroke-linecap="round"/>
+      <line class="lottie-pulse" x1="66" y1="72" x2="${verdictState === "miss" ? 44 : 84}" y2="48" stroke="${verdictState === "miss" ? "#ff5b76" : "#39f5bc"}" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="66" cy="72" r="4" fill="#ffd35c"/>
+      <!-- Center Diorama: Spray Trigger + Bubbling Alchemist Flask -->
+      <ellipse cx="225" cy="92" rx="76" ry="8" fill="rgba(69,234,255,0.22)"/>
       <g class="sweep-arc">
-        <path d="M52 34 h22 l4 8 h-18 z" fill="#45eaff"/>
-        <rect x="54" y="42" width="16" height="36" rx="6" fill="rgba(69,234,255,0.32)" stroke="#45eaff" stroke-width="2"/>
-        <path d="M76 38 l16 -6 M78 42 l18 0 M76 46 l16 6" stroke="#39f5bc" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3"/>
+        <path d="M152 34 h24 l4 9 h-20 z" fill="#45eaff"/>
+        <rect x="154" y="43" width="18" height="38" rx="6" fill="rgba(69,234,255,0.32)" stroke="#45eaff" stroke-width="2"/>
+        <path d="M178 39 l18 -6 M180 44 l20 0 M178 49 l18 6" stroke="#39f5bc" stroke-width="2.2" stroke-linecap="round" stroke-dasharray="3 3"/>
       </g>
-      <!-- Bubbling Alchemist Flask with sloshing liquid -->
-      <path d="M118 18 h24 M124 18 v16 l-24 38 a7 7 0 0 0 6 10 h48 a7 7 0 0 0 6-10 l-24-38 v-16" fill="rgba(57,245,188,0.14)" stroke="#45eaff" stroke-width="2.5" stroke-linejoin="round"/>
-      <path class="liquid-slosh" d="M108 64 q14 -9 26 0 t24 0 l5 10 a5 5 0 0 1 -4 7 h-52 a5 5 0 0 1 -4 -7 z" fill="rgba(57,245,188,0.58)"/>
-      <circle class="bubble-rise" cx="122" cy="62" r="4.5" fill="#39f5bc"/>
-      <circle class="bubble-rise" cx="138" cy="52" r="3.8" fill="#45eaff" style="animation-delay:.35s"/>
-      <circle class="bubble-rise" cx="128" cy="40" r="3.2" fill="#ffd35c" style="animation-delay:.7s"/>
-      <circle class="bubble-rise" cx="144" cy="30" r="5" fill="rgba(69,234,255,0.35)" stroke="#fff" stroke-width="1.2" style="animation-delay:.2s"/>
-      <path class="sparkle-spin" d="M184 28 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#ffd35c"/>
+      <path d="M222 18 h26 M228 18 v16 l-26 40 a7 7 0 0 0 6 10 h52 a7 7 0 0 0 6-10 l-26-40 v-16" fill="rgba(57,245,188,0.16)" stroke="${accentStroke}" stroke-width="2.5" stroke-linejoin="round"/>
+      <path class="liquid-slosh" d="M210 66 q15 -9 28 0 t26 0 l5 10 a5 5 0 0 1 -4 7 h-56 a5 5 0 0 1 -4 -7 z" fill="${verdictState === "miss" ? "rgba(255,91,118,0.65)" : "rgba(57,245,188,0.62)"}"/>
+      <circle class="bubble-rise" cx="226" cy="64" r="5" fill="#39f5bc"/>
+      <circle class="bubble-rise" cx="244" cy="52" r="4" fill="#45eaff" style="animation-delay:.35s"/>
+      <circle class="bubble-rise" cx="234" cy="38" r="3.5" fill="#ffd35c" style="animation-delay:.7s"/>
+      <!-- Right Wing: Chrome Fixture Shield -->
+      <rect x="326" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <path d="M358 74 v-22 a14 14 0 0 1 28 0 v8" fill="none" stroke="#e2f7ff" stroke-width="4.5" stroke-linecap="round"/>
+      <path class="sparkle-spin" d="M392 32 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#ffd35c"/>
     </svg>`;
   } else if (catRaw === "technique") {
-    el.innerHTML = `<svg viewBox="0 0 240 104" role="presentation">
-      <rect x="34" y="14" width="172" height="74" rx="14" fill="rgba(12,36,58,0.85)" stroke="rgba(69,234,255,0.45)" stroke-width="1.8"/>
-      <path d="M56 32 h128 l-128 20 h128 l-128 20 h128" fill="none" stroke="rgba(69,234,255,0.32)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 5"/>
-      <!-- Animated Pro Squeegee Gliding Across Surface -->
+    el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
+      <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <circle cx="66" cy="56" r="22" fill="rgba(69,234,255,0.12)" stroke="#45eaff" stroke-width="2"/>
+      <line class="lottie-orbit" x1="66" y1="56" x2="66" y2="39" stroke="#ffd35c" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="132" y="14" width="176" height="84" rx="14" fill="rgba(12,36,58,0.88)" stroke="${accentStroke}" stroke-width="2"/>
+      <path d="M154 34 h132 l-132 22 h132 l-132 22 h132" fill="none" stroke="rgba(69,234,255,0.36)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 5"/>
       <g class="sweep-arc">
-        <rect x="92" y="24" width="56" height="11" rx="4" fill="#45eaff" stroke="#fff" stroke-width="1.2"/>
-        <rect x="115" y="35" width="10" height="24" rx="3" fill="#ffd35c"/>
-        <circle cx="96" cy="29" r="3.5" fill="#fff"/>
-        <circle cx="144" cy="29" r="3.5" fill="#fff"/>
+        <rect x="190" y="25" width="60" height="12" rx="4" fill="#45eaff" stroke="#fff" stroke-width="1.2"/>
+        <rect x="215" y="37" width="10" height="26" rx="3" fill="#ffd35c"/>
       </g>
-      <path class="sparkle-spin" d="M62 28 l3 8 l8 3 l-8 3 l-3 8 l-3-8 l-8-3 l8-3 z" fill="#39f5bc"/>
-      <path class="sparkle-spin" d="M178 58 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#ffd35c" style="animation-delay:.4s"/>
-      <circle class="bubble-rise" cx="84" cy="68" r="4.5" fill="rgba(69,234,255,0.4)" stroke="#45eaff" stroke-width="1.4"/>
+      <rect x="326" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <path class="sparkle-spin" d="M374 34 l5 13 l13 5 l-13 5 l-5 13 l-5-13 l-13-5 l13-5 z" fill="#39f5bc"/>
     </svg>`;
   } else {
-    el.innerHTML = `<svg viewBox="0 0 240 104" role="presentation">
-      <rect x="32" y="16" width="176" height="70" rx="14" fill="rgba(10,34,54,0.85)" stroke="#45eaff" stroke-width="2"/>
-      <path d="M48 72 l34 -44 M72 72 l34 -44" stroke="rgba(255,255,255,0.12)" stroke-width="6" stroke-linecap="round"/>
-      <!-- Animated Scrubbing Sponge + Foam Suds Trail -->
+    el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
+      <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <text x="66" y="40" text-anchor="middle" fill="#9bdfff" font-size="10" font-weight="800">9-ZONE SCAN</text>
+      <rect x="46" y="46" width="40" height="34" rx="5" fill="rgba(57,245,188,0.22)" stroke="#39f5bc" stroke-width="1.5"/>
+      <rect x="132" y="16" width="176" height="80" rx="14" fill="rgba(10,34,54,0.88)" stroke="${accentStroke}" stroke-width="2"/>
+      <path d="M148 78 l36 -48 M174 78 l36 -48" stroke="rgba(255,255,255,0.14)" stroke-width="6" stroke-linecap="round"/>
       <g class="sweep-arc">
-        <circle cx="88" cy="58" r="6" fill="#e0faff" opacity="0.85"/>
-        <circle cx="98" cy="62" r="5" fill="#fff" opacity="0.9"/>
-        <circle cx="150" cy="58" r="6.5" fill="#e0faff" opacity="0.85"/>
-        <rect x="92" y="32" width="58" height="28" rx="8" fill="#ffd35c" stroke="#fff" stroke-width="1.5"/>
-        <rect x="92" y="32" width="58" height="9" rx="4" fill="#39f5bc"/>
-        <circle cx="106" cy="48" r="2.2" fill="#b47b00" opacity="0.55"/>
-        <circle cx="122" cy="51" r="2.6" fill="#b47b00" opacity="0.55"/>
-        <circle cx="136" cy="47" r="2" fill="#b47b00" opacity="0.55"/>
+        <circle cx="186" cy="62" r="6.5" fill="#e0faff" opacity="0.9"/>
+        <circle cx="252" cy="62" r="7" fill="#e0faff" opacity="0.9"/>
+        <rect x="190" y="34" width="62" height="30" rx="8" fill="#ffd35c" stroke="#fff" stroke-width="1.5"/>
+        <rect x="190" y="34" width="62" height="10" rx="4" fill="#39f5bc"/>
       </g>
-      <path class="sparkle-spin" d="M58 30 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#ffd35c"/>
-      <path class="sparkle-spin" d="M182 26 l3 8 l8 3 l-8 3 l-3 8 l-3-8 l-8-3 l8-3 z" fill="#45eaff" style="animation-delay:.45s"/>
-      <circle class="bubble-rise" cx="166" cy="66" r="5" fill="rgba(69,234,255,0.35)" stroke="#45eaff" stroke-width="1.5"/>
+      <rect x="326" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <path class="sparkle-spin" d="M374 34 l5 13 l13 5 l-13 5 l-5 13 l-5-13 l-13-5 l13-5 z" fill="#ffd35c"/>
     </svg>`;
   }
 }
 
 function triggerDeckParticleBurst(isCorrect = true) {
+  triggerArcadeFx(isCorrect ? "confetti" : "pixels", {
+    palette: isCorrect
+      ? ["#39f5bc", "#45eaff", "#ffd35c", "#c084fc", "#ffffff"]
+      : ["#ff5b76", "#ffd35c", "#ff9f5a"]
+  });
   const host = document.getElementById("deckParticleBurst");
   if (!host) return;
   host.innerHTML = "";
@@ -8014,19 +8370,18 @@ function triggerDeckParticleBurst(isCorrect = true) {
         `<svg viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="rgba(69,234,255,0.32)" stroke="#45eaff" stroke-width="2"/><circle cx="8" cy="8" r="2.2" fill="#fff"/></svg>`,
         `<svg viewBox="0 0 22 22"><path d="M11 1 l2.8 7.2 l7.2 2.8 l-7.2 2.8 l-2.8 7.2 l-2.8-7.2 l-7.2-2.8 l7.2-2.8 z" fill="#ffd35c"/></svg>`,
         `<svg viewBox="0 0 22 22"><path d="M11 2 C11 2 5 9.5 5 14 a6 6 0 0 0 12 0 C17 9.5 11 2 11 2z" fill="#39f5bc"/></svg>`,
-        `<svg viewBox="0 0 22 22"><rect x="3" y="6" width="16" height="10" rx="4" fill="#ffd35c" stroke="#39f5bc" stroke-width="2"/></svg>`,
-        `<svg viewBox="0 0 22 22"><circle cx="8" cy="12" r="5" fill="#fff"/><circle cx="14" cy="11" r="4.2" fill="#aef4ff"/><circle cx="11" cy="7" r="3.6" fill="#39f5bc"/></svg>`
+        `<svg viewBox="0 0 22 22"><rect x="3" y="6" width="16" height="10" rx="4" fill="#ffd35c" stroke="#39f5bc" stroke-width="2"/></svg>`
       ]
     : [
         `<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="6" fill="#ff5b76"/></svg>`,
         `<svg viewBox="0 0 20 20"><path d="M10 2 l8 15 h-16 z" fill="#ffd35c"/></svg>`
       ];
-  const count = isCorrect ? 30 : 12;
+  const count = isCorrect ? 28 : 14;
   for (let i = 0; i < count; i += 1) {
     const dot = document.createElement("span");
     dot.className = "deck-particle is-confetti";
     const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.25 - 0.12);
-    const dist = 68 + (i % 4) * 32;
+    const dist = 74 + (i % 4) * 34;
     const rot = Math.round((Math.random() - 0.5) * 320);
     dot.style.left = "50%";
     dot.style.top = "45%";
@@ -8066,15 +8421,19 @@ function renderDeck() {
   els.deckDone?.classList.toggle("hidden", !finished);
   renderDeckSponsorSlot(false, null);
 
+  const vStamp = document.getElementById("deckVerdictStamp");
+  if (vStamp) {
+    vStamp.className = "deck-verdict-stamp hidden";
+    vStamp.textContent = "";
+  }
   if (els.deckCard) {
     els.deckCard.style.transform = "";
-    els.deckCard.classList.remove("swiping", "swipe-left-commit", "swipe-right-commit", "card-pop");
+    els.deckCard.classList.remove("swiping", "swipe-left-commit", "swipe-right-commit", "card-pop", "card-verdict-hit", "card-verdict-miss");
     void els.deckCard.offsetWidth;
     els.deckCard.classList.add("card-pop");
   }
   if (els.deckStampLeft) els.deckStampLeft.style.opacity = "0";
   if (els.deckStampRight) els.deckStampRight.style.opacity = "0";
-
   if (finished) {
     const streak = bumpStreakIfNewDay();
     const progress = loadDeckProgress();
@@ -8180,6 +8539,19 @@ function answerDeck(pick) {
   if (els.deckStampRight) els.deckStampRight.style.opacity = pick === "right" ? "1" : "0";
   els.deckNextButton?.classList.remove("hidden");
 
+  const catRaw = String(card?.category || "").toLowerCase();
+  renderDeckIllustration(catRaw, false, hit ? "hit" : "miss");
+  if (els.deckCard) {
+    els.deckCard.classList.remove("card-verdict-hit", "card-verdict-miss");
+    void els.deckCard.offsetWidth;
+    els.deckCard.classList.add(hit ? "card-verdict-hit" : "card-verdict-miss");
+  }
+  const vStamp = document.getElementById("deckVerdictStamp");
+  if (vStamp) {
+    vStamp.textContent = hit ? "✨ NAILED IT! +100 XP" : "⚠️ TRICK CALL! WATCH THE RULE";
+    vStamp.className = `deck-verdict-stamp ${hit ? "is-hit" : "is-miss"}`;
+  }
+
   playTone(hit ? 880 : 320, 0.07);
   if (hit) setTimeout(() => playTone(1174, 0.09), 70);
   triggerDeckParticleBurst(hit);
@@ -8187,7 +8559,7 @@ function answerDeck(pick) {
   if (els.deckFeedback) {
     const productType = localizedDeckField(card, "productType");
     const productNote = productType ? ` · ${t("productTypePrefix")} ${productType}.` : "";
-    els.deckFeedback.textContent = `${hit ? t("deckCorrect") : t("deckWrong")} ${localizedDeckField(card, "why")}${productNote}`;
+    els.deckFeedback.textContent = `${hit ? "✨ " + t("deckCorrect") : "💡 " + t("deckWrong")} ${localizedDeckField(card, "why")}${productNote}`;
     els.deckFeedback.className = `deck-feedback ${hit ? "is-correct" : "is-wrong"}`;
   }
 
@@ -8542,9 +8914,10 @@ function setConsentAccepted(accepted = true) {
 }
 
 function speakConsentAloud() {
+  stopSpeech();
   const lang = state.language || "en";
   if (clipStatus(lang, "consent", "00") === "available") {
-    playHostClip(clipUrlFor(lang, "consent", "00"), t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 });
+    playHostClip(clipUrlFor(lang, "consent", "00"), t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 }, "consent");
     return;
   }
   speakText(t("consentBody"), { force: true, rate: 1.0, pitch: 1.0 });
@@ -10033,6 +10406,21 @@ function bumpSponsorImpression(kind = "home") {
   } catch {}
 }
 
+function buildSponsorLogoSvg() {
+  return `<svg class="sponsor-logo-svg" viewBox="0 0 180 56" role="img" aria-label="Sponsor Logo Placeholder (300x100 aspect ratio)">
+    <defs>
+      <linearGradient id="spGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#113858"/><stop offset="100%" stop-color="#071a2c"/>
+      </linearGradient>
+    </defs>
+    <rect x="1.5" y="1.5" width="177" height="53" rx="10" fill="url(#spGrad)" stroke="#ffd35c" stroke-width="1.5" stroke-dasharray="4 2"/>
+    <circle cx="28" cy="28" r="16" fill="rgba(57,245,188,0.18)" stroke="#39f5bc" stroke-width="1.5"/>
+    <path d="M28 16 l3 7 l7 3 l-7 3 l-3 7 l-3-7 l-7-3 l7-3 z" fill="#ffd35c"/>
+    <text x="52" y="25" fill="#ffffff" font-size="11.5" font-weight="900" letter-spacing="0.06em">SPONSOR LOGO</text>
+    <text x="52" y="40" fill="#ffd35c" font-size="9.5" font-weight="800" letter-spacing="0.05em">YOUR BRAND · 3:1 AD</text>
+  </svg>`;
+}
+
 function renderHomeSponsorSlot() {
   if (!els.homeSponsorSlot) return;
   const slot = getSponsorSlot("home");
@@ -10042,14 +10430,18 @@ function renderHomeSponsorSlot() {
     return;
   }
   els.homeSponsorSlot.innerHTML = "";
+  const logoWrap = document.createElement("div");
+  logoWrap.className = "sponsor-logo-wrap";
+  logoWrap.innerHTML = buildSponsorLogoSvg();
   const badge = document.createElement("span");
   badge.className = "sponsor-badge";
   badge.textContent = t("sponsoredBadge");
   const text = document.createElement("span");
+  text.className = "sponsor-copy-text";
   text.textContent = slot.isDefault
     ? `${t("sponsorHomeTitle")} — ${t("sponsorHomeDetail")}`
     : `${slot.title}${slot.detail ? ` — ${slot.detail}` : ""}`;
-  els.homeSponsorSlot.append(badge, text);
+  els.homeSponsorSlot.append(logoWrap, badge, text);
   els.homeSponsorSlot.classList.remove("hidden");
 }
 
@@ -10063,15 +10455,19 @@ function renderDeckSponsorSlot(showAfterAnswer, card) {
   }
   bumpSponsorImpression("deck");
   els.deckSponsorSlot.innerHTML = "";
+  const logoWrap = document.createElement("div");
+  logoWrap.className = "sponsor-logo-wrap";
+  logoWrap.innerHTML = buildSponsorLogoSvg();
   const badge = document.createElement("span");
   badge.className = "sponsor-badge";
   badge.textContent = t("sponsoredBadge");
   const text = document.createElement("span");
+  text.className = "sponsor-copy-text";
   const catNote = card?.productType ? ` (${localizedDeckField(card, "productType")})` : card?.category ? ` (${card.category})` : "";
   text.textContent = slot.isDefault
     ? `${t("sponsorDeckTitle")}${catNote} — ${t("sponsorDeckDetail")}`
     : `${slot.title}${catNote}${slot.detail ? ` — ${slot.detail}` : ""}`;
-  els.deckSponsorSlot.append(badge, text);
+  els.deckSponsorSlot.append(logoWrap, badge, text);
   els.deckSponsorSlot.classList.remove("hidden");
 }
 
@@ -12343,6 +12739,12 @@ function bindEvents() {
       renderMusicStreamEmbed(val);
     });
   }
+  const openRouterBtn = document.getElementById("openRouterSsoButton");
+  if (openRouterBtn) {
+    openRouterBtn.addEventListener("click", () => {
+      void startOpenRouterOAuth();
+    });
+  }
   const replaySummaryBtn = document.getElementById("replaySummaryButton");
   if (replaySummaryBtn) {
     replaySummaryBtn.addEventListener("click", () => {
@@ -12350,7 +12752,7 @@ function bindEvents() {
       announceGameVerdict();
     });
   }
-  // Global gamified button micro-interactions (radial ripple + cleaning sparkle burst + WebAudio harmonic pluck)
+  // Global gamified button micro-interactions (60fps pixel explosion + radial ripple + cleaning sparkle burst + WebAudio harmonic pluck)
   document.addEventListener("pointerdown", (event) => {
     const btn = event.target?.closest?.("button, .clickable-evidence, .mvp-tab-chip");
     if (!btn || btn.disabled) return;
@@ -12362,8 +12764,15 @@ function bindEvents() {
     btn.classList.remove("btn-pop-active");
     void btn.offsetWidth;
     btn.classList.add("btn-pop-active");
+    setTimeout(() => btn.classList.remove("btn-pop-active"), 340);
     if (!SELFTEST_MODE && !state.voice.muted) {
       playTone(btn.classList.contains("primary-button") ? 740 : 587.33, 0.032);
+    }
+    if (!SELFTEST_MODE) {
+      triggerArcadeFx(btn.classList.contains("spot-pill-chip") ? "bubbles" : "pixels", {
+        x: event.clientX,
+        y: event.clientY
+      });
     }
     if (!SELFTEST_MODE && (btn.classList.contains("primary-button") || btn.classList.contains("spot-pill-chip") || btn.id === "replaySummaryButton")) {
       const layer = document.getElementById("buttonSparkleLayer");
@@ -12445,7 +12854,7 @@ function initializeApp() {
   renderAdminDashboard();
   renderCheckinSites();
   initializeSelfTestUI();
-
+  void handleOpenRouterCallbackIfPresent();
   if (SPECTATOR_MODE) {
     initializeSpectatorMode();
     return;
@@ -12463,14 +12872,16 @@ function initializeApp() {
       }
     }, 180);
     let initialGestureHandled = false;
-    const onFirstGesture = () => {
+    const onFirstGesture = (event) => {
       if (initialGestureHandled) return;
       initialGestureHandled = true;
       document.removeEventListener("pointerdown", onFirstGesture, true);
       document.removeEventListener("keydown", onFirstGesture, true);
       unlockAudio();
       if (state.voice.muted || SELFTEST_MODE) return;
-      if (!state.voice.currentAudio) {
+      // If the user's first tap is on an interactive button/control, let that button's own handler trigger its voice clip without competing
+      if (event?.target?.closest?.("button, a, input, select, label")) return;
+      if (!state.voice.currentAudio && activeVoiceAudios.size === 0) {
         if (state.editingFtue && state.cleanerFtueStep === 3 && !hasConsent()) {
           speakConsentAloud();
         } else if (state.screen === "welcome") {
