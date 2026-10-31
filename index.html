@@ -13,7 +13,6 @@
 </head>
 
 <body>
-  <div class="ambient-grid" aria-hidden="true"></div>
   <div class="ambient-orb ambient-orb-one" aria-hidden="true"></div>
   <div class="ambient-orb ambient-orb-two" aria-hidden="true"></div>
 
@@ -49,12 +48,6 @@
     <!-- WELCOME -->
     <section id="welcomeScreen" class="screen active">
       <div class="content hero">
-        <div class="hero-scanline" aria-hidden="true"></div>
-
-        <div class="eyebrow" data-i18n="aiPoweredChallenge">
-          AI-POWERED SPEED CHALLENGE
-        </div>
-
         <h1>
           <span data-i18n="beatThe">Beat the</span>
           <span class="gradient-text" data-i18n="certificationTime">Benchmark Time</span>
@@ -128,7 +121,7 @@
             </button>
           </div>
           <p id="consentText" class="consent-copy" data-i18n="consentBody">
-            CleanQuest captures before and after photos of the work surface. Faces are never identified (no facial recognition or biometrics). An optional victory-pose photo is processed on this device only. Location is recorded only if you share it. If you add your own provider key in Settings, photos and voice notes may be sent to that provider for verification or transcription; otherwise everything is stored in this browser only. Scores and records are for training and recognition — never for discipline.
+            CleanQuest captures before and after photos of the work surface. Faces are never identified (no facial recognition or biometrics). An optional victory-pose photo is processed on this device only. Location is recorded only if you share it. If you add your own provider key in Settings, photos and voice notes may be sent to that provider for verification or transcription; otherwise everything is stored in this browser only. Scores and records are for training and recognition · never for discipline.
           </p>
           <div class="consent-actions">
             <label class="consent-check-label" for="consentCheckbox">
@@ -154,7 +147,7 @@
             <input id="cleanerPin" class="pin-input pin-code" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4-digit PIN" data-i18n-placeholder="pinPlaceholder" aria-label="4-digit PIN" />
             <button id="pinSaveButton" class="secondary-button compact-chip" type="button" data-i18n="pinSaveAction">SAVE PIN</button>
           </div>
-          <small class="fine-print" data-i18n="pinLocalNote">Local convenience lock only — your phone + PIN stay on this device and are never sent anywhere.</small>
+          <small class="fine-print" data-i18n="pinLocalNote">Local convenience lock only · your phone + PIN stay on this device and are never sent anywhere.</small>
         </section>
 
         <section id="homePassportPanel" class="home-passport-panel hologram-card hidden" aria-label="Crew and consistency overview">
@@ -168,7 +161,7 @@
           <div id="consistencyMeter" class="consistency-meter">
             <div class="consistency-head">
               <span id="consistencyLabel" data-i18n="consistencyDefault">Week 1 of 13 · On track</span>
-              <small id="consistencyMilestone" data-i18n="consistencyDisclaimer">Benchmark consistency — never a certification</small>
+              <small id="consistencyMilestone" data-i18n="consistencyDisclaimer">Benchmark consistency · never a certification</small>
             </div>
             <div class="progress-track consistency-track">
               <div id="consistencyFill" class="progress-fill" style="width: 8%"></div>
@@ -193,7 +186,7 @@
         </section>
 
         <p id="welcomeDisclaimer" class="fine-print" data-i18n="welcomeDisclaimer">
-          Prototype experience. Benchmark only — never a certification.
+          Prototype experience. Benchmark only · never a certification.
         </p>
       </div>
     </section>
@@ -201,7 +194,6 @@
     <!-- INSTRUCTIONS -->
     <section id="instructionsScreen" class="screen">
       <div class="content">
-        <div class="eyebrow" data-i18n="howItWorks">HOW IT WORKS</div>
         <h2 data-i18n="instructionsTitle">Your challenge</h2>
 
         <div class="instruction-list">
@@ -263,21 +255,21 @@
           <label class="checkin-area-label" for="buildingLeagueSelect">
             <span data-i18n="leagueLabel">LEAGUE</span>
             <select id="buildingLeagueSelect" class="area-select">
-              <option value="office">Office</option>
-              <option value="education">Education</option>
-              <option value="healthcare">Healthcare</option>
-              <option value="industrial">Industrial</option>
-              <option value="retail">Retail</option>
+              <option value="office" data-i18n="leagueOffice">Office</option>
+              <option value="education" data-i18n="leagueEducation">Education</option>
+              <option value="healthcare" data-i18n="leagueHealthcare">Healthcare</option>
+              <option value="industrial" data-i18n="leagueIndustrial">Industrial</option>
+              <option value="retail" data-i18n="leagueRetail">Retail</option>
             </select>
           </label>
           <label class="checkin-area-label" for="areaTemplateSelect">
             <span data-i18n="areaLabel">AREA</span>
             <select id="areaTemplateSelect" class="area-select">
-              <option value="breakroom">Breakroom</option>
-              <option value="restroom">Restroom</option>
-              <option value="lobby">Lobby</option>
-              <option value="office">Office</option>
-              <option value="classroom">Classroom</option>
+              <option value="breakroom" data-i18n="areaBreakroom">Breakroom</option>
+              <option value="restroom" data-i18n="areaRestroom">Restroom</option>
+              <option value="lobby" data-i18n="areaLobby">Lobby</option>
+              <option value="office" data-i18n="areaOffice">Office</option>
+              <option value="classroom" data-i18n="areaClassroom">Classroom</option>
             </select>
           </label>
           <label class="checkin-area-label" for="spotTemplateSelect">
@@ -369,7 +361,6 @@
       <div class="content timer-content">
         <div class="timer-header">
           <div>
-            <div class="eyebrow" data-i18n="liveChallenge">LIVE CHALLENGE</div>
             <h2 data-i18n="qualityFirst">Quality first. Time second.</h2>
           </div>
 
@@ -435,12 +426,12 @@
             <i></i><i></i><i></i><i></i>
           </div>
 
-          <img id="ghostOverlay" class="ghost-overlay hidden" alt="Before capture ghost alignment" />
+          <img id="ghostOverlay" class="ghost-overlay hidden" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Before capture ghost alignment" />
           <div id="liveZoneGrid" class="live-zone-grid hidden" aria-hidden="true">
             <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
           </div>
           <div id="idleNudgeBanner" class="idle-nudge-banner hidden" role="alert" data-i18n="idleNudge">
-            ⚡ NO MOTION DETECTED — STEP IN &amp; WORK THE ASSIGNED SPOT!
+            ⚡ NO MOTION DETECTED · STEP IN &amp; WORK THE ASSIGNED SPOT!
           </div>
           <div id="afterAlignBanner" class="after-align-banner hidden" role="status" data-i18n="afterAlignPrompt">
             GHOST ALIGNMENT: Match your Before angle, then tap CAPTURE AFTER &amp; SCORE
@@ -510,7 +501,6 @@
     <!-- RESULTS -->
     <section id="resultsScreen" class="screen">
       <div class="content results-content">
-        <div class="eyebrow" data-i18n="results">RESULTS</div>
         <h2 data-i18n="challengeComplete">Challenge complete</h2>
 
         <div id="analysisLoading" class="analysis-loading hidden">
@@ -560,7 +550,7 @@
             <div class="evidence-grid">
               <figure id="beforeEvidenceCard" class="evidence-card clickable-evidence" role="button" tabindex="0" aria-label="Maximize Before photo" data-i18n-aria="ariaMaxBefore">
                 <div class="evidence-image-wrap">
-                  <img id="beforeThumbnail" alt="Before capture" />
+                  <img id="beforeThumbnail" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Before capture" />
                   <div id="beforeDetectionOverlay" class="detection-overlay" aria-hidden="true"></div>
                   <div id="beforeSamOverlay" class="detection-overlay sam-overlay" aria-hidden="true"></div>
                   <span class="maximize-badge" data-i18n="maximizeBadge">⤢ MAXIMIZE</span>
@@ -574,7 +564,7 @@
 
               <figure id="afterEvidenceCard" class="evidence-card clickable-evidence" role="button" tabindex="0" aria-label="Maximize After photo" data-i18n-aria="ariaMaxAfter">
                 <div class="evidence-image-wrap">
-                  <img id="afterThumbnail" alt="After capture" />
+                  <img id="afterThumbnail" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="After capture" />
                   <div id="afterDetectionOverlay" class="detection-overlay" aria-hidden="true"></div>
                   <div id="afterSamOverlay" class="detection-overlay sam-overlay" aria-hidden="true"></div>
                   <span class="maximize-badge" data-i18n="maximizeBadge">⤢ MAXIMIZE</span>
@@ -626,11 +616,11 @@
           </div>
 
           <p id="offlineScoreNote" class="fine-print hidden" data-i18n="offlineScoreNote">
-            Offline score — add a key in Settings for cloud verification.
+            Offline score · add a key in Settings for cloud verification.
           </p>
 
           <p id="scorecardErrorNote" class="fine-print hidden" data-i18n="scorecardErrorNote">
-            Cloud check failed — showing the on-device score.
+            Cloud check failed · showing the on-device score.
           </p>
 
           <p
@@ -663,7 +653,7 @@
           </div>
 
           <div id="posePreviewWrap" class="pose-preview-wrap hidden">
-            <img id="poseThumbnail" alt="Victory pose" />
+            <img id="poseThumbnail" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Victory pose" />
           </div>
 
           <div id="nameInputPanelCard" class="identity-panel hologram-card hidden">
@@ -678,7 +668,7 @@
               data-i18n-placeholder="playerNamePlaceholder"
               placeholder="Player"
             />
-            <small data-i18n="nameOptional">Optional — Player will be used by default.</small>
+            <small data-i18n="nameOptional">Optional · Player will be used by default.</small>
           </div>
 
           <div class="results-actions-grid">
@@ -738,7 +728,6 @@
     <!-- LEADERBOARD -->
     <section id="leaderboardScreen" class="screen">
       <div class="content">
-        <div class="eyebrow" data-i18n="beatLeader">BEAT THE LEADER</div>
         <h2 data-i18n="leaderboard">Leaderboard</h2>
 
         <div id="crewLeaderboardSummary" class="crew-summary-bar hologram-card"></div>
@@ -802,7 +791,6 @@
     <!-- RECORDS -->
     <section id="recordsScreen" class="screen">
       <div class="content">
-        <div class="eyebrow" data-i18n="recordsTitle">INSPECTION LOG</div>
         <h2 data-i18n="recordsTitle">INSPECTION LOG</h2>
 
         <div id="offlineQueueSection" class="offline-queue-section hologram-card hidden">
@@ -906,33 +894,62 @@
     <!-- SETTINGS -->
     <section id="settingsScreen" class="screen">
       <div class="content">
-        <div class="eyebrow" data-i18n="settingsTitle">SETTINGS</div>
         <h2 data-i18n="settingsTitle">SETTINGS</h2>
 
-        <div class="identity-panel hologram-card">
-          <label for="metaApiKey" data-i18n="settingsMetaKey">
-            Meta Model API key
-          </label>
-          <input
-            id="metaApiKey"
-            type="password"
-            maxlength="200"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="••••••••"
-          />
+        <div id="settingsHostVoicePanel" class="identity-panel hologram-card">
+          <span data-i18n="hostVoiceTitle">HOST VOICE</span>
+          <div class="hype-level-group" role="radiogroup" aria-label="Host hype level">
+            <label class="provider-option">
+              <input id="hypeLevelOff" type="radio" name="hypeLevel" value="off" checked />
+              <span data-i18n="hypeOffLabel">Off · silent by default</span>
+            </label>
+            <label class="provider-option">
+              <input id="hypeLevelChill" type="radio" name="hypeLevel" value="chill" />
+              <span data-i18n="hypeChillLabel">Chill · start, finish &amp; verdict only</span>
+            </label>
+            <label class="provider-option">
+              <input id="hypeLevelFull" type="radio" name="hypeLevel" value="full" />
+              <span data-i18n="hypeFullLabel">Full · all host hype beats</span>
+            </label>
+          </div>
+          <div id="voiceNameList" class="provider-log"></div>
+          <div id="voiceTestButtons" class="settings-row hidden">
+            <button type="button" class="secondary-button" data-voice-sample="en">EN ▸</button>
+            <button type="button" class="secondary-button" data-voice-sample="es">ES ▸</button>
+            <button type="button" class="secondary-button" data-voice-sample="pl">PL ▸</button>
+          </div>
+        </div>
 
-          <label for="basetenApiKey" data-i18n="settingsBasetenKey">
-            Baseten API key
-          </label>
-          <input
-            id="basetenApiKey"
-            type="password"
-            maxlength="200"
-            autocomplete="off"
-            spellcheck="false"
-            placeholder="••••••••"
-          />
+        <div id="settingsKeysPanel" class="identity-panel hologram-card">
+          <div class="settings-keys-grid">
+            <div>
+              <label for="metaApiKey" data-i18n="settingsMetaKey">
+                Meta Model API key
+              </label>
+              <input
+                id="metaApiKey"
+                type="password"
+                maxlength="200"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="••••••••"
+              />
+            </div>
+
+            <div>
+              <label for="basetenApiKey" data-i18n="settingsBasetenKey">
+                Baseten API key
+              </label>
+              <input
+                id="basetenApiKey"
+                type="password"
+                maxlength="200"
+                autocomplete="off"
+                spellcheck="false"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
 
           <small data-i18n="settingsKeysNote">
             Keys stay in this browser only. The game works fully offline without them.
@@ -991,30 +1008,6 @@
           </div>
         </div>
 
-        <div class="identity-panel hologram-card">
-          <span data-i18n="hostVoiceTitle">HOST VOICE</span>
-          <div class="hype-level-group" role="radiogroup" aria-label="Host hype level">
-            <label class="provider-option">
-              <input id="hypeLevelOff" type="radio" name="hypeLevel" value="off" checked />
-              <span data-i18n="hypeOffLabel">Off — silent by default</span>
-            </label>
-            <label class="provider-option">
-              <input id="hypeLevelChill" type="radio" name="hypeLevel" value="chill" />
-              <span data-i18n="hypeChillLabel">Chill — start, finish &amp; verdict only</span>
-            </label>
-            <label class="provider-option">
-              <input id="hypeLevelFull" type="radio" name="hypeLevel" value="full" />
-              <span data-i18n="hypeFullLabel">Full — all host hype beats</span>
-            </label>
-          </div>
-          <div id="voiceNameList" class="provider-log"></div>
-          <div id="voiceTestButtons" class="settings-row hidden">
-            <button type="button" class="secondary-button" data-voice-sample="en">EN ▸</button>
-            <button type="button" class="secondary-button" data-voice-sample="es">ES ▸</button>
-            <button type="button" class="secondary-button" data-voice-sample="pl">PL ▸</button>
-          </div>
-        </div>
-
         <div class="sticky-cta">
           <button
             id="settingsDone"
@@ -1030,7 +1023,6 @@
     <!-- DECK -->
     <section id="deckScreen" class="screen">
       <div class="content">
-        <div class="eyebrow" data-i18n="deckTitle">DAILY DECK</div>
         <h2 data-i18n="deckTitle">DAILY DECK</h2>
 
         <p id="deckStreak" class="fine-print"></p>
@@ -1113,12 +1105,12 @@
         </div>
         <div id="lightboxStage" class="lightbox-stage">
           <figure id="lightboxBeforePane" class="lightbox-pane">
-            <img id="lightboxBeforeImg" alt="Full Before capture" />
+            <img id="lightboxBeforeImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Full Before capture" />
             <figcaption data-i18n="before">BEFORE</figcaption>
           </figure>
           <figure id="lightboxAfterPane" class="lightbox-pane">
-            <img id="lightboxAfterImg" alt="Full After capture" />
-            <img id="lightboxGhostImg" class="lightbox-ghost-img hidden" alt="Before shadow overlay" />
+            <img id="lightboxAfterImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Full After capture" />
+            <img id="lightboxGhostImg" class="lightbox-ghost-img hidden" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Before shadow overlay" />
             <figcaption data-i18n="after">AFTER</figcaption>
           </figure>
         </div>
@@ -1162,10 +1154,10 @@
     <div class="spectator-shell">
       <header class="spectator-header">
         <div>
+          <h1>CLEANQUEST</h1>
           <div class="spectator-kicker" data-i18n="liveLeaderboard">
             LIVE LEADERBOARD
           </div>
-          <h1>CLEANQUEST</h1>
         </div>
 
         <div class="spectator-live">

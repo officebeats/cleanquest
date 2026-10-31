@@ -472,6 +472,19 @@ const translations = {
     deckStampLeft: "⟵ MISS",
     deckStampRight: "RIGHT CALL ⟶",
     openSupervisorTools: "📋 OPEN INSPECTION LOG & SUPERVISOR TOOLS (11–15) →",
+    leagueOffice: "Office",
+    leagueEducation: "Education",
+    leagueHealthcare: "Healthcare",
+    leagueIndustrial: "Industrial",
+    leagueRetail: "Retail",
+    areaBreakroom: "Breakroom",
+    areaRestroom: "Restroom",
+    areaLobby: "Lobby",
+    areaOffice: "Office",
+    areaClassroom: "Classroom",
+    gradeClean: "CLEAN",
+    gradePartly: "PARTLY CLEAN",
+    gradeMissed: "MISSED",
   },
 
   es: {
@@ -808,6 +821,19 @@ const translations = {
     deckStampLeft: "⟵ FALLO",
     deckStampRight: "ACIERTA ⟶",
     openSupervisorTools: "📋 ABRIR REGISTRO Y HERRAMIENTAS DE SUPERVISIÓN (11–15) →",
+    leagueOffice: "Oficina",
+    leagueEducation: "Educación",
+    leagueHealthcare: "Salud",
+    leagueIndustrial: "Industrial",
+    leagueRetail: "Comercio",
+    areaBreakroom: "Sala de descanso",
+    areaRestroom: "Baño",
+    areaLobby: "Vestíbulo",
+    areaOffice: "Oficina",
+    areaClassroom: "Aula",
+    gradeClean: "LIMPIO",
+    gradePartly: "PARCIAL",
+    gradeMissed: "OMITIDO",
   },
 
   pl: {
@@ -1144,6 +1170,19 @@ const translations = {
     deckStampLeft: "⟵ BŁĄD",
     deckStampRight: "DOBRZE ⟶",
     openSupervisorTools: "📋 OTWÓRZ DZIENNIK I NARZĘDZIA NADZORU (11–15) →",
+    leagueOffice: "Biuro",
+    leagueEducation: "Edukacja",
+    leagueHealthcare: "Zdrowie",
+    leagueIndustrial: "Przemysł",
+    leagueRetail: "Handel",
+    areaBreakroom: "Pokój socjalny",
+    areaRestroom: "Łazienka",
+    areaLobby: "Hol",
+    areaOffice: "Biuro",
+    areaClassroom: "Sala lekcyjna",
+    gradeClean: "CZYSTO",
+    gradePartly: "CZĘŚCIOWO",
+    gradeMissed: "POMINIĘTO",
   }
 };
 
@@ -1571,6 +1610,9 @@ function applyTranslations() {
   }
 
   try {
+    const savedOverride = state.checkin.spotOverride;
+    assignSpotForArea(state.checkin.areaKey, state.checkin.league, state.checkin.assignedSpot);
+    state.checkin.spotOverride = savedOverride;
     renderCrewAndConsistencyUI();
     renderHomeSponsorSlot();
     renderAdminDashboard();
@@ -2897,6 +2939,12 @@ function navigateTo(screen) {
     renderDeck();
   }
 
+  if (screen === "welcome") {
+    state.showPassportHub = false;
+    state.editingFtue = false;
+    syncFtueCollapseUI();
+  }
+
   if (screen === "records") {
     renderInspectionLog();
     renderOfflineQueue();
@@ -3764,7 +3812,7 @@ function resetCaptures() {
   }
 
   els.posePreviewWrap.classList.add("hidden");
-  els.poseThumbnail.removeAttribute("src");
+  els.poseThumbnail.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E";
 }
 
 function resetTimeAnnouncements() {
@@ -5832,6 +5880,8 @@ function updateEvidenceThumbnails() {
   );
 }
 
+const EMPTY_IMG_SRC = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E";
+
 function setEvidenceImage(
   imageElement,
   placeholderElement,
@@ -5842,7 +5892,7 @@ function setEvidenceImage(
     imageElement.classList.remove("hidden");
     placeholderElement.classList.add("hidden");
   } else {
-    imageElement.removeAttribute("src");
+    imageElement.src = EMPTY_IMG_SRC;
     imageElement.classList.add("hidden");
     placeholderElement.classList.remove("hidden");
   }
@@ -7325,8 +7375,8 @@ function syncFtueCollapseUI() {
   if (showSetup && state.cleanerFtueStep === 2) {
     els.consentGate?.classList.add("hidden");
   }
-  els.ftueSummaryBar?.classList.toggle("hidden", !showHub && !showSetup);
-  els.homePassportPanel?.classList.toggle("hidden", !showHub);
+  els.ftueSummaryBar?.classList.toggle("hidden", !showHub || showSetup);
+  els.homePassportPanel?.classList.toggle("hidden", !showHub || showSetup);
   els.cleanerStepTabs?.classList.toggle("hidden", !showHub && !showSetup);
 }
 
@@ -7571,12 +7621,48 @@ function renderScoreBreakdown(runInput) {
     surfaces.forEach((s) => {
       const chip = document.createElement("span");
       chip.className = `surface-grade-chip ${s.grade}`;
-      const gradeLabel = s.grade === "clean" ? "CLEAN" : s.grade === "partly" ? "PARTLY CLEAN" : "MISSED";
-      chip.textContent = `${s.name}: ${gradeLabel}`;
+      const gradeLabel = s.grade === "clean" ? t("gradeClean") : s.grade === "partly" ? t("gradePartly") : t("gradeMissed");
+      chip.textContent = `${localizedSpotName(s.name)}: ${gradeLabel}`;
       els.surfaceGradeMap.appendChild(chip);
     });
   }
   return Object.freeze(bars);
+}
+
+const SPOT_TRANSLATIONS = {
+  es: {
+    "Sink & counter": "Fregadero y encimera",
+    "Sink & mirror counter": "Fregadero y espejo",
+    "Workstation desk & shelf": "Escritorio y estante",
+    "Tabletop & appliance front": "Mesa y electrodomésticos",
+    "Mirror, glass & handles": "Espejo, vidrio y manijas",
+    "Fixture row & partition": "Sanitarios y mampara",
+    "Trash & floor zone": "Papelera y zona de piso",
+    "Reception counter & glass": "Mostrador de recepción y vidrio",
+    "Entry glass & floor mat": "Vidrio de entrada y tapete",
+    "Whiteboard rail & teacher desk": "Pizarra y escritorio",
+    "Student table row & floor": "Fila de mesas y piso"
+  },
+  pl: {
+    "Sink & counter": "Zlew i blat",
+    "Sink & mirror counter": "Zlew i lustro",
+    "Workstation desk & shelf": "Biurko i półka",
+    "Tabletop & appliance front": "Stół i fronty urządzeń",
+    "Mirror, glass & handles": "Lustro, szkło i klamki",
+    "Fixture row & partition": "Armatura i przegroda",
+    "Trash & floor zone": "Kosz i strefa podłogi",
+    "Reception counter & glass": "Lada recepcji i szkło",
+    "Entry glass & floor mat": "Szyba wejściowa i wycieraczka",
+    "Whiteboard rail & teacher desk": "Tablica i biurko nauczyciela",
+    "Student table row & floor": "Rząd ławek i podłoga"
+  }
+};
+
+function localizedSpotName(spotName) {
+  const raw = String(spotName || "");
+  if (state.language === "es" && SPOT_TRANSLATIONS.es[raw]) return SPOT_TRANSLATIONS.es[raw];
+  if (state.language === "pl" && SPOT_TRANSLATIONS.pl[raw]) return SPOT_TRANSLATIONS.pl[raw];
+  return raw;
 }
 
 function readAppeals() {
@@ -7669,7 +7755,7 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
     allSpots.forEach((sp) => {
       const opt = document.createElement("option");
       opt.value = sp;
-      opt.textContent = sp;
+      opt.textContent = localizedSpotName(sp);
       sel.appendChild(opt);
     });
     sel.value = chosenSpot;
@@ -7680,7 +7766,7 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = `mvp-tab-chip spot-pill-chip${sp === chosenSpot ? " active" : ""}`;
-      btn.textContent = sp;
+      btn.textContent = localizedSpotName(sp);
       btn.addEventListener("click", () => selectCleaningSpot(sp));
       els.timerSpotPills.appendChild(btn);
     });
@@ -7692,7 +7778,7 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
     els.timerSpotRuleBadge.textContent = `${t("rulePrefix")} ${localizedRuleSummary(profile)}`;
   }
   if (els.frameGuideText) {
-    els.frameGuideText.textContent = `${chosenSpot.toUpperCase()} · ${localizedRuleSummary(profile)}`;
+    els.frameGuideText.textContent = `${localizedSpotName(chosenSpot).toUpperCase()} · ${localizedRuleSummary(profile)}`;
   }
   return {
     league: state.checkin.league,
@@ -8124,25 +8210,27 @@ function toggleGhostOverlay() {
 
 let lastLightboxTrigger = null;
 
+function resolveEvidenceAttrUrl(el) {
+  const raw = el?.getAttribute("src") || "";
+  return raw && raw !== EMPTY_IMG_SRC ? raw : "";
+}
+
 function openEvidenceLightbox(mode = "split") {
   if (!els.evidenceLightboxModal) return false;
-  const beforeUrl = state.captures.before?.dataUrl || els.beforeThumbnail?.getAttribute("src") || "";
-  const afterUrl = state.captures.after?.dataUrl || els.afterThumbnail?.getAttribute("src") || "";
+  const beforeUrl = state.captures.before?.dataUrl || resolveEvidenceAttrUrl(els.beforeThumbnail);
+  const afterUrl = state.captures.after?.dataUrl || resolveEvidenceAttrUrl(els.afterThumbnail);
   if ((mode === "before" && !beforeUrl) || (mode === "after" && !afterUrl) || (!beforeUrl && !afterUrl)) {
     return false;
   }
   lastLightboxTrigger = document.activeElement;
   if (els.lightboxBeforeImg) {
-    if (beforeUrl) els.lightboxBeforeImg.src = beforeUrl;
-    else els.lightboxBeforeImg.removeAttribute("src");
+    els.lightboxBeforeImg.src = beforeUrl || EMPTY_IMG_SRC;
   }
   if (els.lightboxAfterImg) {
-    if (afterUrl) els.lightboxAfterImg.src = afterUrl;
-    else els.lightboxAfterImg.removeAttribute("src");
+    els.lightboxAfterImg.src = afterUrl || EMPTY_IMG_SRC;
   }
   if (els.lightboxGhostImg) {
-    if (beforeUrl) els.lightboxGhostImg.src = beforeUrl;
-    else els.lightboxGhostImg.removeAttribute("src");
+    els.lightboxGhostImg.src = beforeUrl || EMPTY_IMG_SRC;
   }
   if (els.lightboxModeBefore) {
     els.lightboxModeBefore.disabled = !beforeUrl;
@@ -8171,8 +8259,8 @@ function openEvidenceLightbox(mode = "split") {
 
 function setEvidenceLightboxMode(mode = "split") {
   if (!els.evidenceLightboxModal) return false;
-  const beforeUrl = state.captures.before?.dataUrl || els.beforeThumbnail?.getAttribute("src") || "";
-  const afterUrl = state.captures.after?.dataUrl || els.afterThumbnail?.getAttribute("src") || "";
+  const beforeUrl = state.captures.before?.dataUrl || resolveEvidenceAttrUrl(els.beforeThumbnail);
+  const afterUrl = state.captures.after?.dataUrl || resolveEvidenceAttrUrl(els.afterThumbnail);
   if (!beforeUrl && !afterUrl) return false;
   let effectiveMode = mode;
   if (effectiveMode === "before" && !beforeUrl) effectiveMode = afterUrl ? "after" : "split";
@@ -10257,7 +10345,7 @@ function bindEvents() {
         setCleanerFtueStep(3);
         syncConsentUI();
         els.consentGate?.classList.add("needs-attention");
-        els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+        els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "nearest" });
         return;
       }
       state.editingFtue = false;
@@ -10284,7 +10372,7 @@ function bindEvents() {
         setCleanerFtueStep(3);
         syncConsentUI();
         els.consentGate?.classList.add("needs-attention");
-        els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "center" });
+        els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "nearest" });
         return;
       }
       setInstructionsSeen(true);
