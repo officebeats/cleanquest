@@ -6055,7 +6055,7 @@ const CLOUD_SCORING_PROMPT = [
   "{",
   '  "surfaces": [',
   '    { "name": "counter|glass|floor|fixture", "score": 0-100,',
-  '      "missed": [], "confidence": 0-1 }',
+  '      "missed": [], "confidence": 0-1, "box_2d": [ymin, xmin, ymax, xmax] }',
   "  ],",
   '  "overall": 0-100,',
   '  "verdict": "pass|retry",',
@@ -6073,7 +6073,7 @@ const VERIFIED_SURFACES = new Set([
 ]);
 
 function loadCloudSettings() {
-  const empty = { metaKey: "", basetenKey: "", provider: "meta" };
+  const empty = { metaKey: "", basetenKey: "", provider: "meta", openRouterModel: "google/gemini-2.5-flash" };
 
   try {
     const raw = localStorage.getItem(CLOUD_SETTINGS_KEY);
@@ -6084,7 +6084,10 @@ function loadCloudSettings() {
     return {
       metaKey: typeof parsed.metaKey === "string" ? parsed.metaKey : "",
       basetenKey: typeof parsed.basetenKey === "string" ? parsed.basetenKey : "",
-      provider: parsed.provider === "baseten" ? "baseten" : "meta"
+      provider: parsed.provider === "baseten" ? "baseten" : "meta",
+      openRouterModel: typeof parsed.openRouterModel === "string" && parsed.openRouterModel
+        ? parsed.openRouterModel
+        : "google/gemini-2.5-flash"
     };
   } catch {
     return empty;
@@ -6096,6 +6099,8 @@ function refreshSettingsInputs() {
 
   if (els.metaApiKey) els.metaApiKey.value = settings.metaKey;
   if (els.basetenApiKey) els.basetenApiKey.value = settings.basetenKey;
+  const modelSel = document.getElementById("openRouterModelSelect");
+  if (modelSel) modelSel.value = settings.openRouterModel || "google/gemini-2.5-flash";
 
   document
     .querySelectorAll('input[name="inferenceProvider"]')
@@ -6121,14 +6126,15 @@ function closeSettings() {
 }
 
 function saveSettingsKeys() {
+  const modelSel = document.getElementById("openRouterModelSelect");
   const next = {
     metaKey: els.metaApiKey?.value.trim() || "",
     basetenKey: els.basetenApiKey?.value.trim() || "",
     provider: document.querySelector('input[name="inferenceProvider"]:checked')?.value === "baseten"
       ? "baseten"
-      : "meta"
+      : "meta",
+    openRouterModel: modelSel?.value || "google/gemini-2.5-flash"
   };
-
   try {
     localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(next));
   } catch {}
@@ -6386,7 +6392,7 @@ function getScorecardTarget(settings) {
     return {
       provider: "openrouter",
       url: "https://openrouter.ai/api/v1/chat/completions",
-      model: "google/gemini-2.5-flash",
+      model: settings.openRouterModel || "google/gemini-2.5-flash",
       key: settings.metaKey,
       role: "system"
     };
@@ -6521,28 +6527,62 @@ async function getVerifiedScore(aiResult, before, after) {
     let response;
 
     try {
-      response = await fetch(target.url, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${target.key}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          model: target.model,
-          messages: [
-            { role: target.role, content: CLOUD_SCORING_PROMPT },
-            {
-              role: "user",
-              content: [
-                { type: "text", text: "BEFORE photo first, AFTER photo second. Score the visible change." },
-                { type: "image_url", image_url: { url: smallBefore } },
-                { type: "image_url", image_url: { url: smallAfter } }
-              ]
-            }
-          ]
-        }),
-        signal: controller.signal
-      });
+      if (target.provider === "anthropic") {
+        const b64Before = String(smallBefore).replace(/^data:[^;]+;base64,/, "");
+        const b64After = String(smallAfter).replace(/^data:[^;]+;base64,/, "");
+        response = await fetch(target.url, {
+          method: "POST",
+          headers: {
+            "x-api-key": target.key,
+            "anthropic-version": "2023-06-01",
+            "anthropic-dangerous-direct-browser-access": "true",
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: target.model,
+            max_tokens: 512,
+            system: CLOUD_SCORING_PROMPT,
+            messages: [
+              {
+                role: "user",
+                content: [
+                  { type: "text", text: "BEFORE photo first, AFTER photo second. Score the visible change." },
+                  { type: "image", source: { type: "base64", media_type: "image/jpeg", data: b64Before } },
+                  { type: "image", source: { type: "base64", media_type: "image/jpeg", data: b64After } }
+                ]
+              }
+            ]
+          }),
+          signal: controller.signal
+        });
+      } else {
+        const extraHeaders = target.provider === "openrouter"
+          ? { "HTTP-Referer": window.location.origin, "X-Title": "CleanQuest" }
+          : {};
+        response = await fetch(target.url, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${target.key}`,
+            "Content-Type": "application/json",
+            ...extraHeaders
+          },
+          body: JSON.stringify({
+            model: target.model,
+            messages: [
+              { role: target.role, content: CLOUD_SCORING_PROMPT },
+              {
+                role: "user",
+                content: [
+                  { type: "text", text: "BEFORE photo first, AFTER photo second. Score the visible change." },
+                  { type: "image_url", image_url: { url: smallBefore } },
+                  { type: "image_url", image_url: { url: smallAfter } }
+                ]
+              }
+            ]
+          }),
+          signal: controller.signal
+        });
+      }
     } finally {
       clearTimeout(timeout);
     }
@@ -6559,9 +6599,10 @@ async function getVerifiedScore(aiResult, before, after) {
     }
 
     const data = await response.json().catch(() => null);
-    const parsed = sanitizeScorecard(
-      extractScorecardJSON(data?.choices?.[0]?.message?.content)
-    );
+    const rawText = target.provider === "anthropic"
+      ? data?.content?.[0]?.text
+      : data?.choices?.[0]?.message?.content;
+    const parsed = sanitizeScorecard(extractScorecardJSON(rawText));
 
     if (!parsed) {
       const schemaError = {
@@ -7607,7 +7648,30 @@ async function transcribeVoiceNote(blob) {
       const j = await r.json().catch(() => null);
       return j?.text?.trim() || null;
     }
-
+    if (detected === "gemini") {
+      const buf = new Uint8Array(await wav.arrayBuffer());
+      let bin = "";
+      for (let i = 0; i < buf.length; i += 1) bin += String.fromCharCode(buf[i]);
+      const b64 = btoa(bin);
+      const r = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(settings.metaKey)}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{
+              parts: [
+                { text: "Transcribe this spoken cleaning inspection note verbatim. Return only the transcript." },
+                { inlineData: { mimeType: "audio/wav", data: b64 } }
+              ]
+            }]
+          })
+        }
+      );
+      if (!r.ok) return null;
+      const j = await r.json().catch(() => null);
+      return j?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
+    }
     const controller = new AbortController();
     const timeout = setTimeout(
       () => controller.abort(),

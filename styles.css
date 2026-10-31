@@ -6067,19 +6067,11 @@ button.btn-pop-active::before {
   gap: 6px;
   margin-bottom: 8px;
 }
-
-.sso-hero-btn {
-  width: auto !important;
-  min-height: 36px !important;
-  padding: 5px 12px !important;
-  font-size: 11.5px !important;
-  font-weight: 900 !important;
-}
-
 @media (max-height: 660px) {
   #resultsScreen .verdict-audio-pill,
   #resultsScreen .score-bar-detail,
   #settingsScreen .sso-quick-bar,
+  #settingsScreen #openRouterModelSelect,
   #settingsScreen .music-streaming-bar,
   #settingsScreen .music-stream-drawer,
   #deckScreen .deck-illustration,

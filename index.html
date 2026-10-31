@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031-14" />
+  <link rel="stylesheet" href="styles.css?v=20261031-15" />
 </head>
 
 <body>
@@ -1155,6 +1155,12 @@
               <span>Baseten (Spark Open)</span>
             </label>
           </div>
+          <select id="openRouterModelSelect" class="area-select" aria-label="OpenRouter / Cloud Model">
+            <option value="google/gemini-2.5-flash">Model: Gemini 2.5 Flash (Default)</option>
+            <option value="openai/gpt-4o-mini">Model: OpenAI GPT-4o Mini</option>
+            <option value="anthropic/claude-sonnet-4">Model: Anthropic Claude Sonnet 4</option>
+            <option value="meta-llama/llama-4-maverick">Model: Meta Llama 4 Maverick</option>
+          </select>
         </div>
 
         <div class="identity-panel hologram-card">
@@ -1378,7 +1384,7 @@
   <canvas id="arcadeFxCanvas" class="arcade-fx-canvas" aria-hidden="true"></canvas>
   <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
   <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
-  <script src="deck.js?v=20261031-14"></script>
-  <script src="app.js?v=20261031-14"></script>
+  <script src="deck.js?v=20261031-15"></script>
+  <script src="app.js?v=20261031-15"></script>
 </body>
 </html>
