@@ -4881,8 +4881,21 @@ select:focus-visible {
   #settingsScreen .identity-panel {
     padding: 4px 8px !important;
   }
-  #settingsScreen .identity-panel small {
+  #settingsScreen .identity-panel small,
+  #settingsScreen .settings-keys-explain {
     display: none !important;
+  }
+  #deckScreen .deck-illustration {
+    height: 48px !important;
+    margin: 2px 0 4px !important;
+  }
+  #deckScreen .deck-stage {
+    padding-bottom: 6px !important;
+    margin: 0 0 4px !important;
+  }
+  #deckScreen #deckCard {
+    padding: 8px 12px !important;
+    min-height: 0 !important;
   }
   #leaderboardScreen .leaderboard-list {
     max-height: 110px !important;
@@ -4911,5 +4924,464 @@ select:focus-visible {
   }
   #cameraScreen #continueWithoutCamera {
     margin: 0 !important;
+  }
+}
+
+/* ==========================================================================
+ * GAMIFIED DAILY DECK, EDM DISCO GROOVE, & UX DISTILLATION ACROSS ALL SCREENS
+ * ========================================================================== */
+.qr-icon-btn {
+  width: 44px !important;
+  min-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 0 !important;
+  display: inline-grid !important;
+  place-items: center !important;
+  border-radius: 12px !important;
+  color: var(--cyan) !important;
+  border: 1px solid var(--line-bright) !important;
+  background: rgba(14, 38, 60, 0.85) !important;
+  flex: 0 0 44px !important;
+}
+
+.qr-icon-btn svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+}
+
+/* Camera Check-In: clean top-labeled 2-col station selector, zero ragged left edges */
+#cameraScreen #checkinBar {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px 10px !important;
+  padding: 10px 12px !important;
+  border-radius: 14px !important;
+  background: rgba(8, 22, 36, 0.88) !important;
+}
+
+#cameraScreen #checkinBar .checkin-area-label {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+}
+
+#cameraScreen #checkinBar .checkin-area-label > span {
+  font-size: 11px !important;
+  font-weight: 850 !important;
+  letter-spacing: 0.08em !important;
+  color: var(--cyan) !important;
+}
+
+#cameraScreen #checkinBar .checkin-site-label {
+  grid-column: 1 / -1 !important;
+}
+
+#cameraScreen #checkinBar label[for="spotTemplateSelect"] {
+  grid-column: 1 / 2 !important;
+}
+
+#cameraScreen #scanAreaQrButton {
+  grid-column: 2 / 3 !important;
+  justify-self: end !important;
+  align-self: end !important;
+  width: 100% !important;
+  max-width: 56px !important;
+}
+
+#cameraScreen #assignedSpotBadge {
+  display: none !important;
+}
+
+/* Results screen: crisp legibility, single action button, zero verbose paragraphs */
+#resultsScreen #disputePanel,
+#resultsScreen #judgeDemoNote,
+#resultsScreen #verifyProvenance,
+#resultsScreen .results-actions-grid small.fine-print {
+  display: none !important;
+}
+
+#resultsScreen .results-actions-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  margin: 2px 0 0 !important;
+}
+
+#resultsScreen .score-bar-head {
+  font-size: 16px !important;
+  font-weight: 850 !important;
+  color: #ffffff !important;
+}
+
+#resultsScreen .score-bar-track {
+  height: 10px !important;
+  border-radius: 999px !important;
+}
+
+#resultsScreen .surface-grade-chip {
+  font-size: 13px !important;
+  font-weight: 850 !important;
+  padding: 5px 12px !important;
+}
+
+#resultsScreen .finding-card p {
+  font-size: 15px !important;
+  font-weight: 650 !important;
+  line-height: 1.45 !important;
+  color: #eaf6ff !important;
+  text-align: center !important;
+}
+
+/* Records & Settings screen cleanup for non-technical users */
+#recordsScreen #adminDashboardPanel > .section-label {
+  display: none !important;
+}
+
+#settingsScreen .settings-keys-explain {
+  margin: 0 0 8px !important;
+  font-size: 12.5px !important;
+  line-height: 1.4 !important;
+  color: #d6eefb !important;
+}
+
+#settingsScreen .key-label-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 6px !important;
+  margin-bottom: 2px !important;
+}
+
+#settingsScreen .get-key-link {
+  color: var(--cyan) !important;
+  font-size: 11.5px !important;
+  font-weight: 850 !important;
+  text-decoration: none !important;
+  padding: 2px 8px !important;
+  border-radius: 999px !important;
+  border: 1px solid var(--line-bright) !important;
+  background: rgba(12, 36, 56, 0.85) !important;
+  white-space: nowrap !important;
+}
+
+/* Welcome screen: subtle inline Judges' Presentation link */
+.judges-report-link {
+  min-height: 36px !important;
+  margin-top: 4px !important;
+  padding: 4px 12px !important;
+  font-size: 11.5px !important;
+  background: transparent !important;
+  border-color: rgba(99, 218, 255, 0.22) !important;
+  color: var(--muted-bright) !important;
+}
+
+/* Gamified Daily Deck: HUD, 5-pip progress, 3D card stack, animated SVG stage, particle burst */
+.deck-top-hud {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.deck-top-hud h2 {
+  margin: 0 !important;
+}
+
+.deck-hud-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deck-streak-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 107, 53, 0.14);
+  border: 1px solid rgba(255, 170, 90, 0.42);
+  color: #ffe3c2;
+  font-size: 12.5px;
+  font-weight: 850;
+}
+
+.flame-svg {
+  animation: flame-flicker 1.4s ease-in-out infinite alternate;
+  transform-origin: 50% 85%;
+}
+
+@keyframes flame-flicker {
+  0% { transform: scale(1) rotate(-3deg); filter: drop-shadow(0 0 4px rgba(255, 140, 60, 0.6)); }
+  100% { transform: scale(1.14) rotate(3deg); filter: drop-shadow(0 0 9px rgba(255, 211, 92, 0.95)); }
+}
+
+.disco-groove-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(119, 103, 255, 0.55);
+  background: linear-gradient(120deg, rgba(119, 103, 255, 0.24), rgba(69, 234, 255, 0.18));
+  color: #eafaff;
+  font-size: 11.5px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+}
+
+.disco-groove-pill:not(.active) {
+  opacity: 0.55;
+  border-color: var(--line);
+  background: rgba(10, 27, 43, 0.6);
+}
+
+.eq-bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+
+.eq-bars i {
+  display: block;
+  width: 3px;
+  height: 5px;
+  border-radius: 2px;
+  background: var(--cyan);
+}
+
+.disco-groove-pill.active .eq-bars i:nth-child(1) { animation: eq-bounce 0.48s ease-in-out infinite alternate; }
+.disco-groove-pill.active .eq-bars i:nth-child(2) { animation: eq-bounce 0.36s ease-in-out 0.12s infinite alternate; background: #39f5bc; }
+.disco-groove-pill.active .eq-bars i:nth-child(3) { animation: eq-bounce 0.42s ease-in-out 0.24s infinite alternate; background: #c084fc; }
+.disco-groove-pill.active .eq-bars i:nth-child(4) { animation: eq-bounce 0.32s ease-in-out 0.06s infinite alternate; }
+
+@keyframes eq-bounce {
+  0% { height: 4px; }
+  100% { height: 14px; }
+}
+
+.deck-progress-pips {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin: 0 0 14px;
+}
+
+.deck-pip {
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(99, 218, 255, 0.16);
+  transition: background 240ms ease, transform 240ms ease, box-shadow 240ms ease;
+}
+
+.deck-pip.done {
+  background: var(--green);
+  box-shadow: 0 0 10px rgba(57, 245, 188, 0.45);
+}
+
+.deck-pip.active {
+  background: var(--cyan);
+  box-shadow: 0 0 12px rgba(69, 234, 255, 0.65);
+  transform: scaleY(1.25);
+}
+
+.deck-stage {
+  position: relative;
+  padding-bottom: 18px;
+  margin: 4px 0 10px;
+}
+
+.deck-stage::before,
+.deck-stage::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  right: 14px;
+  bottom: 8px;
+  height: 44px;
+  border-radius: 18px;
+  border: 1px solid rgba(99, 218, 255, 0.22);
+  background: linear-gradient(145deg, rgba(16, 44, 66, 0.65), rgba(6, 18, 32, 0.82));
+  z-index: 0;
+  pointer-events: none;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.deck-stage::after {
+  left: 28px;
+  right: 28px;
+  bottom: 0;
+  opacity: 0.45;
+}
+
+#deckScreen #deckCard {
+  position: relative;
+  z-index: 2;
+  padding: 16px 18px 20px !important;
+  border-radius: 20px !important;
+  border: 1px solid rgba(92, 226, 255, 0.45) !important;
+  background:
+    radial-gradient(circle at 85% 15%, rgba(69, 234, 255, 0.16), transparent 45%),
+    radial-gradient(circle at 15% 85%, rgba(119, 103, 255, 0.16), transparent 45%),
+    linear-gradient(155deg, rgba(14, 38, 60, 0.94), rgba(5, 14, 26, 0.96)) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.52), 0 0 28px rgba(69, 234, 255, 0.12) !important;
+}
+
+#deckScreen #deckCard.card-pop {
+  animation: deck-card-pop 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes deck-card-pop {
+  0% { transform: scale(0.92) translateY(12px); opacity: 0.6; }
+  60% { transform: scale(1.02) translateY(-2px); opacity: 1; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.deck-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.deck-cat-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(69, 234, 255, 0.14);
+  border: 1px solid rgba(69, 234, 255, 0.42);
+  color: var(--cyan) !important;
+  font-size: 12px !important;
+}
+
+.deck-card-counter {
+  color: var(--muted-bright);
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
+.deck-illustration {
+  height: 108px;
+  margin: 6px 0 12px;
+  border-radius: 14px;
+  background: radial-gradient(circle at 50% 50%, rgba(69, 234, 255, 0.14), rgba(4, 12, 24, 0.72));
+  border: 1px solid rgba(99, 218, 255, 0.18);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.deck-illustration svg {
+  width: 100%;
+  max-width: 240px;
+  height: 96px;
+  overflow: visible;
+}
+
+.deck-illustration .sparkle-spin {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sparkle-pulse 1.8s ease-in-out infinite alternate;
+}
+
+.deck-illustration .sweep-arc {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sweep-glide 2.2s ease-in-out infinite alternate;
+}
+
+.deck-illustration .bubble-rise {
+  animation: bubble-float 2s ease-in-out infinite;
+}
+
+@keyframes sparkle-pulse {
+  0% { transform: scale(0.82) rotate(-12deg); opacity: 0.65; }
+  100% { transform: scale(1.18) rotate(12deg); opacity: 1; }
+}
+
+@keyframes sweep-glide {
+  0% { transform: translateX(-14px); }
+  100% { transform: translateX(14px); }
+}
+
+@keyframes bubble-float {
+  0% { transform: translateY(8px); opacity: 0.4; }
+  50% { opacity: 1; }
+  100% { transform: translateY(-10px); opacity: 0.2; }
+}
+
+.deck-particle-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  overflow: visible;
+}
+
+.deck-particle {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: particle-fly 680ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes particle-fly {
+  0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(0.2); opacity: 0; }
+}
+
+#deckScreen #deckLeft {
+  border-color: rgba(255, 91, 118, 0.48) !important;
+  background: linear-gradient(145deg, rgba(72, 18, 34, 0.62), rgba(20, 12, 24, 0.82)) !important;
+  color: #ffd6de !important;
+}
+
+#deckScreen #deckRight {
+  border-color: rgba(57, 245, 188, 0.55) !important;
+  background: linear-gradient(145deg, rgba(14, 68, 58, 0.68), rgba(10, 32, 46, 0.88)) !important;
+  color: #d4fff0 !important;
+}
+#deckScreen .deck-feedback:empty {
+  display: none !important;
+}
+
+@media (max-height: 660px) {
+  #deckScreen .deck-illustration {
+    display: none !important;
+  }
+  #deckScreen .deck-top-hud {
+    margin-bottom: 4px !important;
+  }
+  #deckScreen .deck-progress-pips {
+    margin-bottom: 6px !important;
+  }
+  #deckScreen .deck-stage {
+    padding-bottom: 4px !important;
+    margin: 0 0 4px !important;
+  }
+  #deckScreen #deckCard {
+    padding: 8px 12px !important;
+    min-height: 0 !important;
+  }
+  #deckScreen .deck-card p#deckText {
+    font-size: 16px !important;
+    margin: 4px 0 !important;
+  }
+  #deckScreen .deck-actions-row {
+    margin-top: 4px !important;
   }
 }

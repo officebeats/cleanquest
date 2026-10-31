@@ -270,7 +270,7 @@
     display:block;
     width:100%;
     max-width:980px;
-    min-width:520px;
+    min-width:0;
     height:auto;
     margin:0 auto;
     font-family:inherit;
@@ -299,10 +299,9 @@
     .meta span { font-size:13.5px; padding:6px 12px; }
     .shot { flex-direction:column; gap:14px; padding:14px; }
     .shot img, .shot img.wide { width:100%; max-width:420px; margin:0 auto; }
-    table, tbody { display:block; width:100%; }
-    tr { display:block; border:1px solid var(--line); border-radius:12px; margin-bottom:12px; padding:10px 12px; background:rgba(8,22,36,.65); }
-    tr:first-child { display:none; }
-    td { display:block; border:none; padding:4px 0; font-size:16.5px; line-height:1.55; }
+    .table-scroll { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    table { min-width:620px; font-size:15px; }
+    th, td { padding:10px 12px; }
   }
   @media print {
     body, header.hero, section.card, .shot, .meta span, code, th, .verdict, header.hero .links a, svg.diagram .node, svg.diagram .lane {
@@ -698,8 +697,8 @@
         <ul>
           <li><strong>Screen contents &amp; controls:</strong>
             <ul>
-              <li>Per-location inspection log with 1-tap <code>EXPORT JSON</code> and <code>EXPORT CSV</code> buttons.</li>
-              <li>Supervisor Tabs 11–15 gated by Pane 11's mandatory pledge checkbox (<em>"data is for training &amp; recognition only, never discipline"</em>).</li>
+              <li>Per-location inspection log with plain-English <code>⬇ SAVE BACKUP</code> and <code>⬇ DOWNLOAD SPREADSHEET</code> buttons.</li>
+              <li>Human-labeled Supervisor tabs (<code>Pledge</code>, <code>Sites &amp; QR</code>, <code>Crew</code>, <code>Insights</code>, <code>Training</code> — spec numbers stripped) gated by the non-discipline pledge checkbox.</li>
             </ul>
           </li>
           <li><strong>Offline resilience:</strong>
@@ -752,13 +751,13 @@
         <ul>
           <li><strong>Screen contents &amp; controls:</strong>
             <ul>
-              <li>Three-way Host Voice selector (<code>Off</code> default, <code>Chill</code>, <code>Full</code>) plus masked browser-only API key inputs for Meta Model API and Baseten.</li>
-              <li>Inference provider radio toggle (<code>Meta Model API</code> vs. <code>Baseten Spark Open</code>) and 1-tap <code>EXPORT LOG (JSON)</code> audit trail.</li>
+              <li>Plain-English explanation of what API keys unlock, plus 1-tap <code>Get key ↗</code> hyperlinks to <code>dev.meta.ai</code> and Baseten right beside each aligned input.</li>
+              <li>Three-way Host Voice selector (<code>Full</code> active by default, <code>Chill</code>, <code>Off</code>), inference provider toggle, and 1-tap <code>EXPORT LOG</code> audit trail.</li>
             </ul>
           </li>
           <li><strong>Security &amp; acoustics:</strong>
             <ul>
-              <li>Zero keys in repo; default-Off voice and muted UI tones guarantee silence in occupied buildings until explicitly enabled.</li>
+              <li>Zero keys in repo; voice auto-plays by default and can be muted in one tap from the topbar.</li>
             </ul>
           </li>
         </ul>
@@ -768,9 +767,10 @@
       <div class="shot"><img src="shots/12-deck.png" alt="Daily deck" /><div class="desc">
         <h4>Trilingual Daily Swipe Deck (Screen 9)</h4>
         <ul>
-          <li><strong>Screen contents &amp; controls:</strong>
+          <li><strong>Gamification, micro-interactions &amp; live EDM Disco House groove:</strong>
             <ul>
-              <li>5-card daily session drawn from 30 ISSA-style trilingual cards (<code>SURFACE</code>, <code>PRODUCT</code>, <code>TECHNIQUE</code>) with drag/swipe gestures and 44px Left/Right buttons.</li>
+              <li>3D perspective-stacked card deck with a 5-pip glowing progress bar, animated flickering flame streak pill, and a live <strong>124 BPM WebAudio EDM Disco House synthesizer</strong> (4-on-the-floor kick, offbeat hats, funky octave disco bassline, and Nu-Disco chords) with an animated 4-bar EQ toggle!</li>
+              <li>Category-matched animated vector scenes (sparkling surface wiper, bubbling alchemist flask, S-curve technique sweep) + 18-particle neon burst and chord arpeggio on every right call.</li>
             </ul>
           </li>
           <li><strong>Learning &amp; sponsor rules:</strong>

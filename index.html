@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031-4" />
+  <link rel="stylesheet" href="styles.css?v=20261031-6" />
 </head>
 
 <body>
@@ -104,9 +104,7 @@
             🪪 PASSPORT, CREW &amp; SUPERVISOR
           </button>
         </div>
-
-        <div id="homeStatusStrip" class="home-status-strip" role="status"></div>
-
+        <div id="homeStatusStrip" class="home-status-strip hidden" role="status"></div>
         <div id="ftueSummaryBar" class="ftue-summary-bar hologram-card hidden">
           <span id="ftueSummaryText" class="consent-status-badge" data-i18n="ftueActiveLabel">✓ Consent &amp; Pass active</span>
           <div class="ftue-summary-actions">
@@ -205,7 +203,7 @@
           Prototype experience. Benchmark only · never a certification.
         </p>
         <a id="openJudgesReportLink" class="judges-report-link" href="docs/judges/report.html" data-i18n="openJudgesReport">
-          📊 JUDGES' PRESENTATION &amp; RUBRIC REPORT
+          Judges' Presentation ↗
         </a>
       </div>
     </section>
@@ -315,7 +313,14 @@
               <option value="Trash & floor zone">Trash &amp; floor zone</option>
             </select>
           </label>
-          <button id="scanAreaQrButton" class="ghost-toggle-chip" type="button" data-i18n="scanAreaQrAction">⌗ SCAN QR</button>
+          <button id="scanAreaQrButton" class="ghost-toggle-chip qr-icon-btn" type="button" aria-label="Scan QR" data-i18n-aria="scanAreaQrAction" title="Scan QR">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h.01"></path>
+            </svg>
+          </button>
           <span id="assignedSpotBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
         </div>
 
@@ -415,7 +420,14 @@
             </select>
           </label>
           <div id="timerSpotPills" class="timer-spot-pills" role="group" aria-label="Quick Spot Selection"></div>
-          <button id="timerScanQrButton" class="ghost-toggle-chip" type="button" data-i18n="scanAreaQrAction">⌗ SCAN QR</button>
+          <button id="timerScanQrButton" class="ghost-toggle-chip qr-icon-btn" type="button" aria-label="Scan QR" data-i18n-aria="scanAreaQrAction" title="Scan QR">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+              <path d="M14 14h3v3h-3zM20 14v3M14 20h3M20 20h.01"></path>
+            </svg>
+          </button>
           <span id="timerSpotRuleBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
         </div>
 
@@ -736,7 +748,7 @@
               </small>
             </div>
 
-            <div id="disputePanel" class="dispute-panel hologram-card">
+            <div id="disputePanel" class="dispute-panel hologram-card hidden">
               <div class="dispute-row">
                 <span class="section-label" data-i18n="disputeHeading">FAIR REVIEW</span>
                 <button id="disputeButton" class="secondary-button compact-chip" type="button" data-i18n="disputeAction">
@@ -844,12 +856,12 @@
 
         <section id="adminDashboardPanel" class="offline-queue-section hologram-card" aria-label="Supervisor training and site tools">
           <div class="section-label" data-i18n="adminPanelTitle">ADMIN SCREENS (11–15 · NEVER EDITS SCORES)</div>
-          <div id="adminScreenTabs" class="mvp-step-tabs" role="tablist" aria-label="Admin screens 11 to 15">
-            <button class="mvp-tab-chip active" type="button" data-admin-tab="11" data-i18n="adminTabInvite">11 · Invite</button>
-            <button class="mvp-tab-chip" type="button" data-admin-tab="12" data-i18n="adminTabSites">12 · Sites &amp; QR</button>
-            <button class="mvp-tab-chip" type="button" data-admin-tab="13" data-i18n="adminTabCrew">13 · Crew</button>
-            <button class="mvp-tab-chip" type="button" data-admin-tab="14" data-i18n="adminTabDashboard">14 · Dashboard</button>
-            <button class="mvp-tab-chip" type="button" data-admin-tab="15" data-i18n="adminTabAssign">15 · Assign</button>
+          <div id="adminScreenTabs" class="mvp-step-tabs" role="tablist" aria-label="Supervisor tools">
+            <button class="mvp-tab-chip active" type="button" data-admin-tab="11" data-i18n="adminTabInvite">Pledge</button>
+            <button class="mvp-tab-chip" type="button" data-admin-tab="12" data-i18n="adminTabSites">Sites &amp; QR</button>
+            <button class="mvp-tab-chip" type="button" data-admin-tab="13" data-i18n="adminTabCrew">Crew</button>
+            <button class="mvp-tab-chip" type="button" data-admin-tab="14" data-i18n="adminTabDashboard">Insights</button>
+            <button class="mvp-tab-chip" type="button" data-admin-tab="15" data-i18n="adminTabAssign">Training</button>
           </div>
 
           <div id="adminPane11" class="admin-tab-pane">
@@ -940,16 +952,16 @@
           <span data-i18n="hostVoiceTitle">HOST VOICE</span>
           <div class="hype-level-group" role="radiogroup" aria-label="Host hype level">
             <label class="provider-option">
-              <input id="hypeLevelOff" type="radio" name="hypeLevel" value="off" checked />
-              <span data-i18n="hypeOffLabel">Off · silent by default</span>
+              <input id="hypeLevelOff" type="radio" name="hypeLevel" value="off" />
+              <span data-i18n="hypeOffLabel">Off · silent</span>
             </label>
             <label class="provider-option">
               <input id="hypeLevelChill" type="radio" name="hypeLevel" value="chill" />
               <span data-i18n="hypeChillLabel">Chill · start, finish &amp; verdict only</span>
             </label>
             <label class="provider-option">
-              <input id="hypeLevelFull" type="radio" name="hypeLevel" value="full" />
-              <span data-i18n="hypeFullLabel">Full · all host hype beats</span>
+              <input id="hypeLevelFull" type="radio" name="hypeLevel" value="full" checked />
+              <span data-i18n="hypeFullLabel">Full · all host hype beats (default)</span>
             </label>
           </div>
           <div id="voiceNameList" class="provider-log"></div>
@@ -961,11 +973,17 @@
         </div>
 
         <div id="settingsKeysPanel" class="identity-panel hologram-card">
+          <p class="settings-keys-explain" data-i18n="settingsKeysExplain">
+            Optional cloud upgrade: unlocks verified per-surface AI scorecards, SAM 3.1 surface highlights, and voice-note transcription. Not required to play — the game works on-device without keys.
+          </p>
           <div class="settings-keys-grid">
             <div>
-              <label for="metaApiKey" data-i18n="settingsMetaKey">
-                Meta Model API key
-              </label>
+              <div class="key-label-row">
+                <label for="metaApiKey" data-i18n="settingsMetaKey">
+                  Meta Model API key
+                </label>
+                <a class="get-key-link" href="https://dev.meta.ai/" target="_blank" rel="noopener noreferrer" data-i18n="getMetaKeyLink">Get key ↗</a>
+              </div>
               <input
                 id="metaApiKey"
                 type="password"
@@ -977,9 +995,12 @@
             </div>
 
             <div>
-              <label for="basetenApiKey" data-i18n="settingsBasetenKey">
-                Baseten API key
-              </label>
+              <div class="key-label-row">
+                <label for="basetenApiKey" data-i18n="settingsBasetenKey">
+                  Baseten API key
+                </label>
+                <a class="get-key-link" href="https://app.baseten.co/settings/api_keys" target="_blank" rel="noopener noreferrer" data-i18n="getBasetenKeyLink">Get key ↗</a>
+              </div>
               <input
                 id="basetenApiKey"
                 type="password"
@@ -992,7 +1013,7 @@
           </div>
 
           <small data-i18n="settingsKeysNote">
-            Keys stay in this browser only. The game works fully offline without them.
+            Keys stay in this browser only and are never shared.
           </small>
 
           <div class="settings-row">
@@ -1063,23 +1084,50 @@
     <!-- DECK -->
     <section id="deckScreen" class="screen">
       <div class="content">
-        <h2 data-i18n="deckTitle">DAILY DECK</h2>
+        <div class="deck-top-hud">
+          <h2 data-i18n="deckTitle">DAILY DECK</h2>
+          <div class="deck-hud-pills">
+            <div class="deck-streak-pill">
+              <svg class="flame-svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path class="flame-outer" fill="#ff6b35" d="M12 2c1.5 3.5 5 5.5 6 9.5 1 4-2 8.5-6 9.5-4-1-7-5.5-6-9.5.6-2.4 2.5-4.2 3.5-5.5-.3 1.8.8 3 1.5 3.2C11.5 6.8 11.2 4.2 12 2z"/>
+                <path class="flame-inner" fill="#ffd35c" d="M12 9c1 2 2.8 3.2 3.2 5.5.4 2.2-1.2 4.8-3.2 5.3-2-.5-3.6-3.1-3.2-5.3.4-2.3 2.2-3.5 3.2-5.5z"/>
+              </svg>
+              <span id="deckStreak">Day streak: 0</span>
+            </div>
+            <button id="discoGrooveButton" class="disco-groove-pill active" type="button" aria-pressed="true" title="Toggle EDM Disco House Groove">
+              <span class="eq-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+              <span data-i18n="discoGrooveLabel">DISCO HOUSE</span>
+            </button>
+          </div>
+        </div>
 
-        <p id="deckStreak" class="fine-print"></p>
-        <div id="deckSwipeHint" class="deck-swipe-hint" data-i18n="deckSwipeHint">
+        <div id="deckProgressPips" class="deck-progress-pips" aria-hidden="true">
+          <span class="deck-pip active"></span>
+          <span class="deck-pip"></span>
+          <span class="deck-pip"></span>
+          <span class="deck-pip"></span>
+          <span class="deck-pip"></span>
+        </div>
+
+        <div id="deckSwipeHint" class="deck-swipe-hint hidden" data-i18n="deckSwipeHint">
           ⟵ DRAG / SWIPE LEFT = MISS &nbsp;·&nbsp; DRAG / SWIPE RIGHT = RIGHT CALL ⟶
         </div>
 
-        <div id="deckCard" class="deck-card hologram-card" aria-describedby="deckSwipeHint">
-          <div class="deck-stamp-row" aria-hidden="true">
-            <span id="deckStampLeft" class="deck-stamp deck-stamp-left" data-i18n="deckStampLeft">⟵ MISS</span>
-            <span id="deckStampRight" class="deck-stamp deck-stamp-right" data-i18n="deckStampRight">RIGHT CALL ⟶</span>
+        <div id="deckStage" class="deck-stage">
+          <div id="deckParticleBurst" class="deck-particle-burst" aria-hidden="true"></div>
+          <div id="deckCard" class="deck-card hologram-card" aria-describedby="deckSwipeHint">
+            <div class="deck-stamp-row" aria-hidden="true">
+              <span id="deckStampLeft" class="deck-stamp deck-stamp-left" data-i18n="deckStampLeft">⟵ MISS</span>
+              <span id="deckStampRight" class="deck-stamp deck-stamp-right" data-i18n="deckStampRight">RIGHT CALL ⟶</span>
+            </div>
+            <div class="deck-card-head">
+              <div class="section-label deck-cat-badge" id="deckCategory">SURFACE</div>
+              <span id="deckProgress" class="deck-card-counter">Card 1 of 5</span>
+            </div>
+            <div id="deckIllustration" class="deck-illustration" aria-hidden="true"></div>
+            <p id="deckText"></p>
           </div>
-          <div class="section-label" id="deckCategory">SURFACE</div>
-          <p id="deckText"></p>
-          <p id="deckProgress" class="fine-print"></p>
         </div>
-
         <p id="deckFeedback" class="deck-feedback"></p>
         <div id="deckSponsorSlot" class="sponsor-slot hidden" aria-live="polite"></div>
 
@@ -1218,7 +1266,7 @@
     </div>
   </section>
 
-  <script src="deck.js?v=20261031-4"></script>
-  <script src="app.js?v=20261031-4"></script>
+  <script src="deck.js?v=20261031-6"></script>
+  <script src="app.js?v=20261031-6"></script>
 </body>
 </html>

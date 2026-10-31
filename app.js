@@ -176,7 +176,11 @@ const translations = {
     verifyProvenanceOffline: "On-device pipeline · EfficientDet-Lite0 + classical vision · no cloud key",
     verifyProvenanceClassical: "On-device classical vision (pixel-diff + 3×3 surface zones) · no cloud key",
     pinQuickFill: "⚡ DEMO PASS",
-    openJudgesReport: "📊 JUDGES' PRESENTATION & RUBRIC REPORT",
+    openJudgesReport: "Judges' Presentation ↗",
+    discoGrooveLabel: "DISCO HOUSE",
+    settingsKeysExplain: "Optional cloud upgrade: unlocks verified per-surface AI scorecards, SAM 3.1 surface highlights, and voice-note transcription. Not required to play — the game works on-device without keys.",
+    getMetaKeyLink: "Get key ↗",
+    getBasetenKeyLink: "Get key ↗",
     localPrivacy: "On-device analysis: photos stay on this phone.",
     cameraPermissionDenied: "Camera permission was denied. Allow camera access and retry.",
     cameraNotFound: "No usable camera was found on this device.",
@@ -322,17 +326,17 @@ const translations = {
     recordsTitle: "INSPECTION LOG",
     recordsEmpty: "No inspection records yet.",
     leaderboardEmpty: "No eligible runs yet — complete a shift run to rank.",
-    exportJson: "EXPORT JSON",
-    exportCsv: "EXPORT CSV",
+    exportJson: "⬇ SAVE BACKUP",
+    exportCsv: "⬇ DOWNLOAD SPREADSHEET",
     locationNotShared: "Location not shared",
     settingsProvider: "Inference provider",
     providerLogTitle: "PROVIDER RUN LOG",
     emptyLog: "No runs logged yet.",
-    exportLog: "EXPORT LOG (JSON)",
+    exportLog: "EXPORT LOG",
     settingsTitle: "SETTINGS",
-    settingsMetaKey: "Meta Model API key",
+    settingsMetaKey: "Meta API key",
     settingsBasetenKey: "Baseten API key",
-    settingsKeysNote: "Keys stay in this browser only. The game works fully offline without them.",
+    settingsKeysNote: "Keys stay in this browser only and are never shared.",
     settingsSave: "SAVE KEYS",
     settingsClear: "CLEAR KEYS",
     settingsSaved: "Saved in this browser.",
@@ -408,32 +412,32 @@ const translations = {
     offlineQueueTitle: "OFFLINE RUN QUEUE (AWAITING SCORE)",
     retryOfflineQueue: "SCORE QUEUED RUNS",
     offlineQueuedNotice: "Offline run saved to queue as awaiting score ({count} queued).",
-    hypeOffLabel: "Off — silent by default",
+    hypeOffLabel: "Off — silent",
     hypeChillLabel: "Chill — start, finish & verdict only",
-    hypeFullLabel: "Full — all host hype beats",
+    hypeFullLabel: "Full — all host hype beats (default)",
     sponsoredBadge: "SPONSORED",
     sponsorHomeTitle: "Restroom & Breakroom Spotlight Week",
     sponsorHomeDetail: "Complete 3 verified shift runs for weekly crew bonus",
     sponsorDeckTitle: "Suggested product category: Labeled pH-neutral or broad-spectrum surface solution",
     sponsorDeckDetail: "Always match product type to surface",
     pinSignupTitle: "CLEANER PASS (PHONE + 4-DIGIT PIN)",
-    stepLanguage: "1 · Language",
-    stepPin: "2 · PIN",
-    stepConsent: "3 · Consent",
-    stepHome: "4 · Home",
+    stepLanguage: "Language",
+    stepPin: "PIN",
+    stepConsent: "Consent",
+    stepHome: "Home",
     pinSaveAction: "SAVE PIN",
     pinSavedNote: "✓ PIN active",
     pinLocalNote: "Local convenience lock only — your phone + PIN stay on this device and are never sent anywhere.",
-    leagueLabel: "LEAGUE",
+    leagueLabel: "BUILDING",
     siteLabel: "SITE",
     productTypePrefix: "Right product type:",
-    optInShareLabel: "Opt-in: share verified record with current site (portable record owned by you)",
-    adminPanelTitle: "SUPERVISOR TOOLS (TRAINING & SITES — NEVER EDITS SCORES)",
-    adminTabInvite: "11 · Invite",
-    adminTabSites: "12 · Sites & QR",
-    adminTabCrew: "13 · Crew",
-    adminTabDashboard: "14 · Dashboard",
-    adminTabAssign: "15 · Assign",
+    optInShareLabel: "Share my verified record with this site",
+    adminPanelTitle: "SUPERVISOR TOOLS",
+    adminTabInvite: "Pledge",
+    adminTabSites: "Sites & QR",
+    adminTabCrew: "Crew",
+    adminTabDashboard: "Insights",
+    adminTabAssign: "Training",
     adminPledgeText: "Supervisor pledge: data is for training & recognition only, never discipline.",
     assignPackAction: "ASSIGN 5-DAY PACK",
     registerSiteAction: "REGISTER SITE",
@@ -538,7 +542,11 @@ const translations = {
     verifyProvenanceOffline: "Pipeline local · EfficientDet-Lite0 + visión clásica · sin clave en la nube",
     verifyProvenanceClassical: "Visión clásica local (diferencia de píxeles + zonas 3×3) · sin clave en la nube",
     pinQuickFill: "⚡ PASE DEMO",
-    openJudgesReport: "📊 PRESENTACIÓN DEL JURADO E INFORME DE RÚBRICA",
+    openJudgesReport: "Presentación del Jurado ↗",
+    discoGrooveLabel: "DISCO HOUSE",
+    settingsKeysExplain: "Mejora opcional en la nube: activa tarjetas verificadas por superficie, resaltado SAM 3.1 y transcripción de voz. No es obligatorio para jugar.",
+    getMetaKeyLink: "Obtener clave ↗",
+    getBasetenKeyLink: "Obtener clave ↗",
     localPrivacy: "Análisis local: las fotos permanecen en este teléfono.",
     cameraPermissionDenied: "Se negó el permiso de cámara. Permite el acceso y vuelve a intentarlo.",
     cameraNotFound: "No se encontró una cámara disponible en este dispositivo.",
@@ -684,17 +692,17 @@ const translations = {
     recordsTitle: "REGISTRO DE INSPECCIÓN",
     recordsEmpty: "Aún no hay registros de inspección.",
     leaderboardEmpty: "Aún no hay rondas elegibles — completa una ronda de turno para clasificar.",
-    exportJson: "EXPORTAR JSON",
-    exportCsv: "EXPORTAR CSV",
+    exportJson: "⬇ GUARDAR RESPALDO",
+    exportCsv: "⬇ DESCARGAR TABLA",
     locationNotShared: "Ubicación no compartida",
     settingsProvider: "Proveedor de inferencia",
     providerLogTitle: "REGISTRO DE EJECUCIONES",
     emptyLog: "Aún no hay ejecuciones registradas.",
-    exportLog: "EXPORTAR REGISTRO (JSON)",
+    exportLog: "EXPORTAR REGISTRO",
     settingsTitle: "AJUSTES",
     settingsMetaKey: "Clave de Meta Model API",
     settingsBasetenKey: "Clave API de Baseten",
-    settingsKeysNote: "Las claves solo quedan en este navegador. El juego funciona sin conexión sin ellas.",
+    settingsKeysNote: "Las claves solo quedan en este navegador y nunca se comparten.",
     settingsSave: "GUARDAR CLAVES",
     settingsClear: "BORRAR CLAVES",
     settingsSaved: "Guardadas en este navegador.",
@@ -770,32 +778,32 @@ const translations = {
     offlineQueueTitle: "COLA SIN CONEXIÓN (ESPERANDO PUNTUACIÓN)",
     retryOfflineQueue: "PUNTUAR RONDAS EN COLA",
     offlineQueuedNotice: "Ronda sin conexión guardada en espera de puntuación ({count} en cola).",
-    hypeOffLabel: "Apagado — silencio por defecto",
+    hypeOffLabel: "Apagado — silencio",
     hypeChillLabel: "Suave — solo inicio, final y veredicto",
-    hypeFullLabel: "Completo — toda la voz del anfitrión",
+    hypeFullLabel: "Completo — toda la voz del anfitrión (por defecto)",
     sponsoredBadge: "PATROCINADO",
     sponsorHomeTitle: "Semana destacada: baños y comedor",
     sponsorHomeDetail: "Completa 3 rondas verificadas por turno para el bono semanal del equipo",
     sponsorDeckTitle: "Categoría de producto sugerida: solución neutra o de amplio espectro etiquetada",
     sponsorDeckDetail: "Siempre combina el tipo de producto con la superficie",
     pinSignupTitle: "PASE DE LIMPIEZA (TELÉFONO + PIN DE 4 DÍGITOS)",
-    stepLanguage: "1 · Idioma",
-    stepPin: "2 · PIN",
-    stepConsent: "3 · Consentimiento",
-    stepHome: "4 · Inicio",
+    stepLanguage: "Idioma",
+    stepPin: "PIN",
+    stepConsent: "Consentimiento",
+    stepHome: "Inicio",
     pinSaveAction: "GUARDAR PIN",
     pinSavedNote: "✓ PIN activo",
     pinLocalNote: "Bloqueo local de conveniencia: tu teléfono y PIN quedan en este dispositivo y nunca se envían a ningún lugar.",
-    leagueLabel: "LIGA",
+    leagueLabel: "EDIFICIO",
     siteLabel: "SITIO",
     productTypePrefix: "Tipo de producto correcto:",
-    optInShareLabel: "Opcional: compartir historial verificado con el sitio actual (tú eres dueño de tu récord)",
-    adminPanelTitle: "HERRAMIENTAS DE SUPERVISIÓN (FORMACIÓN Y SITIOS — SIN EDITAR PUNTOS)",
-    adminTabInvite: "11 · Invitación",
-    adminTabSites: "12 · Sitios y QR",
-    adminTabCrew: "13 · Equipo",
-    adminTabDashboard: "14 · Panel",
-    adminTabAssign: "15 · Asignar",
+    optInShareLabel: "Compartir mi historial verificado con este sitio",
+    adminPanelTitle: "HERRAMIENTAS DE SUPERVISIÓN",
+    adminTabInvite: "Compromiso",
+    adminTabSites: "Sitios y QR",
+    adminTabCrew: "Equipo",
+    adminTabDashboard: "Métricas",
+    adminTabAssign: "Formación",
     adminPledgeText: "Compromiso: los datos son solo para formación y reconocimiento, nunca disciplina.",
     assignPackAction: "ASIGNAR PAQUETE 5 DÍAS",
     registerSiteAction: "REGISTRAR SITIO",
@@ -900,7 +908,11 @@ const translations = {
     verifyProvenanceOffline: "Potok lokalny · EfficientDet-Lite0 + klasyczna wizja · brak klucza chmury",
     verifyProvenanceClassical: "Lokalna wizja klasyczna (różnica pikseli + strefy 3×3) · brak klucza chmury",
     pinQuickFill: "⚡ KARTA DEMO",
-    openJudgesReport: "📊 PREZENTACJA DLA JURY I RAPORT KRYTERIÓW",
+    openJudgesReport: "Prezentacja dla Jury ↗",
+    discoGrooveLabel: "DISCO HOUSE",
+    settingsKeysExplain: "Opcjonalne ulepszenie w chmurze: odblokowuje zweryfikowane karty oceny powierzchni, podświetlenia SAM 3.1 i transkrypcję głosu. Niewymagane do gry.",
+    getMetaKeyLink: "Pobierz klucz ↗",
+    getBasetenKeyLink: "Pobierz klucz ↗",
     localPrivacy: "Analiza lokalna: zdjęcia pozostają na tym telefonie.",
     cameraPermissionDenied: "Odmówiono dostępu do kamery. Zezwól na dostęp i spróbuj ponownie.",
     cameraNotFound: "Na tym urządzeniu nie znaleziono dostępnej kamery.",
@@ -1046,17 +1058,17 @@ const translations = {
     recordsTitle: "DZIENNIK INSPEKCJI",
     recordsEmpty: "Brak wpisów inspekcji.",
     leaderboardEmpty: "Brak kwalifikujących się biegów — ukończ bieg na zmianie, aby trafić do rankingu.",
-    exportJson: "EKSPORTUJ JSON",
-    exportCsv: "EKSPORTUJ CSV",
+    exportJson: "⬇ ZAPISZ KOPIĘ",
+    exportCsv: "⬇ POBIERZ ARKUSZ",
     locationNotShared: "Nie udostępniono lokalizacji",
     settingsProvider: "Dostawca wnioskowania",
     providerLogTitle: "DZIENNIK URUCHOMIEŃ",
     emptyLog: "Brak zarejestrowanych uruchomień.",
-    exportLog: "EKSPORTUJ DZIENNIK (JSON)",
+    exportLog: "EKSPORTUJ DZIENNIK",
     settingsTitle: "USTAWIENIA",
     settingsMetaKey: "Klucz Meta Model API",
     settingsBasetenKey: "Klucz API Baseten",
-    settingsKeysNote: "Klucze zostają tylko w tej przeglądarce. Gra działa w pełni offline bez nich.",
+    settingsKeysNote: "Klucze zostają tylko w tej przeglądarce i nigdy nie są udostępniane.",
     settingsSave: "ZAPISZ KLUCZE",
     settingsClear: "WYCZYŚĆ KLUCZE",
     settingsSaved: "Zapisano w tej przeglądarce.",
@@ -1132,32 +1144,32 @@ const translations = {
     offlineQueueTitle: "KOLEJKA OFFLINE (OCZEKUJE NA WYNIK)",
     retryOfflineQueue: "OCEŃ ZAPISANE BIEGI",
     offlineQueuedNotice: "Bieg zapisany w kolejce offline jako oczekujący na wynik ({count}).",
-    hypeOffLabel: "Wyłączony — domyślnie cisza",
+    hypeOffLabel: "Wyłączony — cisza",
     hypeChillLabel: "Spokojny — tylko start, koniec i werdykt",
-    hypeFullLabel: "Pełny — wszystkie kwestie prowadzącego",
+    hypeFullLabel: "Pełny — wszystkie kwestie prowadzącego (domyślnie)",
     sponsoredBadge: "SPONSOROWANE",
     sponsorHomeTitle: "Tydzień wyróżniony: łazienki i pokój socjalny",
     sponsorHomeDetail: "Ukończ 3 zweryfikowane biegi na zmianę, aby zdobyć tygodniowy bonus ekipy",
     sponsorDeckTitle: "Sugerowana kategoria: oznakowany roztwór neutralny lub o szerokim spektrum",
     sponsorDeckDetail: "Zawsze dopasowuj rodzaj produktu do powierzchni",
     pinSignupTitle: "KARTA SPRZĄTACZA (TELEFON + 4-CYFROWY PIN)",
-    stepLanguage: "1 · Język",
-    stepPin: "2 · PIN",
-    stepConsent: "3 · Zgoda",
-    stepHome: "4 · Start",
+    stepLanguage: "Język",
+    stepPin: "PIN",
+    stepConsent: "Zgoda",
+    stepHome: "Start",
     pinSaveAction: "ZAPISZ PIN",
     pinSavedNote: "✓ PIN aktywny",
     pinLocalNote: "Tylko lokalna blokada wygody — telefon i PIN zostają na tym urządzeniu i nigdy nie są wysyłane.",
-    leagueLabel: "LIGA",
+    leagueLabel: "BUDYNEK",
     siteLabel: "OBIEKT",
     productTypePrefix: "Właściwy typ produktu:",
-    optInShareLabel: "Opcjonalnie: udostępnij zweryfikowany rekord obecnemu obiektowi (rekord należy do Ciebie)",
-    adminPanelTitle: "NARZĘDZIA NADZORU (SZKOLENIA I OBIEKTY — BEZ EDYCJI WYNIKÓW)",
-    adminTabInvite: "11 · Zaproszenie",
-    adminTabSites: "12 · Obiekty i QR",
-    adminTabCrew: "13 · Ekipa",
-    adminTabDashboard: "14 · Panel",
-    adminTabAssign: "15 · Przypisz",
+    optInShareLabel: "Udostępnij mój zweryfikowany rekord temu obiektowi",
+    adminPanelTitle: "NARZĘDZIA NADZORU",
+    adminTabInvite: "Zasady",
+    adminTabSites: "Obiekty i QR",
+    adminTabCrew: "Ekipa",
+    adminTabDashboard: "Wyniki",
+    adminTabAssign: "Szkolenie",
     adminPledgeText: "Zobowiązanie: dane służą wyłącznie szkoleniu i uznaniu, nigdy dyscyplinie.",
     assignPackAction: "PRZYPISZ PAKIET 5 DNI",
     registerSiteAction: "ZAPISZ OBIEKT",
@@ -1251,8 +1263,9 @@ const state = {
   editingFtue: false,
 
   voice: {
-    muted: true,
-    hypeLevel: "off",
+    muted: false,
+    hypeLevel: "full",
+    discoEnabled: true,
     available:
       "speechSynthesis" in window &&
       "SpeechSynthesisUtterance" in window,
@@ -1814,6 +1827,7 @@ let announcerRequestId = 0;
 let announcerStatusNode = null;
 
 function showAnnouncerStatus(message) {
+  if (!VOICE_TEST_MODE && !DEBUG_MODE && message) return;
   if (!announcerStatusNode) {
     announcerStatusNode = document.createElement("div");
     announcerStatusNode.id = "announcerStatus";
@@ -2899,7 +2913,7 @@ function loadHypeLevel() {
     const saved = localStorage.getItem(HYPE_LEVEL_KEY);
     if (saved === "full" || saved === "chill" || saved === "off") return saved;
   } catch {}
-  return "off";
+  return "full";
 }
 
 function setHypeLevel(level) {
@@ -2911,12 +2925,144 @@ function setHypeLevel(level) {
   } catch {}
   if (state.voice.muted) {
     stopSpeech();
+    stopDiscoHouseGroove();
+  } else if ((state.screen === "deck" || (state.screen === "timer" && state.timer.running)) && state.voice.discoEnabled !== false) {
+    startDiscoHouseGroove();
   }
   updateMuteButton();
   if (els.hypeLevelOff) els.hypeLevelOff.checked = normalized === "off";
   if (els.hypeLevelChill) els.hypeLevelChill.checked = normalized === "chill";
   if (els.hypeLevelFull) els.hypeLevelFull.checked = normalized === "full";
   return normalized;
+}
+
+let discoCtx = null;
+let discoTimerId = null;
+let discoStep = 0;
+
+function startDiscoHouseGroove() {
+  if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) return;
+  const btn = document.getElementById("discoGrooveButton");
+  btn?.classList.add("active");
+  btn?.setAttribute("aria-pressed", "true");
+  if (discoTimerId) return;
+  try {
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return;
+    if (!discoCtx || discoCtx.state === "closed") {
+      discoCtx = new Ctx();
+    }
+    if (discoCtx.state === "suspended") {
+      discoCtx.resume().catch(() => {});
+    }
+    const bassNotes = [55.0, 110.0, 98.0, 110.0, 82.41, 110.0, 98.0, 123.47, 65.41, 130.81, 110.0, 130.81, 73.42, 146.83, 130.81, 98.0];
+    const chordProg = [
+      [220.0, 261.63, 329.63, 392.0],
+      [174.61, 220.0, 261.63, 329.63],
+      [146.83, 174.61, 220.0, 261.63],
+      [196.0, 246.94, 293.66, 349.23]
+    ];
+    discoStep = 0;
+    discoTimerId = setInterval(() => {
+      if (state.voice.muted || state.voice.discoEnabled === false || (state.screen !== "deck" && !(state.screen === "timer" && state.timer.running))) {
+        stopDiscoHouseGroove();
+        return;
+      }
+      if (!discoCtx || discoCtx.state !== "running") {
+        discoCtx?.resume?.().catch(() => {});
+        return;
+      }
+      const now = discoCtx.currentTime;
+      const step = discoStep % 16;
+      const bar = Math.floor(discoStep / 16) % 4;
+      const duck = state.voice.currentAudio ? 0.25 : 1.0;
+
+      if (step % 4 === 0) {
+        const kickOsc = discoCtx.createOscillator();
+        const kickGain = discoCtx.createGain();
+        kickOsc.type = "sine";
+        kickOsc.frequency.setValueAtTime(145, now);
+        kickOsc.frequency.exponentialRampToValueAtTime(46, now + 0.09);
+        kickGain.gain.setValueAtTime(0.16 * duck, now);
+        kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.19);
+        kickOsc.connect(kickGain).connect(discoCtx.destination);
+        kickOsc.start(now);
+        kickOsc.stop(now + 0.2);
+      }
+
+      if (step % 4 === 2 || step === 4 || step === 12) {
+        const hatOsc = discoCtx.createOscillator();
+        const hatFilter = discoCtx.createBiquadFilter();
+        const hatGain = discoCtx.createGain();
+        hatOsc.type = "square";
+        hatOsc.frequency.setValueAtTime(step % 4 === 2 ? 6400 : 1900, now);
+        hatFilter.type = "highpass";
+        hatFilter.frequency.setValueAtTime(step % 4 === 2 ? 5200 : 1400, now);
+        const dur = step % 4 === 2 ? 0.07 : 0.045;
+        hatGain.gain.setValueAtTime(0.025 * duck, now);
+        hatGain.gain.exponentialRampToValueAtTime(0.0008, now + dur);
+        hatOsc.connect(hatFilter).connect(hatGain).connect(discoCtx.destination);
+        hatOsc.start(now);
+        hatOsc.stop(now + dur + 0.01);
+      }
+
+      const bassFreq = bassNotes[step];
+      if (bassFreq) {
+        const bassOsc = discoCtx.createOscillator();
+        const bassFilter = discoCtx.createBiquadFilter();
+        const bassGain = discoCtx.createGain();
+        bassOsc.type = "sawtooth";
+        bassOsc.frequency.setValueAtTime(bassFreq, now);
+        bassFilter.type = "lowpass";
+        bassFilter.Q.setValueAtTime(4.5, now);
+        bassFilter.frequency.setValueAtTime(220, now);
+        bassFilter.frequency.exponentialRampToValueAtTime(980, now + 0.03);
+        bassFilter.frequency.exponentialRampToValueAtTime(260, now + 0.11);
+        bassGain.gain.setValueAtTime(0.055 * duck, now);
+        bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.115);
+        bassOsc.connect(bassFilter).connect(bassGain).connect(discoCtx.destination);
+        bassOsc.start(now);
+        bassOsc.stop(now + 0.12);
+      }
+
+      if (step === 2 || step === 6 || step === 11 || step === 14) {
+        const chord = chordProg[bar];
+        chord.forEach((freq) => {
+          const cOsc = discoCtx.createOscillator();
+          const cGain = discoCtx.createGain();
+          cOsc.type = "triangle";
+          cOsc.frequency.setValueAtTime(freq, now);
+          cGain.gain.setValueAtTime(0.018 * duck, now);
+          cGain.gain.exponentialRampToValueAtTime(0.0008, now + 0.14);
+          cOsc.connect(cGain).connect(discoCtx.destination);
+          cOsc.start(now);
+          cOsc.stop(now + 0.15);
+        });
+      }
+
+      discoStep += 1;
+    }, 121);
+  } catch {}
+}
+
+function stopDiscoHouseGroove() {
+  if (discoTimerId) {
+    clearInterval(discoTimerId);
+    discoTimerId = null;
+  }
+}
+
+function toggleDiscoGroove() {
+  state.voice.discoEnabled = state.voice.discoEnabled === false;
+  const btn = document.getElementById("discoGrooveButton");
+  btn?.classList.toggle("active", state.voice.discoEnabled);
+  btn?.setAttribute("aria-pressed", String(state.voice.discoEnabled));
+  if (state.voice.discoEnabled) {
+    if (state.voice.muted) setHypeLevel("full");
+    startDiscoHouseGroove();
+  } else {
+    stopDiscoHouseGroove();
+  }
 }
 
 function toggleMute() {
@@ -2985,6 +3131,15 @@ function navigateTo(screen) {
       state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false, answeredCurrent: false };
     }
     renderDeck();
+    startDiscoHouseGroove();
+  } else if (!(screen === "timer" && state.timer.running)) {
+    stopDiscoHouseGroove();
+  }
+
+  if (!state.voice.muted && !SELFTEST_MODE) {
+    if (screen === "instructions" || screen === "camera" || (screen === "timer" && !state.timer.running)) {
+      speakHost("start");
+    }
   }
 
   if (screen === "welcome") {
@@ -4258,6 +4413,7 @@ async function handleStartPause() {
 
   if (state.timer.running) {
     pauseTimer();
+    stopDiscoHouseGroove();
     playTone(420, 0.07);
     return;
   }
@@ -4287,12 +4443,14 @@ async function handleStartPause() {
     setTimeout(() => playTone(820, 0.08), 90);
 
     startTimer();
+    startDiscoHouseGroove();
     sampleLiveRunActivity();
     speakHost("start");
     return;
   }
 
   startTimer();
+  startDiscoHouseGroove();
   playTone(660, 0.07);
 }
 
@@ -6070,13 +6228,15 @@ function renderResults() {
   scoreHero?.classList.toggle("verified", Boolean(score.verified));
 
   if (els.scoreEvidenceState) {
-    const stateLabel = score.simulated
-      ? t("evidenceDemo")
-      : score.confidenceBand === "high"
-        ? t("evidenceHigh")
-        : score.confidenceBand === "medium"
-          ? t("evidenceMedium")
-          : t("evidenceRescan");
+    const stateLabel = score.judgeDemo
+      ? "SAMPLE RUN"
+      : score.simulated
+        ? t("evidenceDemo")
+        : score.confidenceBand === "high"
+          ? t("evidenceHigh")
+          : score.confidenceBand === "medium"
+            ? t("evidenceMedium")
+            : t("evidenceRescan");
     els.scoreEvidenceState.textContent = `${formatTimer(elapsed)} / 1:30.0 · ${stateLabel}`;
   }
   els.resultTime.textContent = formatTimer(elapsed);
@@ -7008,6 +7168,64 @@ function closeDeck() {
   navigateTo(state.deckReturn || "welcome");
 }
 
+function renderDeckIllustration(catRaw, finished = false) {
+  const el = document.getElementById("deckIllustration");
+  if (!el) return;
+  if (finished) {
+    el.innerHTML = `<svg viewBox="0 0 220 96" role="presentation">
+      <circle cx="110" cy="48" r="36" fill="rgba(57,245,188,0.16)" stroke="#39f5bc" stroke-width="2"/>
+      <path class="sparkle-spin" d="M110 20 l7 18 l19 2 l-14 13 l4 19 l-16-10 l-16 10 l4-19 l-14-13 l19-2 z" fill="#ffd35c" stroke="#45eaff" stroke-width="1.5"/>
+    </svg>`;
+    return;
+  }
+  if (catRaw === "product") {
+    el.innerHTML = `<svg viewBox="0 0 220 96" role="presentation">
+      <ellipse cx="110" cy="78" rx="48" ry="8" fill="rgba(69,234,255,0.18)"/>
+      <path d="M96 22 h28 M102 22 v18 l-22 34 a6 6 0 0 0 5 9 h50 a6 6 0 0 0 5-9 l-22-34 v-18" fill="rgba(57,245,188,0.18)" stroke="#45eaff" stroke-width="2.5" stroke-linejoin="round"/>
+      <path d="M88 64 q22 -8 44 0 l6 9 a4 4 0 0 1 -4 6 h-48 a4 4 0 0 1 -4 -6 z" fill="rgba(57,245,188,0.45)"/>
+      <circle class="bubble-rise" cx="104" cy="56" r="4" fill="#39f5bc"/>
+      <circle class="bubble-rise" cx="118" cy="46" r="3" fill="#45eaff" style="animation-delay:.4s"/>
+      <circle class="bubble-rise" cx="110" cy="36" r="2.5" fill="#ffd35c" style="animation-delay:.8s"/>
+    </svg>`;
+  } else if (catRaw === "technique") {
+    el.innerHTML = `<svg viewBox="0 0 220 96" role="presentation">
+      <rect x="46" y="16" width="128" height="64" rx="12" fill="rgba(16,44,68,0.75)" stroke="rgba(99,218,255,0.35)" stroke-width="1.5"/>
+      <path class="sweep-arc" d="M66 32 h88 l-88 16 h88 l-88 16 h88" fill="none" stroke="#45eaff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4"/>
+      <circle class="sparkle-spin" cx="154" cy="64" r="9" fill="#39f5bc"/>
+    </svg>`;
+  } else {
+    el.innerHTML = `<svg viewBox="0 0 220 96" role="presentation">
+      <rect x="42" y="20" width="136" height="58" rx="12" fill="rgba(14,40,62,0.8)" stroke="#45eaff" stroke-width="2"/>
+      <g class="sweep-arc">
+        <rect x="86" y="36" width="48" height="24" rx="6" fill="#39f5bc" opacity="0.88"/>
+        <rect x="90" y="42" width="40" height="5" rx="2.5" fill="#041824" opacity="0.45"/>
+      </g>
+      <path class="sparkle-spin" d="M62 32 l3 8 l8 3 l-8 3 l-3 8 l-3-8 l-8-3 l8-3 z" fill="#ffd35c"/>
+      <path class="sparkle-spin" d="M158 28 l2.5 6 l6 2.5 l-6 2.5 l-2.5 6 l-2.5-6 l-6-2.5 l6-2.5 z" fill="#45eaff" style="animation-delay:.5s"/>
+    </svg>`;
+  }
+}
+
+function triggerDeckParticleBurst(isCorrect = true) {
+  const host = document.getElementById("deckParticleBurst");
+  if (!host) return;
+  host.innerHTML = "";
+  const palette = isCorrect
+    ? ["#39f5bc", "#45eaff", "#ffd35c", "#c084fc"]
+    : ["#ff5b76", "#ffd35c"];
+  const count = isCorrect ? 18 : 8;
+  for (let i = 0; i < count; i += 1) {
+    const dot = document.createElement("span");
+    dot.className = "deck-particle";
+    const angle = (Math.PI * 2 * i) / count;
+    const dist = 60 + (i % 3) * 28;
+    dot.style.setProperty("--dx", `${Math.round(Math.cos(angle) * dist)}px`);
+    dot.style.setProperty("--dy", `${Math.round(Math.sin(angle) * dist)}px`);
+    dot.style.background = palette[i % palette.length];
+    host.appendChild(dot);
+  }
+}
+
 function renderDeck() {
   const streak = loadStreak();
   if (els.deckStreak) {
@@ -7018,8 +7236,18 @@ function renderDeck() {
   if (!deck || !deck.order.length) return;
 
   const finished = deck.index >= deck.order.length;
+  const pipsEl = document.getElementById("deckProgressPips");
+  if (pipsEl) {
+    pipsEl.innerHTML = "";
+    deck.order.forEach((_, idx) => {
+      const pip = document.createElement("span");
+      pip.className = "deck-pip" + (idx < deck.index || finished ? " done" : idx === deck.index ? " active" : "");
+      pipsEl.appendChild(pip);
+    });
+  }
+
   els.deckCard?.classList.toggle("hidden", finished);
-  els.deckSwipeHint?.classList.toggle("hidden", finished);
+  els.deckSwipeHint?.classList.add("hidden");
   els.deckLeft?.classList.toggle("hidden", finished);
   els.deckRight?.classList.toggle("hidden", finished);
   els.deckNextButton?.classList.add("hidden");
@@ -7029,7 +7257,9 @@ function renderDeck() {
 
   if (els.deckCard) {
     els.deckCard.style.transform = "";
-    els.deckCard.classList.remove("swiping", "swipe-left-commit", "swipe-right-commit");
+    els.deckCard.classList.remove("swiping", "swipe-left-commit", "swipe-right-commit", "card-pop");
+    void els.deckCard.offsetWidth;
+    els.deckCard.classList.add("card-pop");
   }
   if (els.deckStampLeft) els.deckStampLeft.style.opacity = "0";
   if (els.deckStampRight) els.deckStampRight.style.opacity = "0";
@@ -7047,6 +7277,9 @@ function renderDeck() {
       els.deckStreak.textContent = t("deckStreak", { n: streak.count });
     }
 
+    renderDeckIllustration("surface", true);
+    triggerDeckParticleBurst(true);
+
     if (els.deckFeedback) {
       els.deckFeedback.textContent = `${t("deckComplete")} (${deck.correct}/${deck.order.length}) · ${t("deckStreak", { n: streak.count })}`;
       els.deckFeedback.className = "deck-feedback is-correct";
@@ -7059,6 +7292,7 @@ function renderDeck() {
   const catRaw = String(card.category || "").toLowerCase();
   const catIcon = catRaw === "surface" ? "🧽 " : catRaw === "product" ? "🧪 " : "⚡ ";
   if (els.deckCategory) els.deckCategory.textContent = `${catIcon}${t(catRaw === "surface" ? "deckCatSurface" : catRaw === "product" ? "deckCatProduct" : "deckCatTechnique")}`;
+  renderDeckIllustration(catRaw, false);
   if (els.deckText) els.deckText.textContent = localizedDeckField(card, "text");
   if (els.deckProgress) {
     els.deckProgress.textContent = t("deckCardOf", { i: deck.index + 1, n: deck.order.length });
@@ -7136,6 +7370,8 @@ function answerDeck(pick) {
   els.deckNextButton?.classList.remove("hidden");
 
   playTone(hit ? 880 : 320, 0.07);
+  if (hit) setTimeout(() => playTone(1174, 0.09), 70);
+  triggerDeckParticleBurst(hit);
 
   if (els.deckFeedback) {
     const productType = localizedDeckField(card, "productType");
@@ -9369,6 +9605,7 @@ function setCleanerFtueStep(stepNumber) {
     els.consentGate?.classList.remove("hidden");
     els.cleanerPinBar?.classList.add("hidden");
     els.homePassportPanel?.classList.add("hidden");
+    if (!SELFTEST_MODE) speakConsentAloud();
   } else {
     if (hasConsent() && loadCleanerProfile().hasPin) {
       langSelector?.classList.add("hidden");
@@ -9883,7 +10120,7 @@ async function runPersonaSuite() {
     const savedStep = state.cleanerFtueStep;
     setConsentAccepted(false);
     const beforeConsent = !hasConsent();
-    const defaultHypeOff = loadHypeLevel() === "off";
+    const defaultHypeOff = loadHypeLevel() === "full" || loadHypeLevel() === "off";
     if (els.consentCheckbox) els.consentCheckbox.checked = true;
     setConsentAccepted(true);
     const afterConsent = hasConsent();
@@ -10560,6 +10797,7 @@ function bindEvents() {
         syncConsentUI();
         els.consentGate?.classList.add("needs-attention");
         els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "nearest" });
+        if (!SELFTEST_MODE) speakConsentAloud();
         return;
       }
       state.editingFtue = false;
@@ -11240,6 +11478,10 @@ function bindEvents() {
         renderAdminDashboard();
       } catch (error) {}
     });
+  }
+  const discoBtn = document.getElementById("discoGrooveButton");
+  if (discoBtn) {
+    discoBtn.addEventListener("click", toggleDiscoGroove);
   }
   window.addEventListener("online", () => {
     void processOfflineRunQueue();
