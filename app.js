@@ -170,13 +170,11 @@ const translations = {
     demoMode: "DEMO MODE",
     demoCameraPlaceholder: "CAMERA PLACEHOLDER",
     judgeDemoAction: "JUDGE DEMO · SAMPLE SCORE",
-    judgeDemoNote: "Judge demo · Rung 1 scored live on-device + Rung 2 Muse Spark 1.3 & SAM 3.1 preview. No leaderboard credit.",
-    verifiedScorecardPreview: "VERIFIED SCORECARD · MUSE SPARK 1.3 + SAM 3.1 (JUDGE DEMO PREVIEW)",
+    judgeDemoNote: "Judge demo · scored live by the on-device pipeline on sample photos. No leaderboard credit.",
     verifyProvenanceVerified: "Verified by {provider} · {model}",
     verifyProvenanceSamSuffix: " · SAM 3.1 overlays",
     verifyProvenanceOffline: "On-device pipeline · EfficientDet-Lite0 + classical vision · no cloud key",
     verifyProvenanceClassical: "On-device classical vision (pixel-diff + 3×3 surface zones) · no cloud key",
-    verifyProvenanceDemoPreview: "Rung 1 live on-device score · Rung 2 Muse Spark 1.3 + SAM 3.1 preview (add key in Settings for live cloud calls)",
     pinQuickFill: "⚡ DEMO PASS",
     openJudgesReport: "📊 JUDGES' PRESENTATION & RUBRIC REPORT",
     localPrivacy: "On-device analysis: photos stay on this phone.",
@@ -533,13 +531,11 @@ const translations = {
     demoMode: "MODO DEMO",
     demoCameraPlaceholder: "IMAGEN DE DEMOSTRACIÓN",
     judgeDemoAction: "DEMO JURADO · EJEMPLO",
-    judgeDemoNote: "Demo para el jurado · Nivel 1 puntuado en vivo + vista previa Nivel 2 Muse Spark 1.3 y SAM 3.1. Sin crédito en la tabla.",
-    verifiedScorecardPreview: "TARJETA VERIFICADA · MUSE SPARK 1.3 + SAM 3.1 (VISTA PREVIA DEMO)",
+    judgeDemoNote: "Demo para el jurado · puntuado en vivo localmente con fotos de muestra. Sin crédito en la tabla.",
     verifyProvenanceVerified: "Verificado por {provider} · {model}",
     verifyProvenanceSamSuffix: " · superposiciones SAM 3.1",
     verifyProvenanceOffline: "Pipeline local · EfficientDet-Lite0 + visión clásica · sin clave en la nube",
     verifyProvenanceClassical: "Visión clásica local (diferencia de píxeles + zonas 3×3) · sin clave en la nube",
-    verifyProvenanceDemoPreview: "Nivel 1 puntuación local en vivo · Nivel 2 vista previa Muse Spark 1.3 + SAM 3.1",
     pinQuickFill: "⚡ PASE DEMO",
     openJudgesReport: "📊 PRESENTACIÓN DEL JURADO E INFORME DE RÚBRICA",
     localPrivacy: "Análisis local: las fotos permanecen en este teléfono.",
@@ -896,13 +892,11 @@ const translations = {
     demoMode: "TRYB DEMO",
     demoCameraPlaceholder: "OBRAZ ZASTĘPCZY",
     judgeDemoAction: "DEMO JURY · PRZYKŁAD",
-    judgeDemoNote: "Demo dla jury · Poziom 1 oceniony na żywo + podgląd Poziomu 2 Muse Spark 1.3 i SAM 3.1. Bez wpływu na ranking.",
-    verifiedScorecardPreview: "ZWERYFIKOWANA KARTA · MUSE SPARK 1.3 + SAM 3.1 (PODGLĄD DEMO)",
+    judgeDemoNote: "Demo dla jury · ocenione na żywo lokalnie na przykładowych zdjęciach. Bez wpływu na ranking.",
     verifyProvenanceVerified: "Zweryfikowano: {provider} · {model}",
     verifyProvenanceSamSuffix: " · nakładki SAM 3.1",
     verifyProvenanceOffline: "Potok lokalny · EfficientDet-Lite0 + klasyczna wizja · brak klucza chmury",
     verifyProvenanceClassical: "Lokalna wizja klasyczna (różnica pikseli + strefy 3×3) · brak klucza chmury",
-    verifyProvenanceDemoPreview: "Poziom 1 wynik lokalny na żywo · Poziom 2 podgląd Muse Spark 1.3 + SAM 3.1",
     pinQuickFill: "⚡ KARTA DEMO",
     openJudgesReport: "📊 PREZENTACJA DLA JURY I RAPORT KRYTERIÓW",
     localPrivacy: "Analiza lokalna: zdjęcia pozostają na tym telefonie.",
@@ -4349,48 +4343,6 @@ async function runJudgeDemo() {
   }
   if (state.latestScore) {
     state.latestScore.judgeDemo = true;
-    if (state.latestScore.verified?.status !== "verified") {
-      state.latestScore.verified = {
-        status: "verified",
-        judgeDemoPreview: true,
-        provider: "meta-demo-preview",
-        model: "muse-spark-1.3",
-        overall: 89,
-        verdict: "pass",
-        hypeLine: "Counter and fixture gleaming — glass nearly spotless, floor angle below 0.60 confidence floor!",
-        surfaces: [
-          { name: "counter", score: 94, verified: true, missed: [] },
-          { name: "fixture", score: 91, verified: true, missed: [] },
-          { name: "glass", score: 86, verified: true, missed: ["water spot near right edge"] },
-          { name: "floor", score: 42, verified: false, missed: ["confidence 0.48 < 0.60 floor"] }
-        ]
-      };
-      state.latestScore.sam = {
-        status: "overlays",
-        judgeDemoPreview: true,
-        surfaces: {
-          counter: {
-            before: [{ x1: 110, y1: 390, x2: 850, y2: 590, w: 960, h: 720 }],
-            after: [{ x1: 110, y1: 390, x2: 850, y2: 590, w: 960, h: 720 }]
-          },
-          fixture: {
-            before: [{ x1: 370, y1: 230, x2: 590, y2: 430, w: 960, h: 720 }],
-            after: [{ x1: 370, y1: 230, x2: 590, y2: 430, w: 960, h: 720 }]
-          },
-          glass: {
-            before: [{ x1: 60, y1: 65, x2: 450, y2: 215, w: 960, h: 720 }],
-            after: [{ x1: 60, y1: 65, x2: 450, y2: 215, w: 960, h: 720 }]
-          }
-        }
-      };
-      appendProviderLog({
-        provider: "meta-demo-preview",
-        model: "muse-spark-1.3 + sam-3.1",
-        status: "demo-preview",
-        overall: 89,
-        mock: true
-      });
-    }
   }
   state.judgeDemo = false;
   els.judgeDemoNote?.classList.remove("hidden");
@@ -4405,10 +4357,7 @@ function renderVerifyProvenance() {
   el.textContent = "";
   const ai = state.result?.ai;
   if (!ai) return;
-  if (ai.verified?.judgeDemoPreview) {
-    el.textContent = t("verifyProvenanceDemoPreview");
-    el.classList.remove("hidden");
-  } else if (ai.verified?.status === "verified") {
+  if (ai.verified?.status === "verified") {
     const sam = ai.sam?.status === "overlays" ? t("verifyProvenanceSamSuffix") : "";
     el.textContent = t("verifyProvenanceVerified", {
       provider: ai.verified.provider || "cloud",
@@ -5673,9 +5622,7 @@ function renderVerifiedScorecard() {
 
   const labelEl = card.querySelector(".section-label");
   if (labelEl) {
-    labelEl.textContent = verified.judgeDemoPreview
-      ? t("verifiedScorecardPreview")
-      : t("verifiedScorecard");
+    labelEl.textContent = t("verifiedScorecard");
   }
   const body = els.verifiedBody;
   body.innerHTML = "";
