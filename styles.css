@@ -5359,8 +5359,227 @@ select:focus-visible {
   display: none !important;
 }
 
+.hero-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hero-lottie-badge {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+}
+
+.lottie-orbit {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lottie-spin 9s linear infinite;
+}
+
+.lottie-float {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lottie-bob 2.2s ease-in-out infinite alternate;
+}
+
+.lottie-sparkle {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sparkle-pulse 1.5s ease-in-out infinite alternate;
+}
+
+.lottie-bubble {
+  animation: bubble-float 2.1s ease-in-out infinite;
+}
+
+.lottie-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: lottie-ring 1.6s ease-in-out infinite alternate;
+}
+
+.lottie-scan {
+  animation: lottie-scan-line 1.8s ease-in-out infinite alternate;
+}
+
+.lottie-scrub {
+  animation: sweep-glide 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes lottie-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes lottie-bob {
+  0% { transform: translateY(-2px) scale(0.96); }
+  100% { transform: translateY(2px) scale(1.05); }
+}
+
+@keyframes lottie-ring {
+  0% { transform: scale(0.8); opacity: 0.6; }
+  100% { transform: scale(1.22); opacity: 1; }
+}
+
+@keyframes lottie-scan-line {
+  0% { transform: translateY(-3px); opacity: 0.55; }
+  100% { transform: translateY(6px); opacity: 1; }
+}
+
+.step-lottie-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  min-width: 44px;
+}
+/* Staggered Screen Entrance Cascade (zero vertical layout shift for instant CTA reachability) */
+.screen.screen-enter-cascade > .content > * {
+  animation: screen-item-rise 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes screen-item-rise {
+  0% { opacity: 0.78; filter: brightness(1.18); }
+  100% { opacity: 1; filter: brightness(1); }
+}
+
+/* Gamified Button Pop & Radial Ripple */
+button.btn-pop-active {
+  animation: btn-spring-pop 320ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes btn-spring-pop {
+  0% { transform: scale(0.94); }
+  55% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* Daily Deck Ambient Floaters, Cleaning Confetti & Beat Thump */
+.deck-ambient-floaters {
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  z-index: 3;
+  transition: transform 90ms ease-out;
+}
+
+.deck-floater {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 6px rgba(69, 234, 255, 0.45));
+  animation: floater-drift 3.2s ease-in-out infinite alternate;
+}
+
+.deck-floater svg {
+  width: 100%;
+  height: 100%;
+}
+
+@keyframes floater-drift {
+  0% { transform: translateY(0) rotate(-8deg) scale(0.92); }
+  100% { transform: translateY(-9px) rotate(10deg) scale(1.08); }
+}
+
+.deck-particle.is-confetti {
+  width: 18px;
+  height: 18px;
+  background: transparent !important;
+  border-radius: 0;
+  animation: confetti-fly 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.deck-particle.is-confetti svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.45));
+}
+
+@keyframes confetti-fly {
+  0% { transform: translate(-50%, -50%) scale(0.6) rotate(0deg); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(1.05) rotate(var(--rot, 140deg)); opacity: 0; }
+}
+
+#deckScreen #deckCard.beat-thump {
+  animation: deck-beat-thump 190ms ease-out;
+}
+
+@keyframes deck-beat-thump {
+  0% { box-shadow: 0 18px 42px rgba(0, 0, 0, 0.52), 0 0 38px rgba(69, 234, 255, 0.34) !important; transform: scale(1.012); }
+  100% { box-shadow: 0 18px 42px rgba(0, 0, 0, 0.52), 0 0 28px rgba(69, 234, 255, 0.12) !important; transform: scale(1); }
+}
+
+.liquid-slosh {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: slosh-wave 1.6s ease-in-out infinite alternate;
+}
+
+@keyframes slosh-wave {
+  0% { transform: rotate(-5deg) scaleY(0.96); }
+  100% { transform: rotate(5deg) scaleY(1.04); }
+}
+
+.disco-track-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 36px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(69, 234, 255, 0.42);
+  background: rgba(12, 34, 54, 0.78);
+  color: #dff8ff;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.music-streaming-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.music-streaming-bar .compact-chip {
+  min-height: 34px !important;
+  padding: 4px 10px !important;
+  font-size: 11.5px !important;
+}
+
+.spotify-chip {
+  border-color: rgba(30, 215, 96, 0.55) !important;
+  color: #72f6a4 !important;
+}
+
+.apple-chip {
+  border-color: rgba(250, 88, 106, 0.55) !important;
+  color: #ff9eaa !important;
+}
+
+.music-stream-drawer {
+  margin-top: 8px;
+  display: grid;
+  gap: 6px;
+}
+
+.music-stream-input-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6px;
+}
+
 @media (max-height: 660px) {
-  #deckScreen .deck-illustration {
+  #settingsScreen .music-streaming-bar,
+  #settingsScreen .music-stream-drawer,
+  #deckScreen .deck-illustration,
+  #deckScreen .deck-ambient-floaters {
     display: none !important;
   }
   #deckScreen .deck-top-hud {

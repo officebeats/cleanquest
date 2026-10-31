@@ -66,3 +66,16 @@ any sponsor/brand content in code, any score-editing or discipline tooling.
 certification claims) over code + docs; headless-Chrome self-test 6/6 and
 persona suite; phone fold at 360×740 and 390×844; a persona added per phase
 (consent-first-timer, appellant, offline-queued run, crew member).
+
+## Phase 5: Music Engine (3 Disclosure-Style House Tracks) & Spotify / Apple Music Account Integration
+
+1. **Built-in WebAudio UK Garage / Deep-Disco House Producer Engine (`DISCLOSURE_TRACKS`):**
+   - **Track 1 — *Latch Groove* (122 BPM · F minor / Ab major · Default):** Polyrhythmic 6/8-over-4/4 Juno-106 9th chord stabs (`Fm9 → Dbmaj9 → Abmaj9 → Cm7/Eb`), pitch-gliding vocal-chop synth lead, skipping UKG rimshot pocket, and deep sub + Korg M1 Organ-2 bass.
+   - **Track 2 — *White Noise* (124 BPM · A minor / D Dorian):** Driving 909 club house kick, sizzling open hi-hats, resonant M1/saw bassline, and Philly/French-disco string falls.
+   - **Track 3 — *Omen Velvet* (126 BPM · C# minor / E major):** Slap-octave Nu-Disco bassline, sidechained Rhodes/Juno chords, and syncopated synth-brass hook.
+   - **Adaptive Mix & Sidechain Ducking:** Plays at `1.0x` energy on the Daily Deck, `0.38x` subtle ambient club mix during Camera Check-In & active Timer runs, and automatically ducks to `0.22x` whenever the game-show host speaks.
+2. **Spotify & Apple Music Account / Playlist Integration (`#settingsHostVoicePanel`):**
+   - **Today (Zero-Key Browser Embeds):** Cleaners can tap `Spotify ↗` or `Apple Music ↗` in Settings (or paste any playlist/track URL) to mount an official Spotify (`open.spotify.com/embed/...`) or Apple Music (`embed.music.apple.com/...`) player using their signed-in browser session.
+   - **Next (Full OAuth 2.0 PKCE + Web Playback SDK / MusicKit JS v3):**
+     - **Spotify:** OAuth 2.0 Authorization Code with PKCE (`streaming`, `user-read-playback-state`, `user-modify-playback-state`, `playlist-read-private` scopes) + Spotify Web Playback SDK so CleanQuest can list the cleaner's own playlists and duck `player.setVolume(0.2)` automatically during host voice clips.
+     - **Apple Music:** Apple MusicKit JS v3 (`MusicKit.configure({ developerToken })` → `music.authorize()`) with native user library playlist picker and automatic gain ducking under host voice cues.

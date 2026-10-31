@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031-7" />
+  <link rel="stylesheet" href="styles.css?v=20261031-9" />
 </head>
 
 <body>
@@ -48,10 +48,20 @@
     <!-- WELCOME -->
     <section id="welcomeScreen" class="screen active">
       <div class="content hero">
-        <h1>
-          <span data-i18n="beatThe">Beat the</span>
-          <span class="gradient-text" data-i18n="certificationTime">Benchmark Time</span>
-        </h1>
+        <div class="hero-title-row">
+          <div class="hero-lottie-badge" aria-hidden="true">
+            <svg viewBox="0 0 56 56" width="44" height="44">
+              <circle cx="28" cy="28" r="24" fill="rgba(69,234,255,0.12)" stroke="rgba(69,234,255,0.45)" stroke-width="1.5" stroke-dasharray="4 3" class="lottie-orbit"/>
+              <path class="lottie-float" d="M16 34 l4-14 l8 6 l8-6 l4 14 z" fill="#ffd35c" stroke="#fff" stroke-width="1.2" stroke-linejoin="round"/>
+              <path class="lottie-sparkle" d="M42 12 l2 5 l5 2 l-5 2 l-2 5 l-2-5 l-5-2 l5-2 z" fill="#39f5bc"/>
+              <circle class="lottie-bubble" cx="14" cy="16" r="3.5" fill="rgba(69,234,255,0.45)" stroke="#fff" stroke-width="1"/>
+            </svg>
+          </div>
+          <h1>
+            <span data-i18n="beatThe">Beat the</span>
+            <span class="gradient-text" data-i18n="certificationTime">Benchmark Time</span>
+          </h1>
+        </div>
 
         <p id="welcomeBody" class="hero-copy" data-i18n="welcomeBody">
           Clean fast. Clean well. Let AI evaluate what it can clearly see.
@@ -215,7 +225,14 @@
 
         <div class="instruction-list">
           <article class="instruction-card hologram-card">
-            <div class="step-number">01</div>
+            <div class="step-number step-lottie-wrap">
+              <span>01</span>
+              <svg class="step-lottie-svg" viewBox="0 0 36 36" width="26" height="26" aria-hidden="true">
+                <rect x="5" y="8" width="26" height="20" rx="4" fill="rgba(69,234,255,0.16)" stroke="#45eaff" stroke-width="2"/>
+                <circle class="lottie-pulse" cx="18" cy="18" r="5" fill="none" stroke="#39f5bc" stroke-width="2"/>
+                <line class="lottie-scan" x1="8" y1="14" x2="28" y2="14" stroke="#ffd35c" stroke-width="1.8"/>
+              </svg>
+            </div>
             <div>
               <h3 data-i18n="step1Title">Get ready</h3>
               <p data-i18n="step1Body">
@@ -225,7 +242,17 @@
           </article>
 
           <article class="instruction-card hologram-card">
-            <div class="step-number">02</div>
+            <div class="step-number step-lottie-wrap">
+              <span>02</span>
+              <svg class="step-lottie-svg" viewBox="0 0 36 36" width="26" height="26" aria-hidden="true">
+                <g class="lottie-scrub">
+                  <rect x="7" y="15" width="22" height="11" rx="4" fill="#ffd35c" stroke="#39f5bc" stroke-width="1.6"/>
+                  <rect x="7" y="15" width="22" height="4" rx="2" fill="#39f5bc"/>
+                </g>
+                <circle class="lottie-bubble" cx="12" cy="10" r="2.5" fill="#45eaff"/>
+                <circle class="lottie-bubble" cx="24" cy="8" r="2" fill="#39f5bc" style="animation-delay:.4s"/>
+              </svg>
+            </div>
             <div>
               <h3 data-i18n="step2Title">Clean</h3>
               <p data-i18n="step2Body">
@@ -235,7 +262,14 @@
           </article>
 
           <article class="instruction-card hologram-card">
-            <div class="step-number">03</div>
+            <div class="step-number step-lottie-wrap">
+              <span>03</span>
+              <svg class="step-lottie-svg" viewBox="0 0 36 36" width="26" height="26" aria-hidden="true">
+                <path class="lottie-float" d="M11 10 h14 v7 a7 7 0 0 1 -14 0 z" fill="#ffd35c" stroke="#fff" stroke-width="1.4"/>
+                <rect x="15" y="24" width="6" height="4" fill="#45eaff"/>
+                <path class="lottie-sparkle" d="M28 7 l1.8 4.2 l4.2 1.8 l-4.2 1.8 l-1.8 4.2 l-1.8-4.2 l-4.2-1.8 l4.2-1.8 z" fill="#39f5bc"/>
+              </svg>
+            </div>
             <div>
               <h3 data-i18n="step3Title">Get scored</h3>
               <p data-i18n="step3Body">
@@ -964,6 +998,24 @@
               <span data-i18n="hypeFullLabel">Full · all host hype beats (default)</span>
             </label>
           </div>
+          <div class="music-streaming-bar">
+            <button id="settingsTrackCycleButton" class="secondary-button compact-chip" type="button">
+              🎵 Track 1/3 · Latch Groove ⏭
+            </button>
+            <button id="connectSpotifyButton" class="secondary-button compact-chip stream-chip spotify-chip hidden" type="button" title="Connect or embed Spotify playlist">
+              Spotify ↗
+            </button>
+            <button id="connectAppleMusicButton" class="secondary-button compact-chip stream-chip apple-chip hidden" type="button" title="Connect or embed Apple Music playlist">
+              Apple Music ↗
+            </button>
+          </div>
+          <div id="musicStreamDrawer" class="music-stream-drawer hidden">
+            <div class="music-stream-input-row">
+              <input id="musicStreamUrlInput" type="url" placeholder="Paste Spotify or Apple Music playlist URL…" aria-label="Spotify or Apple Music playlist URL" />
+              <button id="musicStreamLoadButton" class="primary-button compact-chip" type="button">LOAD</button>
+            </div>
+            <div id="musicStreamEmbedHost" class="music-stream-embed-host"></div>
+          </div>
           <div id="voiceNameList" class="provider-log"></div>
           <div id="voiceTestButtons" class="settings-row hidden">
             <button type="button" class="secondary-button" data-voice-sample="en">EN ▸</button>
@@ -1094,9 +1146,12 @@
               </svg>
               <span id="deckStreak">Day streak: 0</span>
             </div>
-            <button id="discoGrooveButton" class="disco-groove-pill active" type="button" aria-pressed="true" title="Toggle EDM Disco House Groove">
+            <button id="discoGrooveButton" class="disco-groove-pill active" type="button" aria-pressed="true" title="Toggle music">
               <span class="eq-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-              <span data-i18n="discoGrooveLabel">DISCO HOUSE</span>
+              <span data-i18n="discoGrooveLabel">MUSIC</span>
+            </button>
+            <button id="discoNextTrackButton" class="disco-track-pill" type="button" title="Next track (1/3)">
+              <span id="discoTrackBadge">1/3</span> ⏭
             </button>
           </div>
         </div>
@@ -1114,6 +1169,7 @@
         </div>
 
         <div id="deckStage" class="deck-stage">
+          <div id="deckAmbientFloaters" class="deck-ambient-floaters" aria-hidden="true"></div>
           <div id="deckParticleBurst" class="deck-particle-burst" aria-hidden="true"></div>
           <div id="deckCard" class="deck-card hologram-card" aria-describedby="deckSwipeHint">
             <div class="deck-stamp-row" aria-hidden="true">
@@ -1266,7 +1322,7 @@
     </div>
   </section>
 
-  <script src="deck.js?v=20261031-7"></script>
-  <script src="app.js?v=20261031-7"></script>
+  <script src="deck.js?v=20261031-9"></script>
+  <script src="app.js?v=20261031-9"></script>
 </body>
 </html>

@@ -177,7 +177,7 @@ const translations = {
     verifyProvenanceClassical: "On-device classical vision (pixel-diff + 3×3 surface zones) · no cloud key",
     pinQuickFill: "⚡ DEMO PASS",
     openJudgesReport: "Judges' Presentation ↗",
-    discoGrooveLabel: "DISCO HOUSE",
+    discoGrooveLabel: "MUSIC",
     settingsKeysExplain: "Optional cloud upgrade: unlocks verified per-surface AI scorecards, SAM 3.1 surface highlights, and voice-note transcription. Not required to play — the game works on-device without keys.",
     getMetaKeyLink: "Get key ↗",
     getBasetenKeyLink: "Get key ↗",
@@ -543,7 +543,7 @@ const translations = {
     verifyProvenanceClassical: "Visión clásica local (diferencia de píxeles + zonas 3×3) · sin clave en la nube",
     pinQuickFill: "⚡ PASE DEMO",
     openJudgesReport: "Presentación del Jurado ↗",
-    discoGrooveLabel: "DISCO HOUSE",
+    discoGrooveLabel: "MÚSICA",
     settingsKeysExplain: "Mejora opcional en la nube: activa tarjetas verificadas por superficie, resaltado SAM 3.1 y transcripción de voz. No es obligatorio para jugar.",
     getMetaKeyLink: "Obtener clave ↗",
     getBasetenKeyLink: "Obtener clave ↗",
@@ -909,7 +909,7 @@ const translations = {
     verifyProvenanceClassical: "Lokalna wizja klasyczna (różnica pikseli + strefy 3×3) · brak klucza chmury",
     pinQuickFill: "⚡ KARTA DEMO",
     openJudgesReport: "Prezentacja dla Jury ↗",
-    discoGrooveLabel: "DISCO HOUSE",
+    discoGrooveLabel: "MUZYKA",
     settingsKeysExplain: "Opcjonalne ulepszenie w chmurze: odblokowuje zweryfikowane karty oceny powierzchni, podświetlenia SAM 3.1 i transkrypcję głosu. Niewymagane do gry.",
     getMetaKeyLink: "Pobierz klucz ↗",
     getBasetenKeyLink: "Pobierz klucz ↗",
@@ -2939,34 +2939,196 @@ function setHypeLevel(level, persist = true) {
 }
 
 let discoCtx = null;
+let discoMaster = null;
+let discoNoiseBuf = null;
 let discoTimerId = null;
 let discoStep = 0;
+let discoTrackIndex = 0;
+
+const DISCLOSURE_TRACKS = [
+  {
+    id: "latch",
+    name: "Latch Groove",
+    stepMs: 123, // 122 BPM Disclosure "Latch" Instrumental (Fm9 -> Dbmaj9 -> Abmaj7 -> Cm7/Eb)
+    swingSec: 0.024,
+    stabSteps: [0, 3, 6, 9, 12, 14], // Signature Latch 6/8-over-4/4 polyrhythmic chord stutter!
+    bassPattern: [
+      43.65, 0, 0, 87.31, 0, 0, 87.31, 77.78, 43.65, 0, 87.31, 0, 65.41, 0, 77.78, 87.31,
+      69.30, 0, 0, 138.59, 0, 0, 138.59, 103.83, 69.30, 0, 138.59, 0, 103.83, 0, 87.31, 77.78,
+      51.91, 0, 0, 103.83, 0, 0, 103.83, 87.31, 51.91, 0, 103.83, 0, 77.78, 0, 87.31, 103.83,
+      65.41, 0, 0, 130.81, 0, 0, 98.0, 130.81, 77.78, 0, 155.56, 130.81, 116.54, 0, 103.83, 77.78
+    ],
+    chordVoicings: [
+      [174.61, 207.65, 261.63, 311.13, 392.0],  // Fm9
+      [138.59, 174.61, 207.65, 261.63, 311.13], // Dbmaj9
+      [207.65, 261.63, 311.13, 392.0, 466.16],  // Abmaj9
+      [196.0, 261.63, 311.13, 392.0, 466.16]    // Cm7 / Eb6
+    ],
+    leadHook: [
+      523.25, 0, 0, 622.25, 0, 0, 523.25, 0, 466.16, 0, 0, 415.30, 392.0, 0, 349.23, 0,
+      523.25, 0, 0, 698.46, 0, 0, 622.25, 0, 523.25, 0, 0, 466.16, 415.30, 0, 523.25, 0,
+      622.25, 0, 0, 783.99, 0, 0, 698.46, 0, 622.25, 0, 0, 523.25, 466.16, 0, 523.25, 622.25,
+      783.99, 0, 0, 698.46, 0, 0, 622.25, 523.25, 466.16, 0, 523.25, 622.25, 523.25, 0, 466.16, 392.0
+    ],
+    stringNotes: [783.99, 830.61, 1046.5, 932.33]
+  },
+  {
+    id: "whitenoise",
+    name: "White Noise",
+    stepMs: 121, // 124 BPM Disclosure "White Noise" M1 Organ Club House (Am9 -> D9 -> Gmaj9 -> Em9)
+    swingSec: 0.021,
+    stabSteps: [0, 3, 6, 10, 14],
+    bassPattern: [
+      55.0, 0, 110.0, 98.0, 0, 82.41, 110.0, 130.81, 55.0, 0, 110.0, 146.83, 0, 130.81, 110.0, 98.0,
+      73.42, 0, 146.83, 130.81, 0, 110.0, 146.83, 164.81, 73.42, 0, 146.83, 130.81, 0, 110.0, 98.0, 82.41,
+      49.0, 0, 98.0, 110.0, 0, 123.47, 98.0, 146.83, 49.0, 0, 98.0, 123.47, 110.0, 0, 98.0, 82.41,
+      82.41, 0, 164.81, 146.83, 0, 123.47, 164.81, 196.0, 61.74, 98.0, 123.47, 146.83, 164.81, 196.0, 146.83, 110.0
+    ],
+    chordVoicings: [
+      [220.0, 261.63, 329.63, 392.0, 493.88],   // Am9
+      [185.0, 220.0, 293.66, 329.63, 440.0],    // D9 (Dorian lift)
+      [196.0, 246.94, 293.66, 369.99, 440.0],   // Gmaj9
+      [164.81, 196.0, 246.94, 293.66, 392.0]    // Em9
+    ],
+    leadHook: [
+      659.25, 0, 783.99, 880.0, 0, 783.99, 659.25, 587.33, 523.25, 0, 659.25, 0, 587.33, 523.25, 440.0, 0,
+      739.99, 0, 880.0, 987.77, 0, 880.0, 739.99, 659.25, 587.33, 0, 659.25, 739.99, 0, 659.25, 587.33, 493.88,
+      587.33, 0, 783.99, 880.0, 0, 987.77, 880.0, 783.99, 659.25, 0, 587.33, 0, 659.25, 783.99, 880.0, 0,
+      987.77, 0, 880.0, 783.99, 659.25, 0, 783.99, 880.0, 1046.5, 0, 987.77, 880.0, 783.99, 659.25, 587.33, 659.25
+    ],
+    stringNotes: [880.0, 1174.66, 987.77, 1318.51]
+  },
+  {
+    id: "omen",
+    name: "Omen Velvet",
+    stepMs: 119, // 126 BPM Disclosure "Omen / You & Me" Nu-Disco Filter House (C#m9 -> A6/9 -> F#m11 -> G#7#9)
+    swingSec: 0.022,
+    stabSteps: [0, 2, 6, 9, 11, 14],
+    bassPattern: [
+      69.30, 138.59, 0, 123.47, 69.30, 0, 138.59, 164.81, 69.30, 138.59, 0, 110.0, 92.50, 0, 110.0, 123.47,
+      55.0, 110.0, 0, 138.59, 55.0, 0, 110.0, 164.81, 55.0, 110.0, 0, 92.50, 82.41, 0, 92.50, 110.0,
+      46.25, 92.50, 0, 110.0, 46.25, 0, 92.50, 138.59, 46.25, 92.50, 0, 110.0, 123.47, 0, 110.0, 92.50,
+      51.91, 103.83, 0, 123.47, 51.91, 0, 138.59, 155.56, 51.91, 103.83, 123.47, 138.59, 155.56, 164.81, 138.59, 103.83
+    ],
+    chordVoicings: [
+      [277.18, 329.63, 415.30, 493.88, 622.25], // C#m9
+      [220.0, 277.18, 329.63, 369.99, 493.88],  // A6/9
+      [185.0, 220.0, 277.18, 329.63, 415.30],   // F#m11
+      [207.65, 261.63, 311.13, 369.99, 493.88]  // G#7#9
+    ],
+    leadHook: [
+      622.25, 0, 554.37, 493.88, 0, 415.30, 493.88, 554.37, 622.25, 0, 739.99, 0, 659.25, 554.37, 493.88, 0,
+      659.25, 0, 554.37, 493.88, 0, 659.25, 739.99, 830.61, 659.25, 0, 554.37, 493.88, 0, 415.30, 493.88, 554.37,
+      554.37, 0, 659.25, 739.99, 0, 830.61, 739.99, 659.25, 554.37, 0, 493.88, 0, 554.37, 659.25, 739.99, 0,
+      830.61, 0, 739.99, 659.25, 622.25, 0, 659.25, 739.99, 987.77, 0, 830.61, 739.99, 659.25, 622.25, 554.37, 622.25
+    ],
+    stringNotes: [1108.73, 987.77, 830.61, 1244.5]
+  }
+];
+
+function updateDiscoTrackUI() {
+  const trk = DISCLOSURE_TRACKS[discoTrackIndex] || DISCLOSURE_TRACKS[0];
+  const badge = document.getElementById("discoTrackBadge");
+  if (badge) badge.textContent = `${discoTrackIndex + 1}/${DISCLOSURE_TRACKS.length}`;
+  const settingsBtn = document.getElementById("settingsTrackCycleButton");
+  if (settingsBtn) {
+    settingsBtn.textContent = `🎵 Track ${discoTrackIndex + 1}/${DISCLOSURE_TRACKS.length} · ${trk.name} ⏭`;
+  }
+}
+
+function cycleDiscoTrack() {
+  discoTrackIndex = (discoTrackIndex + 1) % DISCLOSURE_TRACKS.length;
+  updateDiscoTrackUI();
+  if (discoTimerId) {
+    stopDiscoHouseGroove();
+    startDiscoHouseGroove();
+  } else {
+    state.voice.discoEnabled = true;
+    startDiscoHouseGroove();
+  }
+}
+
+function ensureDiscoAudioGraph() {
+  const Ctx = window.AudioContext || window.webkitAudioContext;
+  if (!Ctx) return null;
+  if (!discoCtx || discoCtx.state === "closed") {
+    discoCtx = new Ctx();
+    discoMaster = null;
+    discoNoiseBuf = null;
+  }
+  if (!discoMaster) {
+    const lowBoost = discoCtx.createBiquadFilter();
+    lowBoost.type = "lowshelf";
+    lowBoost.frequency.value = 92;
+    lowBoost.gain.value = 7.0;
+
+    const highAir = discoCtx.createBiquadFilter();
+    highAir.type = "highshelf";
+    highAir.frequency.value = 6600;
+    highAir.gain.value = 3.8;
+
+    const comp = discoCtx.createDynamicsCompressor();
+    comp.threshold.value = -16;
+    comp.knee.value = 5;
+    comp.ratio.value = 5.5;
+    comp.attack.value = 0.002;
+    comp.release.value = 0.11;
+
+    const outGain = discoCtx.createGain();
+    outGain.gain.value = 0.94;
+
+    lowBoost.connect(highAir);
+    highAir.connect(comp);
+    comp.connect(outGain);
+    outGain.connect(discoCtx.destination);
+    discoMaster = lowBoost;
+  }
+  if (!discoNoiseBuf) {
+    const len = Math.floor(discoCtx.sampleRate * 0.5);
+    discoNoiseBuf = discoCtx.createBuffer(1, len, discoCtx.sampleRate);
+    const data = discoNoiseBuf.getChannelData(0);
+    for (let i = 0; i < len; i += 1) {
+      data[i] = Math.random() * 2 - 1;
+    }
+  }
+  return discoCtx;
+}
+
+function triggerNoiseBurst(ctx, dest, time, duration, filterType, freq, q, peakGain) {
+  if (!discoNoiseBuf) return;
+  const src = ctx.createBufferSource();
+  src.buffer = discoNoiseBuf;
+  const flt = ctx.createBiquadFilter();
+  flt.type = filterType;
+  flt.frequency.setValueAtTime(freq, time);
+  flt.Q.setValueAtTime(q, time);
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(Math.max(0.0001, peakGain), time);
+  g.gain.exponentialRampToValueAtTime(0.0005, time + duration);
+  src.connect(flt);
+  flt.connect(g);
+  g.connect(dest);
+  src.start(time);
+  src.stop(time + duration + 0.01);
+}
 
 function startDiscoHouseGroove() {
   if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) return;
   const btn = document.getElementById("discoGrooveButton");
   btn?.classList.add("active");
   btn?.setAttribute("aria-pressed", "true");
+  updateDiscoTrackUI();
   if (discoTimerId) return;
   try {
-    const Ctx = window.AudioContext || window.webkitAudioContext;
-    if (!Ctx) return;
-    if (!discoCtx || discoCtx.state === "closed") {
-      discoCtx = new Ctx();
+    const ctx = ensureDiscoAudioGraph();
+    if (!ctx) return;
+    if (ctx.state === "suspended") {
+      ctx.resume().catch(() => {});
     }
-    if (discoCtx.state === "suspended") {
-      discoCtx.resume().catch(() => {});
-    }
-    const bassNotes = [55.0, 110.0, 98.0, 110.0, 82.41, 110.0, 98.0, 123.47, 65.41, 130.81, 110.0, 130.81, 73.42, 146.83, 130.81, 98.0];
-    const chordProg = [
-      [220.0, 261.63, 329.63, 392.0],
-      [174.61, 220.0, 261.63, 329.63],
-      [146.83, 174.61, 220.0, 261.63],
-      [196.0, 246.94, 293.66, 349.23]
-    ];
+    const trk = DISCLOSURE_TRACKS[discoTrackIndex] || DISCLOSURE_TRACKS[0];
     discoStep = 0;
     discoTimerId = setInterval(() => {
-      if (state.voice.muted || state.voice.discoEnabled === false || (state.screen !== "deck" && !(state.screen === "timer" && state.timer.running))) {
+      if (state.voice.muted || state.voice.discoEnabled === false) {
         stopDiscoHouseGroove();
         return;
       }
@@ -2974,76 +3136,199 @@ function startDiscoHouseGroove() {
         discoCtx?.resume?.().catch(() => {});
         return;
       }
-      const now = discoCtx.currentTime;
-      const step = discoStep % 16;
-      const bar = Math.floor(discoStep / 16) % 4;
-      const duck = state.voice.currentAudio ? 0.25 : 1.0;
+      const dest = discoMaster || discoCtx.destination;
+      const step64 = discoStep % 64;
+      const step = step64 % 16;
+      const bar = Math.floor(step64 / 16);
+      const swingOffset = step % 2 === 1 ? trk.swingSec : 0;
+      const now = discoCtx.currentTime + swingOffset;
+      const screenMix = state.screen === "deck" ? 1.0 : state.screen === "results" || state.screen === "leaderboard" ? 0.58 : 0.38;
+      const duck = (state.voice.currentAudio ? 0.22 : 1.0) * screenMix;
+      const isKickStep = step % 4 === 0 || (bar % 2 === 1 && step === 14);
+      const sidechain = step % 4 === 0 ? 0.40 : step % 4 === 1 ? 0.78 : 1.0;
 
-      if (step % 4 === 0) {
-        const kickOsc = discoCtx.createOscillator();
-        const kickGain = discoCtx.createGain();
-        kickOsc.type = "sine";
-        kickOsc.frequency.setValueAtTime(145, now);
-        kickOsc.frequency.exponentialRampToValueAtTime(46, now + 0.09);
-        kickGain.gain.setValueAtTime(0.16 * duck, now);
-        kickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.19);
-        kickOsc.connect(kickGain).connect(discoCtx.destination);
-        kickOsc.start(now);
-        kickOsc.stop(now + 0.2);
+      // 1. PUNCHY DISCLOSURE UKG / DEEP-HOUSE KICK (Sub + Mid-Punch + Beater Click)
+      if (isKickStep) {
+        const kVel = (step % 4 === 0 ? 0.72 : 0.44) * duck;
+        const kickSub = discoCtx.createOscillator();
+        const kickSubGain = discoCtx.createGain();
+        kickSub.type = "sine";
+        kickSub.frequency.setValueAtTime(195, now);
+        kickSub.frequency.exponentialRampToValueAtTime(62, now + 0.028);
+        kickSub.frequency.exponentialRampToValueAtTime(44, now + 0.15);
+        kickSubGain.gain.setValueAtTime(kVel, now);
+        kickSubGain.gain.exponentialRampToValueAtTime(0.001, now + 0.21);
+        kickSub.connect(kickSubGain).connect(dest);
+        kickSub.start(now);
+        kickSub.stop(now + 0.22);
+
+        const kickPunch = discoCtx.createOscillator();
+        const kickPunchGain = discoCtx.createGain();
+        kickPunch.type = "triangle";
+        kickPunch.frequency.setValueAtTime(320, now);
+        kickPunch.frequency.exponentialRampToValueAtTime(86, now + 0.02);
+        kickPunchGain.gain.setValueAtTime(kVel * 0.54, now);
+        kickPunchGain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
+        kickPunch.connect(kickPunchGain).connect(dest);
+        kickPunch.start(now);
+        kickPunch.stop(now + 0.06);
+
+        triggerNoiseBurst(discoCtx, dest, now, 0.014, "bandpass", 2500, 1.8, kVel * 0.36);
+
+        if (step % 4 === 0 && state.screen === "deck" && els.deckCard && !els.deckCard.classList.contains("swiping")) {
+          els.deckCard.classList.remove("beat-thump");
+          void els.deckCard.offsetWidth;
+          els.deckCard.classList.add("beat-thump");
+        }
       }
 
-      if (step % 4 === 2 || step === 4 || step === 12) {
-        const hatOsc = discoCtx.createOscillator();
-        const hatFilter = discoCtx.createBiquadFilter();
-        const hatGain = discoCtx.createGain();
-        hatOsc.type = "square";
-        hatOsc.frequency.setValueAtTime(step % 4 === 2 ? 6400 : 1900, now);
-        hatFilter.type = "highpass";
-        hatFilter.frequency.setValueAtTime(step % 4 === 2 ? 5200 : 1400, now);
-        const dur = step % 4 === 2 ? 0.07 : 0.045;
-        hatGain.gain.setValueAtTime(0.025 * duck, now);
-        hatGain.gain.exponentialRampToValueAtTime(0.0008, now + dur);
-        hatOsc.connect(hatFilter).connect(hatGain).connect(discoCtx.destination);
-        hatOsc.start(now);
-        hatOsc.stop(now + dur + 0.01);
+      // 2. LAYERED 909 HANDCLAP + RIM/SNARE ON BEATS 2 & 4
+      if (step === 4 || step === 12) {
+        triggerNoiseBurst(discoCtx, dest, now, 0.022, "bandpass", 1250, 1.4, 0.34 * duck);
+        triggerNoiseBurst(discoCtx, dest, now + 0.011, 0.024, "bandpass", 1350, 1.4, 0.36 * duck);
+        triggerNoiseBurst(discoCtx, dest, now + 0.022, 0.135, "bandpass", 1180, 1.1, 0.40 * duck);
+        const snOsc = discoCtx.createOscillator();
+        const snGain = discoCtx.createGain();
+        snOsc.type = "triangle";
+        snOsc.frequency.setValueAtTime(230, now);
+        snOsc.frequency.exponentialRampToValueAtTime(112, now + 0.045);
+        snGain.gain.setValueAtTime(0.25 * duck, now);
+        snGain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+        snOsc.connect(snGain).connect(dest);
+        snOsc.start(now);
+        snOsc.stop(now + 0.08);
       }
 
-      const bassFreq = bassNotes[step];
-      if (bassFreq) {
-        const bassOsc = discoCtx.createOscillator();
-        const bassFilter = discoCtx.createBiquadFilter();
-        const bassGain = discoCtx.createGain();
-        bassOsc.type = "sawtooth";
-        bassOsc.frequency.setValueAtTime(bassFreq, now);
-        bassFilter.type = "lowpass";
-        bassFilter.Q.setValueAtTime(4.5, now);
-        bassFilter.frequency.setValueAtTime(220, now);
-        bassFilter.frequency.exponentialRampToValueAtTime(980, now + 0.03);
-        bassFilter.frequency.exponentialRampToValueAtTime(260, now + 0.11);
-        bassGain.gain.setValueAtTime(0.055 * duck, now);
-        bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.115);
-        bassOsc.connect(bassFilter).connect(bassGain).connect(discoCtx.destination);
-        bassOsc.start(now);
-        bassOsc.stop(now + 0.12);
+      // 3. SKIPPING UK GARAGE GHOST RIMSHOTS & SIZZLING 909 OPEN/CLOSED HATS
+      if (step === 7 || step === 9 || (bar === 3 && (step === 11 || step === 15))) {
+        const rimOsc = discoCtx.createOscillator();
+        const rimFlt = discoCtx.createBiquadFilter();
+        const rimGain = discoCtx.createGain();
+        rimOsc.type = "square";
+        rimOsc.frequency.setValueAtTime(880, now);
+        rimOsc.frequency.exponentialRampToValueAtTime(420, now + 0.018);
+        rimFlt.type = "bandpass";
+        rimFlt.frequency.setValueAtTime(1700, now);
+        rimFlt.Q.setValueAtTime(4.5, now);
+        rimGain.gain.setValueAtTime(0.20 * duck, now);
+        rimGain.gain.exponentialRampToValueAtTime(0.001, now + 0.032);
+        rimOsc.connect(rimFlt).connect(rimGain).connect(dest);
+        rimOsc.start(now);
+        rimOsc.stop(now + 0.035);
+      }
+      if (step % 4 === 2) {
+        triggerNoiseBurst(discoCtx, dest, now, 0.145, "highpass", 6600, 0.9, 0.22 * duck);
+      } else if (step % 2 === 1) {
+        triggerNoiseBurst(discoCtx, dest, now, 0.034, "highpass", 8600, 0.8, 0.11 * duck);
       }
 
-      if (step === 2 || step === 6 || step === 11 || step === 14) {
-        const chord = chordProg[bar];
-        chord.forEach((freq) => {
+      // 4. DISCLOSURE DEEP SUB + KORG M1 ORGAN-2 / FM PERCUSSIVE BASSLINE
+      const bassFreq = trk.bassPattern[step64];
+      if (bassFreq > 0) {
+        const bGainAmt = 0.44 * duck * sidechain;
+        const subOsc = discoCtx.createOscillator();
+        const subGain = discoCtx.createGain();
+        subOsc.type = "sine";
+        subOsc.frequency.setValueAtTime(bassFreq, now);
+        subGain.gain.setValueAtTime(bGainAmt, now);
+        subGain.gain.exponentialRampToValueAtTime(0.002, now + 0.135);
+        subOsc.connect(subGain).connect(dest);
+        subOsc.start(now);
+        subOsc.stop(now + 0.14);
+
+        const m1Osc = discoCtx.createOscillator();
+        const m1Gain = discoCtx.createGain();
+        m1Osc.type = "sine";
+        m1Osc.frequency.setValueAtTime(bassFreq * 2.998, now);
+        m1Gain.gain.setValueAtTime(bGainAmt * 0.46, now);
+        m1Gain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+        m1Osc.connect(m1Gain).connect(dest);
+        m1Osc.start(now);
+        m1Osc.stop(now + 0.07);
+
+        const sawOsc = discoCtx.createOscillator();
+        const sawFlt = discoCtx.createBiquadFilter();
+        const sawGain = discoCtx.createGain();
+        sawOsc.type = "sawtooth";
+        sawOsc.frequency.setValueAtTime(bassFreq, now);
+        sawFlt.type = "lowpass";
+        sawFlt.Q.setValueAtTime(6.0, now);
+        sawFlt.frequency.setValueAtTime(160, now);
+        sawFlt.frequency.exponentialRampToValueAtTime(1750, now + 0.018);
+        sawFlt.frequency.exponentialRampToValueAtTime(220, now + 0.115);
+        sawGain.gain.setValueAtTime(bGainAmt * 0.62, now);
+        sawGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+        sawOsc.connect(sawFlt).connect(sawGain).connect(dest);
+        sawOsc.start(now);
+        sawOsc.stop(now + 0.125);
+      }
+
+      // 5. SIGNATURE LATCH POLYRHYTHMIC JUNO-106 CHORD STUTTER & TOP BELL PLUCK
+      if (trk.stabSteps.includes(step)) {
+        const chord = trk.chordVoicings[bar];
+        const stabDur = step === 6 || step === 14 ? 0.21 : 0.15;
+        const chordFlt = discoCtx.createBiquadFilter();
+        const chordGain = discoCtx.createGain();
+        chordFlt.type = "lowpass";
+        chordFlt.Q.setValueAtTime(2.8, now);
+        chordFlt.frequency.setValueAtTime(480, now);
+        chordFlt.frequency.exponentialRampToValueAtTime(2950, now + 0.042);
+        chordFlt.frequency.exponentialRampToValueAtTime(760, now + stabDur);
+        chordGain.gain.setValueAtTime(0.052 * duck * sidechain, now);
+        chordGain.gain.exponentialRampToValueAtTime(0.001, now + stabDur);
+        chordFlt.connect(chordGain).connect(dest);
+        chord.forEach((freq, idx) => {
           const cOsc = discoCtx.createOscillator();
-          const cGain = discoCtx.createGain();
-          cOsc.type = "triangle";
+          cOsc.type = idx % 2 === 0 ? "sawtooth" : "triangle";
           cOsc.frequency.setValueAtTime(freq, now);
-          cGain.gain.setValueAtTime(0.018 * duck, now);
-          cGain.gain.exponentialRampToValueAtTime(0.0008, now + 0.14);
-          cOsc.connect(cGain).connect(discoCtx.destination);
+          cOsc.detune.setValueAtTime((idx - 2) * 7, now);
+          cOsc.connect(chordFlt);
           cOsc.start(now);
-          cOsc.stop(now + 0.15);
+          cOsc.stop(now + stabDur + 0.01);
         });
       }
 
+      // 6. DISCLOSURE PITCH-GLIDING VOCAL-CHOP / SYNTH LEAD HOOK & STRINGS
+      const leadFreq = trk.leadHook[step64];
+      if (leadFreq > 0) {
+        const lOsc = discoCtx.createOscillator();
+        const lFlt = discoCtx.createBiquadFilter();
+        const lGain = discoCtx.createGain();
+        lOsc.type = "sawtooth";
+        lOsc.frequency.setValueAtTime(leadFreq * 0.94, now);
+        lOsc.frequency.exponentialRampToValueAtTime(leadFreq, now + 0.024);
+        lFlt.type = "bandpass";
+        lFlt.frequency.setValueAtTime(1750, now);
+        lFlt.Q.setValueAtTime(2.1, now);
+        lGain.gain.setValueAtTime(0.078 * duck * sidechain, now);
+        lGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
+        lOsc.connect(lFlt).connect(lGain).connect(dest);
+        lOsc.start(now);
+        lOsc.stop(now + 0.16);
+      }
+
+      if (step === 2 || step === 10) {
+        const sFreq = trk.stringNotes[bar];
+        const sOsc = discoCtx.createOscillator();
+        const sFlt = discoCtx.createBiquadFilter();
+        const sGain = discoCtx.createGain();
+        sOsc.type = "sawtooth";
+        sOsc.frequency.setValueAtTime(sFreq, now);
+        if (bar === 3 && step === 10) {
+          sOsc.frequency.exponentialRampToValueAtTime(sFreq * 0.5, now + 0.34);
+        }
+        sFlt.type = "lowpass";
+        sFlt.frequency.setValueAtTime(3400, now);
+        sGain.gain.setValueAtTime(0.001, now);
+        sGain.gain.linearRampToValueAtTime(0.036 * duck, now + 0.05);
+        sGain.gain.exponentialRampToValueAtTime(0.0008, now + 0.36);
+        sOsc.connect(sFlt).connect(sGain).connect(dest);
+        sOsc.start(now);
+        sOsc.stop(now + 0.37);
+      }
+
       discoStep += 1;
-    }, 121);
+    }, trk.stepMs);
   } catch {}
 }
 
@@ -3065,6 +3350,27 @@ function toggleDiscoGroove() {
   } else {
     stopDiscoHouseGroove();
   }
+}
+
+const DEFAULT_SPOTIFY_EMBED = "https://open.spotify.com/embed/track/51ODNNDZm21HU7wI7cccRr?utm_source=generator&theme=0";
+const DEFAULT_APPLE_EMBED = "https://embed.music.apple.com/us/album/settle/1440859705";
+
+function renderMusicStreamEmbed(rawUrl) {
+  const drawer = document.getElementById("musicStreamDrawer");
+  const host = document.getElementById("musicStreamEmbedHost");
+  const input = document.getElementById("musicStreamUrlInput");
+  if (!drawer || !host) return;
+  drawer.classList.remove("hidden");
+  let embedUrl = String(rawUrl || "").trim();
+  if (!embedUrl) embedUrl = DEFAULT_SPOTIFY_EMBED;
+  if (embedUrl.includes("open.spotify.com/") && !embedUrl.includes("/embed/")) {
+    embedUrl = embedUrl.replace("open.spotify.com/", "open.spotify.com/embed/");
+  } else if (embedUrl.includes("music.apple.com/") && !embedUrl.includes("embed.music.apple.com/")) {
+    embedUrl = embedUrl.replace("music.apple.com/", "embed.music.apple.com/");
+  }
+  if (input && rawUrl) input.value = rawUrl;
+  stopDiscoHouseGroove();
+  host.innerHTML = `<iframe src="${embedUrl}" width="100%" height="84" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:12px;border:1px solid rgba(69,234,255,0.35);"></iframe>`;
 }
 
 function toggleMute() {
@@ -3134,10 +3440,15 @@ function navigateTo(screen) {
     }
     renderDeck();
     startDiscoHouseGroove();
-  } else if (!(screen === "timer" && state.timer.running)) {
-    stopDiscoHouseGroove();
+  } else if (screen === "instructions" || screen === "camera" || screen === "timer" || screen === "results" || screen === "leaderboard") {
+    startDiscoHouseGroove();
   }
-
+  const activeScreenEl = document.getElementById(`${screen}Screen`);
+  if (activeScreenEl) {
+    activeScreenEl.classList.remove("screen-enter-cascade");
+    void activeScreenEl.offsetWidth;
+    activeScreenEl.classList.add("screen-enter-cascade");
+  }
   if (!state.voice.muted && !SELFTEST_MODE) {
     if (screen === "instructions" || screen === "camera" || (screen === "timer" && !state.timer.running)) {
       speakHost("start");
@@ -7170,40 +7481,148 @@ function closeDeck() {
   navigateTo(state.deckReturn || "welcome");
 }
 
+function populateDeckAmbientFloaters() {
+  const host = document.getElementById("deckAmbientFloaters");
+  if (!host || host.childElementCount > 0) return;
+  const icons = [
+    `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="rgba(69,234,255,0.18)" stroke="#45eaff" stroke-width="1.6"/><circle cx="9" cy="9" r="2.2" fill="#ffffff" opacity="0.85"/></svg>`,
+    `<svg viewBox="0 0 24 24"><path d="M12 2 l2.6 7.4 l7.4 2.6 l-7.4 2.6 l-2.6 7.4 l-2.6-7.4 l-7.4-2.6 l7.4-2.6 z" fill="#ffd35c"/></svg>`,
+    `<svg viewBox="0 0 24 24"><path d="M12 3 C12 3 6 10.5 6 15 a6 6 0 0 0 12 0 c0-4.5-6-12-6-12z" fill="rgba(57,245,188,0.35)" stroke="#39f5bc" stroke-width="1.6"/></svg>`,
+    `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7" fill="rgba(192,132,252,0.22)" stroke="#c084fc" stroke-width="1.5"/><circle cx="9.5" cy="9.5" r="1.8" fill="#fff"/></svg>`,
+    `<svg viewBox="0 0 24 24"><rect x="4" y="8" width="16" height="9" rx="4" fill="rgba(57,245,188,0.28)" stroke="#39f5bc" stroke-width="1.5"/><circle cx="8" cy="12" r="1" fill="#fff"/><circle cx="15" cy="13" r="1.2" fill="#fff"/></svg>`,
+    `<svg viewBox="0 0 24 24"><path d="M12 3 l2 6 l6 2 l-6 2 l-2 6 l-2-6 l-6-2 l6-2 z" fill="#45eaff"/></svg>`
+  ];
+  const positions = [
+    { left: "4%", top: "8%", delay: "0s", size: 22 },
+    { left: "88%", top: "12%", delay: "0.4s", size: 20 },
+    { left: "8%", top: "74%", delay: "0.9s", size: 18 },
+    { left: "86%", top: "68%", delay: "1.3s", size: 24 },
+    { left: "18%", top: "38%", delay: "0.6s", size: 16 },
+    { left: "78%", top: "40%", delay: "1.1s", size: 19 }
+  ];
+  positions.forEach((pos, idx) => {
+    const node = document.createElement("span");
+    node.className = "deck-floater";
+    node.style.left = pos.left;
+    node.style.top = pos.top;
+    node.style.width = `${pos.size}px`;
+    node.style.height = `${pos.size}px`;
+    node.style.animationDelay = pos.delay;
+    node.innerHTML = icons[idx % icons.length];
+    host.appendChild(node);
+  });
+}
+
+function spawnDragShakeConfetti(dx, velocity = 12) {
+  const host = document.getElementById("deckParticleBurst");
+  if (!host) return;
+  if (host.childElementCount > 42) return;
+  const shapes = [
+    // Iridescent soap bubble
+    `<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="rgba(69,234,255,0.28)" stroke="#45eaff" stroke-width="1.8"/><circle cx="7.5" cy="7.5" r="2" fill="#fff"/></svg>`,
+    // Golden 4-point sparkle
+    `<svg viewBox="0 0 20 20"><path d="M10 1 l2.4 6.6 l6.6 2.4 l-6.6 2.4 l-2.4 6.6 l-2.4-6.6 l-6.6-2.4 l6.6-2.4 z" fill="#ffd35c"/></svg>`,
+    // Emerald droplet
+    `<svg viewBox="0 0 20 20"><path d="M10 2 C10 2 5 8.5 5 12.5 a5 5 0 0 0 10 0 C15 8.5 10 2 10 2z" fill="#39f5bc"/></svg>`,
+    // Foam suds cluster
+    `<svg viewBox="0 0 20 20"><circle cx="7" cy="11" r="4.5" fill="#e0faff"/><circle cx="13" cy="10" r="3.8" fill="#aef4ff"/><circle cx="10" cy="6.5" r="3.2" fill="#fff"/></svg>`
+  ];
+  const count = Math.min(3, 1 + Math.floor(Math.abs(velocity) / 14));
+  for (let i = 0; i < count; i += 1) {
+    const p = document.createElement("span");
+    p.className = "deck-particle is-confetti";
+    const sideX = 50 + (Math.random() * 56 - 28) + Math.max(-25, Math.min(25, dx * 0.15));
+    const sideY = 26 + Math.random() * 44;
+    p.style.left = `${sideX}%`;
+    p.style.top = `${sideY}%`;
+    const spreadX = (dx >= 0 ? 1 : -1) * (24 + Math.random() * 58) + (Math.random() * 40 - 20);
+    const spreadY = -28 - Math.random() * 54;
+    const rot = Math.round((Math.random() - 0.5) * 260);
+    p.style.setProperty("--dx", `${Math.round(spreadX)}px`);
+    p.style.setProperty("--dy", `${Math.round(spreadY)}px`);
+    p.style.setProperty("--rot", `${rot}deg`);
+    p.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+    host.appendChild(p);
+    setTimeout(() => p.remove(), 680);
+  }
+}
+
 function renderDeckIllustration(catRaw, finished = false) {
+  populateDeckAmbientFloaters();
   const el = document.getElementById("deckIllustration");
   if (!el) return;
   if (finished) {
-    el.innerHTML = `<svg viewBox="0 0 220 96" role="presentation">
-      <circle cx="110" cy="48" r="36" fill="rgba(57,245,188,0.16)" stroke="#39f5bc" stroke-width="2"/>
-      <path class="sparkle-spin" d="M110 20 l7 18 l19 2 l-14 13 l4 19 l-16-10 l-16 10 l4-19 l-14-13 l19-2 z" fill="#ffd35c" stroke="#45eaff" stroke-width="1.5"/>
+    el.innerHTML = `<svg viewBox="0 0 240 104" role="presentation">
+      <defs>
+        <linearGradient id="trophyGold" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#ffe57f"/><stop offset="100%" stop-color="#ff9f1c"/>
+        </linearGradient>
+      </defs>
+      <circle cx="120" cy="52" r="42" fill="rgba(57,245,188,0.15)" stroke="#39f5bc" stroke-width="2" stroke-dasharray="6 4" class="sparkle-spin"/>
+      <g class="sweep-arc">
+        <path d="M96 28 h48 v18 c0 14-10 24-24 24 s-24-10-24-24 z" fill="url(#trophyGold)" stroke="#fff" stroke-width="1.5"/>
+        <path d="M96 32 h-10 c0 10 4 16 12 16 M144 32 h10 c0 10-4 16-12 16" fill="none" stroke="#ffd35c" stroke-width="2.5" stroke-linecap="round"/>
+        <rect x="114" y="70" width="12" height="10" rx="2" fill="#ffd35c"/>
+        <rect x="102" y="80" width="36" height="6" rx="3" fill="#39f5bc"/>
+      </g>
+      <path class="sparkle-spin" d="M64 26 l4 10 l10 4 l-10 4 l-4 10 l-4-10 l-10-4 l10-4 z" fill="#ffd35c"/>
+      <path class="sparkle-spin" d="M178 24 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#45eaff" style="animation-delay:.35s"/>
+      <circle class="bubble-rise" cx="76" cy="74" r="6" fill="rgba(69,234,255,0.35)" stroke="#45eaff" stroke-width="1.5"/>
+      <circle class="bubble-rise" cx="168" cy="70" r="5" fill="rgba(57,245,188,0.35)" stroke="#39f5bc" stroke-width="1.5" style="animation-delay:.4s"/>
     </svg>`;
     return;
   }
   if (catRaw === "product") {
-    el.innerHTML = `<svg viewBox="0 0 220 96" role="presentation">
-      <ellipse cx="110" cy="78" rx="48" ry="8" fill="rgba(69,234,255,0.18)"/>
-      <path d="M96 22 h28 M102 22 v18 l-22 34 a6 6 0 0 0 5 9 h50 a6 6 0 0 0 5-9 l-22-34 v-18" fill="rgba(57,245,188,0.18)" stroke="#45eaff" stroke-width="2.5" stroke-linejoin="round"/>
-      <path d="M88 64 q22 -8 44 0 l6 9 a4 4 0 0 1 -4 6 h-48 a4 4 0 0 1 -4 -6 z" fill="rgba(57,245,188,0.45)"/>
-      <circle class="bubble-rise" cx="104" cy="56" r="4" fill="#39f5bc"/>
-      <circle class="bubble-rise" cx="118" cy="46" r="3" fill="#45eaff" style="animation-delay:.4s"/>
-      <circle class="bubble-rise" cx="110" cy="36" r="2.5" fill="#ffd35c" style="animation-delay:.8s"/>
+    el.innerHTML = `<svg viewBox="0 0 240 104" role="presentation">
+      <ellipse cx="120" cy="88" rx="64" ry="8" fill="rgba(69,234,255,0.2)"/>
+      <!-- Animated Spray Nozzle + Mist -->
+      <g class="sweep-arc">
+        <path d="M52 34 h22 l4 8 h-18 z" fill="#45eaff"/>
+        <rect x="54" y="42" width="16" height="36" rx="6" fill="rgba(69,234,255,0.32)" stroke="#45eaff" stroke-width="2"/>
+        <path d="M76 38 l16 -6 M78 42 l18 0 M76 46 l16 6" stroke="#39f5bc" stroke-width="2" stroke-linecap="round" stroke-dasharray="3 3"/>
+      </g>
+      <!-- Bubbling Alchemist Flask with sloshing liquid -->
+      <path d="M118 18 h24 M124 18 v16 l-24 38 a7 7 0 0 0 6 10 h48 a7 7 0 0 0 6-10 l-24-38 v-16" fill="rgba(57,245,188,0.14)" stroke="#45eaff" stroke-width="2.5" stroke-linejoin="round"/>
+      <path class="liquid-slosh" d="M108 64 q14 -9 26 0 t24 0 l5 10 a5 5 0 0 1 -4 7 h-52 a5 5 0 0 1 -4 -7 z" fill="rgba(57,245,188,0.58)"/>
+      <circle class="bubble-rise" cx="122" cy="62" r="4.5" fill="#39f5bc"/>
+      <circle class="bubble-rise" cx="138" cy="52" r="3.8" fill="#45eaff" style="animation-delay:.35s"/>
+      <circle class="bubble-rise" cx="128" cy="40" r="3.2" fill="#ffd35c" style="animation-delay:.7s"/>
+      <circle class="bubble-rise" cx="144" cy="30" r="5" fill="rgba(69,234,255,0.35)" stroke="#fff" stroke-width="1.2" style="animation-delay:.2s"/>
+      <path class="sparkle-spin" d="M184 28 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#ffd35c"/>
     </svg>`;
   } else if (catRaw === "technique") {
-    el.innerHTML = `<svg viewBox="0 0 220 96" role="presentation">
-      <rect x="46" y="16" width="128" height="64" rx="12" fill="rgba(16,44,68,0.75)" stroke="rgba(99,218,255,0.35)" stroke-width="1.5"/>
-      <path class="sweep-arc" d="M66 32 h88 l-88 16 h88 l-88 16 h88" fill="none" stroke="#45eaff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="6 4"/>
-      <circle class="sparkle-spin" cx="154" cy="64" r="9" fill="#39f5bc"/>
+    el.innerHTML = `<svg viewBox="0 0 240 104" role="presentation">
+      <rect x="34" y="14" width="172" height="74" rx="14" fill="rgba(12,36,58,0.85)" stroke="rgba(69,234,255,0.45)" stroke-width="1.8"/>
+      <path d="M56 32 h128 l-128 20 h128 l-128 20 h128" fill="none" stroke="rgba(69,234,255,0.32)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 5"/>
+      <!-- Animated Pro Squeegee Gliding Across Surface -->
+      <g class="sweep-arc">
+        <rect x="92" y="24" width="56" height="11" rx="4" fill="#45eaff" stroke="#fff" stroke-width="1.2"/>
+        <rect x="115" y="35" width="10" height="24" rx="3" fill="#ffd35c"/>
+        <circle cx="96" cy="29" r="3.5" fill="#fff"/>
+        <circle cx="144" cy="29" r="3.5" fill="#fff"/>
+      </g>
+      <path class="sparkle-spin" d="M62 28 l3 8 l8 3 l-8 3 l-3 8 l-3-8 l-8-3 l8-3 z" fill="#39f5bc"/>
+      <path class="sparkle-spin" d="M178 58 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#ffd35c" style="animation-delay:.4s"/>
+      <circle class="bubble-rise" cx="84" cy="68" r="4.5" fill="rgba(69,234,255,0.4)" stroke="#45eaff" stroke-width="1.4"/>
     </svg>`;
   } else {
-    el.innerHTML = `<svg viewBox="0 0 220 96" role="presentation">
-      <rect x="42" y="20" width="136" height="58" rx="12" fill="rgba(14,40,62,0.8)" stroke="#45eaff" stroke-width="2"/>
+    el.innerHTML = `<svg viewBox="0 0 240 104" role="presentation">
+      <rect x="32" y="16" width="176" height="70" rx="14" fill="rgba(10,34,54,0.85)" stroke="#45eaff" stroke-width="2"/>
+      <path d="M48 72 l34 -44 M72 72 l34 -44" stroke="rgba(255,255,255,0.12)" stroke-width="6" stroke-linecap="round"/>
+      <!-- Animated Scrubbing Sponge + Foam Suds Trail -->
       <g class="sweep-arc">
-        <rect x="86" y="36" width="48" height="24" rx="6" fill="#39f5bc" opacity="0.88"/>
-        <rect x="90" y="42" width="40" height="5" rx="2.5" fill="#041824" opacity="0.45"/>
+        <circle cx="88" cy="58" r="6" fill="#e0faff" opacity="0.85"/>
+        <circle cx="98" cy="62" r="5" fill="#fff" opacity="0.9"/>
+        <circle cx="150" cy="58" r="6.5" fill="#e0faff" opacity="0.85"/>
+        <rect x="92" y="32" width="58" height="28" rx="8" fill="#ffd35c" stroke="#fff" stroke-width="1.5"/>
+        <rect x="92" y="32" width="58" height="9" rx="4" fill="#39f5bc"/>
+        <circle cx="106" cy="48" r="2.2" fill="#b47b00" opacity="0.55"/>
+        <circle cx="122" cy="51" r="2.6" fill="#b47b00" opacity="0.55"/>
+        <circle cx="136" cy="47" r="2" fill="#b47b00" opacity="0.55"/>
       </g>
-      <path class="sparkle-spin" d="M62 32 l3 8 l8 3 l-8 3 l-3 8 l-3-8 l-8-3 l8-3 z" fill="#ffd35c"/>
-      <path class="sparkle-spin" d="M158 28 l2.5 6 l6 2.5 l-6 2.5 l-2.5 6 l-2.5-6 l-6-2.5 l6-2.5 z" fill="#45eaff" style="animation-delay:.5s"/>
+      <path class="sparkle-spin" d="M58 30 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#ffd35c"/>
+      <path class="sparkle-spin" d="M182 26 l3 8 l8 3 l-8 3 l-3 8 l-3-8 l-8-3 l8-3 z" fill="#45eaff" style="animation-delay:.45s"/>
+      <circle class="bubble-rise" cx="166" cy="66" r="5" fill="rgba(69,234,255,0.35)" stroke="#45eaff" stroke-width="1.5"/>
     </svg>`;
   }
 }
@@ -7212,22 +7631,34 @@ function triggerDeckParticleBurst(isCorrect = true) {
   const host = document.getElementById("deckParticleBurst");
   if (!host) return;
   host.innerHTML = "";
-  const palette = isCorrect
-    ? ["#39f5bc", "#45eaff", "#ffd35c", "#c084fc"]
-    : ["#ff5b76", "#ffd35c"];
-  const count = isCorrect ? 18 : 8;
+  const shapes = isCorrect
+    ? [
+        `<svg viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="rgba(69,234,255,0.32)" stroke="#45eaff" stroke-width="2"/><circle cx="8" cy="8" r="2.2" fill="#fff"/></svg>`,
+        `<svg viewBox="0 0 22 22"><path d="M11 1 l2.8 7.2 l7.2 2.8 l-7.2 2.8 l-2.8 7.2 l-2.8-7.2 l-7.2-2.8 l7.2-2.8 z" fill="#ffd35c"/></svg>`,
+        `<svg viewBox="0 0 22 22"><path d="M11 2 C11 2 5 9.5 5 14 a6 6 0 0 0 12 0 C17 9.5 11 2 11 2z" fill="#39f5bc"/></svg>`,
+        `<svg viewBox="0 0 22 22"><rect x="3" y="6" width="16" height="10" rx="4" fill="#ffd35c" stroke="#39f5bc" stroke-width="2"/></svg>`,
+        `<svg viewBox="0 0 22 22"><circle cx="8" cy="12" r="5" fill="#fff"/><circle cx="14" cy="11" r="4.2" fill="#aef4ff"/><circle cx="11" cy="7" r="3.6" fill="#39f5bc"/></svg>`
+      ]
+    : [
+        `<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="6" fill="#ff5b76"/></svg>`,
+        `<svg viewBox="0 0 20 20"><path d="M10 2 l8 15 h-16 z" fill="#ffd35c"/></svg>`
+      ];
+  const count = isCorrect ? 30 : 12;
   for (let i = 0; i < count; i += 1) {
     const dot = document.createElement("span");
-    dot.className = "deck-particle";
-    const angle = (Math.PI * 2 * i) / count;
-    const dist = 60 + (i % 3) * 28;
+    dot.className = "deck-particle is-confetti";
+    const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.25 - 0.12);
+    const dist = 68 + (i % 4) * 32;
+    const rot = Math.round((Math.random() - 0.5) * 320);
+    dot.style.left = "50%";
+    dot.style.top = "45%";
     dot.style.setProperty("--dx", `${Math.round(Math.cos(angle) * dist)}px`);
-    dot.style.setProperty("--dy", `${Math.round(Math.sin(angle) * dist)}px`);
-    dot.style.background = palette[i % palette.length];
+    dot.style.setProperty("--dy", `${Math.round(Math.sin(angle) * dist - 18)}px`);
+    dot.style.setProperty("--rot", `${rot}deg`);
+    dot.innerHTML = shapes[i % shapes.length];
     host.appendChild(dot);
   }
 }
-
 function renderDeck() {
   const streak = loadStreak();
   if (els.deckStreak) {
@@ -11031,15 +11462,26 @@ function bindEvents() {
       } catch {}
     });
 
+    let lastDragX = 0;
     els.deckCard.addEventListener("pointermove", (event) => {
       if (dragStartX === null || event.pointerId !== dragPointerId) return;
       if (!state.deck || state.deck.locked) return;
       const dx = event.clientX - dragStartX;
-      const rot = Math.max(-12, Math.min(12, dx * 0.06));
-      els.deckCard.style.transform = `translate3d(${dx}px, 0, 0) rotate(${rot}deg)`;
+      const vel = Math.abs(dx - lastDragX);
+      lastDragX = dx;
+      const rot = Math.max(-14, Math.min(14, dx * 0.065));
+      const tiltY = Math.max(-16, Math.min(16, dx * 0.08));
+      els.deckCard.style.transform = `perspective(800px) translate3d(${dx}px, 0, 0) rotateZ(${rot}deg) rotateY(${tiltY}deg)`;
       const ratio = Math.min(1, Math.abs(dx) / 60);
       if (els.deckStampLeft) els.deckStampLeft.style.opacity = dx < -12 ? String(ratio) : "0";
       if (els.deckStampRight) els.deckStampRight.style.opacity = dx > 12 ? String(ratio) : "0";
+      if (Math.abs(dx) > 8 && vel > 2) {
+        spawnDragShakeConfetti(dx, vel);
+      }
+      const floaters = document.getElementById("deckAmbientFloaters");
+      if (floaters) {
+        floaters.style.transform = `translate3d(${Math.round(dx * -0.12)}px, ${Math.round(Math.sin(dx * 0.15) * 6)}px, 0)`;
+      }
     });
 
     const finishPointerSwipe = (event) => {
@@ -11484,6 +11926,42 @@ function bindEvents() {
   if (discoBtn) {
     discoBtn.addEventListener("click", toggleDiscoGroove);
   }
+  const discoNextBtn = document.getElementById("discoNextTrackButton");
+  if (discoNextBtn) {
+    discoNextBtn.addEventListener("click", cycleDiscoTrack);
+  }
+  const settingsTrackBtn = document.getElementById("settingsTrackCycleButton");
+  if (settingsTrackBtn) {
+    settingsTrackBtn.addEventListener("click", cycleDiscoTrack);
+  }
+  const spotifyBtn = document.getElementById("connectSpotifyButton");
+  if (spotifyBtn) {
+    spotifyBtn.addEventListener("click", () => renderMusicStreamEmbed(DEFAULT_SPOTIFY_EMBED));
+  }
+  const appleBtn = document.getElementById("connectAppleMusicButton");
+  if (appleBtn) {
+    appleBtn.addEventListener("click", () => renderMusicStreamEmbed(DEFAULT_APPLE_EMBED));
+  }
+  const streamLoadBtn = document.getElementById("musicStreamLoadButton");
+  if (streamLoadBtn) {
+    streamLoadBtn.addEventListener("click", () => {
+      const val = document.getElementById("musicStreamUrlInput")?.value || "";
+      renderMusicStreamEmbed(val);
+    });
+  }
+  // Global gamified button micro-interactions (radial ripple + cleaning sparkle burst on primary actions)
+  document.addEventListener("pointerdown", (event) => {
+    const btn = event.target?.closest?.("button, .clickable-evidence, .mvp-tab-chip");
+    if (!btn || btn.disabled) return;
+    const rect = btn.getBoundingClientRect();
+    if (rect.width > 0 && rect.height > 0) {
+      btn.style.setProperty("--tap-x", `${Math.round(event.clientX - rect.left)}px`);
+      btn.style.setProperty("--tap-y", `${Math.round(event.clientY - rect.top)}px`);
+    }
+    btn.classList.remove("btn-pop-active");
+    void btn.offsetWidth;
+    btn.classList.add("btn-pop-active");
+  }, { passive: true });
   window.addEventListener("online", () => {
     void processOfflineRunQueue();
   });
