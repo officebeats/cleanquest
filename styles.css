@@ -3482,7 +3482,7 @@ p {
   max-height: none !important;
   aspect-ratio: 16 / 9 !important;
   overflow: visible !important;
-  background: #040a12 !important;
+  background: transparent !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -3498,8 +3498,8 @@ p {
 
 .maximize-badge {
   position: absolute !important;
-  top: 6px !important;
-  right: 6px !important;
+  top: 8px !important;
+  right: 8px !important;
   z-index: 5 !important;
   width: 24px !important;
   height: 24px !important;

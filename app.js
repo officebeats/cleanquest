@@ -265,7 +265,8 @@ const translations = {
 
     findingAllCleared: "Detected countable objects were cleared.",
     findingFraming: "Before/after framing changed too much. Keep the camera fixed and rescan.",
-    findingZones: "{improved} of 9 work-area zones visibly improved; {residual} show remaining texture detail.",
+    findingZones: "{improved} of 9 zones visibly improved · {residual} remaining.",
+    findingZonesOne: "{improved} of 9 zones visibly improved · 1 zone needs another pass.",
     findingDemoStation: "Demo station: 3 of 3 surface items (cup, bottle, bowl) cleared; counter and sink basin visibly improved.",
     findingNoObjects: "Not enough countable objects were detected for strong verification.",
     findingRemaining: "{objects} still detected after the challenge.",
@@ -626,7 +627,8 @@ const translations = {
 
     findingAllCleared: "Los objetos detectables fueron retirados.",
     findingFraming: "El encuadre antes/después cambió demasiado. Mantén la cámara fija y repite.",
-    findingZones: "{improved} de 9 zonas de trabajo mejoraron visiblemente; {residual} muestran detalle de textura restante.",
+    findingZones: "{improved} de 9 zonas mejoraron visiblemente · {residual} pendientes.",
+    findingZonesOne: "{improved} de 9 zonas mejoraron visiblemente · 1 zona necesita otra pasada.",
     findingDemoStation: "Estación demo: 3 de 3 objetos de la superficie (taza, botella, tazón) retirados; la encimera y el lavabo mejoraron visiblemente.",
     findingNoObjects: "No se detectaron suficientes objetos para una verificación sólida.",
     findingRemaining: "{objects} siguen detectados después del reto.",
@@ -987,7 +989,8 @@ const translations = {
 
     findingAllCleared: "Wykryte obiekty zostały usunięte.",
     findingFraming: "Kadr przed/po zmienił się zbyt mocno. Trzymaj kamerę nieruchomo i zeskanuj ponownie.",
-    findingZones: "{improved} z 9 stref roboczych wyraźnie się poprawiło; {residual} pokazuje pozostałą teksturę.",
+    findingZones: "{improved} z 9 stref wyraźnie lepsze · {residual} do poprawy.",
+    findingZonesOne: "{improved} z 9 stref wyraźnie lepsze · 1 strefa wymaga poprawki.",
     findingDemoStation: "Stacja demo: 3 z 3 przedmiotów (kubek, butelka, miska) usunięte; blat i umywalka wyraźnie lepsze.",
     findingNoObjects: "Wykryto zbyt mało obiektów, aby mocno potwierdzić wynik.",
     findingRemaining: "{objects} nadal wykryto po zakończeniu wyzwania.",
@@ -5092,7 +5095,8 @@ function calculateLocalScore(
     findings.push(t("findingAllCleared"));
   }
   if (surface) {
-    findings.push(t("findingZones", { improved: surface.improvedZones, residual: surface.residualZones }));
+    const zoneKey = Number(surface.residualZones) === 1 ? "findingZonesOne" : "findingZones";
+    findings.push(t(zoneKey, { improved: surface.improvedZones, residual: surface.residualZones }));
   }
   if (remainingCount > 0) findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }));
   if (newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
