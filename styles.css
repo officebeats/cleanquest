@@ -2987,6 +2987,25 @@ p {
   margin: 16px 0 12px;
 }
 
+#cameraScreen #checkinBar .checkin-site-label {
+  grid-column: 1 / -1;
+}
+#adminSquadList {
+  flex-wrap: wrap !important;
+}
+#adminSquadList .mvp-tab-chip {
+  min-height: 44px !important;
+}
+
+.home-status-strip {
+  margin: 0 4px 4px;
+  color: var(--muted-bright);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+}
+
 @media (min-width: 900px) {
   .app-shell {
     width: min(960px, calc(100% - 32px)) !important;

@@ -105,6 +105,8 @@
           </button>
         </div>
 
+        <div id="homeStatusStrip" class="home-status-strip" role="status"></div>
+
         <div id="ftueSummaryBar" class="ftue-summary-bar hologram-card hidden">
           <span id="ftueSummaryText" class="consent-status-badge" data-i18n="ftueActiveLabel">✓ Consent &amp; Pass active</span>
           <div class="ftue-summary-actions">
@@ -261,6 +263,10 @@
       <div class="content camera-content">
 
         <div id="checkinBar" class="checkin-bar">
+          <label class="checkin-area-label checkin-site-label" for="siteSelect">
+            <span data-i18n="siteLabel">SITE</span>
+            <select id="siteSelect" class="area-select"></select>
+          </label>
           <label class="checkin-area-label" for="buildingLeagueSelect">
             <span data-i18n="leagueLabel">LEAGUE</span>
             <select id="buildingLeagueSelect" class="area-select">
@@ -846,10 +852,12 @@
           </div>
 
           <div id="adminPane13" class="admin-tab-pane hidden">
+            <div id="adminSquadList" class="mvp-step-tabs" role="group" aria-label="Squads"></div>
             <div class="pin-row">
               <input id="adminInviteInput" class="pin-input" type="text" maxlength="2000" placeholder="Paste phone/name list to invite" data-i18n-placeholder="inviteInputPlaceholder" aria-label="Invite crew member" />
               <button id="inviteApproveButton" class="secondary-button compact-chip" type="button" data-i18n="inviteApproveAction">INVITE &amp; APPROVE</button>
             </div>
+            <button id="adminNewSquadButton" class="secondary-button compact-chip" type="button" data-i18n="newSquadAction">+ NEW SQUAD</button>
             <div id="adminCrewList" class="home-crew-matchup"></div>
           </div>
 

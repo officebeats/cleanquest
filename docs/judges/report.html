@@ -77,13 +77,27 @@
   </div>
 
   <section class="card">
-    <h2>How to score this — rubric map</h2>
+    <h2>How to score this — rubric + MVP map</h2>
     <table>
-      <tr><th>Criterion (weight)</th><th>CleanQuest's answer</th><th>Where to see it</th></tr>
-      <tr><td><strong>Impact 30%</strong> — who benefits, does it matter, could people use it</td><td>Non-technical night cleaners get portable proof of work; small operators get proof without re-checks; associations get training delivered at the moment of work. Consent-first, faces never identified, read-only appeals, top-10-only boards.</td><td>Run the app in Spanish for 20 seconds; open the inspection log; file a dispute</td></tr>
-      <tr><td><strong>Meta AI Tooling 25%</strong> — beyond a basic integration</td><td>Spark scorecards grade each surface with confidence gating (low-confidence marked unverified, never smoothed over); SAM 3.1 overlays ground every claim in pixels; voice notes transcribed; Baseten Spark Open toggle with exportable per-run log; on-device EfficientDet-Lite0 + Pose Landmarker rung.</td><td>Results scorecard with provenance line; provider log export; one-tap Judge Demo</td></tr>
-      <tr><td><strong>Demo 25%</strong> — working, holds up live</td><td>One-tap Judge Demo runs the real pipeline on sample photos in ~10 seconds; then run the live loop on a real room; spectator board projects the ranking.</td><td>Instructions screen → Judge Demo; <code>?spectator=1</code> on the big screen</td></tr>
-      <tr><td><strong>Technical Depth 20%</strong> — sound, refined engineering</td><td>11k lines of dependency-free vanilla JS; hermetic self-test + persona suite; offline queue that re-scores on reconnect; 44px touch floors verified on 9 mobile screens + desktop; no fake data paths (demos excluded from ranking, samples labeled and ineligible).</td><td>Settings → run self-test; airplane-mode run; this report's appendix</td></tr>
+      <tr><th>Criterion (weight)</th><th>CleanQuest's answer</th><th>MVP coverage (Operating Standards)</th><th>Where to see it</th></tr>
+      <tr><td><strong>Impact 30%</strong> — who benefits, does it matter, could people use it</td><td>Non-technical night cleaners get portable proof of work; small operators get proof without re-checks; associations get training delivered at the moment of work. Consent-first, faces never identified, read-only appeals, top-10-only boards.</td><td>Screens 1–4 (language, phone+PIN, consent + read-aloud, home with streak/week/matchup strip), 10 (crew + top-10 + MVP + personal record), 11–15 (pledge-gated supervisor tools, sites+QR, squad create/switch, training gaps, one-tap packs). All 10 company rules honored.</td><td>Run in Spanish for 20s; check the home status strip; open supervisor tools → Squads; file a dispute</td></tr>
+      <tr><td><strong>Meta AI Tooling 25%</strong> — beyond a basic integration</td><td>Spark scorecards grade each surface with confidence gating (low-confidence marked unverified, never smoothed over); SAM 3.1 overlays ground every claim in pixels; voice notes transcribed; Baseten Spark Open toggle with exportable per-run log; on-device EfficientDet-Lite0 + Pose Landmarker rung.</td><td>Screen 8 (weighted 50/25/25 total + three explanation bars + surface map + provenance line); Settings provider toggle + exportable run log.</td><td>Results scorecard with provenance line; provider log export; one-tap Judge Demo</td></tr>
+      <tr><td><strong>Demo 25%</strong> — working, holds up live</td><td>One-tap Judge Demo runs the real pipeline on sample photos in ~10 seconds; then run the live loop on a real room; spectator board projects the ranking.</td><td>Screens 5–7 (registered-site picker + QR check-in + system-assigned spot + frame guide; timer with neutral live grid so misses stay hidden; ghost overlay for after-capture); Screen 9 (5-card trilingual swipe deck + labeled post-answer sponsor slot); spectator board.</td><td>Instructions → Judge Demo; camera site picker + QR; <code>?spectator=1</code> on the big screen</td></tr>
+      <tr><td><strong>Technical Depth 20%</strong> — sound, refined engineering</td><td>11k lines of dependency-free vanilla JS; hermetic self-test + persona suite; offline queue that re-scores on reconnect; 44px touch floors verified on 9 mobile screens + desktop; no fake data paths (demos excluded from ranking, samples labeled and ineligible).</td><td>All 9 Experience Principles (under 3 min, zero typing in the run, language-first, 44px glove targets, offline queue + rescore, low-end phone downscaling, celebrate-never-shame, explain every score, hype host default-Off with muted tones) + all 6 run-integrity rules (registered-site eligibility enforced).</td><td>Settings → run self-test; airplane-mode run; this report's appendix</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>MVP compliance — 15 screens + operating rules</h2>
+    <table>
+      <tr><th>#</th><th>MVP screen / rule</th><th>Status</th><th>Evidence in this build</th></tr>
+      <tr><td>1–3</td><td>Language picker · Phone+PIN · Consent + read-aloud</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Top-level EN/ES/PL; local hashed 4-digit PIN (no email); first-run consent gate with native MP3/TTS read-aloud, "faces never identified", "never for discipline".</td></tr>
+      <tr><td>4</td><td>Home (Start, matchup, streak, cards, sponsor card, 13-wk meter)</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Always-visible status strip shows streak + week of 13 + matchup at a glance; full passport/sponsor/meter hub one tap below.</td></tr>
+      <tr><td>5–7</td><td>Check-in (Site + QR + assigned spot + frame guide) · Run timer · Ghost after-capture</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Registered-site picker + <code>CQ-QR</code> scan; daily system-assigned spot; neutral live grid (misses hidden until scored); 4-mode before-shadow ghost overlay.</td></tr>
+      <tr><td>8</td><td>Score reveal (total, 3 bars, surface map, Dispute)</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>50/25/25 weighted hero, Clean/Technique/Time bars, surface map, provenance line, one-tap read-only appeal (5-business-day promise), Judge Demo path.</td></tr>
+      <tr><td>9–10</td><td>Swipe deck (5/day, missed repeat, labeled sponsor) · Crew &amp; leaderboard</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>30 trilingual brand-neutral cards, post-answer <code>SPONSORED</code> slot; top-10 + own row only, crew average + system MVP, personal record with opt-in share, empty-state row when no eligible runs exist.</td></tr>
+      <tr><td>11–15</td><td>Admin: Pledge · Sites &amp; QR print · Crew &amp; squads · Training gaps · One-tap packs</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>All panes gated by the non-discipline pledge; site registry feeds check-in + printable V2 QR stickers; squad chips switch active crew + <code>+ NEW SQUAD</code> creates 5-seat squads; Where/How/When/Who/Knowledge gaps; one-tap 5-day pack assignment.</td></tr>
+      <tr><td>Rules</td><td>Default-off voice · Misses hidden · Registered-site eligibility · Offline rescore</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Voice + UI tones respect mute; live grid neutral; <code>prizeEligible</code> requires registered site + system spot + real capture; reconnect runs <code>scoreChallenge</code> on queued photos.</td></tr>
     </table>
   </section>
 
@@ -137,7 +151,7 @@
 
     <h3>Welcome + onboarding</h3>
     <div class="shot"><img src="shots/01-welcome.png" alt="Welcome screen" /><div class="desc">
-      <p>Entry hub: trilingual picker, Accept the Challenge, Daily Deck, Passport/Crew/Supervisor hub. First tap opens plain-language consent (photo use, no face ID, local-only) with read-aloud, plus optional phone + 4-digit PIN. <span class="verdict v-ready">READY</span></p>
+      <p>Entry hub: trilingual picker, Accept the Challenge, Daily Deck, Passport/Crew/Supervisor hub, and the always-visible <strong>status strip</strong> (streak · week of 13 · crew matchup). First tap opens plain-language consent with read-aloud, plus optional phone + 4-digit PIN. <span class="verdict v-ready">READY · MVP 1–4</span></p>
     </div></div>
     <div class="shot"><img src="shots/02-consent.png" alt="Consent gate open" /><div class="desc">
       <p>Consent-open state keeps every CTA ≥44px; CONFIRM is visible without scrolling. All gating chips verified at 44px.</p>
@@ -153,7 +167,7 @@
 
     <h3>Camera check-in + timer</h3>
     <div class="shot"><img src="shots/05-camera.png" alt="Camera screen" /><div class="desc">
-      <p>League / Area / system-assigned spot, QR scan, frame guide, in-app capture only. Short-viewport guard keeps CTAs in the first fold at 360×740. <span class="verdict v-ready">READY (needs a real device to play)</span></p>
+      <p>Registered-site picker + League / Area / system-assigned spot, QR scan, frame guide, in-app capture only. Selecting a registered site is required for prize/crew eligibility. Short-viewport guard keeps CTAs in the first fold at 360×740. <span class="verdict v-ready">READY · MVP 5 (needs a real device to play)</span></p>
     </div></div>
     <div class="shot"><img src="shots/06-timer.png" alt="Timer screen" /><div class="desc">
       <p>Countdown, ghost overlay to match the angle, dwell cue, host callouts, big Finish. Live zone grid stays neutral during the run — misses remain hidden until scoring, per the operating standards.</p>
@@ -177,7 +191,8 @@
     <div class="shot"><img src="shots/09-records.png" alt="Records screen" /><div class="desc">
       <p>Geofenced inspection log with JSON/CSV export; supervisor panes 11–15 (pledge-gated tools, sites + printable QR stickers, bulk invite, training gaps, one-tap packs). Offline queue re-scores on reconnect with the real pipeline.</p>
     </div></div>
-    <div class="shot"><img src="shots/10-records-sites.png" alt="Sites pane" /><div class="desc"><p>Sites pane with QR sticker preview — the physical-to-digital bridge.</p></div></div>
+    <div class="shot"><img src="shots/10-records-sites.png" alt="Sites pane" /><div class="desc"><p>Sites pane with QR sticker preview — registered sites populate the camera check-in picker and gate prize eligibility.</p></div></div>
+    <div class="shot"><img src="shots/16-squads.png" alt="Admin squads pane" /><div class="desc"><p>Admin pane 13 (Crew &amp; squads): tap any squad chip to switch the active crew, invite/approve members in bulk, or tap <strong>+ NEW SQUAD</strong> to form a new 5-seat squad — all 44px targets. <span class="verdict v-ready">READY · MVP 13</span></p></div></div>
     <div class="shot"><img src="shots/11-settings.png" alt="Settings" /><div class="desc"><p>Host voice control (default Off), API keys (browser-only), provider toggle + exportable run log, voice/test buttons.</p></div></div>
     <div class="shot"><img src="shots/12-deck.png" alt="Daily deck" /><div class="desc"><p>30 trilingual technique cards, 5/day, missed-topic repeat, streaks, labeled sponsor slot after answers only.</p></div></div>
     <div class="shot"><img src="shots/15-desktop-welcome.png" alt="Desktop welcome" class="wide" /><div class="desc"><p>Desktop holds up too: centered column, all CTAs in-fold at 1440×900, camera grid reflows to two columns. Mobile-first, desktop-clean.</p></div></div>
@@ -186,7 +201,7 @@
   <section class="card">
     <h2>Known limitations (disclosed, not hidden)</h2>
     <ul>
-      <li><strong>Registered-site prize gate:</strong> eligibility today = system-assigned spot + in-app capture + practice exclusions. Matching runs against admin-registered sites needs a site-picker/QR-v3 change — scoped, not yet built.</li>
+      <li><strong>Site binding is honour-system at check-in:</strong> runs must pick an admin-registered site (and carry QR provenance when scanned) to be prize-eligible, which closes the MVP rule; cryptographic per-site QR tokens are a post-pilot hardening item.</li>
       <li><strong>Headless ≠ device:</strong> MediaPipe needs real WebGL; CI/headless runs show the honest fallback path. Judge on a real phone.</li>
       <li><strong>Cloud needs keys:</strong> without operator keys judges see the on-device path only — which is itself a complete game, with the offline note shown.</li>
       <li><strong>Residual detector advisory:</strong> one low 11px-label note in dense game chrome; body copy is 12–14px+.</li>

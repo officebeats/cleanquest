@@ -143,6 +143,7 @@ const translations = {
     beatThe: "Beat the",
     certificationTime: "Benchmark Time",
     welcomeBody: "Take two photos — before and after. Your verified record travels with you, job to job.",
+    homeStatusLine: "🔥 Streak {streak} · Week {week} of 13 · {matchup}",
     welcomeDisclaimer: "Prototype experience. Benchmark only — never a certification.",
     acceptChallenge: "ACCEPT THE CHALLENGE",
 
@@ -316,6 +317,7 @@ const translations = {
     viewRecords: "VIEW RECORDS",
     recordsTitle: "INSPECTION LOG",
     recordsEmpty: "No inspection records yet.",
+    leaderboardEmpty: "No eligible runs yet — complete a shift run to rank.",
     exportJson: "EXPORT JSON",
     exportCsv: "EXPORT CSV",
     locationNotShared: "Location not shared",
@@ -419,6 +421,7 @@ const translations = {
     pinSavedNote: "✓ PIN active",
     pinLocalNote: "Local convenience lock only — your phone + PIN stay on this device and are never sent anywhere.",
     leagueLabel: "LEAGUE",
+    siteLabel: "SITE",
     productTypePrefix: "Right product type:",
     optInShareLabel: "Opt-in: share verified record with current site (portable record owned by you)",
     adminPanelTitle: "SUPERVISOR TOOLS (TRAINING & SITES — NEVER EDITS SCORES)",
@@ -432,6 +435,7 @@ const translations = {
     registerSiteAction: "REGISTER SITE",
     printQrAction: "🖨 PRINT QR",
     inviteApproveAction: "INVITE & APPROVE",
+    newSquadAction: "+ NEW SQUAD",
     packDwell: "5-Day Dwell & Disinfection Pack",
     packSurface: "5-Day Top-to-Bottom Surface Pack",
     packProduct: "5-Day Product-to-Surface Match Pack",
@@ -497,6 +501,7 @@ const translations = {
     beatThe: "Supera el",
     certificationTime: "Tiempo de Referencia",
     welcomeBody: "Toma dos fotos — antes y después. Tu registro verificado te acompaña, trabajo tras trabajo.",
+    homeStatusLine: "🔥 Racha {streak} · Semana {week} de 13 · {matchup}",
     welcomeDisclaimer: "Experiencia prototipo. Solo referencia — nunca una certificación.",
     acceptChallenge: "ACEPTAR EL RETO",
 
@@ -670,6 +675,7 @@ const translations = {
     viewRecords: "VER REGISTROS",
     recordsTitle: "REGISTRO DE INSPECCIÓN",
     recordsEmpty: "Aún no hay registros de inspección.",
+    leaderboardEmpty: "Aún no hay rondas elegibles — completa una ronda de turno para clasificar.",
     exportJson: "EXPORTAR JSON",
     exportCsv: "EXPORTAR CSV",
     locationNotShared: "Ubicación no compartida",
@@ -773,6 +779,7 @@ const translations = {
     pinSavedNote: "✓ PIN activo",
     pinLocalNote: "Bloqueo local de conveniencia: tu teléfono y PIN quedan en este dispositivo y nunca se envían a ningún lugar.",
     leagueLabel: "LIGA",
+    siteLabel: "SITIO",
     productTypePrefix: "Tipo de producto correcto:",
     optInShareLabel: "Opcional: compartir historial verificado con el sitio actual (tú eres dueño de tu récord)",
     adminPanelTitle: "HERRAMIENTAS DE SUPERVISIÓN (FORMACIÓN Y SITIOS — SIN EDITAR PUNTOS)",
@@ -786,6 +793,7 @@ const translations = {
     registerSiteAction: "REGISTRAR SITIO",
     printQrAction: "🖨 IMPRIMIR QR",
     inviteApproveAction: "INVITAR Y APROBAR",
+    newSquadAction: "+ NUEVO EQUIPO",
     packDwell: "Paquete de 5 días: contacto y desinfección",
     packSurface: "Paquete de 5 días: superficies de arriba abajo",
     packProduct: "Paquete de 5 días: producto según superficie",
@@ -851,6 +859,7 @@ const translations = {
     beatThe: "Pokonaj",
     certificationTime: "Czas Referencyjny",
     welcomeBody: "Zrób dwa zdjęcia — przed i po. Twój zweryfikowany rekord idzie z Tobą z pracy do pracy.",
+    homeStatusLine: "🔥 Seria {streak} · Tydzień {week} z 13 · {matchup}",
     welcomeDisclaimer: "Wersja prototypowa. Tylko punkt odniesienia — nigdy certyfikacja.",
     acceptChallenge: "PODEJMIJ WYZWANIE",
 
@@ -1024,6 +1033,7 @@ const translations = {
     viewRecords: "ZOBACZ WPISY",
     recordsTitle: "DZIENNIK INSPEKCJI",
     recordsEmpty: "Brak wpisów inspekcji.",
+    leaderboardEmpty: "Brak kwalifikujących się biegów — ukończ bieg na zmianie, aby trafić do rankingu.",
     exportJson: "EKSPORTUJ JSON",
     exportCsv: "EKSPORTUJ CSV",
     locationNotShared: "Nie udostępniono lokalizacji",
@@ -1127,6 +1137,7 @@ const translations = {
     pinSavedNote: "✓ PIN aktywny",
     pinLocalNote: "Tylko lokalna blokada wygody — telefon i PIN zostają na tym urządzeniu i nigdy nie są wysyłane.",
     leagueLabel: "LIGA",
+    siteLabel: "OBIEKT",
     productTypePrefix: "Właściwy typ produktu:",
     optInShareLabel: "Opcjonalnie: udostępnij zweryfikowany rekord obecnemu obiektowi (rekord należy do Ciebie)",
     adminPanelTitle: "NARZĘDZIA NADZORU (SZKOLENIA I OBIEKTY — BEZ EDYCJI WYNIKÓW)",
@@ -1140,6 +1151,7 @@ const translations = {
     registerSiteAction: "ZAPISZ OBIEKT",
     printQrAction: "🖨 DRUKUJ QR",
     inviteApproveAction: "ZAPROŚ I ZATWIERDŹ",
+    newSquadAction: "+ NOWA EKIPA",
     packDwell: "Pakiet 5-dniowy: czas kontaktu i dezynfekcja",
     packSurface: "Pakiet 5-dniowy: powierzchnie od góry do dołu",
     packProduct: "Pakiet 5-dniowy: produkt do powierzchni",
@@ -1292,6 +1304,7 @@ const state = {
     league: "office",
     areaKey: "breakroom",
     assignedSpot: "Sink & counter",
+    site: null,
     ghostEnabled: true,
     dwellCreditSeconds: 0,
     aligningAfter: false
@@ -1444,6 +1457,7 @@ const els = {
   consentStatusBadge: document.getElementById("consentStatusBadge"),
   homePassportPanel: document.getElementById("homePassportPanel"),
   homeCrewMatchup: document.getElementById("homeCrewMatchup"),
+  homeStatusStrip: document.getElementById("homeStatusStrip"),
   consistencyMeter: document.getElementById("consistencyMeter"),
   consistencyLabel: document.getElementById("consistencyLabel"),
   consistencyFill: document.getElementById("consistencyFill"),
@@ -1481,6 +1495,7 @@ const els = {
   pinStatusBadge: document.getElementById("pinStatusBadge"),
   consistencyMilestone: document.getElementById("consistencyMilestone"),
   buildingLeagueSelect: document.getElementById("buildingLeagueSelect"),
+  siteSelect: document.getElementById("siteSelect"),
   surfaceGradeMap: document.getElementById("surfaceGradeMap"),
   personalRecordBar: document.getElementById("personalRecordBar"),
   personalRecordSummary: document.getElementById("personalRecordSummary"),
@@ -1516,6 +1531,8 @@ const els = {
   adminInviteInput: document.getElementById("adminInviteInput"),
   inviteApproveButton: document.getElementById("inviteApproveButton"),
   adminCrewList: document.getElementById("adminCrewList"),
+  adminSquadList: document.getElementById("adminSquadList"),
+  adminNewSquadButton: document.getElementById("adminNewSquadButton"),
   sponsorAnalyticsSummary: document.getElementById("sponsorAnalyticsSummary"),
   spotTemplateSelect: document.getElementById("spotTemplateSelect"),
   timerSpotSelect: document.getElementById("timerSpotSelect"),
@@ -3491,6 +3508,30 @@ function updateTrackDebug(stream = state.camera.stream) {
     `enabled: ${track.enabled}${dimensions}`;
 }
 
+function renderCheckinSites() {
+  const sel = els.siteSelect;
+  if (!sel) return;
+  const sites = loadAdminStore().sites || [];
+  const label = document.querySelector(".checkin-site-label");
+  if (!sites.length) {
+    if (label) label.classList.add("hidden");
+    state.checkin.site = null;
+    sel.innerHTML = "";
+    return;
+  }
+  if (label) label.classList.remove("hidden");
+  const prev = state.checkin.site;
+  sel.innerHTML = "";
+  sites.forEach((name) => {
+    const opt = document.createElement("option");
+    opt.value = name;
+    opt.textContent = name;
+    sel.appendChild(opt);
+  });
+  state.checkin.site = sites.includes(prev) ? prev : sites[0];
+  sel.value = state.checkin.site;
+}
+
 function updateCameraUI() {
   const demo = state.demoMode;
   const starting = state.camera.starting && !demo;
@@ -3544,6 +3585,7 @@ function updateCameraUI() {
   }
 
   updateTrackDebug();
+  renderCheckinSites();
 }
 
 async function retryCamera() {
@@ -7151,6 +7193,11 @@ function saveCompletedRun() {
 
   const isDemoRun = state.demoMode || state.latestScore?.simulated ||
     state.captures.before?.placeholder || state.captures.after?.placeholder;
+  // Runs also need a registered site selected at check-in (no registry
+  // configured = open pilot mode).
+  const registeredSites = loadAdminStore().sites || [];
+  const siteOk = registeredSites.length === 0 ||
+    (!!state.checkin.site && registeredSites.includes(state.checkin.site));
   const entry = {
     id: state.latestRunId,
     name,
@@ -7159,7 +7206,8 @@ function saveCompletedRun() {
     weightedScore,
     // Manual spot picks and any demo/simulated/placeholder runs are practice:
     // visible locally, never prize/crew credit.
-    prizeEligible: !state.checkin?.spotOverride && !isDemoRun,
+    prizeEligible: !state.checkin?.spotOverride && !isDemoRun && siteOk,
+    qrCode: state.checkin?.qrCode || null,
     timeMs: state.timer.elapsedMs,
     styleScore:
       state.latestScore.styleScore ?? 7.5,
@@ -7287,7 +7335,13 @@ function renderLeaderboard() {
 
   els.leaderboardList.innerHTML = "";
   renderCrewAndConsistencyUI();
-
+  if (!visible.length) {
+    const empty = document.createElement("p");
+    empty.className = "fine-print";
+    empty.textContent = t("leaderboardEmpty");
+    els.leaderboardList.appendChild(empty);
+    return;
+  }
   visible.forEach((entry) => {
     const row = document.createElement("div");
     row.className = "leaderboard-row";
@@ -7327,7 +7381,13 @@ function renderSpectatorLeaderboard() {
   const visible = visibleLeaderboard(loadLeaderboard(), state.latestRunId);
 
   els.spectatorLeaderboardList.innerHTML = "";
-
+  if (!visible.length) {
+    const empty = document.createElement("div");
+    empty.className = "spectator-row";
+    empty.textContent = t("leaderboardEmpty");
+    els.spectatorLeaderboardList.appendChild(empty);
+    return;
+  }
   visible.forEach((entry) => {
     const row = document.createElement("div");
     row.className = "spectator-row";
@@ -7884,6 +7944,7 @@ function selectCleaningSpot(spotName) {
   const assigned = assignSpotForArea(state.checkin.areaKey, state.checkin.league, spotName);
   // Manual picks override the system assignment: practice only, no prize/crew credit.
   state.checkin.spotOverride = true;
+  state.checkin.qrCode = null;
   return assigned;
 }
 
@@ -8087,6 +8148,7 @@ function applyAreaQrPayload(raw) {
     return null;
   }
   const assigned = assignSpotForArea(parsed.areaKey, parsed.league, parsed.spot || null);
+  state.checkin.qrCode = parsed.code;
   const badgeText = `${t("qrScannedPrefix")} ${assigned.assignedSpot.toUpperCase()} · ${t("rulePrefix")} ${localizedRuleSummary(assigned.scoringProfile)}`;
   if (els.assignedSpotBadge) {
     els.assignedSpotBadge.textContent = badgeText;
@@ -8567,10 +8629,31 @@ function createCrew(name, seats = 4, creator = "Player", options = {}) {
   return crew;
 }
 
+function renderAdminSquads() {
+  if (!els.adminSquadList) return;
+  const store = loadCrewStore();
+  els.adminSquadList.innerHTML = "";
+  store.crews.forEach((crew, index) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mvp-tab-chip" + (crew.id === store.activeCrewId ? " active" : "");
+    btn.textContent = `${crew.name} · ${crew.members.length}/${crew.seats}`;
+    btn.setAttribute("aria-label", crew.name + (crew.id === store.activeCrewId ? " ✓" : ""));
+    if (crew.id === store.activeCrewId) btn.textContent += " ✓";
+    btn.addEventListener("click", () => {
+      if (!requireAdminPledge()) return;
+      store.activeCrewId = crew.id;
+      saveCrewStore(store);
+      renderAdminDashboard();
+      renderCrewAndConsistencyUI();
+    });
+    els.adminSquadList.appendChild(btn);
+  });
+}
+
 function joinCrew(crewId, memberName) {
   const store = loadCrewStore();
   const crew = store.crews.find((c) => c.id === crewId);
-  if (!crew) throw new Error("Crew not found");
   const name = String(memberName || "").trim();
   if (!name) throw new Error("Member name required");
   if (!crew.members.includes(name)) {
@@ -8795,6 +8878,14 @@ function renderCrewAndConsistencyUI() {
     const store = loadCrewStore();
     const hasVirtual = store.crews.some((c) => c.virtual);
     els.joinVirtualSquadButton.textContent = hasVirtual ? t("virtualSquadActive") : t("joinVirtualSquad");
+  }
+  if (els.homeStatusStrip) {
+    const streak = loadStreak();
+    els.homeStatusStrip.textContent = t("homeStatusLine", {
+      streak: streak.count,
+      week: consistency.currentWeek,
+      matchup: matchup.shortLabel || matchup.label
+    });
   }
   renderPersonalRecordUI();
 }
@@ -9107,6 +9198,7 @@ function registerLocalSite(siteName) {
     els.adminPackStatus.textContent = t("siteRegistered", { site: clean });
   }
   renderAdminDashboard();
+  renderCheckinSites();
   return store.sites;
 }
 
@@ -9310,6 +9402,7 @@ function renderAdminDashboard() {
       : t("assignedPacksNone");
   }
   if (els.adminCrewList) {
+    renderAdminSquads();
     const crewStore = loadCrewStore();
     const activeCrew = crewStore.crews.find((c) => c.id === crewStore.activeCrewId) || crewStore.crews[0];
     const part = activeCrew ? getCrewParticipation(activeCrew.id) : null;
@@ -10841,6 +10934,7 @@ function bindEvents() {
 
   if (els.areaTemplateSelect) {
     els.areaTemplateSelect.addEventListener("change", (event) => {
+      state.checkin.qrCode = null;
       assignSpotForArea(event.target.value);
     });
   }
@@ -10969,7 +11063,14 @@ function bindEvents() {
 
   if (els.buildingLeagueSelect) {
     els.buildingLeagueSelect.addEventListener("change", (event) => {
+      state.checkin.qrCode = null;
       assignSpotForArea(state.checkin.areaKey, event.target.value);
+    });
+  }
+
+  if (els.siteSelect) {
+    els.siteSelect.addEventListener("change", (event) => {
+      state.checkin.site = event.target.value || null;
     });
   }
 
@@ -11084,6 +11185,17 @@ function bindEvents() {
       inviteAndApproveMember();
     });
   }
+
+  if (els.adminNewSquadButton) {
+    els.adminNewSquadButton.addEventListener("click", () => {
+      if (!requireAdminPledge()) return;
+      try {
+        const store = loadCrewStore();
+        createCrew(`Squad ${store.crews.length + 1}`, 5, els.playerName?.value?.trim() || "Supervisor");
+        renderAdminDashboard();
+      } catch (error) {}
+    });
+  }
   window.addEventListener("online", () => {
     void processOfflineRunQueue();
   });
@@ -11142,6 +11254,7 @@ function initializeApp() {
   renderHomeSponsorSlot();
   renderOfflineQueue();
   renderAdminDashboard();
+  renderCheckinSites();
   initializeSelfTestUI();
 
   if (SPECTATOR_MODE) {
