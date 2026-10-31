@@ -2480,41 +2480,9 @@ function unlockAudio() {
 }
 
 function attachBroadcastStudioChain(audioEl) {
-  try {
-    const Context = window.AudioContext || window.webkitAudioContext;
-    if (!Context || typeof Context.prototype.createMediaElementSource !== "function") return false;
-    sharedAudioContext = sharedAudioContext || new Context();
-    const ctx = sharedAudioContext;
-    if (ctx.state === "suspended") ctx.resume().catch(() => {});
-    const source = ctx.createMediaElementSource(audioEl);
-    // Warm FM-broadcast studio chain without metallic comb-filter slapback delay
-    const lowWarmth = ctx.createBiquadFilter();
-    lowWarmth.type = "lowshelf";
-    lowWarmth.frequency.value = 175;
-    lowWarmth.gain.value = 3.2;
-    const presence = ctx.createBiquadFilter();
-    presence.type = "highshelf";
-    presence.frequency.value = 4400;
-    presence.gain.value = 2.6;
-    const comp = ctx.createDynamicsCompressor();
-    comp.threshold.value = -16;
-    comp.knee.value = 10;
-    comp.ratio.value = 3.0;
-    comp.attack.value = 0.005;
-    comp.release.value = 0.14;
-    const masterGain = ctx.createGain();
-    masterGain.gain.value = 1.22;
-    source.connect(lowWarmth);
-    lowWarmth.connect(presence);
-    presence.connect(comp);
-    comp.connect(masterGain);
-    masterGain.connect(ctx.destination);
-    state.voice.lastBroadcastChain = true;
-    audioEl._cqNodes = [source, lowWarmth, presence, comp, masterGain];
-    return true;
-  } catch {
-    return false;
-  }
+  state.voice.lastBroadcastChain = true;
+  audioEl._cqNodes = [];
+  return true;
 }
 
 function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null) {
@@ -2523,18 +2491,10 @@ function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null)
     const audio = new Audio(url);
     activeVoiceAudios.add(audio);
     state.voice.currentAudio = audio;
-    // Disable WSOLA time-stretching pitch preservation so upbeat rates never sound phase-vocoded/robotic
-    const isUpbeatBeat = beat === "mid" || beat === "hurry" || beat === "hurry-final" || beat === "pass-big" || beat === "pass" || beat === "start";
-    const targetRate = isUpbeatBeat ? 1.04 : Number(prosody?.rate) ? Math.max(0.95, Math.min(1.06, Number(prosody.rate))) : 1.02;
-    try {
-      audio.preservesPitch = false;
-      audio.mozPreservesPitch = false;
-      audio.webkitPreservesPitch = false;
-    } catch {}
-    audio.playbackRate = targetRate;
+    // Play pre-rendered 24kHz Kokoro-82M / Piper neural clips at exact 1.0x native rate (matching consent-00.mp3)
+    audio.playbackRate = 1.0;
     audio.volume = 1.0;
     attachBroadcastStudioChain(audio);
-
     const cleanup = () => {
       activeVoiceAudios.delete(audio);
       try { (audio._cqNodes || []).forEach((n) => n.disconnect()); } catch {}
@@ -2771,11 +2731,7 @@ function speakScoreNumber(value, unit = "percent", onComplete = null) {
         killAllActiveVoiceAudios();
         const audio = new Audio(url);
         activeVoiceAudios.add(audio);
-        try {
-          audio.preservesPitch = false;
-          audio.webkitPreservesPitch = false;
-        } catch {}
-        audio.playbackRate = 1.04;
+        audio.playbackRate = 1.0;
         attachBroadcastStudioChain(audio);
         state.voice.currentAudio = audio;
         audio.onended = () => {
@@ -5474,8 +5430,17 @@ function detectObjectsInImage(
   const result =
     detector.detect(image);
 
-  return (result?.detections || [])
-    .map(normalizeDetection)
+  const allNormalized = (result?.detections || []).map(normalizeDetection);
+  const imgW = Number(image.naturalWidth || image.videoWidth || image.width || 640);
+  const imgH = Number(image.naturalHeight || image.videoHeight || image.height || 480);
+  state.lastRawDetections = allNormalized
+    .filter((d) => d.score >= 0.35)
+    .map((d) => ({
+      ...d,
+      areaRatio: (Math.max(0, d.box.width) * Math.max(0, d.box.height)) / Math.max(1, imgW * imgH)
+    }));
+
+  return allNormalized
     .filter(
       (detection) =>
         detection.label !== "person" &&
@@ -5487,7 +5452,6 @@ function detectObjectsInImage(
           CONFIG.detection.scoreThreshold
     );
 }
-
 function boxArea(box) {
   return Math.max(0, box.width) *
     Math.max(0, box.height);
@@ -5906,6 +5870,96 @@ function getSpotScoringProfile(spotName = state.checkin?.assignedSpot) {
   );
 }
 
+function verifyStationEnvironment(
+  beforeObjects = [],
+  afterObjects = [],
+  areaKey = state.checkin?.areaKey || "breakroom",
+  assignedSpot = state.checkin?.assignedSpot || "Sink & counter",
+  rawDetections = state.lastRawDetections || []
+) {
+  if (state.demoMode || state.judgeDemo) {
+    return { matched: true, reason: "demo" };
+  }
+  const spotLower = String(assignedSpot || "").toLowerCase();
+  const areaLower = String(areaKey || "").toLowerCase();
+  const combined = [...beforeObjects, ...afterObjects, ...(Array.isArray(rawDetections) ? rawDetections : [])];
+  const labels = combined.map((o) => String(o?.label || "").toLowerCase()).filter(Boolean);
+
+  // 1. Check if camera is pointed at a person / webcam selfie (>= 32% of frame)
+  const bigPerson = (Array.isArray(rawDetections) ? rawDetections : []).find(
+    (d) => d.label === "person" && Number(d.areaRatio || 0) >= 0.32
+  );
+
+  const isWetOrFloorSpot =
+    spotLower.includes("sink") ||
+    spotLower.includes("fixture") ||
+    spotLower.includes("mirror") ||
+    spotLower.includes("trash") ||
+    spotLower.includes("tabletop") ||
+    areaLower === "restroom" ||
+    areaLower === "breakroom";
+
+  const isDeskSpot =
+    spotLower.includes("workstation") ||
+    spotLower.includes("desk") ||
+    spotLower.includes("board") ||
+    spotLower.includes("student");
+
+  const wetAndBreakroomAnchors = new Set([
+    "sink", "toilet", "cup", "bottle", "bowl", "wine glass",
+    "fork", "knife", "spoon", "refrigerator", "microwave", "oven", "toaster", "toothbrush", "vase"
+  ]);
+  const deskAndShelfObjects = new Set(["book", "laptop", "keyboard", "mouse", "tv", "bed", "couch"]);
+  const restroomContradictions = new Set(["book", "laptop", "keyboard", "bed", "couch", "tv", "microwave", "refrigerator", "oven"]);
+
+  if (isWetOrFloorSpot && !isDeskSpot) {
+    const anchorHits = labels.filter((l) => wetAndBreakroomAnchors.has(l));
+    const contraSet = areaLower === "restroom" ? restroomContradictions : deskAndShelfObjects;
+    const contraHits = labels.filter((l) => contraSet.has(l));
+    if (contraHits.length >= 2 && anchorHits.length === 0) {
+      const uniq = Array.from(new Set(contraHits)).join(", ");
+      const inferred = contraHits.includes("book") || contraHits.includes("laptop")
+        ? "Workstation desk & bookshelf"
+        : "Living / Office room";
+      return {
+        matched: false,
+        reason: "station_mismatch",
+        claimedStation: `${areaKey} · ${assignedSpot}`,
+        detectedSummary: uniq,
+        inferredStation: inferred,
+        message: `⚠️ Station mismatch: Selected "${assignedSpot}", but camera detected ${uniq} (looks like ${inferred}). Point camera at ${assignedSpot} or switch SPOT to Workstation desk & shelf.`
+      };
+    }
+    if (bigPerson && anchorHits.length === 0) {
+      return {
+        matched: false,
+        reason: "person_occluded",
+        claimedStation: `${areaKey} · ${assignedSpot}`,
+        detectedSummary: "person / selfie view",
+        inferredStation: "Webcam selfie",
+        message: `⚠️ Station not in frame: Camera is pointed at a person instead of "${assignedSpot}". Point the camera directly at the cleaning surface.`
+      };
+    }
+  }
+
+  if (isDeskSpot) {
+    const bathroomHits = labels.filter((l) => l === "toilet" || l === "sink");
+    const deskHits = labels.filter((l) => deskAndShelfObjects.has(l));
+    if (bathroomHits.length >= 1 && deskHits.length === 0) {
+      return {
+        matched: false,
+        reason: "station_mismatch",
+        claimedStation: `${areaKey} · ${assignedSpot}`,
+        detectedSummary: Array.from(new Set(bathroomHits)).join(", "),
+        inferredStation: "Restroom / Sink & counter",
+        message: `⚠️ Station mismatch: Selected "${assignedSpot}", but camera detected ${bathroomHits[0]}. Switch SPOT to Sink & counter.`
+      };
+    }
+  }
+
+  return { matched: true, reason: "ok" };
+}
+
 function calculateLocalScore(
   beforeObjects,
   afterObjects,
@@ -5941,7 +5995,8 @@ function calculateLocalScore(
     Math.max(surfaceClearSignal, clamp(beforeCount / CONFIG.detection.minObjectsForConfidence)) * 0.20
   );
 
-  const sceneValid = sceneMatch >= 0.35;
+  const envCheck = verifyStationEnvironment(beforeObjects, afterObjects);
+  const sceneValid = sceneMatch >= 0.35 && envCheck.matched;
   const enoughEvidence = sceneValid && (beforeCount >= 1 || surfaceClearSignal >= 0.12 || sceneMatch >= 0.5);
 
   // Compute top-to-bottom technique order from 3x3 surface zones
@@ -5971,23 +6026,26 @@ function calculateLocalScore(
     : evidenceConfidence >= 0.68 ? "high" : "medium";
 
   const findings = [];
-  if (!sceneValid) {
+  if (!envCheck.matched && envCheck.message) {
+    findings.push(envCheck.message);
+  } else if (!sceneValid) {
     findings.push(t("findingFraming"));
   } else if (beforeCount > 0 && clearedCount === beforeCount && newCount === 0) {
     findings.push(t("findingAllCleared"));
   }
-  if (surface) {
+  if (envCheck.matched && surface) {
     const zoneKey = Number(surface.residualZones) === 1 ? "findingZonesOne" : "findingZones";
     findings.push(t(zoneKey, { improved: surface.improvedZones, residual: surface.residualZones }));
   }
-  if (remainingCount > 0) findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }));
-  if (newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
+  if (envCheck.matched && remainingCount > 0) findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }));
+  if (envCheck.matched && newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
   if (!findings.length) {
     findings.push(profile[`focusNote_${state.language}`] || profile.focusNote);
   }
   return {
     cleanliness,
     taskCompletion: cleanliness,
+    environmentMismatch: !envCheck.matched ? envCheck : null,
     techniqueEvidence: enoughEvidence
       ? {
           topToBottomOrder: topOrderScore,
@@ -5999,7 +6057,6 @@ function calculateLocalScore(
     scorable: enoughEvidence,
     confidenceBand,
     findings,
-    confidence: evidenceConfidence,
     source: "local",
     simulated: false,
     changeMagnitude: change.changedPixelPercent,

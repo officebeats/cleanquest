@@ -491,15 +491,26 @@
     </ul>
     <h3>Rung 2 — cloud verification (opt-in, keyed, explained)</h3>
     <ul>
-      <li><strong>Verified scorecards:</strong> <code>muse-spark-1.3</code> grades each surface (counter, glass, floor, fixture). Surfaces under 0.6 confidence are marked <em>unverified</em>.</li>
-      <li><strong>Surface overlays:</strong> SAM 3.1 segments each surface so the scorecard points at the pixels it means.</li>
-      <li><strong>Voice notes:</strong> transcribed via Muse voice transcription; without a key the audio attaches untranscribed.</li>
-      <li><strong>Second opinion:</strong> Baseten Spark Open toggle (<code>meta-models/muse-spark-open-1026</code>) with an exportable provider log.</li>
-      <li><strong>Graceful failure:</strong> no key or cloud down → the game plays on with an "Offline score" note; queued runs marked "awaiting score" are re-scored with the real pipeline on reconnect; a failed cloud check falls back to the on-device score with the failure stated on screen.</li>
+      <li><strong>1 · Environment &amp; Station Mismatch Gate (<code>verifyStationEnvironment</code>):</strong> Before scoring cleanliness, on-device <strong>MediaPipe EfficientDet-Lite0</strong> (80-class COCO detector) checks whether the camera's visible objects contradict the dropdown station. If the user selects <code>Breakroom · Sink &amp; counter</code> or <code>Trash &amp; floor zone</code> but points the camera at a bookshelf (<code>book</code> ×2+, <code>laptop</code>, <code>bed</code>) or a webcam selfie (<code>person ≥ 32%</code> of frame) with zero sink/cup/bottle anchors, CleanQuest rejects the mismatch (<code>RESCAN</code>) and prompts them to frame the assigned station or switch the <code>SPOT</code> picker.</li>
+      <li><strong>2 · How the 3-Bar Weighted Score Works (Plain English + Technical Math):</strong>
+        <ul>
+          <li><strong>Visible Cleanliness (50% of Total Score):</strong> <em>In plain English:</em> Did clutter disappear and did the surface get visibly cleaner across all 9 zones of the frame? <em>Under the hood:</em> Combines <strong>96×72 structural edge correlation</strong> (<code>sceneMatch ≥ 0.35</code> so the camera can't point at a blank wall for the After shot), <strong>EfficientDet-Lite0 bounding-box IoU + center-distance matching</strong> (<code>clearedCount / beforeCount</code>), and a <strong>3×3 luminance gradient texture analyzer</strong> (<code>analyzeSurfaceZones</code>) weighted by station profile (e.g., <code>Sink &amp; counter</code> weights surface gleam 55%, zone coverage 25%, cleared items 20%).</li>
+          <li><strong>Technique (25% of Total Score):</strong> <em>In plain English:</em> Did you clean top-to-bottom and let your spray sit for its contact time? <em>Under the hood:</em> Computes top-row vs. bottom-row residual gradient scores (<code>topToBottomOrder</code>) and 9-zone uniformity (<code>zoneUniformity</code>), paired with live <code>36×27</code> 9-zone motion telemetry and up to 6 timestamped <code>320×240</code> mid-run JPEG snapshots (<code>state.captures.midRun</code>).</li>
+          <li><strong>Benchmark Time (25% of Total Score):</strong> <em>In plain English:</em> Did you finish within the 1:30 benchmark without rushing? <em>Under the hood:</em> <code>100%</code> time score at or under 90s (with <code>+15s</code> chemical dwell credits subtracted from effective time so waiting for spray contact never hurts your speed score). Runs faster than 70% of standard time (<code>&lt;63s</code>) receive full time points (never a speed bonus) and a <code>review</code> flag to prevent corner-cutting.</li>
+        </ul>
+      </li>
+      <li><strong>3 · Cloud AI Providers &amp; Pixel Segmentation (6 Frontier Labs + 1-Click SSO):</strong>
+        <ul>
+          <li><strong>Meta Model API (<code>muse-spark-1.3</code> + <code>sam-3.1</code> + <code>muse-voice-transcribe-1.0</code>) &amp; Baseten (<code>muse-spark-open-1026</code>):</strong> Grades each surface (<code>counter</code>, <code>glass</code>, <code>floor</code>, <code>fixture</code>) with a <code>0.6</code> confidence gate and draws dashed SAM 3.1 bounding boxes.</li>
+          <li><strong>1-Click OpenRouter OAuth PKCE + Google Gemini 2.5 Flash + OpenAI GPT-4o Mini + Anthropic Claude Sonnet 4 + Groq Llama 4 Scout:</strong> Auto-detected by key prefix (<code>AIza…</code>, <code>sk-…</code>, <code>sk-ant-…</code>, <code>gsk_…</code>, <code>sk-or-…</code>) with normalized <code>box_2d: [ymin, xmin, ymax, xmax]</code> surface overlay rendering and multi-provider voice-note transcription (Whisper / Gemini WAV / Muse ASR).</li>
+        </ul>
+      </li>
+      <li><strong>4 · Host Voice Architecture (Why English Capture/Summary Sounded Robotic vs. Disclaimer &amp; How It Was Fixed):</strong>
+        <ul>
+          <li><strong>Root cause &amp; fix:</strong> The English disclaimer (<code>consent-00.mp3</code>) was rendered at native <code>24,000 Hz</code> with <strong>Kokoro-82M</strong> and played at <code>playbackRate = 1.0</code>, whereas an earlier commit (<code>a2d44e7</code>) had overwritten 88 English capture/summary clips (<code>start</code>, <code>mid</code>, <code>hurry</code>, <code>finish</code>, <code>nudge</code>) with <code>48,000 Hz</code> filter-processed files and pitched them up with WebAudio slapback comb-filtering. We restored all clean <code>24,000 Hz</code> Kokoro-82M clips from <code>cad52c4</code>, re-rendered <code>nudge-00..05.mp3</code> at <code>24,000 Hz</code>, locked <code>playbackRate = 1.0</code>, and enforced a strict <strong>Single-Voice Mutex</strong> (<code>activeVoiceAudios</code>) so all English capture and summary lines match the natural human voice of the disclaimer readout.</li>
+        </ul>
+      </li>
     </ul>
-    <h3>The host voice</h3>
-    <p>231 pre-rendered EN clips (ES/PL via TTS + synth) across verdict tiers routed by margin; scores spoken digit-by-digit so audio always matches the number; one stoppable WebAudio chain; <strong>default Off, never plays uninvited</strong> — including UI tones, which respect the mute.</p>
-  </section>
 
   <section class="card">
     <h2>Feature tour — screen-by-screen breakdown</h2>
