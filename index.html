@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031" />
+  <link rel="stylesheet" href="styles.css?v=20261031-2" />
 </head>
 
 <body>
@@ -243,6 +243,15 @@
           data-i18n="continue"
         >
           CONTINUE
+        </button>
+
+        <button
+          id="instructionsJudgeDemo"
+          class="secondary-button"
+          type="button"
+          data-i18n="judgeDemoAction"
+        >
+          JUDGE DEMO · SAMPLE SCORE
         </button>
       </div>
     </section>
@@ -621,6 +630,12 @@
 
           <p id="scorecardErrorNote" class="fine-print hidden" data-i18n="scorecardErrorNote">
             Cloud check failed · showing the on-device score.
+          </p>
+
+          <p id="verifyProvenance" class="fine-print hidden"></p>
+
+          <p id="judgeDemoNote" class="fine-print hidden" data-i18n="judgeDemoNote">
+            Judge demo · scored live by the on-device pipeline on sample photos. No leaderboard credit.
           </p>
 
           <p
@@ -1178,7 +1193,7 @@
     </div>
   </section>
 
-  <script src="deck.js?v=20261031"></script>
-  <script src="app.js?v=20261031"></script>
+  <script src="deck.js?v=20261031-2"></script>
+  <script src="app.js?v=20261031-2"></script>
 </body>
 </html>

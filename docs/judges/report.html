@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CleanQuest — Judges' Presentation · Meta Global AI Developer Hackathon</title>
+<style>
+  :root { --ink:#0e1a24; --muted:#51606e; --line:#d7e0e7; --accent:#0083a8; --bg:#f4f7f9; --card:#ffffff; --good:#0d7a3f; --warn:#9a6200; --gap:#b3261e; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif; color:var(--ink); background:var(--bg); line-height:1.55; }
+  header.hero { background:#06121b; color:#eaf6fb; padding:40px 24px 32px; }
+  header.hero h1 { margin:0 0 6px; font-size:clamp(28px,5vw,44px); letter-spacing:-.02em; }
+  header.hero p { margin:4px 0; color:#a9c4d2; max-width:72ch; }
+  header.hero .pitch { color:#ffffff; font-size:clamp(17px,2.6vw,22px); font-weight:600; max-width:70ch; margin:14px 0 4px; }
+  main { max-width:1020px; margin:0 auto; padding:24px 20px 64px; }
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 8px; }
+  .meta span { background:#e3edf2; border:1px solid var(--line); border-radius:999px; padding:3px 12px; font-size:13px; }
+  section.card { background:var(--card); border:1px solid var(--line); border-radius:14px; padding:20px 20px 8px; margin:18px 0; }
+  h2 { font-size:22px; margin:6px 0 4px; letter-spacing:-.01em; }
+  h3 { font-size:17px; margin:18px 0 4px; }
+  p, li { font-size:15px; }
+  .shot { display:flex; gap:20px; margin:14px 0 20px; align-items:flex-start; }
+  .shot img { width:min(300px,44vw); border-radius:12px; border:1px solid var(--line); box-shadow:0 8px 24px rgba(0,0,0,.12); }
+  .shot img.wide { width:min(560px,90vw); }
+  .shot .desc { flex:1; min-width:0; }
+  .verdict { display:inline-block; font-weight:700; font-size:13px; border-radius:8px; padding:2px 10px; margin:6px 0; }
+  .v-ready { background:#dff2e6; color:var(--good); }
+  .v-note { background:#fdf0d3; color:var(--warn); }
+  ul { padding-left:20px; }
+  code { background:#eef3f6; padding:1px 6px; border-radius:6px; font-size:13.5px; }
+  footer { color:var(--muted); font-size:13px; padding:24px 0; }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin:10px 0 18px; }
+  th, td { border:1px solid var(--line); padding:8px 10px; text-align:left; vertical-align:top; }
+  th { background:#eaf1f5; }
+  @media print {
+    header.hero { padding:24px; } main { max-width:none; padding:0 8px; }
+    section.card { break-inside:avoid; box-shadow:none; }
+    .shot img { width:230px; }
+  }
+</style>
+</head>
+<body>
+<header class="hero">
+  <h1>CleanQuest — Judges' Presentation</h1>
+  <p>Meta Global AI Developer Hackathon · Indie track · <strong>Build for Your World</strong></p>
+  <p class="pitch">CleanQuest makes the invisible 2&nbsp;a.m. cleaning shift visible — night cleaners prove their work with two photos, own a verified record that travels with them job to job, and get recognized instead of re-checked.</p>
+  <p>Every screenshot below was captured 2026-10-31 from the real app. Meta stack: <strong>Muse Spark 1.3</strong> (per-surface scorecards) + <strong>SAM&nbsp;3.1</strong> (surface overlays) + <strong>Muse voice transcription</strong> + <strong>Baseten Spark Open</strong> as a logged second provider — plus an on-device MediaPipe + classical-vision rung that plays with no keys and no signal.</p>
+</header>
+<main>
+  <div class="meta">
+    <span>Indie track: creativity · technical ambition · whether it works</span>
+    <span>Vanilla JS · no build · no backend · offline-first</span>
+    <span>EN / ES / PL throughout</span>
+    <span>Demo-ready: one-tap Judge Demo + live loop + spectator board</span>
+  </div>
+
+  <section class="card">
+    <h2>How to score this — rubric map</h2>
+    <table>
+      <tr><th>Criterion (weight)</th><th>CleanQuest's answer</th><th>Where to see it</th></tr>
+      <tr><td><strong>Impact 30%</strong> — who benefits, does it matter, could people use it</td><td>Non-technical night cleaners get portable proof of work; small operators get proof without re-checks; associations get training delivered at the moment of work. Consent-first, faces never identified, read-only appeals, top-10-only boards.</td><td>Run the app in Spanish for 20 seconds; open the inspection log; file a dispute</td></tr>
+      <tr><td><strong>Meta AI Tooling 25%</strong> — beyond a basic integration</td><td>Spark scorecards grade each surface with confidence gating (low-confidence marked unverified, never smoothed over); SAM 3.1 overlays ground every claim in pixels; voice notes transcribed; Baseten Spark Open toggle with exportable per-run log; on-device EfficientDet-Lite0 + Pose Landmarker rung.</td><td>Results scorecard with provenance line; provider log export; one-tap Judge Demo</td></tr>
+      <tr><td><strong>Demo 25%</strong> — working, holds up live</td><td>One-tap Judge Demo runs the real pipeline on sample photos in ~10 seconds; then run the live loop on a real room; spectator board projects the ranking.</td><td>Instructions screen → Judge Demo; <code>?spectator=1</code> on the big screen</td></tr>
+      <tr><td><strong>Technical Depth 20%</strong> — sound, refined engineering</td><td>11k lines of dependency-free vanilla JS; hermetic self-test + persona suite; offline queue that re-scores on reconnect; 44px touch floors verified on 9 mobile screens + desktop; no fake data paths (demos excluded from ranking, samples labeled and ineligible).</td><td>Settings → run self-test; airplane-mode run; this report's appendix</td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Not another image analyzer</h2>
+    <p>A one-shot classifier would fail the gate. CleanQuest is a closed loop, and every link is in the build:</p>
+    <ul>
+      <li><strong>Play</strong> — check in with a QR, system-assigned high-impact spot, frame guide, in-app capture only.</li>
+      <li><strong>Verify</strong> — three-bar scorecard (Clean 50 / Technique 25 / Time 25), per-surface verdicts with confidence, SAM overlays, provenance line naming the model.</li>
+      <li><strong>Appeal</strong> — one-tap read-only dispute, 5-business-day promise. No person anywhere can edit a score — enforced in code, not policy.</li>
+      <li><strong>Record</strong> — geofenced, exportable inspection log; portable cleaner-owned passport, opt-in employer share.</li>
+      <li><strong>Train &amp; crew</strong> — 30-card trilingual swipe deck with missed-topic repeat, weekly crew matchups, system-chosen MVP, 13-week consistency meter.</li>
+    </ul>
+    <p>Say it on stage: <em>"The system scores, nobody edits — here is the appeal button that proves it."</em></p>
+  </section>
+
+  <section class="card">
+    <h2>Live demo script (2 runs, ~3 minutes)</h2>
+    <ol>
+      <li><strong>Run 1 — Judge Demo (10 seconds).</strong> Instructions screen → <em>Judge Demo</em>. Narrate: <em>"This is a synthetic dirty/clean pair so you can see the scoring story without us mopping the judging room — same on-device pipeline, watch the provenance line."</em> Tap through to the scorecard; point at the three bars and the demo label.</li>
+      <li><strong>Run 2 — live loop.</strong> Check in, shoot a real before/after in the room, finish, show the scored card with its provenance line ("Verified by …" with cloud keys pre-entered, or the on-device line without).</li>
+      <li><strong>Throughout:</strong> spectator board (<code>?spectator=1</code>) projected; host voice explicitly enabled for run 2 (it defaults to Off — say why: occupied buildings). Keep a 30-second backup recording of a full loop in case the room, camera permission, or venue wifi fails.</li>
+      <li><strong>Before stage:</strong> pre-enter cloud keys in the demo browser, pre-warm MediaPipe on venue wifi (models cache after one load), print area QR stickers, clear localStorage so no prior runs pollute the board.</li>
+    </ol>
+  </section>
+
+  <section class="card">
+    <h2>How the AI works</h2>
+    <p>CleanQuest runs a <strong>two-rung vision ladder</strong> — real on-device perception with no keys and no backend, plus an opt-in cloud rung that verifies and explains. One honest caveat: the classical scoring layer works with zero signal, but the MediaPipe weights fetch from CDN on first use and then cache — a first-ever run on airplane mode scores via pixel-diff plus the neutral pose fallback, with full ML perception on every run after.</p>
+    <h3>Rung 1 — on-device (private by construction, ML after first load)</h3>
+    <ul>
+      <li><strong>Object counting:</strong> MediaPipe EfficientDet-Lite0 (int8 TFLite, loaded on demand, never bundled) counts objects before/after; a matcher measures "objects cleared". Score threshold 0.35, up to 30 results.</li>
+      <li><strong>Change + structure:</strong> classical vision on a downscaled frame — pixel difference (threshold 38), edge-based structural difference, and a 3×3 zone texture grid that also drives the live zone map.</li>
+      <li><strong>Victory-pose style score:</strong> MediaPipe Pose Landmarker Lite (CPU delegate, single pose) reads 33 landmarks into a 0–10 style score. No model, no person, no camera? It says so plainly and applies a neutral 7.5.</li>
+      <li><strong>Why it matters:</strong> photos never leave the browser on this rung; faces are never identified; no facial recognition or biometrics anywhere.</li>
+    </ul>
+    <h3>Rung 2 — cloud verification (opt-in, keyed, explained)</h3>
+    <ul>
+      <li><strong>Verified scorecards:</strong> <code>muse-spark-1.3</code> grades each surface (counter, glass, floor, fixture). Surfaces under 0.6 confidence are marked <em>unverified</em>.</li>
+      <li><strong>Surface overlays:</strong> SAM 3.1 segments each surface so the scorecard points at the pixels it means.</li>
+      <li><strong>Voice notes:</strong> transcribed via Muse voice transcription; without a key the audio attaches untranscribed.</li>
+      <li><strong>Second opinion:</strong> Baseten Spark Open toggle (<code>meta-models/muse-spark-open-1026</code>) with an exportable provider log.</li>
+      <li><strong>Graceful failure:</strong> no key or cloud down → the game plays on with an "Offline score" note; queued runs marked "awaiting score" are re-scored with the real pipeline on reconnect; a failed cloud check falls back to the on-device score with the failure stated on screen.</li>
+    </ul>
+    <h3>The host voice</h3>
+    <p>231 pre-rendered EN clips (ES/PL via TTS + synth) across verdict tiers routed by margin; scores spoken digit-by-digit so audio always matches the number; one stoppable WebAudio chain; <strong>default Off, never plays uninvited</strong> — including UI tones, which respect the mute.</p>
+  </section>
+
+  <section class="card">
+    <h2>Feature tour — what was built, how it looks</h2>
+
+    <h3>Welcome + onboarding</h3>
+    <div class="shot"><img src="shots/01-welcome.png" alt="Welcome screen" /><div class="desc">
+      <p>Entry hub: trilingual picker, Accept the Challenge, Daily Deck, Passport/Crew/Supervisor hub. First tap opens plain-language consent (photo use, no face ID, local-only) with read-aloud, plus optional phone + 4-digit PIN. <span class="verdict v-ready">READY</span></p>
+    </div></div>
+    <div class="shot"><img src="shots/02-consent.png" alt="Consent gate open" /><div class="desc">
+      <p>Consent-open state keeps every CTA ≥44px; CONFIRM is visible without scrolling. All gating chips verified at 44px.</p>
+    </div></div>
+    <div class="shot"><img src="shots/03-welcome-es.png" alt="Welcome in Spanish" /><div class="desc">
+      <p>Full ES translation holds layout — the workforce reads first, not translated afterward.</p>
+    </div></div>
+
+    <h3>Instructions + one-tap Judge Demo</h3>
+    <div class="shot"><img src="shots/04-instructions.png" alt="Instructions with Judge Demo button" /><div class="desc">
+      <p>Three numbered steps, benchmark card, consent-gated camera entry — and the <strong>Judge Demo</strong> button: one tap runs the real local pipeline on sample photos and lands on a labeled scorecard. Consent-gated exactly like the real path. <span class="verdict v-ready">READY — the 10-second scoring story</span></p>
+    </div></div>
+
+    <h3>Camera check-in + timer</h3>
+    <div class="shot"><img src="shots/05-camera.png" alt="Camera screen" /><div class="desc">
+      <p>League / Area / system-assigned spot, QR scan, frame guide, in-app capture only. Short-viewport guard keeps CTAs in the first fold at 360×740. <span class="verdict v-ready">READY (needs a real device to play)</span></p>
+    </div></div>
+    <div class="shot"><img src="shots/06-timer.png" alt="Timer screen" /><div class="desc">
+      <p>Countdown, ghost overlay to match the angle, dwell cue, host callouts, big Finish. Live zone grid stays neutral during the run — misses remain hidden until scoring, per the operating standards.</p>
+    </div></div>
+
+    <h3>Results scorecard</h3>
+    <div class="shot"><img src="shots/07-results.png" alt="Results screen" /><div class="desc">
+      <p>Weighted TOTAL hero (50/25/25), three explanation bars, honest surface map, uncropped evidence with lightbox, one-tap read-only Dispute, optional voice note, pose score — plus the <strong>provenance line</strong> (provider + model + SAM status, or the on-device line) and the <strong>Judge Demo label</strong> on demo runs. <span class="verdict v-ready">READY</span></p>
+    </div></div>
+    <div class="shot"><img src="shots/14-judgedemo.png" alt="Judge Demo scorecard" /><div class="desc">
+      <p>The Judge Demo result: real pipeline output on sample photos, labeled demo, no leaderboard credit, nothing persisted. (Headless capture shows the honest model-unavailable fallback; on a device this is a computed score.)</p>
+    </div></div>
+
+    <h3>Leaderboard + spectator</h3>
+    <div class="shot"><img src="shots/08-leaderboard.png" alt="Leaderboard, fresh install" /><div class="desc">
+      <p>Top-10 + your own row only, practice and demo runs excluded, labeled sample rows excluded from ranking, personal best computed from eligible runs only. Fresh installs show an honest empty board — clear localStorage before judging. <span class="verdict v-ready">READY — best demo surface</span></p>
+    </div></div>
+    <div class="shot"><img src="shots/13-spectator.png" alt="Spectator board" /><div class="desc">
+      <p><code>?spectator=1</code> distance board, 15s refresh — project it on the big screen while someone plays.</p>
+    </div></div>
+
+    <h3>Records, settings, deck</h3>
+    <div class="shot"><img src="shots/09-records.png" alt="Records screen" /><div class="desc">
+      <p>Geofenced inspection log with JSON/CSV export; supervisor panes 11–15 (pledge-gated tools, sites + printable QR stickers, bulk invite, training gaps, one-tap packs). Offline queue re-scores on reconnect with the real pipeline.</p>
+    </div></div>
+    <div class="shot"><img src="shots/10-records-sites.png" alt="Sites pane" /><div class="desc"><p>Sites pane with QR sticker preview — the physical-to-digital bridge.</p></div></div>
+    <div class="shot"><img src="shots/11-settings.png" alt="Settings" /><div class="desc"><p>Host voice control (default Off), API keys (browser-only), provider toggle + exportable run log, voice/test buttons.</p></div></div>
+    <div class="shot"><img src="shots/12-deck.png" alt="Daily deck" /><div class="desc"><p>30 trilingual technique cards, 5/day, missed-topic repeat, streaks, labeled sponsor slot after answers only.</p></div></div>
+    <div class="shot"><img src="shots/15-desktop-welcome.png" alt="Desktop welcome" class="wide" /><div class="desc"><p>Desktop holds up too: centered column, all CTAs in-fold at 1440×900, camera grid reflows to two columns. Mobile-first, desktop-clean.</p></div></div>
+  </section>
+
+  <section class="card">
+    <h2>Known limitations (disclosed, not hidden)</h2>
+    <ul>
+      <li><strong>Registered-site prize gate:</strong> eligibility today = system-assigned spot + in-app capture + practice exclusions. Matching runs against admin-registered sites needs a site-picker/QR-v3 change — scoped, not yet built.</li>
+      <li><strong>Headless ≠ device:</strong> MediaPipe needs real WebGL; CI/headless runs show the honest fallback path. Judge on a real phone.</li>
+      <li><strong>Cloud needs keys:</strong> without operator keys judges see the on-device path only — which is itself a complete game, with the offline note shown.</li>
+      <li><strong>Residual detector advisory:</strong> one low 11px-label note in dense game chrome; body copy is 12–14px+.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <h2>Appendix — verification</h2>
+    <ul>
+      <li>Layout audit: 9/9 mobile screens at 360×740 (zero sub-44px layout targets, zero h-scroll, primary CTAs in-fold) + desktop 1440×900 pass (zero sub-44, zero h-scroll).</li>
+      <li>Independent judge + advisor reviews run against the operating standards; all blockers fixed and re-verified (forced-unmute removed and tones mute-gated; live zone spoilers neutralized; judge-demo cloud egress blocked; demo/sample runs excluded from ranking, personal best, and sponsor counts; offline queue re-scores on reconnect).</li>
+      <li><code>node --check</code> clean; detector 8 → 1 low advisory; no secrets in repo; banned-token grep clean.</li>
+      <li>Report screenshots are the app itself (390×844 mobile, 1440×900 desktop), captured 2026-10-31; leaderboard/spectator demo rows disclosed.</li>
+    </ul>
+  </section>
+
+  <footer>CleanQuest judges' presentation · Meta Global AI Developer Hackathon, Indie track · generated 2026-10-31 · screenshots are the app itself, not mockups.</footer>
+</main>
+</body>
+</html>

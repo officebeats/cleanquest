@@ -142,7 +142,7 @@ const translations = {
     aiPoweredChallenge: "AI-POWERED SPEED CHALLENGE",
     beatThe: "Beat the",
     certificationTime: "Benchmark Time",
-    welcomeBody: "Clean fast. Clean well. Let AI evaluate what it can clearly see.",
+    welcomeBody: "Take two photos — before and after. Your verified record travels with you, job to job.",
     welcomeDisclaimer: "Prototype experience. Benchmark only — never a certification.",
     acceptChallenge: "ACCEPT THE CHALLENGE",
 
@@ -168,6 +168,11 @@ const translations = {
     continueWithoutCamera: "CONTINUE WITHOUT CAMERA",
     demoMode: "DEMO MODE",
     demoCameraPlaceholder: "CAMERA PLACEHOLDER",
+    judgeDemoAction: "JUDGE DEMO · SAMPLE SCORE",
+    judgeDemoNote: "Judge demo · scored live by the on-device pipeline on sample photos. No leaderboard credit.",
+    verifyProvenanceVerified: "Verified by {provider} · {model}",
+    verifyProvenanceSamSuffix: " · SAM 3.1 overlays",
+    verifyProvenanceOffline: "On-device pipeline · EfficientDet-Lite0 + classical vision · no cloud key",
     localPrivacy: "On-device analysis: photos stay on this phone.",
     cameraPermissionDenied: "Camera permission was denied. Allow camera access and retry.",
     cameraNotFound: "No usable camera was found on this device.",
@@ -491,7 +496,7 @@ const translations = {
     aiPoweredChallenge: "RETO DE VELOCIDAD CON IA",
     beatThe: "Supera el",
     certificationTime: "Tiempo de Referencia",
-    welcomeBody: "Limpia rápido. Limpia bien. Deja que la IA evalúe lo visible.",
+    welcomeBody: "Toma dos fotos — antes y después. Tu registro verificado te acompaña, trabajo tras trabajo.",
     welcomeDisclaimer: "Experiencia prototipo. Solo referencia — nunca una certificación.",
     acceptChallenge: "ACEPTAR EL RETO",
 
@@ -517,6 +522,11 @@ const translations = {
     continueWithoutCamera: "CONTINUAR SIN CÁMARA",
     demoMode: "MODO DEMO",
     demoCameraPlaceholder: "IMAGEN DE DEMOSTRACIÓN",
+    judgeDemoAction: "DEMO JURADO · EJEMPLO",
+    judgeDemoNote: "Demo para el jurado · puntuado en vivo localmente con fotos de muestra. Sin crédito en la tabla.",
+    verifyProvenanceVerified: "Verificado por {provider} · {model}",
+    verifyProvenanceSamSuffix: " · superposiciones SAM 3.1",
+    verifyProvenanceOffline: "Pipeline local · EfficientDet-Lite0 + visión clásica · sin clave en la nube",
     localPrivacy: "Análisis local: las fotos permanecen en este teléfono.",
     cameraPermissionDenied: "Se negó el permiso de cámara. Permite el acceso y vuelve a intentarlo.",
     cameraNotFound: "No se encontró una cámara disponible en este dispositivo.",
@@ -840,7 +850,7 @@ const translations = {
     aiPoweredChallenge: "WYZWANIE SZYBKOŚCIOWE Z AI",
     beatThe: "Pokonaj",
     certificationTime: "Czas Referencyjny",
-    welcomeBody: "Sprzątaj szybko i dokładnie. AI oceni to, co wyraźnie zobaczy.",
+    welcomeBody: "Zrób dwa zdjęcia — przed i po. Twój zweryfikowany rekord idzie z Tobą z pracy do pracy.",
     welcomeDisclaimer: "Wersja prototypowa. Tylko punkt odniesienia — nigdy certyfikacja.",
     acceptChallenge: "PODEJMIJ WYZWANIE",
 
@@ -866,6 +876,11 @@ const translations = {
     continueWithoutCamera: "GRAJ BEZ KAMERY",
     demoMode: "TRYB DEMO",
     demoCameraPlaceholder: "OBRAZ ZASTĘPCZY",
+    judgeDemoAction: "DEMO JURY · PRZYKŁAD",
+    judgeDemoNote: "Demo dla jury · ocenione na żywo lokalnie na przykładowych zdjęciach. Bez wpływu na ranking.",
+    verifyProvenanceVerified: "Zweryfikowano: {provider} · {model}",
+    verifyProvenanceSamSuffix: " · nakładki SAM 3.1",
+    verifyProvenanceOffline: "Potok lokalny · EfficientDet-Lite0 + klasyczna wizja · brak klucza chmury",
     localPrivacy: "Analiza lokalna: zdjęcia pozostają na tym telefonie.",
     cameraPermissionDenied: "Odmówiono dostępu do kamery. Zezwól na dostęp i spróbuj ponownie.",
     cameraNotFound: "Na tym urządzeniu nie znaleziono dostępnej kamery.",
@@ -1416,7 +1431,10 @@ const els = {
   verifiedBody: document.getElementById("verifiedBody"),
   verifiedHype: document.getElementById("verifiedHype"),
   offlineScoreNote: document.getElementById("offlineScoreNote"),
-  scorecardErrorNote: document.getElementById("scorecardErrorNote")
+  scorecardErrorNote: document.getElementById("scorecardErrorNote"),
+  verifyProvenance: document.getElementById("verifyProvenance"),
+  judgeDemoNote: document.getElementById("judgeDemoNote"),
+  instructionsJudgeDemo: document.getElementById("instructionsJudgeDemo")
   ,
   consentGate: document.getElementById("consentGate"),
   consentText: document.getElementById("consentText"),
@@ -1783,6 +1801,7 @@ function showAnnouncerStatus(message) {
 }
 
 function playAnnouncerCue() {
+  if (state.voice.muted) return;
   // Independent audio path: verifies that the browser can output audio,
   // even when the device speech service is unavailable.
   try {
@@ -4060,10 +4079,11 @@ function sampleLiveRunActivity(forceIdleForTest = false) {
   }
 
   const workedCount = mon.workedZones.filter(Boolean).length;
+  // Run integrity: misses stay hidden until scoring. The grid renders neutral
+  // during the run; per-zone worked/active state is only revealed on results.
   if (els.liveZoneGrid) {
-    Array.from(els.liveZoneGrid.children).forEach((cell, idx) => {
-      cell.classList.toggle("zone-active", Boolean(mon.activeZones[idx]));
-      cell.classList.toggle("zone-worked", Boolean(mon.workedZones[idx]));
+    Array.from(els.liveZoneGrid.children).forEach((cell) => {
+      cell.classList.remove("zone-active", "zone-worked");
     });
   }
 
@@ -4079,7 +4099,7 @@ function sampleLiveRunActivity(forceIdleForTest = false) {
       els.liveActivityBadge.textContent = t("noMotionBadge");
       els.liveActivityBadge.classList.add("idle-warning");
     } else {
-      els.liveActivityBadge.textContent = t("zonesActive", { n: workedCount });
+      els.liveActivityBadge.textContent = t("liveChallenge");
       els.liveActivityBadge.classList.remove("idle-warning");
     }
   }
@@ -4188,11 +4208,8 @@ async function handleStartPause() {
     return;
   }
 
-  if (state.voice.muted && !SELFTEST_MODE) {
-    setHypeLevel("full");
-  }
-
   if (state.timer.elapsedMs <= 0) {
+
     if (!state.demoMode) {
       const ready = await ensureCameraReady();
 
@@ -4250,8 +4267,63 @@ function setAnalysisLoading(loading) {
   });
 }
 
+async function runJudgeDemo() {
+  if (state.analysis.running) return;
+  state.demoMode = false;
+  state.judgeDemo = true;
+  state.latestRunId = null;
+  state.latestScore = null;
+  state.checkin.assignedSpot = state.checkin.assignedSpot || "Sink & counter";
+  state.checkin.spotOverride = false;
+  const before = createDemoCapture("before");
+  before.placeholder = false;
+  const after = createDemoCapture("after");
+  after.placeholder = false;
+  state.captures.before = before;
+  state.captures.after = after;
+  state.captures.pose = null;
+  state.timer.elapsedMs = 45000;
+  navigateTo("results");
+  setAnalysisLoading(true);
+  try {
+    await analyzeChallenge();
+  } finally {
+    setAnalysisLoading(false);
+  }
+  if (state.latestScore) state.latestScore.judgeDemo = true;
+  state.judgeDemo = false;
+  els.judgeDemoNote?.classList.remove("hidden");
+  renderResults();
+}
+
+function renderVerifyProvenance() {
+  const el = els.verifyProvenance;
+  if (!el) return;
+  // Error state stays hidden deliberately: scorecardErrorNote already explains.
+  el.classList.add("hidden");
+  el.textContent = "";
+  const ai = state.result?.ai;
+  if (!ai) return;
+  if (ai.verified?.status === "verified") {
+    const sam = ai.sam?.status === "overlays" ? t("verifyProvenanceSamSuffix") : "";
+    el.textContent = t("verifyProvenanceVerified", {
+      provider: ai.verified.provider || "cloud",
+      model: ai.verified.model || "scorecard"
+    }) + sam;
+    el.classList.remove("hidden");
+  } else if (
+    (ai.verified?.status === "offline" || ai.verified?.status === "mock") &&
+    Number.isFinite(ai.cleanliness) &&
+    !ai.simulated
+  ) {
+    el.textContent = t("verifyProvenanceOffline");
+    el.classList.remove("hidden");
+  }
+}
+
 async function completeChallenge() {
   if (state.analysis.running) return;
+  state.judgeDemo = false;
 
   if (state.timer.running) {
     pauseTimer();
@@ -4331,6 +4403,7 @@ async function analyzeChallenge() {
   let aiResult;
 
   resetVoiceNote();
+  els.judgeDemoNote?.classList.add("hidden");
 
   if (
     state.demoMode ||
@@ -5330,6 +5403,7 @@ async function getVerifiedScore(aiResult, before, after) {
   try {
     if (
       state.demoMode ||
+      state.judgeDemo ||
       before?.placeholder ||
       after?.placeholder
     ) {
@@ -5653,6 +5727,10 @@ async function getSamOverlays(aiResult, before, after) {
   const skipped = { status: "skipped" };
 
   try {
+    if (state.judgeDemo) {
+      return skipped;
+    }
+
     if (!aiResult || aiResult.verified?.status !== "verified") {
       return skipped;
     }
@@ -5970,6 +6048,7 @@ function renderResults() {
     : `${Math.round(Number(score.confidence || 0) * 100)}% ${t("evidence")}`;
   els.visualChangeValue.textContent = `${Number(score.changeMagnitude || 0).toFixed(1)}%`;
   renderVerifiedScorecard();
+  renderVerifyProvenance();
   renderSamOverlays();
   els.styleScoreDisplay.textContent = `${Number(score.styleScore ?? 7.5).toFixed(1)} / 10`;
 
@@ -6244,21 +6323,24 @@ function getDefaultLeaderboard() {
   return [
     {
       id: "sample-001",
-      name: "Jordan",
+      name: "Jordan · sample",
+      prizeEligible: false,
       cleanliness: 100,
       timeMs: 68400,
       styleScore: 9.4
     },
     {
       id: "sample-002",
-      name: "Alex",
+      name: "Alex · sample",
+      prizeEligible: false,
       cleanliness: 98,
       timeMs: 71200,
       styleScore: 9.1
     },
     {
       id: "sample-003",
-      name: "Sam",
+      name: "Sam · sample",
+      prizeEligible: false,
       cleanliness: 96,
       timeMs: 74200,
       styleScore: 8.8
@@ -7039,6 +7121,11 @@ function closeRecords() {
 function saveCompletedRun() {
   if (!state.latestScore) return null;
 
+  if (state.latestScore?.judgeDemo) {
+    state.latestRunId = null;
+    return null;
+  }
+
   const entries = loadLeaderboard();
 
   const profile = loadCleanerProfile();
@@ -7062,14 +7149,17 @@ function saveCompletedRun() {
     dwellCreditSeconds: state.checkin?.dwellCreditSeconds || 0
   }) : null;
 
+  const isDemoRun = state.demoMode || state.latestScore?.simulated ||
+    state.captures.before?.placeholder || state.captures.after?.placeholder;
   const entry = {
     id: state.latestRunId,
     name,
     cleanliness:
       Number.isFinite(state.latestScore.cleanliness) ? state.latestScore.cleanliness : null,
     weightedScore,
-    // Manual spot picks are practice runs: visible locally, never prize/crew credit.
-    prizeEligible: !state.checkin?.spotOverride,
+    // Manual spot picks and any demo/simulated/placeholder runs are practice:
+    // visible locally, never prize/crew credit.
+    prizeEligible: !state.checkin?.spotOverride && !isDemoRun,
     timeMs: state.timer.elapsedMs,
     styleScore:
       state.latestScore.styleScore ?? 7.5,
@@ -8362,7 +8452,24 @@ async function processOfflineRunQueue() {
   for (const item of queue) {
     if (item.status === "awaiting_score") {
       // Never invent a score: only a measured cleanliness value can be scored.
-      if (!Number.isFinite(item.cleanliness)) continue;
+      if (!Number.isFinite(item.cleanliness)) {
+        if (item.beforeDataUrl && item.afterDataUrl) {
+          try {
+            const local = await scoreChallenge(item.beforeDataUrl, item.afterDataUrl);
+            if (local && Number.isFinite(local.cleanliness)) {
+              item.cleanliness = local.cleanliness;
+              item.changeMagnitude = local.changeMagnitude;
+              item.sceneMatch = local.sceneMatch;
+            } else {
+              continue;
+            }
+          } catch {
+            continue;
+          }
+        } else {
+          continue;
+        }
+      }
       item.score = item.cleanliness;
       item.status = "scored";
       item.scoredAt = new Date().toISOString();
@@ -8865,7 +8972,7 @@ function setEmployerShareOptIn(optIn) {
 }
 
 function getPersonalRecord() {
-  const entries = loadLeaderboard();
+  const entries = loadLeaderboard().filter((e) => e && e.prizeEligible !== false);
   const streak = loadStreak();
   const consistency = getConsistencyProgress();
   const profile = loadCleanerProfile();
@@ -9049,7 +9156,7 @@ function inviteAndApproveMember(memberInput) {
 function getSponsorMonthlyAnalytics() {
   const adminStore = loadAdminStore();
   const progress = loadDeckProgress();
-  const runs = loadLeaderboard().length;
+  const runs = loadLeaderboard().filter((e) => e && e.prizeEligible !== false).length;
   const mastered = progress.masteredIds.length;
   const missed = progress.missedIds.length;
   const totalAnswered = mastered + missed;
@@ -9226,6 +9333,7 @@ function playTone(
   frequency = 700,
   duration = 0.08
 ) {
+  if (state.voice.muted) return;
   try {
     const AudioContextClass =
       window.AudioContext ||
@@ -10381,6 +10489,23 @@ function bindEvents() {
       if (!state.demoMode) {
         await ensureCameraReady();
       }
+    }
+  );
+
+  els.instructionsJudgeDemo?.addEventListener(
+    "click",
+    async () => {
+      stopSpeech();
+      if (!hasConsent()) {
+        navigateTo("welcome");
+        state.editingFtue = true;
+        setCleanerFtueStep(3);
+        syncConsentUI();
+        els.consentGate?.classList.add("needs-attention");
+        els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "nearest" });
+        return;
+      }
+      await runJudgeDemo();
     }
   );
   els.cameraContinue.addEventListener(
