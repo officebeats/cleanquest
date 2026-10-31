@@ -142,7 +142,7 @@ const translations = {
     aiPoweredChallenge: "AI-POWERED SPEED CHALLENGE",
     beatThe: "Beat the",
     certificationTime: "Benchmark Time",
-    welcomeBody: "Tap Start and clean — AI auto-captures live frames during the countdown, tracks every surface zone, and calls the action in real time.",
+    welcomeBody: "Snap Before and After — while the clock runs, AI samples 9 surface zones live, captures mid-run progress frames, and calls the action.",
     homeStatusLine: "🔥 Streak {streak} · Week {week} of 13 · {matchup}",
     welcomeDisclaimer: "Prototype experience. Benchmark only — never a certification.",
     acceptChallenge: "ACCEPT THE CHALLENGE",
@@ -474,7 +474,7 @@ const translations = {
     rulePrefix: "RULE:",
     idleNudge: "⚡ NO MOTION DETECTED — STEP IN & WORK THE ASSIGNED SPOT!",
     noMotionBadge: "⚠ NO MOTION · STEP IN!",
-    zonesActive: "📸 AUTO-SNAP · {n}/9 ZONES ACTIVE",
+    zonesActive: "📸 LIVE · {n}/9 ZONES · {s} SNAPS",
     sharePassportAction: "🪪 SHARE PASSPORT",
     passportCopiedNote: "✓ Verified Benchmark Passport copied to share!",
     deckSwipeHint: "⟵ DRAG / SWIPE LEFT = MISS  ·  DRAG / SWIPE RIGHT = RIGHT CALL ⟶",
@@ -512,7 +512,7 @@ const translations = {
     aiPoweredChallenge: "RETO DE VELOCIDAD CON IA",
     beatThe: "Supera el",
     certificationTime: "Tiempo de Referencia",
-    welcomeBody: "Toca Iniciar y limpia — la IA captura cuadros automáticamente durante la cuenta regresiva y narra tu progreso en vivo.",
+    welcomeBody: "Toma Antes y Después — durante la cuenta regresiva, la IA muestrea 9 zonas en vivo, captura cuadros de progreso y narra la acción.",
     homeStatusLine: "🔥 Racha {streak} · Semana {week} de 13 · {matchup}",
     welcomeDisclaimer: "Experiencia prototipo. Solo referencia — nunca una certificación.",
     acceptChallenge: "ACEPTAR EL RETO",
@@ -844,7 +844,7 @@ const translations = {
     rulePrefix: "REGLA:",
     idleNudge: "⚡ SIN MOVIMIENTO DETECTADO — ¡ENTRA Y TRABAJA EL PUNTO ASIGNADO!",
     noMotionBadge: "⚠ SIN MOVIMIENTO · ¡ENTRA!",
-    zonesActive: "📸 AUTO-CAPTURA · {n}/9 ZONAS ACTIVAS",
+    zonesActive: "📸 EN VIVO · {n}/9 ZONAS · {s} CAPTURAS",
     sharePassportAction: "🪪 COMPARTIR PASAPORTE",
     passportCopiedNote: "✓ ¡Pasaporte de referencia copiado para compartir!",
     deckSwipeHint: "⟵ DESLIZA IZQUIERDA = FALLO  ·  DESLIZA DERECHA = ACIERTA ⟶",
@@ -882,7 +882,7 @@ const translations = {
     aiPoweredChallenge: "WYZWANIE SZYBKOŚCIOWE Z AI",
     beatThe: "Pokonaj",
     certificationTime: "Czas Referencyjny",
-    welcomeBody: "Naciśnij Start i sprzątaj — AI automatycznie rejestruje klatki podczas odliczania i komentuje postępy na żywo.",
+    welcomeBody: "Zrób zdjęcie Przed i Po — podczas odliczania AI analizuje 9 stref na żywo, zapisuje klatki postępu i komentuje akcję.",
     homeStatusLine: "🔥 Seria {streak} · Tydzień {week} z 13 · {matchup}",
     welcomeDisclaimer: "Wersja prototypowa. Tylko punkt odniesienia — nigdy certyfikacja.",
     acceptChallenge: "PODEJMIJ WYZWANIE",
@@ -1214,7 +1214,7 @@ const translations = {
     rulePrefix: "ZASADA:",
     idleNudge: "⚡ BRAK RUCHU — WEJDŹ I PRACUJ NAD PRZYPISANYM PUNKTEM!",
     noMotionBadge: "⚠ BRAK RUCHU · WEJDŹ!",
-    zonesActive: "📸 AUTO-KADR · {n}/9 STREF AKTYWNYCH",
+    zonesActive: "📸 NA ŻYWO · {n}/9 STREF · {s} KLATEK",
     sharePassportAction: "🪪 UDOSTĘPNIJ PASZPORT",
     passportCopiedNote: "✓ Zweryfikowany paszport skopiowany!",
     deckSwipeHint: "⟵ PRZESUŃ W LEWO = BŁĄD  ·  PRZESUŃ W PRAWO = DOBRZE ⟶",
@@ -4704,10 +4704,12 @@ function resetTimeAnnouncements() {
   };
   state.liveMonitor = {
     lastSampleAt: 0,
+    lastSnapshotAt: 0,
     lastMotionAt: performance.now(),
     lastNudgeAt: 0,
     lastLuma: null,
     beforeLuma: null,
+    liveSnapshots: [],
     workedZones: new Array(9).fill(false),
     activeZones: new Array(9).fill(false),
     motionRatio: 0,
@@ -4937,6 +4939,39 @@ function sampleLiveRunActivity(forceIdleForTest = false) {
   }
 
   const workedCount = mon.workedZones.filter(Boolean).length;
+  // Capture real 320x240 mid-run progress frames (up to 6 keyframes per run)
+  if (
+    !forceIdleForTest &&
+    mon.liveSnapshots.length < 6 &&
+    (mon.liveSnapshots.length === 0 || now - (mon.lastSnapshotAt || 0) >= 12000 || workedCount > (mon.lastSnapshotZones || 0) + 2)
+  ) {
+    try {
+      const snapCanvas = document.createElement("canvas");
+      snapCanvas.width = 320;
+      snapCanvas.height = 240;
+      const sctx = snapCanvas.getContext("2d");
+      if (!state.demoMode && els.timerVideo && els.timerVideo.readyState >= 2) {
+        sctx.drawImage(els.timerVideo, 0, 0, 320, 240);
+      } else {
+        sctx.fillStyle = "#0b1d2e";
+        sctx.fillRect(0, 0, 320, 240);
+        sctx.fillStyle = "#39f5bc";
+        sctx.font = "bold 16px system-ui";
+        sctx.fillText(`MID-RUN SNAP #${mon.liveSnapshots.length + 1} (${workedCount}/9 ZONES)`, 16, 124);
+      }
+      const dataUrl = snapCanvas.toDataURL("image/jpeg", 0.72);
+      mon.liveSnapshots.push({
+        index: mon.liveSnapshots.length + 1,
+        elapsedMs: state.timer.elapsedMs || 0,
+        workedZones: workedCount,
+        dataUrl
+      });
+      mon.lastSnapshotAt = now;
+      mon.lastSnapshotZones = workedCount;
+      state.captures.midRun = mon.liveSnapshots;
+    } catch {}
+  }
+
   // Run integrity: misses stay hidden until scoring. The grid renders neutral
   // during the run; per-zone worked/active state is only revealed on results.
   if (els.liveZoneGrid) {
@@ -4957,11 +4992,12 @@ function sampleLiveRunActivity(forceIdleForTest = false) {
       els.liveActivityBadge.textContent = t("noMotionBadge");
       els.liveActivityBadge.classList.add("idle-warning");
     } else {
-      els.liveActivityBadge.textContent = workedCount > 0 ? t("zonesActive", { n: workedCount }) : t("liveChallenge");
+      els.liveActivityBadge.textContent = workedCount > 0
+        ? t("zonesActive", { n: workedCount, s: mon.liveSnapshots.length })
+        : t("liveChallenge");
       els.liveActivityBadge.classList.remove("idle-warning");
     }
   }
-
   if (!isIdle && workedCount >= 4 && !mon.midProgressSpoken && !SELFTEST_MODE) {
     mon.midProgressSpoken = true;
     speakHost("mid");
