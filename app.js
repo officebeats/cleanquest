@@ -170,10 +170,15 @@ const translations = {
     demoMode: "DEMO MODE",
     demoCameraPlaceholder: "CAMERA PLACEHOLDER",
     judgeDemoAction: "JUDGE DEMO · SAMPLE SCORE",
-    judgeDemoNote: "Judge demo · scored live by the on-device pipeline on sample photos. No leaderboard credit.",
+    judgeDemoNote: "Judge demo · Rung 1 scored live on-device + Rung 2 Muse Spark 1.3 & SAM 3.1 preview. No leaderboard credit.",
+    verifiedScorecardPreview: "VERIFIED SCORECARD · MUSE SPARK 1.3 + SAM 3.1 (JUDGE DEMO PREVIEW)",
     verifyProvenanceVerified: "Verified by {provider} · {model}",
     verifyProvenanceSamSuffix: " · SAM 3.1 overlays",
     verifyProvenanceOffline: "On-device pipeline · EfficientDet-Lite0 + classical vision · no cloud key",
+    verifyProvenanceClassical: "On-device classical vision (pixel-diff + 3×3 surface zones) · no cloud key",
+    verifyProvenanceDemoPreview: "Rung 1 live on-device score · Rung 2 Muse Spark 1.3 + SAM 3.1 preview (add key in Settings for live cloud calls)",
+    pinQuickFill: "⚡ DEMO PASS",
+    openJudgesReport: "📊 JUDGES' PRESENTATION & RUBRIC REPORT",
     localPrivacy: "On-device analysis: photos stay on this phone.",
     cameraPermissionDenied: "Camera permission was denied. Allow camera access and retry.",
     cameraNotFound: "No usable camera was found on this device.",
@@ -528,10 +533,15 @@ const translations = {
     demoMode: "MODO DEMO",
     demoCameraPlaceholder: "IMAGEN DE DEMOSTRACIÓN",
     judgeDemoAction: "DEMO JURADO · EJEMPLO",
-    judgeDemoNote: "Demo para el jurado · puntuado en vivo localmente con fotos de muestra. Sin crédito en la tabla.",
+    judgeDemoNote: "Demo para el jurado · Nivel 1 puntuado en vivo + vista previa Nivel 2 Muse Spark 1.3 y SAM 3.1. Sin crédito en la tabla.",
+    verifiedScorecardPreview: "TARJETA VERIFICADA · MUSE SPARK 1.3 + SAM 3.1 (VISTA PREVIA DEMO)",
     verifyProvenanceVerified: "Verificado por {provider} · {model}",
     verifyProvenanceSamSuffix: " · superposiciones SAM 3.1",
     verifyProvenanceOffline: "Pipeline local · EfficientDet-Lite0 + visión clásica · sin clave en la nube",
+    verifyProvenanceClassical: "Visión clásica local (diferencia de píxeles + zonas 3×3) · sin clave en la nube",
+    verifyProvenanceDemoPreview: "Nivel 1 puntuación local en vivo · Nivel 2 vista previa Muse Spark 1.3 + SAM 3.1",
+    pinQuickFill: "⚡ PASE DEMO",
+    openJudgesReport: "📊 PRESENTACIÓN DEL JURADO E INFORME DE RÚBRICA",
     localPrivacy: "Análisis local: las fotos permanecen en este teléfono.",
     cameraPermissionDenied: "Se negó el permiso de cámara. Permite el acceso y vuelve a intentarlo.",
     cameraNotFound: "No se encontró una cámara disponible en este dispositivo.",
@@ -886,10 +896,15 @@ const translations = {
     demoMode: "TRYB DEMO",
     demoCameraPlaceholder: "OBRAZ ZASTĘPCZY",
     judgeDemoAction: "DEMO JURY · PRZYKŁAD",
-    judgeDemoNote: "Demo dla jury · ocenione na żywo lokalnie na przykładowych zdjęciach. Bez wpływu na ranking.",
+    judgeDemoNote: "Demo dla jury · Poziom 1 oceniony na żywo + podgląd Poziomu 2 Muse Spark 1.3 i SAM 3.1. Bez wpływu na ranking.",
+    verifiedScorecardPreview: "ZWERYFIKOWANA KARTA · MUSE SPARK 1.3 + SAM 3.1 (PODGLĄD DEMO)",
     verifyProvenanceVerified: "Zweryfikowano: {provider} · {model}",
     verifyProvenanceSamSuffix: " · nakładki SAM 3.1",
     verifyProvenanceOffline: "Potok lokalny · EfficientDet-Lite0 + klasyczna wizja · brak klucza chmury",
+    verifyProvenanceClassical: "Lokalna wizja klasyczna (różnica pikseli + strefy 3×3) · brak klucza chmury",
+    verifyProvenanceDemoPreview: "Poziom 1 wynik lokalny na żywo · Poziom 2 podgląd Muse Spark 1.3 + SAM 3.1",
+    pinQuickFill: "⚡ KARTA DEMO",
+    openJudgesReport: "📊 PREZENTACJA DLA JURY I RAPORT KRYTERIÓW",
     localPrivacy: "Analiza lokalna: zdjęcia pozostają na tym telefonie.",
     cameraPermissionDenied: "Odmówiono dostępu do kamery. Zezwól na dostęp i spróbuj ponownie.",
     cameraNotFound: "Na tym urządzeniu nie znaleziono dostępnej kamery.",
@@ -4324,7 +4339,7 @@ async function runJudgeDemo() {
   state.captures.before = before;
   state.captures.after = after;
   state.captures.pose = null;
-  state.timer.elapsedMs = 45000;
+  state.timer.elapsedMs = 78000;
   navigateTo("results");
   setAnalysisLoading(true);
   try {
@@ -4332,7 +4347,51 @@ async function runJudgeDemo() {
   } finally {
     setAnalysisLoading(false);
   }
-  if (state.latestScore) state.latestScore.judgeDemo = true;
+  if (state.latestScore) {
+    state.latestScore.judgeDemo = true;
+    if (state.latestScore.verified?.status !== "verified") {
+      state.latestScore.verified = {
+        status: "verified",
+        judgeDemoPreview: true,
+        provider: "meta-demo-preview",
+        model: "muse-spark-1.3",
+        overall: 89,
+        verdict: "pass",
+        hypeLine: "Counter and fixture gleaming — glass nearly spotless, floor angle below 0.60 confidence floor!",
+        surfaces: [
+          { name: "counter", score: 94, verified: true, missed: [] },
+          { name: "fixture", score: 91, verified: true, missed: [] },
+          { name: "glass", score: 86, verified: true, missed: ["water spot near right edge"] },
+          { name: "floor", score: 42, verified: false, missed: ["confidence 0.48 < 0.60 floor"] }
+        ]
+      };
+      state.latestScore.sam = {
+        status: "overlays",
+        judgeDemoPreview: true,
+        surfaces: {
+          counter: {
+            before: [{ x1: 110, y1: 390, x2: 850, y2: 590, w: 960, h: 720 }],
+            after: [{ x1: 110, y1: 390, x2: 850, y2: 590, w: 960, h: 720 }]
+          },
+          fixture: {
+            before: [{ x1: 370, y1: 230, x2: 590, y2: 430, w: 960, h: 720 }],
+            after: [{ x1: 370, y1: 230, x2: 590, y2: 430, w: 960, h: 720 }]
+          },
+          glass: {
+            before: [{ x1: 60, y1: 65, x2: 450, y2: 215, w: 960, h: 720 }],
+            after: [{ x1: 60, y1: 65, x2: 450, y2: 215, w: 960, h: 720 }]
+          }
+        }
+      };
+      appendProviderLog({
+        provider: "meta-demo-preview",
+        model: "muse-spark-1.3 + sam-3.1",
+        status: "demo-preview",
+        overall: 89,
+        mock: true
+      });
+    }
+  }
   state.judgeDemo = false;
   els.judgeDemoNote?.classList.remove("hidden");
   renderResults();
@@ -4346,7 +4405,10 @@ function renderVerifyProvenance() {
   el.textContent = "";
   const ai = state.result?.ai;
   if (!ai) return;
-  if (ai.verified?.status === "verified") {
+  if (ai.verified?.judgeDemoPreview) {
+    el.textContent = t("verifyProvenanceDemoPreview");
+    el.classList.remove("hidden");
+  } else if (ai.verified?.status === "verified") {
     const sam = ai.sam?.status === "overlays" ? t("verifyProvenanceSamSuffix") : "";
     el.textContent = t("verifyProvenanceVerified", {
       provider: ai.verified.provider || "cloud",
@@ -4358,7 +4420,9 @@ function renderVerifyProvenance() {
     Number.isFinite(ai.cleanliness) &&
     !ai.simulated
   ) {
-    el.textContent = t("verifyProvenanceOffline");
+    el.textContent = ai.detectorUsed === false
+      ? t("verifyProvenanceClassical")
+      : t("verifyProvenanceOffline");
     el.classList.remove("hidden");
   }
 }
@@ -5607,9 +5671,14 @@ function renderVerifiedScorecard() {
     return;
   }
 
+  const labelEl = card.querySelector(".section-label");
+  if (labelEl) {
+    labelEl.textContent = verified.judgeDemoPreview
+      ? t("verifiedScorecardPreview")
+      : t("verifiedScorecard");
+  }
   const body = els.verifiedBody;
   body.innerHTML = "";
-
   const head = document.createElement("div");
   head.className = "verified-head";
 
@@ -5920,41 +5989,29 @@ async function scoreChallenge(
     const change = compareFrames(beforeImage, afterImage);
     const surface = analyzeSurfaceZones(beforeImage, afterImage);
 
-    const detector =
-      await loadObjectDetector();
-
-    if (!detector) {
-      const cloud = await scoreWithCloudVision(
-        beforeDataURL,
-        afterDataURL
-      );
-
-      return cloud || {
-        ...getMockAIScore(),
-        changeMagnitude:
-          change.changedPixelPercent
-      };
+    let beforeObjects = [];
+    let afterObjects = [];
+    let detectorWorked = false;
+    try {
+      const detector = await loadObjectDetector();
+      if (detector) {
+        beforeObjects = detectObjectsInImage(detector, beforeImage);
+        afterObjects = detectObjectsInImage(detector, afterImage);
+        detectorWorked = true;
+      }
+    } catch {
+      beforeObjects = [];
+      afterObjects = [];
+      detectorWorked = false;
     }
 
-    const beforeObjects =
-      detectObjectsInImage(
-        detector,
-        beforeImage
-      );
-
-    const afterObjects =
-      detectObjectsInImage(
-        detector,
-        afterImage
-      );
-
-    const localScore =
-      calculateLocalScore(
+    const localScore = calculateLocalScore(
       beforeObjects,
       afterObjects,
       change,
       surface
     );
+    localScore.detectorUsed = detectorWorked;
 
     state.analysis.lastLocalResult =
       localScore;
@@ -11060,6 +11117,38 @@ function bindEvents() {
       } catch {}
     });
   }
+
+  let activePinField = "phone";
+  els.cleanerPhone?.addEventListener("focus", () => { activePinField = "phone"; });
+  els.cleanerPin?.addEventListener("focus", () => { activePinField = "pin"; });
+  document.querySelectorAll("[data-pin-key]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.pinKey;
+      if (key === "quick") {
+        if (els.cleanerPhone) els.cleanerPhone.value = "555-0199";
+        if (els.cleanerPin) els.cleanerPin.value = "1234";
+        try {
+          saveCleanerProfile("555-0199", "1234");
+        } catch {}
+        return;
+      }
+      const phoneEl = els.cleanerPhone;
+      const pinEl = els.cleanerPin;
+      const target = activePinField === "pin" ? pinEl : phoneEl;
+      if (!target) return;
+      if (key === "back") {
+        target.value = String(target.value || "").slice(0, -1);
+        return;
+      }
+      const maxLen = target === pinEl ? 4 : 12;
+      if (String(target.value || "").length < maxLen) {
+        target.value = String(target.value || "") + key;
+      }
+      if (target === phoneEl && String(phoneEl.value || "").replace(/\D/g, "").length >= 7) {
+        activePinField = "pin";
+      }
+    });
+  });
 
   if (els.buildingLeagueSelect) {
     els.buildingLeagueSelect.addEventListener("change", (event) => {

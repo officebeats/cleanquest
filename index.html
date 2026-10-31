@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031-2" />
+  <link rel="stylesheet" href="styles.css?v=20261031-3" />
 </head>
 
 <body>
@@ -149,6 +149,20 @@
             <input id="cleanerPin" class="pin-input pin-code" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="4-digit PIN" data-i18n-placeholder="pinPlaceholder" aria-label="4-digit PIN" />
             <button id="pinSaveButton" class="secondary-button compact-chip" type="button" data-i18n="pinSaveAction">SAVE PIN</button>
           </div>
+          <div id="pinGlovePad" class="pin-glove-pad" role="group" aria-label="Glove-friendly number pad">
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="1">1</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="2">2</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="3">3</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="4">4</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="5">5</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="6">6</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="7">7</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="8">8</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="9">9</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="0">0</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="back" aria-label="Backspace">⌫</button>
+            <button class="secondary-button compact-chip pin-key" type="button" data-pin-key="quick" data-i18n="pinQuickFill">⚡ DEMO PASS</button>
+          </div>
           <small class="fine-print" data-i18n="pinLocalNote">Local convenience lock only · your phone + PIN stay on this device and are never sent anywhere.</small>
         </section>
 
@@ -190,6 +204,9 @@
         <p id="welcomeDisclaimer" class="fine-print" data-i18n="welcomeDisclaimer">
           Prototype experience. Benchmark only · never a certification.
         </p>
+        <a id="openJudgesReportLink" class="judges-report-link" href="docs/judges/report.html" data-i18n="openJudgesReport">
+          📊 JUDGES' PRESENTATION &amp; RUBRIC REPORT
+        </a>
       </div>
     </section>
 
@@ -1201,7 +1218,7 @@
     </div>
   </section>
 
-  <script src="deck.js?v=20261031-2"></script>
-  <script src="app.js?v=20261031-2"></script>
+  <script src="deck.js?v=20261031-3"></script>
+  <script src="app.js?v=20261031-3"></script>
 </body>
 </html>
