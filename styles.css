@@ -5016,16 +5016,20 @@ select:focus-visible {
   display: none !important;
 }
 /* Results screen: crisp legibility, single action button, zero verbose paragraphs */
-#resultsScreen #disputePanel,
 #resultsScreen #judgeDemoNote,
 #resultsScreen #verifyProvenance,
 #resultsScreen .results-actions-grid small.fine-print {
   display: none !important;
 }
 
+#resultsScreen #disputePanel:not(.hidden) {
+  display: block !important;
+}
+
 #resultsScreen .results-actions-grid {
   display: grid !important;
-  grid-template-columns: 1fr !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 8px !important;
   margin: 2px 0 0 !important;
 }
 
@@ -6739,9 +6743,19 @@ body.music-beat-thump #leaderboardScreen #playAgainButton {
     min-height: 52px !important;
     max-height: 52px !important;
   }
-  #resultsScreen .finding-card,
-  #resultsScreen .results-actions-grid {
+  #resultsScreen .finding-card {
     display: none !important;
+  }
+  #resultsScreen .results-actions-grid {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+  }
+  #resultsScreen #voiceRecordButton,
+  #resultsScreen #disputeButton {
+    min-height: 36px !important;
+    padding: 4px 8px !important;
+    font-size: 11.5px !important;
   }
   #resultsScreen #verifiedScorecard {
     padding: 5px 10px !important;
