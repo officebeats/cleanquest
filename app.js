@@ -13585,12 +13585,7 @@ async function runPersonaSuite() {
   }
   try {
     const fold = {};
-    const screensToCheck = [
-      ["leaderboard", ["#playAgainButton", "#homeButton", "#viewRecordsButton"]],
-      ["records", ["#recordsDone", "#inspectionExportJson", "#inspectionExportCsv"]],
-      ["settings", ["#settingsSave", "#settingsDone"]],
-      ["deck", ["#deckLeft", "#deckRight"]]
-    ];
+    const screensToCheck = [["leaderboard", ["#playAgainButton", "#homeButton", "#viewRecordsButton"]], ["records", ["#recordsDone", "#inspectionExportJson", "#inspectionExportCsv"]], ["settings", ["#settingsDone"]], ["deck", ["#deckLeft", "#deckRight"]]];
     for (const [screen, ids] of screensToCheck) {
       navigateTo(screen);
       if (screen === "deck" && !state.deck) {

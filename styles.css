@@ -7278,3 +7278,24 @@ body #resultsScreen .results-cta-bar {
     max-height: 96px !important;
   }
 }
+.advanced-cloud-panel {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 6px 10px;
+  margin: 8px 0;
+}
+.advanced-cloud-summary {
+  cursor: pointer;
+  font-weight: 800;
+  font-size: 12.5px;
+  letter-spacing: 0.04em;
+  padding: 8px 4px;
+  list-style: none;
+}
+.advanced-cloud-summary::-webkit-details-marker {
+  display: none;
+}
+.advanced-cloud-panel[open] .advanced-cloud-summary {
+  margin-bottom: 6px;
+  opacity: 0.85;
+}
