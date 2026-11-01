@@ -7139,7 +7139,7 @@ function renderProviderLog() {
   });
 }
 
-async function callPartnerBackendProxy({ provider = "auto", messages = [], max_tokens = 950, seasonKey = "", forceRefresh = false } = {}) {
+async function callPartnerBackendProxy({ provider = "auto", messages = [], max_tokens = 1450, seasonKey = "", forceRefresh = false } = {}) {
   if (!CONFIG.cloud.backendProxyUrl) return null;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), CONFIG.cloud.timeoutMs);
@@ -7284,7 +7284,7 @@ async function generateLiveAiBonusCard(forceNetwork = false, silentSync = false)
     const proxyResp = await callPartnerBackendProxy({
       provider: "auto",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 1050,
+      max_tokens: 1550,
       seasonKey,
       forceRefresh: Boolean(forceNetwork)
     });
@@ -7372,7 +7372,7 @@ async function generateLiveAiShiftBriefing(forceNetwork = false) {
     const proxyResp = await callPartnerBackendProxy({
       provider: "auto",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 750
+      max_tokens: 1450
     });
     let textOut = "";
     let totalTokSum = 0;
@@ -7681,7 +7681,7 @@ async function getVerifiedScore(aiResult, before, after) {
         : "auto");
       const proxyResp = await callPartnerBackendProxy({
         provider: partnerMode,
-        max_tokens: 900,
+        max_tokens: 1450,
         messages: [
           { role: "system", content: CLOUD_SCORING_PROMPT },
           {
