@@ -9681,7 +9681,14 @@ function loadDeckLeaderboard() {
   try {
     const raw = JSON.parse(localStorage.getItem(DECK_LEADERBOARD_KEY));
     if (Array.isArray(raw)) {
-      return raw.filter((e) => e && typeof e === "object" && !e.sample && !e.isSample);
+      return raw.filter(
+        (e) =>
+          e &&
+          typeof e === "object" &&
+          !e.sample &&
+          !e.isSample &&
+          !/^deck-rival-/.test(String(e.id || ""))
+      );
     }
   } catch {}
   return [];
