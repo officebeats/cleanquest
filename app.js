@@ -44,8 +44,8 @@ const CONFIG = {
     endpoint: "https://api.meta.ai/v1/chat/completions",
     model: "muse-spark-1.3",
     timeoutMs: 25000,
-    maxEdgePx: 768,
-    jpegQuality: 0.82,
+    maxEdgePx: 512,
+    jpegQuality: 0.72,
     minSurfaceConfidence: 0.6,
     asrEndpoint: "https://api.meta.ai/v1/asr/transcribe",
     asrModel: "muse-voice-transcribe-1.0",
@@ -57,7 +57,7 @@ const CONFIG = {
       endpoint: "https://api.fireworks.ai/inference/v1/chat/completions",
       model: "accounts/fireworks/models/muse-spark-open"
     },
-    backendProxyUrl: "https://script.google.com/macros/s/AKfycbwV_FnddnMG6XO2wZ43wXD56wrpH79O2amozBM5Rd0rE4rQZBokI1Qm47QhoFYwD8I/exec",
+    backendProxyUrl: "https://script.google.com/macros/s/AKfycbyiAoVP4NCdmJVrZG6tijb9knTD5Nh3O67aDX7EJqTnjeJs2qjWBBcH7GxFbJasmViU/exec",
     samEndpoint: "https://api.meta.ai/v1/responses",
     samModel: "sam-3.1"
   }
@@ -6855,7 +6855,7 @@ const CLOUD_SCORING_PROMPT = [
   "You receive two photos: BEFORE cleaning and AFTER cleaning.",
   "Score only visible cleanliness and technique.",
   "Never claim sanitation, disinfection, or certification.",
-  "Respond with JSON ONLY, no other text, matching this schema:",
+  "Think briefly (<35 words). Respond with JSON ONLY, no other text, matching this schema:",
   "{",
   '  "surfaces": [',
   '    { "name": "counter|glass|floor|fixture", "score": 0-100,',
@@ -6877,7 +6877,7 @@ const VERIFIED_SURFACES = new Set([
 ]);
 
 function loadCloudSettings() {
-  const empty = { metaKey: "", basetenKey: "", provider: "baseten", openRouterModel: "dual" };
+  const empty = { metaKey: "", basetenKey: "", provider: "baseten", openRouterModel: "auto" };
 
   try {
     const raw = localStorage.getItem(CLOUD_SETTINGS_KEY);
@@ -6891,7 +6891,7 @@ function loadCloudSettings() {
       provider: parsed.provider === "meta" ? "meta" : "baseten",
       openRouterModel: typeof parsed.openRouterModel === "string" && parsed.openRouterModel
         ? parsed.openRouterModel
-        : "dual"
+        : "auto"
     };
   } catch {
     return empty;
@@ -7139,14 +7139,14 @@ function renderProviderLog() {
   });
 }
 
-async function callPartnerBackendProxy({ provider = "dual", messages = [], max_tokens = 2048 } = {}) {
+async function callPartnerBackendProxy({ provider = "auto", messages = [], max_tokens = 950, seasonKey = "", forceRefresh = false } = {}) {
   if (!CONFIG.cloud.backendProxyUrl) return null;
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), CONFIG.cloud.timeoutMs);
   try {
     const resp = await fetch(CONFIG.cloud.backendProxyUrl, {
       method: "POST",
-      body: JSON.stringify({ provider, messages, max_tokens }),
+      body: JSON.stringify({ provider, messages, max_tokens, seasonKey, forceRefresh }),
       signal: controller.signal
     });
     if (!resp.ok) return null;
@@ -7157,7 +7157,9 @@ async function callPartnerBackendProxy({ provider = "dual", messages = [], max_t
     clearTimeout(timeout);
   }
 }
+
 const BIWEEKLY_SEASON_KEY = "cleanquest.biweeklySeason.v1";
+const BRIEFING_CACHE_KEY = "cleanquest.briefingCache.v1";
 
 function getBiWeeklySeasonMeta() {
   const windowMs = 14 * 86400000;
@@ -7177,22 +7179,32 @@ function loadCachedBiWeeklySeason() {
   }
 }
 
-function applyBiWeeklyCardsToDeck(pack) {
-  if (!pack || !Array.isArray(pack.cards) || !pack.cards.length || typeof SWIPE_DECK === "undefined") return false;
-  const newIndices = [];
+function ensureSeasonCardsInSwipeDeck(pack) {
+  if (!pack || !Array.isArray(pack.cards) || !pack.cards.length || typeof SWIPE_DECK === "undefined") return [];
+  const added = [];
   for (const c of pack.cards) {
-    let idx = SWIPE_DECK.findIndex((existing) => existing.id === c.id);
-    if (idx < 0) {
+    if (!c || !c.id || !c.text) continue;
+    const existingIdx = SWIPE_DECK.findIndex((existing) => existing.id === c.id);
+    if (existingIdx >= 0) {
+      SWIPE_DECK[existingIdx] = c;
+      added.push(SWIPE_DECK[existingIdx]);
+    } else {
       SWIPE_DECK.push(c);
-      idx = SWIPE_DECK.length - 1;
+      added.push(c);
     }
-    newIndices.push(idx);
   }
+  return added;
+}
+
+function applyBiWeeklyCardsToDeck(pack) {
+  const cards = ensureSeasonCardsInSwipeDeck(pack);
+  if (!cards.length) return false;
   state.deck = {
-    order: newIndices,
+    order: cards.slice(),
     index: 0,
     correct: 0,
     locked: false,
+    answeredCurrent: false,
     isBiWeeklySeason: true,
     seasonNum: pack.seasonNum,
     seasonTheme: pack.theme
@@ -7201,45 +7213,92 @@ function applyBiWeeklyCardsToDeck(pack) {
   return true;
 }
 
-async function generateLiveAiBonusCard(forceNetwork = false) {
+function parseSeasonPackFromItem(item, seasonNum, daysLeft, areaKey, areaLabel) {
+  const raw = item?.data?.choices?.[0]?.message?.content || "";
+  const parsed = extractScorecardJSON(raw);
+  const rawCards = Array.isArray(parsed?.cards)
+    ? parsed.cards
+    : (parsed && typeof parsed.en === "string" ? [parsed] : []);
+  if (!rawCards.length) return null;
+  const theme = typeof parsed?.theme === "string" && parsed.theme.trim()
+    ? parsed.theme.trim()
+    : `${areaLabel} Mastery`;
+  const cards = rawCards
+    .filter((c) => c && typeof c.en === "string" && c.en.trim())
+    .slice(0, 5)
+    .map((c, idx) => {
+      const cat = ["surface", "product", "technique"].includes(c.c || c.category)
+        ? (c.c || c.category)
+        : "technique";
+      const ans = (c.a || c.answer) === "miss" ? "miss" : "right";
+      return {
+        id: `season-${seasonNum}-${areaKey}-${idx + 1}`,
+        category: cat,
+        productType: "neutral cleaner",
+        answer: ans,
+        isSeasonCard: true,
+        seasonNum,
+        text: {
+          en: `🗓️ [S${seasonNum} · ${theme}] ${c.en.trim()}`,
+          es: `🗓️ [T${seasonNum} · ${theme}] ${(c.es || c.en).trim()}`,
+          pl: `🗓️ [S${seasonNum} · ${theme}] ${(c.pl || c.en).trim()}`
+        }
+      };
+    });
+  if (!cards.length) return null;
+  return {
+    seasonNum,
+    daysLeft,
+    areaKey,
+    theme,
+    cards,
+    generatedAt: new Date().toISOString()
+  };
+}
+
+async function generateLiveAiBonusCard(forceNetwork = false, silentSync = false) {
   const btn = document.getElementById("deckAiBonusButton");
   const { seasonNum, daysLeft } = getBiWeeklySeasonMeta();
   const areaKey = state.checkin?.areaKey || "breakroom";
   const cached = loadCachedBiWeeklySeason();
-  // If cached for this 14-day bi-weekly season & station, always serve from the 0-token local cache unless forceNetwork is true
+  // Tier 1 Cache (0 tokens, 0ms): Local browser cache for the current 14-day bi-weekly window
   if (!forceNetwork && cached && cached.seasonNum === seasonNum && cached.areaKey === areaKey) {
-    applyBiWeeklyCardsToDeck(cached);
+    ensureSeasonCardsInSwipeDeck(cached);
+    if (!silentSync) applyBiWeeklyCardsToDeck(cached);
     return cached;
   }
-  if (btn) {
+  if (btn && !silentSync) {
     btn.disabled = true;
     btn.textContent = "⏳ AI…";
   }
   try {
     const areaLabel = CONFIG.areaTemplates[areaKey]?.label || "Breakroom & Pantry";
     const spotLabel = state.checkin?.assignedSpot || "Sink & counter";
-    // Token-efficient batched prompt: generates a full 3-card Bi-Weekly Season Pack + Theme in 1 single API call (~3x lower prompt overhead per card)
+    const seasonKey = `SEASON_PACK_${seasonNum}_${areaKey}`;
+    // Batched compact prompt: 1 single primary API call (with automatic failover) generates the entire 14-day Season Pack
     const prompt = [
       `CleanQuest Bi-Weekly Season #${seasonNum} (${areaLabel} · ${spotLabel}).`,
-      "Think briefly (<50 words). Output ONLY valid JSON (no markdown):",
+      "Think briefly (<35 words). Output ONLY valid JSON (no markdown):",
       '{"theme":"Short theme","cards":[{"c":"surface","a":"right","en":"1 short sentence","es":"1 frase corta","pl":"1 krótkie zdanie"},{"c":"product","a":"miss","en":"1 short sentence","es":"1 frase corta","pl":"1 krótkie zdanie"},{"c":"technique","a":"right","en":"1 short sentence","es":"1 frase corta","pl":"1 krótkie zdanie"}]}'
     ].join("\n");
     const proxyResp = await callPartnerBackendProxy({
-      provider: "dual",
+      provider: "auto",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 2048
+      max_tokens: 1050,
+      seasonKey,
+      forceRefresh: Boolean(forceNetwork)
     });
     let chosenPack = null;
+    // Tier 2 Cache (0 LLM tokens): Shared server-side ScriptProperties cache hit
+    if (proxyResp?.cachedOnServer && proxyResp?.seasonPack) {
+      chosenPack = parseSeasonPackFromItem(proxyResp.seasonPack, seasonNum, daysLeft, areaKey, areaLabel);
+    }
     for (const item of proxyResp?.results || []) {
       const usage = item?.data?.usage || {};
       const totalTok = Number(usage.total_tokens) || 0;
-      const raw = item?.data?.choices?.[0]?.message?.content || "";
-      const parsed = extractScorecardJSON(raw);
-      const rawCards = Array.isArray(parsed?.cards)
-        ? parsed.cards
-        : (parsed && typeof parsed.en === "string" ? [parsed] : []);
+      const packCandidate = parseSeasonPackFromItem(item, seasonNum, daysLeft, areaKey, areaLabel);
       if (item?.ok && totalTok > 0) {
-        const cardCount = Math.max(1, rawCards.length || 3);
+        const cardCount = Math.max(1, packCandidate?.cards?.length || 3);
         appendProviderLog({
           provider: item.provider,
           model: item.model,
@@ -7253,92 +7312,76 @@ async function generateLiveAiBonusCard(forceNetwork = false) {
           mock: false
         });
       }
-      if (!chosenPack && rawCards.length > 0) {
-        const theme = typeof parsed?.theme === "string" && parsed.theme.trim()
-          ? parsed.theme.trim()
-          : `${areaLabel} Mastery`;
-        const cards = rawCards
-          .filter((c) => c && typeof c.en === "string" && c.en.trim())
-          .slice(0, 5)
-          .map((c, idx) => {
-            const cat = ["surface", "product", "technique"].includes(c.c || c.category)
-              ? (c.c || c.category)
-              : "technique";
-            const ans = (c.a || c.answer) === "miss" ? "miss" : "right";
-            return {
-              id: `season-${seasonNum}-${areaKey}-${idx + 1}`,
-              category: cat,
-              productType: "neutral cleaner",
-              answer: ans,
-              isSeasonCard: true,
-              seasonNum,
-              text: {
-                en: `🗓️ [S${seasonNum} · ${theme}] ${c.en.trim()}`,
-                es: `🗓️ [T${seasonNum} · ${theme}] ${(c.es || c.en).trim()}`,
-                pl: `🗓️ [S${seasonNum} · ${theme}] ${(c.pl || c.en).trim()}`
-              }
-            };
-          });
-        if (cards.length > 0) {
-          chosenPack = {
-            seasonNum,
-            daysLeft,
-            areaKey,
-            theme,
-            cards,
-            generatedAt: new Date().toISOString()
-          };
-        }
+      if (!chosenPack && packCandidate) {
+        chosenPack = packCandidate;
       }
     }
     if (chosenPack) {
       try {
         localStorage.setItem(BIWEEKLY_SEASON_KEY, JSON.stringify(chosenPack));
       } catch {}
-      applyBiWeeklyCardsToDeck(chosenPack);
+      ensureSeasonCardsInSwipeDeck(chosenPack);
+      if (!silentSync || state.screen === "deck") {
+        applyBiWeeklyCardsToDeck(chosenPack);
+      }
       renderPersonalRecordUI();
     }
     return chosenPack;
   } finally {
-    if (btn) {
+    if (btn && !silentSync) {
       btn.disabled = false;
       btn.textContent = "✨ AI";
     }
   }
 }
 
-async function generateLiveAiShiftBriefing() {
+async function generateLiveAiShiftBriefing(forceNetwork = false) {
   const btn = document.getElementById("adminAiBriefingButton");
   const out = document.getElementById("adminAiBriefingOutput");
+  const logs = loadInspectionLog().slice(-10);
+  const avg = logs.length
+    ? Math.round(logs.reduce((s, r) => s + (Number(r.cleanliness) || 85), 0) / logs.length)
+    : 91;
+  const cacheFingerprint = `${logs.length}:${logs[logs.length - 1]?.id || "seed"}:${avg}`;
+  if (!forceNetwork) {
+    try {
+      const cachedBriefing = JSON.parse(localStorage.getItem(BRIEFING_CACHE_KEY));
+      if (cachedBriefing && cachedBriefing.fingerprint === cacheFingerprint && cachedBriefing.text) {
+        if (out) {
+          out.classList.remove("hidden");
+          out.textContent = `${cachedBriefing.text} (cached · 0 tok)`;
+        }
+        return cachedBriefing.text;
+      }
+    } catch {}
+  }
   if (btn) {
     btn.disabled = true;
     btn.textContent = "⏳ GENERATING MUSE SPARK OPEN BRIEFING…";
   }
   if (out) {
     out.classList.remove("hidden");
-    out.textContent = "⏳ Querying Baseten + Fireworks AI (Muse Spark Open)…";
+    out.textContent = "⏳ Querying Muse Spark Open (Primary + Auto-Failover)…";
   }
   try {
-    const logs = loadInspectionLog().slice(-10);
-    const avg = logs.length
-      ? Math.round(logs.reduce((s, r) => s + (Number(r.cleanliness) || 85), 0) / logs.length)
-      : 91;
     const prompt = [
       "You are the CleanQuest AI Operations Briefing assistant (coaching & recognition only — never discipline).",
       `Recent shift runs: ${logs.length || 3}, average cleanliness: ${avg}%.`,
-      "Think briefly (<40 words). Write a concise 2-sentence shift briefing highlighting quality momentum and which 5-day training pack (Dwell Time, Top-to-Bottom Surface, or Product Match) to feature today."
+      "Think briefly (<30 words). Write a concise 2-sentence shift briefing highlighting quality momentum and which 5-day training pack (Dwell Time, Top-to-Bottom Surface, or Product Match) to feature today."
     ].join("\n");
     const proxyResp = await callPartnerBackendProxy({
-      provider: "dual",
+      provider: "auto",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 2048
+      max_tokens: 750
     });
     let textOut = "";
     let totalTokSum = 0;
+    let usedProvider = "baseten";
     for (const item of proxyResp?.results || []) {
       const usage = item?.data?.usage || {};
       const totalTok = Number(usage.total_tokens) || 0;
       totalTokSum += totalTok;
+      usedProvider = item?.provider || usedProvider;
       const raw = (item?.data?.choices?.[0]?.message?.content || "").trim();
       if (item?.ok && totalTok > 0) {
         appendProviderLog({
@@ -7355,11 +7398,18 @@ async function generateLiveAiShiftBriefing() {
       }
       if (!textOut && raw) textOut = raw;
     }
-    if (out) {
-      out.textContent = textOut
-        ? `⚡ Muse Spark Open (${totalTokSum.toLocaleString()} tok · Baseten + Fireworks): ${textOut}`
-        : "⚡ Muse Spark Open briefing logged to Provider Run Log.";
+    const formatted = textOut
+      ? `⚡ Muse Spark Open (${totalTokSum.toLocaleString()} tok · ${usedProvider}): ${textOut}`
+      : "⚡ Muse Spark Open briefing logged to Provider Run Log.";
+    if (textOut) {
+      try {
+        localStorage.setItem(BRIEFING_CACHE_KEY, JSON.stringify({ fingerprint: cacheFingerprint, text: formatted }));
+      } catch {}
     }
+    if (out) {
+      out.textContent = formatted;
+    }
+    return formatted;
   } finally {
     if (btn) {
       btn.disabled = false;
@@ -7626,11 +7676,12 @@ async function getVerifiedScore(aiResult, before, after) {
     }
 
     const runPartnerDualFallback = async (modeOverride) => {
-      const partnerMode = modeOverride || (["baseten", "fireworks", "dual"].includes(settings.openRouterModel)
+      const partnerMode = modeOverride || (["auto", "baseten", "fireworks", "dual"].includes(settings.openRouterModel)
         ? settings.openRouterModel
-        : "dual");
+        : "auto");
       const proxyResp = await callPartnerBackendProxy({
         provider: partnerMode,
+        max_tokens: 900,
         messages: [
           { role: "system", content: CLOUD_SCORING_PROMPT },
           {
@@ -9277,10 +9328,19 @@ function openDeck() {
   if (state.screen !== "deck") {
     state.deckReturn = state.screen;
   }
-
+  const { seasonNum } = getBiWeeklySeasonMeta();
+  const areaKey = state.checkin?.areaKey || "breakroom";
+  const cachedSeason = loadCachedBiWeeklySeason();
+  if (cachedSeason && cachedSeason.seasonNum === seasonNum) {
+    ensureSeasonCardsInSwipeDeck(cachedSeason);
+  }
   state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false, answeredCurrent: false };
   navigateTo("deck");
   renderDeck();
+  // Zero-touch automated bi-weekly rotation: if the 14-day clock rolled over and this station isn't cached yet, sync automatically
+  if (!SELFTEST_MODE && !VOICE_TEST_MODE && !state.inPersonaSuite && (!cachedSeason || cachedSeason.seasonNum !== seasonNum || cachedSeason.areaKey !== areaKey)) {
+    void generateLiveAiBonusCard(false, true);
+  }
 }
 
 function closeDeck() {

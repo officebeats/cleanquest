@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261101-06" />
+  <link rel="stylesheet" href="styles.css?v=20261101-07" />
 </head>
 
 <body>
@@ -1202,9 +1202,10 @@
             </label>
           </div>
           <select id="openRouterModelSelect" class="area-select" aria-label="OpenRouter / Cloud Model">
-            <option value="dual">Partner Cloud: Baseten + Fireworks AI (Muse Spark Open · Dual Active)</option>
-            <option value="baseten">Partner Cloud: Baseten (meta-models/muse-spark-open)</option>
-            <option value="fireworks">Partner Cloud: Fireworks AI (accounts/fireworks/models/muse-spark-open)</option>
+            <option value="auto" selected>Partner Cloud: Baseten Primary → Fireworks Failover (Token-Efficient Default)</option>
+            <option value="baseten">Partner Cloud: Baseten Only (meta-models/muse-spark-open)</option>
+            <option value="fireworks">Partner Cloud: Fireworks AI Only (accounts/fireworks/models/muse-spark-open)</option>
+            <option value="dual">Partner Cloud: Dual Parallel (Baseten + Fireworks Benchmark)</option>
             <option value="google/gemini-2.5-flash">OpenRouter: Gemini 2.5 Flash</option>
             <option value="openai/gpt-4o-mini">OpenRouter: OpenAI GPT-4o Mini</option>
             <option value="anthropic/claude-sonnet-4">OpenRouter: Anthropic Claude Sonnet 4</option>
@@ -1455,7 +1456,7 @@
   <canvas id="arcadeFxCanvas" class="arcade-fx-canvas" aria-hidden="true"></canvas>
   <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
   <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
-  <script src="deck.js?v=20261101-06"></script>
-  <script src="app.js?v=20261101-06"></script>
+  <script src="deck.js?v=20261101-07"></script>
+  <script src="app.js?v=20261101-07"></script>
 </body>
 </html>
