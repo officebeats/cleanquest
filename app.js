@@ -3804,6 +3804,7 @@ function navigateTo(screen) {
 
   if (screen === "leaderboard") {
     renderLeaderboard();
+    if (!SELFTEST_MODE) triggerArcadeFx("confetti");
   }
 
   if (screen === "deck") {
@@ -8999,6 +9000,9 @@ function renderLeaderboard() {
   visible.forEach((entry) => {
     const row = document.createElement("div");
     row.className = "leaderboard-row";
+    if (entry.rank >= 1 && entry.rank <= 3) {
+      row.classList.add(`rank-${entry.rank}`);
+    }
 
     if (entry.id === state.latestRunId || entry.isViewer) {
       row.classList.add("latest");
@@ -9006,7 +9010,13 @@ function renderLeaderboard() {
 
     const rank = document.createElement("span");
     rank.className = "rank";
-    rank.textContent = String(entry.rank);
+    rank.textContent = entry.rank === 1
+      ? "🥇 1"
+      : entry.rank === 2
+        ? "🥈 2"
+        : entry.rank === 3
+          ? "🥉 3"
+          : String(entry.rank);
 
     const name = document.createElement("span");
     name.className = "player-name";
