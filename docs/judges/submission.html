@@ -434,45 +434,48 @@
 
   <!-- STEP 1: CREDITS & LIVE PARTNER TELEMETRY -->
   <section class="card telemetry-card">
-    <span class="step-badge">Step 1 · Credits &amp; Live Partner Telemetry (Do This First)</span>
-    <h2>How to Claim Credits &amp; Log Live Telemetry in 4 Minutes</h2>
+    <span class="step-badge">Step 1 · Credits &amp; Live Partner Telemetry Status</span>
+    <h2>What Is Completed vs. What Is Left</h2>
+
+    <h3>✅ Completed (Already Done in Your Orca Browser)</h3>
+    <ol class="numbered-steps">
+      <li><strong>Created &amp; Saved Your Meta Model API Key:</strong> Minted key <code>CleanQuest</code> (<code>LLM_1424…ogo4</code>) on <a href="https://dev.meta.ai/api-keys?team_id=1630664498630649&amp;project_id=1738477500698778" target="_blank" rel="noopener">dev.meta.ai/api-keys ↗</a> and saved it directly into CleanQuest <code>⚙ Settings</code> in your Orca browser.</li>
+      <li><strong>Added 1-Tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in Settings:</strong> Verifies live <code>muse-spark-1.3</code> and <code>meta-models/muse-spark-open-1026</code> responses with <code>✓ verified</code> / <code>⚠ error</code> badges.</li>
+      <li><strong>Probed Live Meta API &amp; Identified Billing Hold:</strong> Tested <code>api.meta.ai/v1/chat/completions</code>, which returned <code>HTTP 402</code> because <a href="https://dev.meta.ai/billing?team_id=1630664498630649&amp;project_id=1738477500698778" target="_blank" rel="noopener">dev.meta.ai/billing ↗</a> currently shows <em>"Model API access suspended due to failed payment — $22.50 past due on Visa •••• 1402"</em>.</li>
+    </ol>
+
+    <h3>⏳ Left for You to Do (4 Quick Actions)</h3>
     <ol class="numbered-steps">
       <li>
-        <strong>Claim your $150 Meta Model API credits:</strong>
+        <strong>Click <code>Make payment</code> on Meta Billing (Open in Orca Tab 1):</strong>
         <ul>
-          <li>Open <a href="https://dev.meta.ai/billing?team_id=2181437619392922&amp;project_id=2030324597684216" target="_blank" rel="noopener">Meta Developer Billing ↗</a>.</li>
-          <li>Confirm your $150 credit is active and a payment card is attached (required by Meta to unlock API calls).</li>
-          <li>Set a <strong>$150 Spend Limit</strong> on the Billing page.</li>
-          <li>Each teammate (<strong>Ernesto</strong>, <strong>Bill</strong>, <strong>Dom</strong>) must claim their own credit individually before <strong>Wed Nov 4, 9:00 PM ET</strong>.</li>
+          <li>In <a href="https://dev.meta.ai/billing?team_id=1630664498630649&amp;project_id=1738477500698778" target="_blank" rel="noopener">dev.meta.ai/billing ↗</a>, click the blue <strong><code>Make payment</code></strong> button (<code>$22.50</code> on <code>Visa •••• 1402</code>) to un-suspend your Meta Model API key.</li>
+          <li>Confirm your <strong>$150 Spend Limit</strong> is set on that page, and remind <strong>Bill</strong> and <strong>Dom</strong> to claim their individual $150 credits before <strong>Wed Nov 4, 9:00 PM ET</strong>.</li>
         </ul>
       </li>
       <li>
-        <strong>Copy your Meta API Key and Baseten API Key:</strong>
+        <strong>Sign in to Baseten &amp; Paste Your Baseten Key (Orca Tab 2):</strong>
         <ul>
-          <li>Get your Meta key from <a href="https://dev.meta.ai/" target="_blank" rel="noopener">dev.meta.ai ↗</a> (powers <code>muse-spark-1.3</code>, <code>sam-3.1</code>, and <code>muse-voice-transcribe-1.0</code>).</li>
-          <li>Get your Baseten key from <a href="https://app.baseten.co/settings/api_keys" target="_blank" rel="noopener">app.baseten.co/settings/api_keys ↗</a> (powers <code>meta-models/muse-spark-open-1026</code> for the <strong>$10K Open Weights Bonus Prize</strong>).</li>
+          <li>Sign in at <a href="https://app.baseten.co/settings/api_keys" target="_blank" rel="noopener">app.baseten.co/settings/api_keys ↗</a> and copy your Baseten API key.</li>
+          <li>In CleanQuest <code>⚙ Settings</code> (already open in Orca Tab 2 with your Meta key pre-filled), paste your Baseten key into <strong>Baseten / Secondary Key</strong> and tap <strong><code>SAVE KEYS</code></strong>.</li>
         </ul>
       </li>
       <li>
-        <strong>Paste both keys into CleanQuest Settings:</strong>
+        <strong>Tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in CleanQuest Settings:</strong>
         <ul>
-          <li>Open the <a href="../../index.html" target="_blank" rel="noopener">Live CleanQuest App ↗</a> and tap the <code>⚙</code> gear icon in the top-right corner.</li>
-          <li>Paste your <strong>Meta Model API Key</strong> into the first box.</li>
-          <li>Paste your <strong>Baseten Key</strong> into the second box.</li>
-          <li>Tap <strong>SAVE KEYS</strong> (keys stay in your browser's <code>localStorage</code> only — never in Git).</li>
+          <li>Scroll to the <strong>PROVIDER RUN LOG</strong> card in <code>⚙ Settings</code> and tap <strong><code>⚡ TEST &amp; LOG TELEMETRY</code></strong>.</li>
+          <li>Confirm the status line shows <code>✓ Primary (meta · muse-spark-1.3): verified · ✓ Baseten (meta-models/muse-spark-open-1026): verified</code>.</li>
         </ul>
       </li>
       <li>
-        <strong>Test your keys, then record 1 real camera run per provider:</strong>
+        <strong>Complete 1 Real Camera Run per Provider &amp; Export JSON:</strong>
         <ul>
-          <li>In <code>⚙ Settings</code>, tap <strong><code>⚡ TEST &amp; LOG TELEMETRY</code></strong> to run a synthetic key-check probe against Meta and Baseten (confirms <code>✓ verified</code> vs. <code>⚠ http-401</code> without polluting your run log).</li>
-          <li>With Provider set to <strong>Meta Model API</strong>, complete <strong>1 real Before/After camera run</strong> + spoken voice note so a real <code>muse-spark-1.3</code> + <code>sam-3.1</code> run is recorded.</li>
-          <li>Switch Provider in <code>⚙ Settings</code> to <strong>Baseten (Spark Open)</strong>, complete <strong>1 real Before/After camera run</strong> so a real <code>meta-models/muse-spark-open-1026</code> run is recorded, then tap <strong><code>EXPORT LOG (JSON)</code></strong>.</li>
+          <li>Run <strong>1 real Before/After camera round</strong> + spoken voice note on <strong>Meta Model API</strong> (<code>muse-spark-1.3</code> + <code>sam-3.1</code> + <code>muse-voice-transcribe-1.0</code>).</li>
+          <li>Switch Provider in <code>⚙ Settings</code> to <strong>Baseten (Spark Open)</strong>, run <strong>1 real Before/After camera round</strong> on <code>meta-models/muse-spark-open-1026</code>, and tap <strong><code>EXPORT LOG (JSON)</code></strong>.</li>
         </ul>
       </li>
     </ol>
   </section>
-
   <!-- CRITICAL GUARDRAILS -->
   <section class="card critical-card">
     <span class="step-badge">Step 2 · Mandatory Guardrails</span>
