@@ -185,15 +185,15 @@
     border-radius: 10px;
     background: rgba(6, 18, 32, 0.65);
     border: 1px solid rgba(69, 234, 255, 0.16);
-    margin-bottom: 8px;
-  }
-  .Checklist input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin-top: 3px;
-    accent-color: var(--mint);
-    flex-shrink: 0;
-    cursor: pointer;
+    <div class="links">
+      <a class="btn-link" href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit" target="_blank" rel="noopener">1. Direct Submit Portal (/hackathon/submit) ↗</a>
+      <a class="btn-link alt" href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/details" target="_blank" rel="noopener">2. Event Details Page ↗</a>
+      <a class="btn-link alt" href="https://dev.meta.ai/billing?team_id=2181437619392922&amp;project_id=2030324597684216" target="_blank" rel="noopener">3. Meta API Billing &amp; Credits ↗</a>
+      <a class="btn-link alt" href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/waiver" target="_blank" rel="noopener">4. Official Rules &amp; Waiver ↗</a>
+      <a class="btn-link alt" href="../../index.html">5. Launch Live App</a>
+      <a class="btn-link alt" href="report.html">6. Judges' Presentation Report</a>
+      <a class="btn-link alt" href="submission.pdf">7. Download Playbook PDF</a>
+    </div>
   }
 
   .copy-box {
@@ -205,21 +205,21 @@
     margin: 10px 0 16px;
   }
   .copy-box-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    margin-bottom: 8px;
-  }
-  .copy-box-head strong {
-    font-size: 12.5px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--gold);
-  }
-  .copy-btn {
-    padding: 5px 12px;
-    border-radius: 999px;
+    <div class="stat-pill">
+      <small>Track &amp; Theme ($1M Total Pool)</small>
+      <strong>Indie Track · $400K Pool</strong>
+      <span>$150K 1st · $100K 2nd · $75K 3rd · $50K 4th · $25K 5th</span>
+    </div>
+    <div class="stat-pill">
+      <small>Bonus Prizes ($50K Pool)</small>
+      <strong>Open Weights ($10K) + Viral ($20K)</strong>
+      <span>+ Community Vote ($10K, opens Nov 9)</span>
+    </div>
+    <div class="stat-pill">
+      <small>Judging, Finals &amp; Community Vote</small>
+      <strong>Nov 5–8 · Finals Mon Nov 9 (12 PM ET)</strong>
+      <span>Top 5/track live finals Nov 9 · Community winner Nov 16</span>
+    </div>
     border: 1px solid var(--line-bright);
     background: rgba(69, 234, 255, 0.14);
     color: var(--cyan);
@@ -257,6 +257,14 @@
   th {
     color: var(--cyan);
     font-size: 12px;
+      <li>
+        <input type="checkbox" checked />
+        <div><strong>6. One Submission by Appointed Representative (Max 4 Teammates, 1 Track Only):</strong> A project may be entered in <strong>one track only</strong> (Indie Developer Track). One designated Representative (<strong>Ernesto Rodriguez</strong>) submits the project at <a href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit" target="_blank" rel="noopener">/hackathon/submit</a> and <strong>must list every other team member</strong> (<strong>Bill Basil</strong> and <strong>Dom</strong>) on the submission form.</div>
+      </li>
+      <li>
+        <input type="checkbox" checked />
+        <div><strong>7. Exact Baseten Model ID (<code>meta-models/muse-spark-open-1026</code>):</strong> While Baseten's general docs default to <code>meta-models/muse-spark-open</code>, the hackathon explicitly requires <code>meta-models/muse-spark-open-1026</code> — which is already hardcoded in <code>cleanquest/app.js</code> (<code>CONFIG.cloud.baseten.model</code>).</div>
+      </li>
     letter-spacing: 0.06em;
     text-transform: uppercase;
     background: rgba(6, 20, 36, 0.75);
@@ -323,7 +331,20 @@
       <strong>Nov 5–8 · Finals Mon Nov 9</strong>
       <span>Top 5 per track present live at Closing Ceremony</span>
     </div>
-  </div>
+        <tr><td><strong>6. This Submission Playbook (HTML + PDF)</strong></td><td><a href="https://officebeats.github.io/cleanquest/docs/judges/submission.html" target="_blank" rel="noopener">https://officebeats.github.io/cleanquest/docs/judges/submission.html</a></td><td><code>LIVE · STEP-BY-STEP</code></td></tr>
+      </table>
+    </div>
+
+    <h3>Official Schedule &amp; Prize Breakdown (From Event Details &amp; Official Rules Waiver)</h3>
+    <div class="table-scroll">
+      <table>
+        <tr><th>Date / Time (ET)</th><th>Milestone / Prize Category</th><th>Action Required for CleanQuest</th></tr>
+        <tr><td><strong>Wed, Nov 4 · 9:00 PM ET</strong><br/><small>(8:00 PM CT / Nov 5 02:00 UTC)</small></td><td><strong>Hard Submission Deadline &amp; Credit Claim Cutoff</strong></td><td>Submit via <a href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit" target="_blank" rel="noopener">/hackathon/submit</a> before 7:00 PM ET (2 hours early). Ensure Ernesto, Bill, and Dom have each claimed their individual $150 Meta API credits.</td></tr>
+        <tr><td><strong>Thu, Nov 5 – Sun, Nov 8</strong></td><td><strong>Stage 1 (Pass/Fail) &amp; Stage 2 (0–10 Weighted Rubric) Judging</strong></td><td>Keep GitHub Pages live, repo public, and Meta/Baseten endpoints healthy. Drive engagement on your X (Twitter) demo post through <strong>Sun, Nov 8 EOD</strong> for the <strong>$20K Most Viral Project</strong> award.</td></tr>
+        <tr><td><strong>Mon, Nov 9 · 12:00 PM ET</strong></td><td><strong>Closing Ceremony · Top 10 Announced (5 Indie + 5 Startup) · Live Finals</strong></td><td>If selected in the Top 5 Indie finalists, run the <strong>3-Minute Live Finals Stage Playbook</strong> (Step 6 below). Public gallery <strong>Community Vote ($10K)</strong> also opens on Nov 9.</td></tr>
+        <tr><td><strong>Mon, Nov 16</strong></td><td><strong>Community Vote Winner Announced ($10,000)</strong></td><td>Share the public gallery voting link with cleaning crews, operators, and community from Nov 9 to Nov 16.</td></tr>
+      </table>
+    </div>
 
   <!-- CRITICAL RULES -->
   <section class="card critical-card">
