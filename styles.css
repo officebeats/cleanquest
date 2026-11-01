@@ -6314,22 +6314,92 @@ button.btn-pop-active::before {
   background: linear-gradient(90deg, rgba(57, 245, 188, 0.18), rgba(12, 38, 60, 0.92)) !important;
   box-shadow: 0 0 20px rgba(57, 245, 188, 0.22) !important;
 }
-
-/* Live 122 BPM Music Beat-Sync Pulse on Leaderboard */
-body.music-beat-thump #leaderboardScreen .podium-1,
-body.music-beat-thump #leaderboardScreen .leaderboard-row.is-you-row,
-body.music-beat-thump #leaderboardScreen .leaderboard-rival-banner {
-  animation: lb-beat-pulse 190ms ease-out;
+/* Continuous 122 BPM Micro-Dance & Beat-Sync Pulse on Leaderboard (matches Daily Deck energy) */
+.leaderboard-floaters {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
 }
 
-@keyframes lb-beat-pulse {
-  0% { transform: scale(1.015); filter: brightness(1.16); }
-  100% { transform: scale(1); filter: brightness(1); }
+#leaderboardScreen .podium-pillar {
+  animation: lb-pillar-dance 980ms ease-in-out infinite alternate;
+}
+#leaderboardScreen .podium-pillar.podium-2 { animation-delay: 0ms; }
+#leaderboardScreen .podium-pillar.podium-1 { animation-delay: 160ms; }
+#leaderboardScreen .podium-pillar.podium-3 { animation-delay: 320ms; }
+
+@keyframes lb-pillar-dance {
+  0% { transform: translateY(0) scale(1); }
+  100% { transform: translateY(-4px) scale(1.022); }
+}
+
+#leaderboardScreen .leaderboard-row {
+  animation: lb-row-groove 980ms cubic-bezier(0.34, 1.56, 0.64, 1) infinite alternate;
+}
+#leaderboardScreen .leaderboard-row:nth-child(1) { animation-delay: 0ms; }
+#leaderboardScreen .leaderboard-row:nth-child(2) { animation-delay: 110ms; }
+#leaderboardScreen .leaderboard-row:nth-child(3) { animation-delay: 220ms; }
+#leaderboardScreen .leaderboard-row:nth-child(4) { animation-delay: 330ms; }
+#leaderboardScreen .leaderboard-row:nth-child(5) { animation-delay: 440ms; }
+
+@keyframes lb-row-groove {
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(0, -2.5px, 0) scale(1.012); }
+}
+
+#leaderboardScreen .leaderboard-row .rank {
+  display: inline-block;
+  transform-origin: center;
+  animation: lb-medal-dance 490ms cubic-bezier(0.34, 1.56, 0.64, 1) infinite alternate;
+}
+
+@keyframes lb-medal-dance {
+  0% { transform: scale(0.95) rotate(-5deg); }
+  100% { transform: scale(1.12) rotate(5deg); }
+}
+
+#leaderboardScreen .leaderboard-row.is-you-row {
+  animation: lb-you-pulse 490ms ease-in-out infinite alternate !important;
+}
+
+@keyframes lb-you-pulse {
+  0% { transform: scale(1); box-shadow: 0 0 14px rgba(57, 245, 188, 0.22) !important; }
+  100% { transform: scale(1.018) translateY(-2px); box-shadow: 0 0 28px rgba(57, 245, 188, 0.52) !important; }
+}
+
+#leaderboardScreen .leaderboard-rival-banner {
+  animation: lb-banner-pulse 980ms ease-in-out infinite alternate;
+}
+
+@keyframes lb-banner-pulse {
+  0% { box-shadow: 0 0 16px rgba(57, 245, 188, 0.14) !important; }
+  100% { box-shadow: 0 0 28px rgba(69, 234, 255, 0.36) !important; }
+}
+
+body.music-beat-thump #leaderboardScreen .podium-1,
+body.music-beat-thump #leaderboardScreen .leaderboard-row.rank-1,
+body.music-beat-thump #leaderboardScreen .leaderboard-row.is-you-row,
+body.music-beat-thump #leaderboardScreen .leaderboard-rival-banner,
+body.music-beat-thump #leaderboardScreen #playAgainButton {
+  filter: brightness(1.16);
 }
 
 @media (max-width: 899px) {
-  #leaderboardScreen .leaderboard-podium-stage {
-    display: none !important;
+  #leaderboardScreen .podium-pillar {
+    padding: 5px 4px !important;
+  }
+  #leaderboardScreen .podium-pillar.podium-1 {
+    padding: 7px 6px !important;
+  }
+  #leaderboardScreen .podium-score {
+    font-size: 14.5px !important;
+  }
+  #leaderboardScreen .podium-name {
+    font-size: 12px !important;
+  }
+  #leaderboardScreen .leaderboard-list {
+    max-height: 175px !important;
   }
 }
 

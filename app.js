@@ -3534,6 +3534,9 @@ function startDiscoHouseGroove() {
             void els.deckCard.offsetWidth;
             els.deckCard.classList.add("beat-thump");
           }
+          if (state.screen === "leaderboard" && step === 0) {
+            triggerArcadeFx("bubbles", { x: (window.innerWidth || 390) * (0.25 + Math.random() * 0.5), y: (window.innerHeight || 844) * 0.38 });
+          }
         }
       }
       if (isTurnaroundBar && step >= 12) {
@@ -8994,14 +8997,48 @@ function visibleLeaderboard(entries, viewerRunId = state.latestRunId) {
   return visible;
 }
 
+function populateLeaderboardFloaters() {
+  const host = document.getElementById("leaderboardAmbientFloaters");
+  if (!host || host.childElementCount > 0) return;
+  const icons = [
+    `<svg viewBox="0 0 24 24"><path d="M5 18 l2-10 l5 4 l5-4 l2 10 z" fill="#ffd35c" stroke="#fff" stroke-width="1.2"/></svg>`,
+    `<svg viewBox="0 0 24 24"><path d="M12 2 l2.6 7.4 l7.4 2.6 l-7.4 2.6 l-2.6 7.4 l-2.6-7.4 l-7.4-2.6 l7.4-2.6 z" fill="#39f5bc"/></svg>`,
+    `<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" fill="rgba(69,234,255,0.22)" stroke="#45eaff" stroke-width="1.6"/><circle cx="9" cy="9" r="2" fill="#fff"/></svg>`,
+    `<svg viewBox="0 0 24 24"><path d="M12 2 l2.6 7.4 l7.4 2.6 l-7.4 2.6 l-2.6 7.4 l-2.6-7.4 l-7.4-2.6 l7.4-2.6 z" fill="#ffd35c"/></svg>`
+  ];
+  const positions = [
+    { left: "3%", top: "14%", delay: "0s", size: 20 },
+    { left: "91%", top: "16%", delay: "0.35s", size: 22 },
+    { left: "5%", top: "52%", delay: "0.7s", size: 18 },
+    { left: "90%", top: "56%", delay: "1.1s", size: 20 }
+  ];
+  positions.forEach((pos, idx) => {
+    const node = document.createElement("span");
+    node.className = "deck-floater";
+    node.style.left = pos.left;
+    node.style.top = pos.top;
+    node.style.width = `${pos.size}px`;
+    node.style.height = `${pos.size}px`;
+    node.style.animationDelay = pos.delay;
+    node.innerHTML = icons[idx % icons.length];
+    host.appendChild(node);
+  });
+}
+
 function renderLeaderboard() {
+  populateLeaderboardFloaters();
   const rawBoard = loadLeaderboard();
   const visible = visibleLeaderboard(rawBoard, state.latestRunId);
 
   els.leaderboardList.innerHTML = "";
   renderCrewAndConsistencyUI();
 
-  const youRanked = visible.find((e) => e.isViewer || (state.latestRunId && e.id === state.latestRunId));
+  const currentPlayerName = (els.playerName?.value?.trim() || t("defaultPlayer") || "Player").toLowerCase();
+  let youRanked = visible.find((e) => e.isViewer || (state.latestRunId && e.id === state.latestRunId));
+  if (!youRanked) {
+    youRanked = visible.find((e) => String(e.name || "").trim().toLowerCase() === currentPlayerName || String(e.name || "").trim().toLowerCase() === "player");
+    if (youRanked) youRanked.isViewer = true;
+  }
   const nextRival = youRanked && youRanked.rank > 1 ? visible[youRanked.rank - 2] : (!youRanked && visible.length ? visible[visible.length - 1] : null);
   const latestPracticeScore = state.result?.ai?.scorable !== false ? computeWeightedRunScore() : null;
 
