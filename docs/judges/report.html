@@ -359,7 +359,7 @@
         <tr><th>#</th><th>MVP screen / rule</th><th>Status</th><th>Evidence in this build</th></tr>
         <tr><td>1–3</td><td>Language picker · Phone+PIN · Consent + read-aloud</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Top-level EN/ES/PL; local hashed 4-digit PIN with 44px glove numpad (no email); first-run consent gate with native MP3/TTS read-aloud, "faces never identified", "never for discipline".</td></tr>
         <tr><td>4</td><td>Home (Start, matchup, streak, cards, sponsor card, 13-wk meter)</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Always-visible status strip shows streak + week of 13 + matchup at a glance; full passport/sponsor/meter hub one tap below.</td></tr>
-        <tr><td>5–7</td><td>Check-in (10 Building Sectors · 13 Areas · 28 Spots + Single-QR) · Locked Run Timer · 1-Tap Complete</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Full MECE JanSan taxonomy (10 Building verticals, 13 Functional Areas, 28 Cleaning Spots) + single-QR modal; locked countdown (cannot pause/stop mid-run) with 6–8s continuous host voice inspiration + 1-tap <code>COMPLETE CHALLENGE</code> auto-capturing the After photo.</td></tr>
+        <tr><td>5–7</td><td>Check-in (10 Building Sectors · 13 Areas · 28 Spots + Single-QR) · Locked Run Timer · 1-Tap Complete</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Full commercial cleaning station options (10 Building verticals, 13 Functional Areas, 28 Cleaning Spots) + single-QR modal; locked countdown (cannot pause/stop mid-run) with 6–8s continuous host voice inspiration + 1-tap <code>COMPLETE CHALLENGE</code> auto-capturing the After photo.</td></tr>
         <tr><td>8</td><td>Score reveal (total, 5-tier audio summary, crimson low-score/rescan theme, 3 bars, surface map)</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>50/25/25 weighted hero, 5-tier musical stinger + crossfaded Kokoro-82M spoken summary (<code>🔊 REPLAY SUMMARY</code>), tasteful crimson/ruby alert theme (<code>.verdict-is-low</code>) for low/rescan scores, and full-width Clean/Technique/Time bars.</td></tr>
         <tr><td>9–10</td><td>Swipe deck (5/day, missed repeat, subtle logo banner) · Shift &amp; Daily Deck Leaderboards</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>30 trilingual brand-neutral cards with widescreen SVG dioramas, right/wrong game-show SFX, subtle <code>YOUR LOGO HERE</code> sponsor logo lockup, and dual-mode <strong>Shift Challenge + Daily Deck Leaderboard</strong> (<code>⚡ SHIFT CHALLENGE</code> / <code>🃏 DAILY DECK</code>).</td></tr>
         <tr><td>11–15</td><td>Admin: Pledge · Sites &amp; QR print · Crew &amp; squads · Training gaps · One-tap packs</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>All panes gated by the non-discipline pledge; site registry feeds check-in + printable V2 QR stickers; squad chips switch active crew + <code>+ NEW SQUAD</code> creates 5-seat squads; Where/How/When/Who/Knowledge gaps; one-tap 5-day pack assignment.</td></tr>
@@ -589,16 +589,16 @@
     <h3>2 · Check-In, Live Run Timer &amp; Distilled Results Scorecard (MVP Screens 5–8)</h3>
     <div class="tour-grid">
       <div class="shot"><img src="shots/05-camera.png" alt="Camera screen" /><div class="desc">
-        <h4>MECE JanSan Taxonomy Check-In &amp; Single-QR Scanner (Screen 5)</h4>
+        <h4>Commercial Cleaning Station Check-In &amp; Single-QR Scanner (Screen 5)</h4>
         <ul>
-          <li><strong>10 MECE Building Sectors, 13 Facility Areas &amp; 28 Cleaning Spots:</strong>
+          <li><strong>10 Building Sectors, 13 Facility Areas &amp; 28 Cleaning Spots:</strong>
             <ul>
-              <li>Covers the full commercial JanSan industry (ISSA 612 / BSCAI / APPA / CDC): <strong>10 Building Sectors</strong> (<code>🏢 Office</code>, <code>🏫 Education</code>, <code>🏥 Healthcare</code>, <code>🏭 Industrial</code>, <code>🛍️ Retail</code>, <code>🏨 Hospitality</code>, <code>🍽️ Foodservice</code>, <code>✈️ Aviation &amp; Transit</code>, <code>🏟️ Gym &amp; Recreation</code>, <code>🏘️ Multi-Family</code>), <strong>13 Functional Areas</strong>, and <strong>28 Spot Sub-Assemblies</strong> with custom 3×3 zone weights.</li>
+              <li>Covers the full commercial cleaning industry: <strong>10 Building Sectors</strong> (<code>🏢 Office</code>, <code>🏫 Education</code>, <code>🏥 Healthcare</code>, <code>🏭 Industrial</code>, <code>🛍️ Retail</code>, <code>🏨 Hospitality</code>, <code>🍽️ Foodservice</code>, <code>✈️ Aviation &amp; Transit</code>, <code>🏟️ Gym &amp; Recreation</code>, <code>🏘️ Multi-Family</code>), <strong>13 Functional Areas</strong>, and <strong>28 Spot Sub-Assemblies</strong> with custom 3×3 zone weights.</li>
               <li><code>#qrScannerModal</code> displays <strong>only 1 single high-contrast QR code</strong> on screen (with icon-badged station pills) so phone cameras never get confused by multiple QR codes.</li>
             </ul>
           </li>
         </ul>
-        <span class="verdict v-ready">READY · MECE JANSAN</span>
+        <span class="verdict v-ready">READY · MVP 5</span>
       </div></div>
 
       <div class="shot"><img src="shots/06-timer.png" alt="Timer screen" /><div class="desc">
