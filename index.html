@@ -783,7 +783,7 @@
           </div>
 
           <p id="offlineScoreNote" class="fine-print hidden" data-i18n="offlineScoreNote">
-            Offline score · add a key in Settings for cloud verification.
+            Offline score · showing the on-device score.
           </p>
 
           <p id="scorecardErrorNote" class="fine-print hidden" data-i18n="scorecardErrorNote">
@@ -1205,95 +1205,8 @@
         </div>
 
         <details id="advancedCloudPanel" class="advanced-cloud-panel">
-          <summary class="advanced-cloud-summary">⚙️ ADVANCED · Custom keys &amp; cloud provider</summary>
-        <div id="settingsKeysPanel" class="identity-panel hologram-card">
-          <p class="settings-keys-explain" data-i18n="settingsKeysExplain">
-            Optional cloud upgrade: sign in with 1-click SSO or paste a key from Google Gemini, OpenAI, Claude, Groq, Meta, or Baseten to unlock verified scorecards, surface boxes, neural voice, and transcription.
-          </p>
-          <div class="sso-quick-bar">
-            <button id="openRouterSsoButton" class="primary-button compact-chip sso-hero-btn" type="button">
-              ⚡ 1-CLICK SIGN IN (GOOGLE / GITHUB SSO)
-            </button>
-            <a class="get-key-link" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Gemini Free Key (Google Login) ↗</a>
-            <a class="get-key-link" href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">OpenAI Key ↗</a>
-            <a class="get-key-link" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer">Claude Key ↗</a>
-          </div>
-          <div class="settings-keys-grid">
-            <div>
-              <div class="key-label-row">
-                <label for="metaApiKey" data-i18n="settingsMetaKey">
-                  Smart AI Key (Gemini / OpenAI / Claude / Meta)
-                </label>
-                <a class="get-key-link" href="https://dev.meta.ai/" target="_blank" rel="noopener noreferrer" data-i18n="getMetaKeyLink">Meta Key ↗</a>
-              </div>
-              <input
-                id="metaApiKey"
-                type="password"
-                maxlength="240"
-                autocomplete="off"
-                spellcheck="false"
-                placeholder="AIza… / sk-… / sk-ant-… / Meta key"
-              />
-            </div>
-
-            <div>
-              <div class="key-label-row">
-                <label for="basetenApiKey" data-i18n="settingsBasetenKey">
-                  Baseten / Secondary Key
-                </label>
-                <a class="get-key-link" href="https://app.baseten.co/settings/api_keys" target="_blank" rel="noopener noreferrer" data-i18n="getBasetenKeyLink">Get key ↗</a>
-              </div>
-              <input
-                id="basetenApiKey"
-                type="password"
-                maxlength="240"
-                autocomplete="off"
-                spellcheck="false"
-                placeholder="••••••••"
-              />
-            </div>
-          </div>
-          <small data-i18n="settingsKeysNote">
-            Keys stay in this browser only and are never shared.
-          </small>
-
-          <div class="settings-row">
-            <button
-              id="settingsSave"
-              class="primary-button"
-              type="button"
-              data-i18n="settingsSave"
-            >
-              SAVE KEYS
-            </button>
-
-            <button
-              id="settingsClear"
-              class="secondary-button"
-              type="button"
-              data-i18n="settingsClear"
-            >
-              CLEAR KEYS
-            </button>
-          </div>
-
-          <small id="settingsSavedNote" class="settings-saved hidden" data-i18n="settingsSaved">
-            Saved in this browser.
-          </small>
-        </div>
-
+          <summary class="advanced-cloud-summary">⚙️ ADVANCED · Cloud routing (server-funded)</summary>
         <div class="identity-panel hologram-card">
-          <span data-i18n="settingsProvider">Inference provider (auto-detects key prefix)</span>
-          <div class="provider-radio-grid">
-            <label class="provider-option">
-              <input type="radio" name="inferenceProvider" value="meta" />
-              <span>Auto / Meta / Custom Key</span>
-            </label>
-            <label class="provider-option">
-              <input type="radio" name="inferenceProvider" value="baseten" checked />
-              <span>Baseten + Fireworks (Muse Spark Open · Live Cloud)</span>
-            </label>
-          </div>
           <select id="openRouterModelSelect" class="area-select" aria-label="OpenRouter / Cloud Model">
             <option value="auto" selected>Partner Cloud: Baseten Primary → Fireworks Failover (Token-Efficient Default)</option>
             <option value="baseten">Partner Cloud: Baseten Only (meta-models/muse-spark-open-1026)</option>
