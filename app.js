@@ -477,7 +477,7 @@ const translations = {
     surfaceUnverified: "unverified",
     consentTitle: "BEFORE YOUR FIRST RUN",
     consentReadAloud: "🔊 READ ALOUD",
-    consentBody: "CleanQuest captures before and after photos of the work surface. Faces are never identified (no facial recognition or biometrics). An optional victory-pose photo is processed on this device only. Location is recorded only if you share it. If you add your own provider key in Settings, photos and voice notes may be sent to that provider for verification or transcription; otherwise everything is stored in this browser only. Scores and records are for training and recognition — never for discipline.",
+    consentBody: "CleanQuest captures before and after photos of the work surface. Faces are never identified (no facial recognition or biometrics). An optional victory-pose photo is processed on this device only. Location is recorded only if you share it. When cloud verification is enabled in Settings (via Muse Spark Open on Baseten and Fireworks AI or your own key), work-surface photos and voice notes may be sent for scorecard verification or transcription; otherwise everything is stored in this browser only. Scores and records are for training and recognition — never for discipline.",
     consentAgreeLabel: "I understand and agree",
     consentConfirm: "CONFIRM",
     consentSavedNote: "✓ Consent recorded in this browser.",
@@ -865,7 +865,7 @@ const translations = {
     surfaceUnverified: "sin verificar",
     consentTitle: "ANTES DE TU PRIMERA RONDA",
     consentReadAloud: "🔊 ESCUCHAR",
-    consentBody: "CleanQuest toma fotos del antes y después de la superficie de trabajo. Los rostros nunca se identifican (sin reconocimiento facial ni biometría). Una foto opcional de pose de victoria se procesa solo en este dispositivo. La ubicación se registra solo si la compartes. Si agregas tu propia clave de proveedor en Ajustes, las fotos y notas de voz pueden enviarse a ese proveedor para verificación o transcripción; si no, todo se guarda solo en este navegador. Las puntuaciones y registros son para formación y reconocimiento — nunca para disciplina.",
+    consentBody: "CleanQuest toma fotos del antes y después de la superficie de trabajo. Los rostros nunca se identifican (sin reconocimiento facial ni biometría). Una foto opcional de pose de victoria se procesa solo en este dispositivo. La ubicación se registra solo si la compartes. Cuando la verificación en la nube está activada en Ajustes (mediante Muse Spark Open en Baseten y Fireworks AI o tu propia clave), las fotos de la superficie y notas de voz pueden enviarse para verificación o transcripción; si no, todo se guarda solo en este navegador. Las puntuaciones y registros son para formación y reconocimiento — nunca para disciplina.",
     consentAgreeLabel: "Entiendo y acepto",
     consentConfirm: "CONFIRMAR",
     consentSavedNote: "✓ Consentimiento guardado en este navegador.",
@@ -1253,7 +1253,7 @@ const translations = {
     surfaceUnverified: "niezweryfikowana",
     consentTitle: "PRZED PIERWSZYM BIEGIEM",
     consentReadAloud: "🔊 CZYTAJ NA GŁOS",
-    consentBody: "CleanQuest robi zdjęcia przed i po powierzchni roboczej. Twarze nigdy nie są identyfikowane (brak rozpoznawania twarzy i biometrii). Opcjonalne zdjęcie pozy zwycięstwa jest przetwarzane tylko na tym urządzeniu. Lokalizacja jest zapisywana tylko, jeśli ją udostępnisz. Jeśli dodasz własny klucz dostawcy w Ustawieniach, zdjęcia i notatki głosowe mogą zostać wysłane do tego dostawcy w celu weryfikacji lub transkrypcji; w przeciwnym razie wszystko jest zapisane tylko w tej przeglądarce. Wyniki i wpisy służą szkoleniu i uznaniu — nigdy dyscyplinie.",
+    consentBody: "CleanQuest robi zdjęcia przed i po powierzchni roboczej. Twarze nigdy nie są identyfikowane (brak rozpoznawania twarzy i biometrii). Opcjonalne zdjęcie pozy zwycięstwa jest przetwarzane tylko na tym urządzeniu. Lokalizacja jest zapisywana tylko, jeśli ją udostępnisz. Gdy weryfikacja w chmurze jest włączona w Ustawieniach (przez Muse Spark Open w Baseten i Fireworks AI lub własny klucz), zdjęcia powierzchni i notatki głosowe mogą zostać wysłane w celu weryfikacji lub transkrypcji; w przeciwnym razie wszystko jest zapisane tylko w tej przeglądarce. Wyniki i wpisy służą szkoleniu i uznaniu — nigdy dyscyplinie.",
     consentAgreeLabel: "Rozumiem i zgadzam się",
     consentConfirm: "POTWIERDŹ",
     consentSavedNote: "✓ Zgoda zapisana w tej przeglądarce.",
@@ -7523,7 +7523,8 @@ async function getVerifiedScore(aiResult, before, after) {
       state.inPersonaSuite ||
       before?.placeholder ||
       after?.placeholder ||
-      (state.demoMode && !state.judgeDemo && !state.forceCloudVerify)
+      (state.demoMode && !state.judgeDemo && !state.forceCloudVerify) ||
+      (!hasConsent() && !state.judgeDemo && !state.forceCloudVerify)
     ) {
       return offline;
     }
