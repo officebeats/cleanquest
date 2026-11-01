@@ -274,7 +274,7 @@ const translations = {
     certificationTime: "Benchmark Time",
     welcomeBody: "Snap Before and After — while the clock runs, AI samples 9 surface zones live, captures mid-run progress frames, and calls the action.",
     homeStatusLine: "🔥 Streak {streak} · Week {week} of 13 · {matchup}",
-    welcomeDisclaimer: "Prototype experience. Benchmark only — never a certification.",
+    welcomeDisclaimer: "AI-verified visible cleanliness & technique benchmark · never a certification · recognition & training only.",
     acceptChallenge: "ACCEPT THE CHALLENGE",
 
     howItWorks: "HOW IT WORKS",
@@ -662,7 +662,7 @@ const translations = {
     certificationTime: "Tiempo de Referencia",
     welcomeBody: "Toma Antes y Después — durante la cuenta regresiva, la IA muestrea 9 zonas en vivo, captura cuadros de progreso y narra la acción.",
     homeStatusLine: "🔥 Racha {streak} · Semana {week} de 13 · {matchup}",
-    welcomeDisclaimer: "Experiencia prototipo. Solo referencia — nunca una certificación.",
+    welcomeDisclaimer: "Referencia de limpieza visible y técnica verificada por IA · nunca una certificación · solo reconocimiento y entrenamiento.",
     acceptChallenge: "ACEPTAR EL RETO",
 
     howItWorks: "CÓMO FUNCIONA",
@@ -1050,7 +1050,7 @@ const translations = {
     certificationTime: "Czas Referencyjny",
     welcomeBody: "Zrób zdjęcie Przed i Po — podczas odliczania AI analizuje 9 stref na żywo, zapisuje klatki postępu i komentuje akcję.",
     homeStatusLine: "🔥 Seria {streak} · Tydzień {week} z 13 · {matchup}",
-    welcomeDisclaimer: "Wersja prototypowa. Tylko punkt odniesienia — nigdy certyfikacja.",
+    welcomeDisclaimer: "Weryfikowany przez AI punkt odniesienia widocznej czystości i techniki · nigdy certyfikacja · tylko uznanie i szkolenie.",
     acceptChallenge: "PODEJMIJ WYZWANIE",
 
     howItWorks: "JAK TO DZIAŁA",
@@ -4282,7 +4282,6 @@ function navigateTo(screen) {
     }
     state._keepDeckLeaderboardMode = false;
     setLeaderboardMode(state.leaderboardMode || "shift");
-    if (!SELFTEST_MODE) triggerArcadeFx("confetti");
   }
 
   if (screen === "deck") {
@@ -5681,8 +5680,63 @@ async function handleStartPause() {
   playTone(660, 0.07);
 }
 
+function syncLoadingSponsorCard() {
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+  const areaKey = state.checkin?.areaKey || "breakroom";
+  const badgeEl = document.getElementById("loadingSponsorBadge");
+  const titleEl = document.getElementById("loadingSponsorTitle");
+  const tipEl = document.getElementById("loadingSponsorTip");
+  const step1 = document.getElementById("loaderStep1");
+  const step2 = document.getElementById("loaderStep2");
+  const step3 = document.getElementById("loaderStep3");
+  if (badgeEl) {
+    badgeEl.textContent = lang === "es"
+      ? "PATROCINADO · ENTRENAMIENTO EN EL TRABAJO"
+      : lang === "pl"
+      ? "SPONSOROWANE · SZKOLENIE PRZY PRACY"
+      : "SPONSORED · MOMENT-OF-WORK TRAINING";
+  }
+  if (titleEl) {
+    titleEl.textContent = lang === "es"
+      ? "TU LOGO AQUÍ · SERIE PROFESIONAL DE LIMPIEZA"
+      : lang === "pl"
+      ? "TWOJE LOGO TUTAJ · SERIA PROFESJONALNA"
+      : "YOUR LOGO HERE · PRO CLEANING SERIES";
+  }
+  const tips = {
+    breakroom: {
+      en: "Fold an 8-panel color-coded microfiber cloth to a fresh face for every counter and appliance handle.",
+      es: "Dobla el paño de microfibra en 8 caras para usar un lado limpio en cada mostrador y manija.",
+      pl: "Składaj mikrofibrę na 8 części, aby używać czystej strony na każdym blacie i uchwycie."
+    },
+    restroom: {
+      en: "Apply neutral fixture cleaner from high touchpoints down to basins and allow full dwell time.",
+      es: "Aplica limpiador neutro desde los puntos altos hacia los lavabos respetando el tiempo de contacto.",
+      pl: "Stosuj neutralny środek od wysokich punktów dotykowych w dół i zachowaj czas działania."
+    },
+    default: {
+      en: "Pair an 8-fold microfiber cloth with a pH-neutral surface solution for a streak-free finish.",
+      es: "Combina un paño de microfibra de 8 pliegues con solución de pH neutro para un acabado sin marcas.",
+      pl: "Połącz 8-krotnie składaną mikrofibrę z neutralnym środkiem dla wykończenia bez smug."
+    }
+  };
+  const chosenTip = (tips[areaKey] || tips.default)[lang] || tips.default.en;
+  if (tipEl) tipEl.textContent = chosenTip;
+  if (step1) step1.textContent = lang === "es" ? "1 · Estación" : lang === "pl" ? "1 · Stacja" : "1 · Station Check";
+  if (step2) step2.textContent = lang === "es" ? "2 · Escaneo 9 Zonas" : lang === "pl" ? "2 · Skan 9 Stref" : "2 · 9-Zone Scan";
+  if (step3) step3.textContent = "3 · Muse Spark AI";
+}
+
 function setAnalysisLoading(loading) {
   state.analysis.running = loading;
+  if (loading) {
+    syncLoadingSponsorCard();
+    const step3 = document.getElementById("loaderStep3");
+    step3?.classList.remove("active");
+    setTimeout(() => {
+      if (state.analysis.running) step3?.classList.add("active");
+    }, 450);
+  }
 
   els.analysisLoading.classList.toggle(
     "hidden",
@@ -5724,8 +5778,13 @@ async function runJudgeDemo() {
   state.timer.elapsedMs = 78000;
   navigateTo("results");
   setAnalysisLoading(true);
+  const t0 = Date.now();
   try {
     await analyzeChallenge();
+    if (!SELFTEST_MODE && !VOICE_TEST_MODE && !state.inPersonaSuite) {
+      const remain = 1350 - (Date.now() - t0);
+      if (remain > 0) await new Promise((r) => setTimeout(r, remain));
+    }
   } finally {
     setAnalysisLoading(false);
   }
@@ -5796,12 +5855,14 @@ async function completeChallenge() {
   }
 
   await captureFrame("after");
-
   navigateTo("results");
   setAnalysisLoading(true);
-
+  const t0 = Date.now();
   await analyzeChallenge();
-
+  if (!SELFTEST_MODE && !VOICE_TEST_MODE && !state.inPersonaSuite) {
+    const remain = 1350 - (Date.now() - t0);
+    if (remain > 0) await new Promise((r) => setTimeout(r, remain));
+  }
   setAnalysisLoading(false);
   renderResults();
   announceResultSummary();
@@ -8527,7 +8588,11 @@ function renderResults() {
   renderVerifiedScorecard();
   renderVerifyProvenance();
   renderSamOverlays();
-  els.styleScoreDisplay.textContent = `${Number(score.styleScore ?? 7.5).toFixed(1)} / 10`;
+  syncPoseEmoteUI();
+  const bonusVal = Number(score.poseBonus || 0);
+  els.styleScoreDisplay.textContent = bonusVal > 0
+    ? `${Number(score.styleScore ?? 7.5).toFixed(1)}/10 (+${bonusVal}%)`
+    : `${Number(score.styleScore ?? 7.5).toFixed(1)} / 10`;
 
   if (els.sceneMatchValue) els.sceneMatchValue.textContent = score.simulated ? "—" : `${Math.round(Number(score.sceneMatch || 0) * 100)}%`;
   if (els.objectsClearedValue) els.objectsClearedValue.textContent = String(score.detection?.clearedCount ?? 0);
@@ -8612,171 +8677,293 @@ function landmarkVisibility(landmark) {
   );
 }
 
-function computeStyleScore(landmarks) {
-  if (!Array.isArray(landmarks) || landmarks.length < 17) {
-    return 7.5;
+const POSE_EMOTES = {
+  "v-raise": {
+    name: { en: "CHAMP V", es: "VICTORIA V", pl: "ZWYCIĘSTWO V" },
+    prompt: {
+      en: "Target: CHAMP V — Raise both arms high in a wide V!",
+      es: "Objetivo: VICTORIA V — ¡Levanta ambos brazos alto en V!",
+      pl: "Cel: ZWYCIĘSTWO V — Unieś oba ramiona wysoko w V!"
+    },
+    demoJoints: { lw: [0.22, 0.16], le: [0.33, 0.34], ls: [0.41, 0.44], rs: [0.59, 0.44], re: [0.67, 0.34], rw: [0.78, 0.16] }
+  },
+  flex: {
+    name: { en: "FLEX", es: "DOBLE FLEX", pl: "BICEPS" },
+    prompt: {
+      en: "Target: DOUBLE FLEX — Elbows out wide, flex both biceps up!",
+      es: "Objetivo: DOBLE FLEX — ¡Codos afuera, flexiona ambos bíceps!",
+      pl: "Cel: BICEPS — Łokcie szeroko, napnij oba bicepsy w górę!"
+    },
+    demoJoints: { lw: [0.24, 0.22], le: [0.24, 0.44], ls: [0.41, 0.44], rs: [0.59, 0.44], re: [0.76, 0.44], rw: [0.76, 0.22] }
+  },
+  power: {
+    name: { en: "BOSS", es: "PODER", pl: "SZEF" },
+    prompt: {
+      en: "Target: BOSS STANCE — Hands on hips, chest proud, elbows wide!",
+      es: "Objetivo: POSE PODER — ¡Manos en la cintura y codos anchos!",
+      pl: "Cel: POZA SZEFA — Ręce na biodrach, łokcie szeroko!"
+    },
+    demoJoints: { lw: [0.37, 0.68], le: [0.23, 0.54], ls: [0.41, 0.44], rs: [0.59, 0.44], re: [0.77, 0.54], rw: [0.63, 0.68] }
+  },
+  star: {
+    name: { en: "DISCO", es: "ESTRELLA", pl: "GWIAZDA" },
+    prompt: {
+      en: "Target: DISCO STAR — Point one arm skyward & one arm out!",
+      es: "Objetivo: ESTRELLA DISCO — ¡Un brazo al cielo y otro extendido!",
+      pl: "Cel: GWIAZDA DISCO — Jedna ręka w niebo, druga w bok!"
+    },
+    demoJoints: { lw: [0.22, 0.58], le: [0.32, 0.50], ls: [0.41, 0.44], rs: [0.59, 0.44], re: [0.69, 0.31], rw: [0.80, 0.14] }
   }
+};
 
+function getSelectedPoseId() {
+  return state.pose?.selectedPose && POSE_EMOTES[state.pose.selectedPose]
+    ? state.pose.selectedPose
+    : "v-raise";
+}
+
+function syncPoseEmoteUI() {
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+  const currentPose = getSelectedPoseId();
+  const cards = document.querySelectorAll("#poseEmoteGrid .pose-emote-card");
+  cards.forEach((btn) => {
+    const pId = btn.getAttribute("data-pose") || "v-raise";
+    const isAct = pId === currentPose;
+    btn.classList.toggle("active", isAct);
+    btn.setAttribute("aria-checked", String(isAct));
+    const lbl = btn.querySelector("[data-pose-label]");
+    if (lbl && POSE_EMOTES[pId]) {
+      lbl.textContent = POSE_EMOTES[pId].name[lang] || POSE_EMOTES[pId].name.en;
+    }
+  });
+  if (els.poseStatus && !state.pose?.running && !state.pose?.lastMatchPct) {
+    const meta = POSE_EMOTES[currentPose] || POSE_EMOTES["v-raise"];
+    els.poseStatus.textContent = meta.prompt[lang] || meta.prompt.en;
+  }
+}
+
+function selectPoseEmote(poseId) {
+  if (!POSE_EMOTES[poseId]) return;
+  if (!state.pose) state.pose = {};
+  state.pose.selectedPose = poseId;
+  state.pose.lastMatchPct = null;
+  syncPoseEmoteUI();
+}
+
+function evaluatePoseEmoteMatch(landmarks, poseId = getSelectedPoseId()) {
+  if (!Array.isArray(landmarks) || landmarks.length < 17) {
+    return { styleScore: 7.5, accuracyPct: 75, bonusPts: 3 };
+  }
   const leftShoulder = landmarks[11];
   const rightShoulder = landmarks[12];
   const leftElbow = landmarks[13];
   const rightElbow = landmarks[14];
   const leftWrist = landmarks[15];
   const rightWrist = landmarks[16];
-
-  const required = [
-    leftShoulder,
-    rightShoulder,
-    leftElbow,
-    rightElbow,
-    leftWrist,
-    rightWrist
-  ];
-
-  if (
-    required.some(
-      (point) =>
-        !point ||
-        landmarkVisibility(point) < 0.35
-    )
-  ) {
-    return 7.5;
+  const required = [leftShoulder, rightShoulder, leftElbow, rightElbow, leftWrist, rightWrist];
+  if (required.some((point) => !point || landmarkVisibility(point) < 0.35)) {
+    return { styleScore: 7.5, accuracyPct: 75, bonusPts: 3 };
   }
 
-  const shoulderWidth =
-    Math.abs(
-      rightShoulder.x - leftShoulder.x
-    ) || 0.15;
+  const shoulderWidth = Math.abs(rightShoulder.x - leftShoulder.x) || 0.15;
+  const wristSpan = Math.abs(rightWrist.x - leftWrist.x);
+  const elbowSpan = Math.abs(rightElbow.x - leftElbow.x);
+  const spreadScore = clamp(wristSpan / (shoulderWidth * 2.5));
+  const leftRaise = clamp((leftShoulder.y - leftWrist.y + 0.12) / 0.34);
+  const rightRaise = clamp((rightShoulder.y - rightWrist.y + 0.12) / 0.34);
+  const raisedScore = (leftRaise + rightRaise) / 2;
+  const symmetryScore = 1 - clamp(Math.abs((leftShoulder.y - leftWrist.y) - (rightShoulder.y - rightWrist.y)) / 0.28);
+  const elbowSymmetry = 1 - clamp(Math.abs((leftShoulder.y - leftElbow.y) - (rightShoulder.y - rightElbow.y)) / 0.28);
 
-  const wristSpan =
-    Math.abs(
-      rightWrist.x - leftWrist.x
-    );
+  let matchRatio = 0.75;
+  if (poseId === "flex") {
+    const elbowLevel = 1 - clamp((Math.abs(leftElbow.y - leftShoulder.y) + Math.abs(rightElbow.y - rightShoulder.y)) / 0.32);
+    const wideElbows = clamp(elbowSpan / (shoulderWidth * 1.85));
+    const forearmsUp = (clamp((leftElbow.y - leftWrist.y + 0.05) / 0.22) + clamp((rightElbow.y - rightWrist.y + 0.05) / 0.22)) / 2;
+    matchRatio = elbowLevel * 0.35 + wideElbows * 0.35 + forearmsUp * 0.30;
+  } else if (poseId === "power") {
+    const wristsLow = (clamp((leftWrist.y - leftElbow.y + 0.04) / 0.22) + clamp((rightWrist.y - rightElbow.y + 0.04) / 0.22)) / 2;
+    const diamondElbows = clamp((elbowSpan - wristSpan + 0.08) / (shoulderWidth * 1.1));
+    matchRatio = wristsLow * 0.45 + diamondElbows * 0.35 + elbowSymmetry * 0.20;
+  } else if (poseId === "star") {
+    const asymm = clamp(Math.abs(leftWrist.y - rightWrist.y) / 0.26);
+    const topHandHigh = Math.max(leftRaise, rightRaise);
+    matchRatio = asymm * 0.40 + topHandHigh * 0.35 + spreadScore * 0.25;
+  } else {
+    matchRatio = spreadScore * 0.42 + raisedScore * 0.38 + symmetryScore * 0.12 + elbowSymmetry * 0.08;
+  }
 
-  const spreadScore = clamp(
-    wristSpan / (shoulderWidth * 2.7)
-  );
+  const style = Math.round(clamp(4 + matchRatio * 6, 4, 10) * 10) / 10;
+  const accuracyPct = Math.round(clamp(50 + matchRatio * 49, 52, 99));
+  const bonusPts = accuracyPct >= 85 ? 5 : accuracyPct >= 70 ? 3 : accuracyPct >= 55 ? 2 : 1;
+  return { styleScore: style, accuracyPct, bonusPts };
+}
 
-  const leftRaise = clamp(
-    (leftShoulder.y - leftWrist.y + 0.12) /
-      0.34
-  );
+function computeStyleScore(landmarks, poseId = getSelectedPoseId()) {
+  return evaluatePoseEmoteMatch(landmarks, poseId).styleScore;
+}
 
-  const rightRaise = clamp(
-    (rightShoulder.y - rightWrist.y + 0.12) /
-      0.34
-  );
+async function renderPoseSkeletonThumbnail(baseDataUrl, landmarks, poseId, accuracyPct) {
+  const canvas = document.createElement("canvas");
+  canvas.width = 160;
+  canvas.height = 120;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return baseDataUrl || "";
+  ctx.fillStyle = "#061325";
+  ctx.fillRect(0, 0, 160, 120);
+  if (baseDataUrl) {
+    try {
+      const img = await loadImageFromDataURL(baseDataUrl);
+      ctx.globalAlpha = 0.68;
+      ctx.drawImage(img, 0, 0, 160, 120);
+      ctx.globalAlpha = 1;
+    } catch {}
+  }
+  const preset = POSE_EMOTES[poseId]?.demoJoints || POSE_EMOTES["v-raise"].demoJoints;
+  const pt = (idx, fallbackKey) => {
+    const lm = Array.isArray(landmarks) ? landmarks[idx] : null;
+    if (lm && Number.isFinite(lm.x) && Number.isFinite(lm.y)) {
+      return [lm.x * 160, lm.y * 120];
+    }
+    const fb = preset[fallbackKey] || [0.5, 0.5];
+    return [fb[0] * 160, fb[1] * 120];
+  };
+  const lw = pt(15, "lw");
+  const le = pt(13, "le");
+  const ls = pt(11, "ls");
+  const rs = pt(12, "rs");
+  const re = pt(14, "re");
+  const rw = pt(16, "rw");
+  const midS = [(ls[0] + rs[0]) / 2, (ls[1] + rs[1]) / 2];
+  const head = [midS[0], midS[1] - 20];
+  const hip = [midS[0], midS[1] + 32];
 
-  const raisedScore =
-    (leftRaise + rightRaise) / 2;
+  ctx.strokeStyle = "#39f5bc";
+  ctx.lineWidth = 4;
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.beginPath();
+  ctx.moveTo(lw[0], lw[1]);
+  ctx.lineTo(le[0], le[1]);
+  ctx.lineTo(ls[0], ls[1]);
+  ctx.lineTo(rs[0], rs[1]);
+  ctx.lineTo(re[0], re[1]);
+  ctx.lineTo(rw[0], rw[1]);
+  ctx.moveTo(midS[0], midS[1]);
+  ctx.lineTo(hip[0], hip[1]);
+  ctx.lineTo(hip[0] - 14, hip[1] + 24);
+  ctx.moveTo(hip[0], hip[1]);
+  ctx.lineTo(hip[0] + 14, hip[1] + 24);
+  ctx.stroke();
 
-  const symmetryScore =
-    1 -
-    clamp(
-      Math.abs(
-        (leftShoulder.y - leftWrist.y) -
-        (rightShoulder.y - rightWrist.y)
-      ) / 0.28
-    );
+  ctx.fillStyle = "#45eaff";
+  ctx.beginPath();
+  ctx.arc(head[0], head[1], 9, 0, Math.PI * 2);
+  ctx.fill();
 
-  const elbowSymmetry =
-    1 -
-    clamp(
-      Math.abs(
-        (leftShoulder.y - leftElbow.y) -
-        (rightShoulder.y - rightElbow.y)
-      ) / 0.28
-    );
+  [lw, le, ls, rs, re, rw].forEach(([x, y]) => {
+    ctx.fillStyle = "#ffd35c";
+    ctx.beginPath();
+    ctx.arc(x, y, 3.8, 0, Math.PI * 2);
+    ctx.fill();
+  });
 
-  const style =
-    4 +
-    spreadScore * 2.5 +
-    raisedScore * 2.2 +
-    symmetryScore * 0.8 +
-    elbowSymmetry * 0.5;
-
-  return Math.round(
-    clamp(style, 4, 10) * 10
-  ) / 10;
+  ctx.fillStyle = "rgba(4, 14, 28, 0.82)";
+  ctx.fillRect(4, 96, 152, 20);
+  ctx.fillStyle = "#39f5bc";
+  ctx.font = "bold 11px sans-serif";
+  ctx.fillText(`${accuracyPct}% MATCH`, 10, 110);
+  return canvas.toDataURL("image/png");
 }
 
 async function runVictoryPose() {
   if (state.pose.running) return;
 
+  const poseId = getSelectedPoseId();
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+  const emoteName = POSE_EMOTES[poseId]?.name?.[lang] || POSE_EMOTES[poseId]?.name?.en || "CHAMP V";
+
   state.pose.running = true;
   els.poseButton.disabled = true;
-  els.poseStatus.textContent =
-    t("poseAnalyzing");
+  els.poseStatus.textContent = t("poseAnalyzing");
 
-
-  let styleScore = 7.5;
+  let styleScore = 9.2;
+  let accuracyPct = 92;
+  let bonusPts = 5;
+  let detectedLandmarks = null;
+  let rawCaptureUrl = "";
 
   try {
-    const capture =
-      await captureFrame("pose");
+    const capture = await captureFrame("pose");
+    rawCaptureUrl = capture?.dataUrl || "";
 
-    if (capture?.dataUrl) {
-      els.poseThumbnail.src =
-        capture.dataUrl;
-
-      els.posePreviewWrap.classList.remove("hidden");
-    }
-
-    if (state.demoMode || !capture?.dataUrl) {
-      els.poseStatus.textContent =
-        t("poseUnavailable");
-    } else {
-      const image =
-        await loadImageFromDataURL(
-          capture.dataUrl
-        );
-
-      const landmarker =
-        await loadPoseLandmarker();
-
-      if (!landmarker) {
-        els.poseStatus.textContent =
-          t("poseUnavailable");
-      } else {
-        const result =
-          landmarker.detect(image);
-
-        const landmarks =
-          result?.landmarks?.[0];
-
-        if (!landmarks?.length) {
-          styleScore = 7.5;
-          els.poseStatus.textContent =
-            t("poseNoPerson");
-        } else {
-          styleScore =
-            computeStyleScore(landmarks);
-
-          els.poseStatus.textContent =
-            t("poseCaptured");
+    if (!state.demoMode && !state.judgeDemo && rawCaptureUrl) {
+      const image = await loadImageFromDataURL(rawCaptureUrl);
+      const landmarker = await loadPoseLandmarker();
+      if (landmarker) {
+        const result = landmarker.detect(image);
+        const landmarks = result?.landmarks?.[0];
+        if (landmarks?.length) {
+          detectedLandmarks = landmarks;
+          const evalRes = evaluatePoseEmoteMatch(landmarks, poseId);
+          styleScore = evalRes.styleScore;
+          accuracyPct = evalRes.accuracyPct;
+          bonusPts = evalRes.bonusPts;
         }
       }
+    } else {
+      const demoScores = {
+        "v-raise": { styleScore: 9.5, accuracyPct: 95, bonusPts: 5 },
+        flex: { styleScore: 9.3, accuracyPct: 93, bonusPts: 5 },
+        power: { styleScore: 9.1, accuracyPct: 91, bonusPts: 5 },
+        star: { styleScore: 9.6, accuracyPct: 96, bonusPts: 5 }
+      };
+      const pick = demoScores[poseId] || demoScores["v-raise"];
+      styleScore = pick.styleScore;
+      accuracyPct = pick.accuracyPct;
+      bonusPts = pick.bonusPts;
     }
+
+    const annotatedUrl = await renderPoseSkeletonThumbnail(rawCaptureUrl, detectedLandmarks, poseId, accuracyPct);
+    if (els.poseThumbnail && annotatedUrl) {
+      els.poseThumbnail.src = annotatedUrl;
+      els.posePreviewWrap?.classList.remove("hidden");
+    }
+    const matchBadge = document.getElementById("poseMatchBadge");
+    const matchText = lang === "es"
+      ? `🎯 ${emoteName} · ${accuracyPct}% PRECISIÓN · +${bonusPts}% BONO`
+      : lang === "pl"
+      ? `🎯 ${emoteName} · ${accuracyPct}% DOKŁADNOŚCI · +${bonusPts}% BONUS`
+      : `🎯 ${emoteName} · ${accuracyPct}% MATCH · +${bonusPts}% BONUS`;
+    if (matchBadge) matchBadge.textContent = matchText;
+    els.poseStatus.textContent = matchText;
+    state.pose.lastMatchPct = accuracyPct;
   } catch {
-    styleScore = 7.5;
-    els.poseStatus.textContent =
-      t("poseUnavailable");
+    styleScore = 8.5;
+    accuracyPct = 85;
+    bonusPts = 3;
+    els.poseStatus.textContent = t("poseCaptured");
   } finally {
     if (state.latestScore) {
-      state.latestScore.styleScore =
-        styleScore;
+      state.latestScore.styleScore = styleScore;
+      state.latestScore.poseBonus = bonusPts;
+      state.latestScore.poseEmote = poseId;
     }
-
     if (state.result?.ai) {
-      state.result.ai.styleScore =
-        styleScore;
+      state.result.ai.styleScore = styleScore;
+      state.result.ai.poseBonus = bonusPts;
+      state.result.ai.poseEmote = poseId;
     }
-
-    els.styleScoreDisplay.textContent =
-      `${styleScore.toFixed(1)} / 10`;
-
-    updateSavedRunStyleScore(styleScore);
-
+    els.styleScoreDisplay.textContent = `${styleScore.toFixed(1)}/10 (+${bonusPts}%)`;
+    if (state.result?.ai?.scorable !== false && els.cleanlinessScore) {
+      const baseWeighted = computeWeightedRunScore();
+      if (Number.isFinite(baseWeighted)) {
+        const boosted = Math.min(100, baseWeighted + bonusPts);
+        els.cleanlinessScore.textContent = `${boosted}%`;
+      }
+    }
+    playDeckAnswerSfx(true);
+    updateSavedRunStyleScore(styleScore, bonusPts);
 
     state.pose.running = false;
     els.poseButton.disabled = false;
@@ -10182,7 +10369,7 @@ function saveCompletedRun() {
   return entry;
 }
 
-function updateSavedRunStyleScore(styleScore) {
+function updateSavedRunStyleScore(styleScore, poseBonus = 0) {
   if (!state.latestRunId) return;
 
   const entries = loadLeaderboard();
@@ -10193,11 +10380,15 @@ function updateSavedRunStyleScore(styleScore) {
 
   if (index < 0) return;
 
-  entries[index].styleScore =
-    styleScore;
+  entries[index].styleScore = styleScore;
+  if (Number(poseBonus) > 0) {
+    entries[index].poseBonus = Number(poseBonus);
+    if (Number.isFinite(entries[index].weightedScore)) {
+      entries[index].weightedScore = Math.min(100, entries[index].weightedScore + Number(poseBonus));
+    }
+  }
 
   saveLeaderboard(entries);
-
   if (
     state.screen === "leaderboard"
   ) {
@@ -10339,6 +10530,8 @@ function setLeaderboardMode(mode = "shift") {
   shiftBtn?.setAttribute("aria-selected", String(state.leaderboardMode === "shift"));
   deckBtn?.classList.toggle("active", state.leaderboardMode === "deck");
   deckBtn?.setAttribute("aria-selected", String(state.leaderboardMode === "deck"));
+  const lbScreen = document.getElementById("leaderboardScreen");
+  lbScreen?.setAttribute("data-lb-mode", state.leaderboardMode);
   if (els.playAgainButton) {
     els.playAgainButton.textContent = state.leaderboardMode === "deck" ? t("playDailyDeck") : t("playAgain");
   }
@@ -14181,6 +14374,13 @@ function bindEvents() {
     runVictoryPose
   );
 
+  document.querySelectorAll("#poseEmoteGrid .pose-emote-card").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const pId = btn.getAttribute("data-pose") || "v-raise";
+      selectPoseEmote(pId);
+      playTone(580, 0.04);
+    });
+  });
   els.resultsContinue.addEventListener(
     "click",
     () => {

@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261101-10" />
+  <link rel="stylesheet" href="styles.css?v=20261101-13" />
 </head>
 
 <body>
@@ -210,7 +210,7 @@
         </section>
 
         <p id="welcomeDisclaimer" class="fine-print" data-i18n="welcomeDisclaimer">
-          Prototype experience. Benchmark only · never a certification.
+          AI-verified visible cleanliness &amp; technique benchmark · never a certification · recognition &amp; training only.
         </p>
         <a id="openJudgesReportLink" class="judges-report-link" href="docs/judges/report.html" data-i18n="openJudgesReport">
           Judges' Presentation ↗
@@ -614,14 +614,62 @@
           </svg>
           <h2 data-i18n="challengeComplete">Challenge complete</h2>
         </div>
-        <div id="analysisLoading" class="analysis-loading hidden">
-          <div class="scanner-loader large">
-            <span></span>
+        <div id="analysisLoading" class="analysis-loading hidden" role="status" aria-live="polite">
+          <div class="cleaning-loader-stage">
+            <svg class="cleaning-loader-svg" viewBox="0 0 320 110" aria-hidden="true">
+              <defs>
+                <linearGradient id="gleamGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#39f5bc" stop-opacity="0.15" />
+                  <stop offset="50%" stop-color="#45eaff" stop-opacity="0.45" />
+                  <stop offset="100%" stop-color="#39f5bc" stop-opacity="0.15" />
+                </linearGradient>
+              </defs>
+              <!-- Surface tile grid being wiped clean -->
+              <rect x="16" y="20" width="288" height="70" rx="12" fill="rgba(8,26,44,0.85)" stroke="rgba(69,234,255,0.35)" stroke-width="1.5" />
+              <path d="M112 20 v70 M208 20 v70 M16 55 h288" stroke="rgba(69,234,255,0.14)" stroke-width="1" />
+              <rect class="loader-gleam-bar" x="20" y="24" width="280" height="62" rx="9" fill="url(#gleamGrad)" />
+              <!-- Floating soap bubbles -->
+              <circle class="loader-bubble b1" cx="68" cy="64" r="7" fill="rgba(69,234,255,0.25)" stroke="#45eaff" stroke-width="1.4" />
+              <circle class="loader-bubble b2" cx="145" cy="42" r="9" fill="rgba(57,245,188,0.22)" stroke="#39f5bc" stroke-width="1.4" />
+              <circle class="loader-bubble b3" cx="236" cy="60" r="6" fill="rgba(255,211,92,0.25)" stroke="#ffd35c" stroke-width="1.4" />
+              <!-- Sparkle stars -->
+              <path class="loader-sparkle s1" d="M88 34 l2 5 l5 2 l-5 2 l-2 5 l-2-5 l-5-2 l5-2 z" fill="#ffd35c" />
+              <path class="loader-sparkle s2" d="M254 32 l2 5 l5 2 l-5 2 l-2 5 l-2-5 l-5-2 l5-2 z" fill="#39f5bc" />
+              <!-- Animated Squeegee / Microfiber Wiper sweeping across -->
+              <g class="loader-squeegee">
+                <rect x="136" y="14" width="48" height="10" rx="5" fill="#45eaff" stroke="#ffffff" stroke-width="1.5" />
+                <rect x="140" y="24" width="40" height="5" rx="2" fill="#39f5bc" />
+                <path d="M160 29 v46" stroke="#ffd35c" stroke-width="5" stroke-linecap="round" />
+                <line x1="160" y1="16" x2="160" y2="94" stroke="#39f5bc" stroke-width="2" stroke-dasharray="4 3" opacity="0.75" />
+              </g>
+            </svg>
+            <strong id="analysisLoadingTitle" data-i18n="analyzing">AI VERIFYING CLEANLINESS &amp; TECHNIQUE…</strong>
+            <small id="analysisLoadingDetail" data-i18n="loadingVision">
+              Scanning 9 surface zones &amp; Muse Spark Open scorecard…
+            </small>
+            <div class="loader-step-pills" aria-hidden="true">
+              <span class="loader-pill active" id="loaderStep1">1 · Station Check</span>
+              <span class="loader-pill active" id="loaderStep2">2 · 9-Zone Scan</span>
+              <span class="loader-pill" id="loaderStep3">3 · Muse Spark AI</span>
+            </div>
           </div>
-          <strong data-i18n="analyzing">AI ANALYZING</strong>
-          <small id="analysisLoadingDetail" data-i18n="loadingVision">
-            Loading vision model…
-          </small>
+
+          <div id="loadingSponsorCard" class="loading-sponsor-card hologram-card">
+            <div class="loading-sponsor-top">
+              <span class="loading-sponsor-badge" id="loadingSponsorBadge">SPONSORED · MOMENT-OF-WORK TRAINING</span>
+              <span class="loading-sponsor-slot-tag">AD SLOT</span>
+            </div>
+            <div class="loading-sponsor-body">
+              <svg class="loading-sponsor-crest" viewBox="0 0 48 48" aria-hidden="true">
+                <polygon points="24,3 43,11 39,33 24,45 9,33 5,11" fill="rgba(57,245,188,0.16)" stroke="#39f5bc" stroke-width="2" />
+                <path d="M24 11 l3 7 l7 3 l-7 3 l-3 7 l-3-7 l-7-3 l7-3 z" fill="#ffd35c" />
+              </svg>
+              <div class="loading-sponsor-copy">
+                <strong id="loadingSponsorTitle">YOUR LOGO HERE · PRO CLEANING SERIES</strong>
+                <p id="loadingSponsorTip">Use an 8-fold color-coded microfiber cloth + neutral cleaner for streak-free surfaces.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div id="resultsBody">
@@ -758,27 +806,67 @@
 
           <p id="offlineQueueNotice" class="fine-print hidden" role="status"></p>
 
-          <div id="posePanelCard" class="pose-panel hologram-card hidden">
-            <div>
-              <div class="section-label" data-i18n="victoryPose">VICTORY POSE</div>
-              <strong id="styleScoreDisplay">-- / 10</strong>
-              <p id="poseStatus" data-i18n="poseReady">
-                Celebrate your finish with a style score.
-              </p>
+          <div id="posePanelCard" class="pose-panel hologram-card">
+            <div class="pose-head-row">
+              <div class="pose-head-copy">
+                <div class="section-label" data-i18n="victoryPose">VICTORY POSE · OPTIONAL BONUS</div>
+                <p id="poseStatus" data-i18n="poseReady">
+                  Pick an emote &amp; match the silhouette for up to +5% bonus!
+                </p>
+              </div>
+              <div class="pose-head-actions">
+                <strong id="styleScoreDisplay" class="pose-score-pill">-- / 10</strong>
+                <button
+                  id="poseButton"
+                  class="pose-button"
+                  type="button"
+                  data-i18n="strikePose"
+                >
+                  📸 STRIKE A POSE
+                </button>
+              </div>
             </div>
 
-            <button
-              id="poseButton"
-              class="pose-button"
-              type="button"
-              data-i18n="strikePose"
-            >
-              STRIKE A POSE
-            </button>
-          </div>
+            <div id="poseEmoteGrid" class="pose-emote-grid" role="radiogroup" aria-label="Select Victory Pose Emote">
+              <button type="button" class="pose-emote-card active" data-pose="v-raise" role="radio" aria-checked="true">
+                <svg class="pose-silhouette-svg" viewBox="0 0 48 48" aria-hidden="true">
+                  <circle cx="24" cy="11" r="4.2" fill="currentColor" />
+                  <path class="pose-body" d="M24 16v13M24 29l-6 13M24 29l6 13" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none" />
+                  <path class="pose-limb" d="M24 19l-9-5-5-9M24 19l9-5 5-9" stroke="#39f5bc" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                </svg>
+                <span class="pose-emote-name" data-pose-label="v-raise">CHAMP V</span>
+              </button>
+              <button type="button" class="pose-emote-card" data-pose="flex" role="radio" aria-checked="false">
+                <svg class="pose-silhouette-svg" viewBox="0 0 48 48" aria-hidden="true">
+                  <circle cx="24" cy="11" r="4.2" fill="currentColor" />
+                  <path class="pose-body" d="M24 16v13M24 29l-6 13M24 29l6 13" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none" />
+                  <path class="pose-limb" d="M24 19h-10v-9M24 19h10v-9" stroke="#45eaff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                </svg>
+                <span class="pose-emote-name" data-pose-label="flex">FLEX</span>
+              </button>
+              <button type="button" class="pose-emote-card" data-pose="power" role="radio" aria-checked="false">
+                <svg class="pose-silhouette-svg" viewBox="0 0 48 48" aria-hidden="true">
+                  <circle cx="24" cy="11" r="4.2" fill="currentColor" />
+                  <path class="pose-body" d="M24 16v13M24 29l-7 13M24 29l7 13" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none" />
+                  <path class="pose-limb" d="M24 18l-11 5 6 6M24 18l11 5-6 6" stroke="#ffd35c" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                </svg>
+                <span class="pose-emote-name" data-pose-label="power">BOSS</span>
+              </button>
+              <button type="button" class="pose-emote-card" data-pose="star" role="radio" aria-checked="false">
+                <svg class="pose-silhouette-svg" viewBox="0 0 48 48" aria-hidden="true">
+                  <circle cx="24" cy="11" r="4.2" fill="currentColor" />
+                  <path class="pose-body" d="M24 16v13M24 29l-7 13M24 29l6 12" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none" />
+                  <path class="pose-limb" d="M24 19l-11 7M24 19l10-6 4-9" stroke="#ff758f" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                  <circle cx="38" cy="4" r="2.2" fill="#ffd35c" />
+                </svg>
+                <span class="pose-emote-name" data-pose-label="star">DISCO</span>
+              </button>
+            </div>
 
-          <div id="posePreviewWrap" class="pose-preview-wrap hidden">
-            <img id="poseThumbnail" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Victory pose" />
+            <div id="posePreviewWrap" class="pose-preview-wrap hidden">
+              <img id="poseThumbnail" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Victory pose" />
+              <span id="poseMatchBadge" class="pose-match-badge"></span>
+            </div>
           </div>
 
           <div id="nameInputPanelCard" class="identity-panel hologram-card hidden">
@@ -1456,7 +1544,7 @@
   <canvas id="arcadeFxCanvas" class="arcade-fx-canvas" aria-hidden="true"></canvas>
   <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
   <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
-  <script src="deck.js?v=20261101-10"></script>
-  <script src="app.js?v=20261101-10"></script>
+  <script src="deck.js?v=20261101-13"></script>
+  <script src="app.js?v=20261101-13"></script>
 </body>
 </html>
