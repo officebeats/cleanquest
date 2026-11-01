@@ -7443,10 +7443,11 @@ async function getVerifiedScore(aiResult, before, after) {
           signal: controller.signal
         });
         if (target.provider === "baseten" && response.status === 404 && target.model !== "meta-models/muse-spark-open") {
+          target.model = "meta-models/muse-spark-open";
           response = await fetch(target.url, {
             method: "POST",
             headers: reqHeaders,
-            body: buildOaiBody("meta-models/muse-spark-open"),
+            body: buildOaiBody(target.model),
             signal: controller.signal
           });
         }
