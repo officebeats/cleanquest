@@ -4311,8 +4311,8 @@ function handleBack() {
     return;
   }
 
-  if (state.screen === "timer" && state.timer.running) {
-    pauseTimer();
+  if (state.screen === "timer" && (state.timer.running || state.timer.elapsedMs > 0)) {
+    resetTimer();
   }
 
   navigateTo(getPreviousScreen());
