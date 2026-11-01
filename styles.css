@@ -5807,16 +5807,13 @@ button.btn-pop-active::before {
     grid-column: 1 !important;
     grid-row: 1 !important;
   }
-  #leaderboardScreen #leaderboardRivalBanner {
+  #leaderboardScreen #leaderboardModeBar {
     grid-column: 1 !important;
     grid-row: 2 !important;
   }
-  #leaderboardScreen #crewLeaderboardSummary {
+  #leaderboardScreen #leaderboardRivalBanner {
     grid-column: 1 !important;
     grid-row: 3 !important;
-    font-size: 15.5px !important;
-    padding: 12px 16px !important;
-    margin: 0 !important;
   }
   #leaderboardScreen #personalRecordBar {
     grid-column: 1 !important;
@@ -6360,47 +6357,130 @@ body.music-playing #leaderboardScreen .leaderboard-row .rank {
 }
 
 body.music-playing #leaderboardScreen .leaderboard-row.is-you-row {
-  animation: lb-you-pulse var(--beat-ms, 492ms) ease-in-out infinite alternate !important;
+  animation: lb-you-pulse var(--bar-ms, 984ms) ease-in-out infinite alternate !important;
 }
 
 @keyframes lb-you-pulse {
-  0% { transform: scale(1); box-shadow: 0 0 14px rgba(57, 245, 188, 0.22) !important; }
-  100% { transform: scale(1.018) translateY(-2px); box-shadow: 0 0 28px rgba(57, 245, 188, 0.52) !important; }
+  0% { transform: translate3d(0, 0, 0) scale(1); }
+  100% { transform: translate3d(0, -3px, 0) scale(1.014); }
 }
 
-body.music-playing #leaderboardScreen .leaderboard-rival-banner {
-  animation: lb-banner-pulse var(--bar-ms, 984ms) ease-in-out infinite alternate;
-}
-
-@keyframes lb-banner-pulse {
-  0% { box-shadow: 0 0 16px rgba(57, 245, 188, 0.14) !important; }
-  100% { box-shadow: 0 0 28px rgba(69, 234, 255, 0.36) !important; }
-}
-
-body.music-beat-thump #leaderboardScreen .podium-1,
-body.music-beat-thump #leaderboardScreen .leaderboard-row.rank-1,
-body.music-beat-thump #leaderboardScreen .leaderboard-row.is-you-row,
-body.music-beat-thump #leaderboardScreen .leaderboard-rival-banner,
 body.music-beat-thump #leaderboardScreen #playAgainButton {
   filter: brightness(1.18);
-  transform: scale(1.014);
+  transform: scale(1.018);
+}
+
+.leaderboard-mode-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.leaderboard-mode-bar .mvp-tab-chip {
+  min-height: 40px;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  justify-content: center;
+}
+
+.qr-station-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border-radius: 10px;
+  background: rgba(69, 234, 255, 0.12);
+  border: 1px solid rgba(69, 234, 255, 0.35);
+  font-size: 20px;
+}
+
+/* Tasteful Crimson/Ruby Theme for Low Score / Rescan on Results Screen */
+#resultsScreen.verdict-is-low {
+  background: radial-gradient(ellipse at 50% 0%, rgba(255, 64, 96, 0.18), rgba(110, 14, 34, 0.08) 56%, transparent 85%);
+}
+
+#resultsScreen.verdict-is-low .score-hero {
+  background: linear-gradient(145deg, rgba(64, 14, 28, 0.92), rgba(24, 7, 15, 0.94)) !important;
+  border-color: rgba(255, 86, 114, 0.58) !important;
+  box-shadow: 0 14px 36px rgba(255, 52, 86, 0.2), inset 0 1px 0 rgba(255, 140, 160, 0.22) !important;
+}
+
+#resultsScreen.verdict-is-low .score-kicker {
+  color: #ff8fa3 !important;
+}
+
+#resultsScreen.verdict-is-low #cleanlinessScore {
+  color: #ff5c77 !important;
+  text-shadow: 0 0 24px rgba(255, 72, 104, 0.42) !important;
+}
+
+#resultsScreen.verdict-is-low .verdict-audio-pill {
+  background: linear-gradient(145deg, rgba(72, 16, 30, 0.88), rgba(34, 9, 18, 0.92)) !important;
+  border-color: rgba(255, 92, 118, 0.55) !important;
+}
+
+#resultsScreen.verdict-is-low #replaySummaryButton {
+  background: rgba(255, 72, 104, 0.16) !important;
+  border-color: rgba(255, 96, 122, 0.52) !important;
+  color: #ffd6de !important;
+}
+
+#resultsScreen.verdict-is-low .stat-card,
+#resultsScreen.verdict-is-low #scoreExplanation,
+#resultsScreen.verdict-is-low .evidence-card {
+  background: linear-gradient(160deg, rgba(46, 12, 22, 0.82), rgba(16, 6, 12, 0.9)) !important;
+  border-color: rgba(255, 86, 114, 0.36) !important;
+}
+
+#resultsScreen.verdict-is-low .score-bar-value {
+  color: #ff758f !important;
+}
+
+#resultsScreen.verdict-is-low .score-bar-fill {
+  background: linear-gradient(90deg, #ff4d6d, #ff8fa3) !important;
+}
+
+#resultsScreen.verdict-is-low .finding-card {
+  background: linear-gradient(145deg, rgba(68, 16, 28, 0.88), rgba(32, 8, 16, 0.92)) !important;
+  border: 1px solid rgba(255, 92, 118, 0.58) !important;
+  box-shadow: 0 8px 24px rgba(255, 52, 86, 0.16) !important;
 }
 
 @media (max-width: 899px) {
+  #leaderboardScreen .leaderboard-mode-bar {
+    margin-bottom: 4px !important;
+  }
+  #leaderboardScreen .leaderboard-mode-bar .mvp-tab-chip {
+    min-height: 34px !important;
+    padding: 4px 8px !important;
+    font-size: 11.5px !important;
+  }
+  #leaderboardScreen #leaderboardRivalBanner,
+  #leaderboardScreen #personalRecordBar {
+    padding: 7px 11px !important;
+    margin-bottom: 4px !important;
+  }
   #leaderboardScreen .podium-pillar {
-    padding: 5px 4px !important;
+    padding: 4px 4px !important;
   }
   #leaderboardScreen .podium-pillar.podium-1 {
-    padding: 7px 6px !important;
+    padding: 6px 6px !important;
   }
   #leaderboardScreen .podium-score {
-    font-size: 14.5px !important;
+    font-size: 14px !important;
   }
   #leaderboardScreen .podium-name {
-    font-size: 12px !important;
+    font-size: 11.5px !important;
   }
   #leaderboardScreen .leaderboard-list {
-    max-height: 175px !important;
+    max-height: 215px !important;
+  }
+  #leaderboardScreen .leaderboard-row {
+    padding: 8px 12px !important;
   }
 }
 

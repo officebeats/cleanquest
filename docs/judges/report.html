@@ -519,12 +519,12 @@
     <h3>1 · Welcome, Consent &amp; Trilingual Onboarding (MVP Screens 1–4)</h3>
     <div class="tour-grid">
       <div class="shot"><img src="shots/01-welcome.png" alt="Welcome screen" /><div class="desc">
-        <h4>Welcome Hub, Auto-Play Music &amp; Trilingual Voice Intro</h4>
+        <h4>Welcome Hub, Auto-Play Music &amp; Trilingual Voice Intro (Incl. Daily Deck)</h4>
         <ul>
-          <li><strong>Immediate music &amp; voice intro on load:</strong>
+          <li><strong>Immediate music &amp; voice intro on load/gesture:</strong>
             <ul>
-              <li>Starts the <strong>122 BPM Disclosure-style *Latch* groove</strong> and plays a dedicated trilingual voice introduction (<code>assets/audio/&lt;lang&gt;/welcome-intro.mp3</code> — 24 kHz Kokoro-82M <code>af_heart</code> in EN, Piper in ES/PL) as soon as the app loads.</li>
-              <li>Tapping <code>🌐 ENGLISH</code>, <code>🌐 ESPAÑOL</code>, or <code>🌐 POLSKI</code> immediately switches the UI and triggers the spoken welcome intro in that language.</li>
+              <li>Starts the <strong>122 BPM Disclosure-style *Latch* groove</strong> at full <code>0.92x</code> energy and plays a dedicated trilingual voice introduction (<code>assets/audio/&lt;lang&gt;/welcome-intro.mp3</code> — 24 kHz Kokoro-82M <code>af_heart</code> in EN, Mexican Spanish <code>es_MX-claude-high</code> in ES, Piper in PL) introducing both the timed Challenge and the <strong>Daily Deck</strong> streak trainer.</li>
+              <li>Multi-event gesture unlock (<code>pointerup</code>, <code>touchend</code>, <code>click</code>, <code>keydown</code>) guarantees playback even when a mobile browser blocks cold un-gestured autoplay.</li>
             </ul>
           </li>
           <li><strong>Non-technical cleaner UX:</strong>
@@ -555,21 +555,16 @@
       </div></div>
 
       <div class="shot"><img src="shots/03-welcome-es.png" alt="Welcome in Spanish" /><div class="desc">
-        <h4>Spanish &amp; Polish Parity + Spoken Language Switch</h4>
+        <h4>Mexican Spanish (<code>es_MX</code>) &amp; Polish Parity + Spoken Language Switch</h4>
         <ul>
-          <li><strong>Instant spoken intro on language switch:</strong>
+          <li><strong>Authentic Mexican Spanish (<code>es_MX-claude-high.onnx</code>):</strong>
             <ul>
-              <li>All 320+ UI strings, 30 training deck cards, station icons, ARIA labels, and 192+ per-language voice clips switch immediately on tap, playing <code>welcome-intro.mp3</code> in the selected language.</li>
-              <li>Fixed the Spanish batch generator regex so all 192 <code>assets/audio/es/*.mp3</code> clips speak genuine Spanish lines from <code>HOST_LINES.es</code>.</li>
-            </ul>
-          </li>
-          <li><strong>Layout resilience:</strong>
-            <ul>
-              <li>Longer Spanish and Polish labels wrap cleanly inside 44px+ buttons with zero horizontal overflow at 360×740.</li>
+              <li>All 240 Spanish audio clips (198 <code>HOST_LINES.es</code> beats + 39 <code>num-*</code>/<code>glue-*</code> + <code>welcome-intro.mp3</code> + <code>consent-00.mp3</code>) were rewritten in authentic <strong>Mexican Spanish (<code>es_MX</code>)</strong> and rendered with the high-quality <code>es_MX-claude-high.onnx</code> neural model; JanSan terminology uses Mexican Spanish (<em>Tarja y mostrador</em>, <em>Mingitorio</em>, <em>Despachadores</em>, <em>Zoclo</em>).</li>
+              <li>Tapping <code>🌐 ENGLISH</code>, <code>🌐 ESPAÑOL</code>, or <code>🌐 POLSKI</code> immediately switches the UI and speaks the welcome intro in that language.</li>
             </ul>
           </li>
         </ul>
-        <span class="verdict v-ready">READY · TRILINGUAL</span>
+        <span class="verdict v-ready">READY · ES-MX + PL</span>
       </div></div>
 
       <div class="shot"><img src="shots/04-instructions.png" alt="Instructions with Judge Demo button" /><div class="desc">
@@ -594,35 +589,30 @@
     <h3>2 · Check-In, Live Run Timer &amp; Distilled Results Scorecard (MVP Screens 5–8)</h3>
     <div class="tour-grid">
       <div class="shot"><img src="shots/05-camera.png" alt="Camera screen" /><div class="desc">
-        <h4>Icon-Assisted Site Check-In &amp; Above-the-Fold Camera (Screen 5)</h4>
+        <h4>MECE JanSan Taxonomy Check-In &amp; Single-QR Scanner (Screen 5)</h4>
         <ul>
-          <li><strong>Iconography &amp; non-technical clarity:</strong>
+          <li><strong>10 MECE Building Sectors, 13 Facility Areas &amp; 28 Cleaning Spots:</strong>
             <ul>
-              <li>Animated Lottie radar badge + icon-labeled station pickers (<code>📍 SITE</code>, <code>🏢 BUILDING</code>, <code>🚪 AREA</code>, <code>🎯 SPOT TO CLEAN</code>) and icon-prefixed options (<code>🏢 Office</code>, <code>☕ Breakroom</code>, <code>🚰 Sink &amp; counter</code>) + 44×44px SVG QR scanner button.</li>
-              <li>Both mobile and desktop (side-by-side 2-column layout) bound the camera viewfinder to <code>calc(100dvh - 116px)</code> so the camera and primary CTAs are 100% above the fold with zero cutoff.</li>
-            </ul>
-          </li>
-          <li><strong>Run-integrity enforcement:</strong>
-            <ul>
-              <li>Selecting an admin-registered site and keeping the system-assigned spot are required for <code>prizeEligible</code> leaderboard and crew credit.</li>
+              <li>Covers the full commercial JanSan industry (ISSA 612 / BSCAI / APPA / CDC): <strong>10 Building Sectors</strong> (<code>🏢 Office</code>, <code>🏫 Education</code>, <code>🏥 Healthcare</code>, <code>🏭 Industrial</code>, <code>🛍️ Retail</code>, <code>🏨 Hospitality</code>, <code>🍽️ Foodservice</code>, <code>✈️ Aviation &amp; Transit</code>, <code>🏟️ Gym &amp; Recreation</code>, <code>🏘️ Multi-Family</code>), <strong>13 Functional Areas</strong>, and <strong>28 Spot Sub-Assemblies</strong> with custom 3×3 zone weights.</li>
+              <li><code>#qrScannerModal</code> displays <strong>only 1 single high-contrast QR code</strong> on screen (with icon-badged station pills) so phone cameras never get confused by multiple QR codes.</li>
             </ul>
           </li>
         </ul>
-        <span class="verdict v-ready">READY · MVP 5</span>
+        <span class="verdict v-ready">READY · MECE JANSAN</span>
       </div></div>
 
       <div class="shot"><img src="shots/06-timer.png" alt="Timer screen" /><div class="desc">
-        <h4>Live Run Timer, 1-Tap Auto-Capture Complete &amp; 45s Halfway Callout (Screens 6–7)</h4>
+        <h4>Locked Countdown Timer, 1-Tap Auto-Capture &amp; 6–8s Host Coaching (Screens 6–7)</h4>
         <ul>
-          <li><strong>1-tap auto-capture on Complete &amp; countdown end:</strong>
+          <li><strong>Locked running clock &amp; 1-tap auto-capture on Complete:</strong>
             <ul>
-              <li>Bold icon-assisted station pills (<code>🚰 Sink &amp; counter</code>, <code>🍽️ Tabletop &amp; appliance</code>, <code>🗑️ Trash &amp; floor</code>) replace redundant dropdowns and technical rule math.</li>
-              <li>Tapping <code>COMPLETE CHALLENGE</code> (or reaching <code>0:00.0</code> on the clock) <strong>automatically captures the 2nd (<code>AFTER</code>) photo and scores the run in one step</strong> without requiring a second confirmation tap.</li>
+              <li>Once <code>START</code> is tapped, the countdown locks into <code>⏱ LIVE</code> (cannot be paused, stopped, or reset mid-run).</li>
+              <li>Tapping <code>COMPLETE CHALLENGE</code> (or reaching <code>0:00.0</code>) <strong>automatically captures the 2nd (<code>AFTER</code>) photo and scores the run in one step</strong>.</li>
             </ul>
           </li>
-          <li><strong>Live 3×3 luma sampling &amp; accurate 45s Halfway voice:</strong>
+          <li><strong>Continuous 6–8s host voice inspiration &amp; live 3×3 luma sampling:</strong>
             <ul>
-              <li><code>sampleLiveRunActivity()</code> samples a <code>36×27</code> luma grid every <code>1.4s</code> and records up to 6 <code>320×240</code> mid-run snapshots (<code>📸 LIVE · X/9 ZONES · N SNAPS</code>); the <em>Halfway</em> host callout fires strictly at <code>45s</code> remaining.</li>
+              <li>The host voice inspires the cleaner <strong>every 6–8 seconds</strong> across the 90s run (<code>83s</code>, <code>76s</code>, <code>69s</code>, <code>62s</code>, <code>54s</code>, <code>45s</code> Halfway, <code>38s</code>, <code>30s</code>, <code>23s</code>, <code>16s</code>, <code>10s</code>) while <code>sampleLiveRunActivity()</code> records <code>36×27</code> 9-zone luma grids and <code>320×240</code> mid-run snapshots.</li>
             </ul>
           </li>
         </ul>
@@ -630,16 +620,16 @@
       </div></div>
 
       <div class="shot"><img src="shots/07-results.png" alt="Results screen" /><div class="desc">
-        <h4>5-Tier Audio Verdict Summary &amp; Full-Width Breakdown (Screen 8)</h4>
+        <h4>5-Tier Audio Verdict &amp; Crimson Low-Score / Rescan Theme (Screen 8)</h4>
         <ul>
-          <li><strong>5-Tier musical stingers + gapless spoken summary:</strong>
+          <li><strong>5-Tier musical stingers + crossfaded Kokoro-82M readout:</strong>
             <ul>
-              <li>Opens with a <code>540ms</code> F-Dorian Korg M1 pluck count-up roll (<code>0% → 75%</code>), fires a tier-specific WebAudio musical stinger (<code>🏆 S-RANK</code> brass fanfare, <code>✨ A-RANK</code> house Maj9 lift, <code>😅 B-RANK</code> sus4→Maj7 relief, <code>🔥 C-RANK</code> Rhodes sigh + rally fifth, or <code>💪 D-RANK</code> playful wah-wah + snare tap), and chains <code>[Spoken Score %] → [Tier Reaction Clip] → [Finish Clip]</code>.</li>
+              <li>Opens with a <code>540ms</code> F-Dorian count-up roll, fires a tier-specific WebAudio musical stinger (<code>🏆 S-RANK</code> through <code>💪 D-RANK</code>), and chains <code>[Spoken Score %] → [Natural Verdict Reaction]</code>.</li>
             </ul>
           </li>
-          <li><strong>Live waveform replay pill &amp; high-legibility bars:</strong>
+          <li><strong>Tasteful Crimson/Ruby low-score &amp; rescan state (<code>.verdict-is-low</code>):</strong>
             <ul>
-              <li>Full-width <code>🔊 REPLAY SUMMARY</code> pill with animated 5-bar waveform and live transcript caption above 18px full-width score bars and 15px plain-English sub-labels.</li>
+              <li>When a run scores below <code>70%</code> or triggers a station mismatch <code>RESCAN</code>, <code>#resultsScreen.verdict-is-low</code> shifts the Score Hero, breakdown bars, evidence cards, and finding callout to a cohesive crimson/ruby alert palette.</li>
             </ul>
           </li>
         </ul>
@@ -667,21 +657,21 @@
     <h3>3 · Fair Leaderboard, Spectator Board, Supervisor Tools &amp; Daily Deck (MVP Screens 9–15)</h3>
     <div class="tour-grid">
       <div class="shot"><img src="shots/08-leaderboard.png" alt="Leaderboard, fresh install" /><div class="desc">
-        <h4>Competitive 3-Pillar Podium, Rival Chase Meter &amp; Beat-Synced Leaderboard</h4>
+        <h4>Shift Challenge + Daily Deck Leaderboard &amp; Smooth Beat Groove</h4>
         <ul>
-          <li><strong>Sequencer-driven micro-dance &amp; 3-pillar podium:</strong>
+          <li><strong>Dual-mode Leaderboard (<code>⚡ SHIFT CHALLENGE</code> &amp; <code>🃏 DAILY DECK</code>):</strong>
             <ul>
-              <li>2-column full-canvas desktop layout + mobile <strong>3-Pillar Championship Podium Stage</strong> (<code>🥈 #2</code>, tall center <code>👑 #1</code> Gold pedestal, <code>🥉 #3</code>) and <code>🎵 MUSIC</code> / <code>1/3 ⏭</code> header controls.</li>
-              <li>Rows, medals, and podium pillars micro-dance to the active track's tempo (<code>--beat-ms</code>: <code>492ms</code> / <code>484ms</code> / <code>476ms</code>) gated on <code>body.music-playing</code>, with <code>150ms</code> kick-drum brightness pulses and immediate stop when muted.</li>
+              <li>1-tap mode switcher toggles between the 90s <strong>Shift Challenge Leaderboard</strong> (Quality %, Time, Style) and the <strong>Daily Deck Leaderboard</strong> (Accuracy %, Streak 🔥, Deck XP) — with clutter text removed for clean visual focus.</li>
+              <li>Rows and 3-Pillar Podium pedestals micro-groove smoothly to the track tempo (<code>--bar-ms</code>) with zero brightness strobe, while <strong>only <code>PLAY AGAIN</code> pulses on the kick beat</strong>.</li>
             </ul>
           </li>
           <li><strong>Competitive Rival Chase bar &amp; verified <code>YOU</code> placement:</strong>
             <ul>
-              <li><code>🔥 NEXT TARGET TO BEAT</code> progress bar calculates the exact <code>%</code> gap to overtake the next rank above you; highlights your own run via <code>viewerOwned</code> / <code>cleanquest.viewerRunId</code> with a glowing <code>YOU</code> badge (or shows <code>UNRANKED</code> separately until an eligible shift run is completed).</li>
+              <li><code>🔥 NEXT TARGET TO BEAT</code> progress bar calculates the exact gap to overtake the next rank above you and highlights your own row with a glowing <code>YOU</code> badge.</li>
             </ul>
           </li>
         </ul>
-        <span class="verdict v-ready">READY · MVP 10 + BEAT-SYNCED</span>
+        <span class="verdict v-ready">READY · SHIFT + DECK BOARDS</span>
       </div></div>
 
       <div class="shot"><img src="shots/20-desktop-leaderboard.png" alt="Desktop 2-Column Leaderboard" /><div class="desc">
@@ -689,8 +679,8 @@
         <ul>
           <li><strong>Left &amp; right column architecture:</strong>
             <ul>
-              <li><strong>Left column:</strong> Animated Crown Header + <code>🎵 MUSIC</code> / <code>1/3 ⏭</code> controls, Crew Matchup Card, Personal Best / <code>🪪 SHARE PASSPORT</code> Card, and primary <code>PLAY AGAIN</code> / <code>RETURN HOME</code> / <code>VIEW RECORDS</code> CTAs.</li>
-              <li><strong>Right column:</strong> <code>🔥 NEXT TARGET TO BEAT</code> incentive progress bar, 3-Pillar Championship Podium Stage, and full-height ranked rows with Gold/Silver/Bronze medals, glowing <code>YOU</code> row, and beat-synced micro-dance.</li>
+              <li><strong>Left column:</strong> Animated Crown Header + <code>🎵 MUSIC</code> / <code>1/3 ⏭</code> controls, <code>⚡ SHIFT CHALLENGE</code> / <code>🃏 DAILY DECK</code> mode tabs, Rival Chase Card, Personal Best / <code>🪪 SHARE PASSPORT</code> Card, and beat-pulsing <code>PLAY AGAIN</code> CTA.</li>
+              <li><strong>Right column:</strong> 3-Pillar Championship Podium Stage and full-height ranked rows with Gold/Silver/Bronze medals and glowing <code>YOU</code> row.</li>
             </ul>
           </li>
         </ul>
@@ -787,20 +777,20 @@
       </div></div>
 
       <div class="shot"><img src="shots/12-deck.png" alt="Daily deck" /><div class="desc">
-        <h4>AAA Gamified Daily Swipe Deck &amp; Pure Sponsor Banner Image (Screen 9)</h4>
+        <h4>AAA Gamified Daily Swipe Deck, Deck Leaderboard &amp; Subtle Brand Logo (Screen 9)</h4>
         <ul>
-          <li><strong>AAA Widescreen Dioramas, Verdict Stamps &amp; Right/Wrong Game-Show SFX:</strong>
+          <li><strong>AAA Widescreen Dioramas, Verdict Stamps &amp; Deck Leaderboard:</strong>
             <ul>
-              <li>Widescreen 3-panel animated SVG dioramas (pH gauge + spray trigger + bubbling flask + chrome fixture shield) that react dynamically on selection with a slamming <code>✨ NAILED IT! +100 XP</code> or <code>⚠️ TRICK CALL!</code> stamp, game-show Major-9th bell chime vs. descending two-tone error SFX + host voice reaction, and 60fps Canvas confetti/pixel cannons!</li>
+              <li>Widescreen 3-panel animated SVG dioramas react dynamically with a slamming <code>✨ NAILED IT! +100 XP</code> or <code>⚠️ TRICK CALL!</code> stamp, game-show Major-9th bell chime vs. Uh-Oh error SFX + host voice reaction, and a <code>🏆</code> header button + end-of-deck <code>🏆 DECK LEADERBOARD</code> CTA!</li>
             </ul>
           </li>
-          <li><strong>Pure <code>600 × 84</code> SVG Sponsor Banner Image:</strong>
+          <li><strong>Subtle <code>YOUR LOGO HERE</code> Pro Brand Logo Lockup:</strong>
             <ul>
-              <li>Answers are strictly brand-neutral product types; post-answer <code>SPONSORED</code> slot renders a clean, full-width <strong><code>600 × 84</code> (7:1 aspect-ratio) SVG Sponsor Banner Image</strong> (<code>SPONSOR BANNER IMAGE · YOUR BRAND LOGO ARTWORK HERE</code>) with zero paragraph clutter.</li>
+              <li>Post-answer <code>SPONSORED</code> banner renders a sleek geometric shield crest + <strong><code>YOUR LOGO · HERE · PRO SERIES</code></strong> brand logo lockup inside a clean <code>600 × 84</code> banner slot.</li>
             </ul>
           </li>
         </ul>
-        <span class="verdict v-ready">READY · AAA DECK + BANNER AD</span>
+        <span class="verdict v-ready">READY · AAA DECK + LOGO</span>
       </div></div>
       <div class="shot full-span"><img src="shots/15-desktop-welcome.png" alt="Desktop welcome" class="wide" /><div class="desc">
         <h4>Desktop &amp; Wide-Screen Responsiveness (1440×900)</h4>

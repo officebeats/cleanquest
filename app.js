@@ -90,7 +90,18 @@ const CONFIG = {
     totalCards: 30
   },
   retentionDays: 90,
-  buildingLeagues: ["office", "education", "healthcare", "industrial", "retail"],
+  buildingLeagues: [
+    "office",
+    "education",
+    "healthcare",
+    "industrial",
+    "retail",
+    "hospitality",
+    "foodservice",
+    "transit",
+    "athletics",
+    "multifamily"
+  ],
   trainingPacks: {
     dwell: {
       id: "dwell",
@@ -110,29 +121,143 @@ const CONFIG = {
   },
   areaTemplates: {
     breakroom: {
-      label: "Breakroom",
+      label: "Breakroom & Pantry",
       difficultyAdjustment: 0,
-      spots: ["Sink & counter", "Tabletop & appliance front", "Trash & floor zone"]
+      spots: [
+        "Sink & counter",
+        "Tabletop & appliance front",
+        "Trash & floor zone",
+        "Vending bank, microwave & fridge handles",
+        "Soap, towel & sanitizer dispensers"
+      ]
     },
     restroom: {
-      label: "Restroom",
+      label: "Restroom & Washroom",
       difficultyAdjustment: 3,
-      spots: ["Sink & mirror counter", "Fixture row & partition", "Entry door & dispenser zone"]
+      spots: [
+        "Sink & mirror counter",
+        "Fixture row & partition",
+        "Entry door & dispenser zone",
+        "Urinal, toilet & stall hardware",
+        "Soap, towel & sanitizer dispensers",
+        "Hard floor scrub & baseboard edge"
+      ]
     },
     lobby: {
-      label: "Lobby",
+      label: "Lobby & Atrium",
       difficultyAdjustment: 1,
-      spots: ["Entry glass & handles", "Reception counter", "Waiting area floor"]
+      spots: [
+        "Entry glass & handles",
+        "Reception counter",
+        "Waiting area floor",
+        "Carpeted traffic lane & walk-off mat",
+        "High-touch door pulls, switches & rails"
+      ]
     },
     office: {
-      label: "Office",
+      label: "Open Office & Cubicles",
       difficultyAdjustment: 0,
-      spots: ["Workstation desk surface", "Conference table & chairs", "Entry & glass partition"]
+      spots: [
+        "Workstation desk surface",
+        "Conference table & chairs",
+        "Entry & glass partition",
+        "Workstation desk & shelf",
+        "Trash & floor zone"
+      ]
     },
     classroom: {
-      label: "Classroom",
+      label: "Classroom & Lecture Hall",
       difficultyAdjustment: 2,
-      spots: ["Board rail & front desk", "Student desk row", "Doorway & sink area"]
+      spots: [
+        "Board rail & front desk",
+        "Student desk row",
+        "Doorway & sink area",
+        "High-touch door pulls, switches & rails",
+        "Trash & floor zone"
+      ]
+    },
+    conference: {
+      label: "Conference & Boardroom",
+      difficultyAdjustment: 1,
+      spots: [
+        "Conference table & chairs",
+        "Entry & glass partition",
+        "High-touch door pulls, switches & rails",
+        "Carpeted traffic lane & walk-off mat"
+      ]
+    },
+    clinic: {
+      label: "Patient & Exam Room",
+      difficultyAdjustment: 4,
+      spots: [
+        "Patient bed rails & exam table",
+        "Sink & mirror counter",
+        "Soap, towel & sanitizer dispensers",
+        "High-touch door pulls, switches & rails",
+        "Hard floor scrub & baseboard edge"
+      ]
+    },
+    kitchen: {
+      label: "Commercial Kitchen & Prep",
+      difficultyAdjustment: 3,
+      spots: [
+        "Commercial prep table & hood apron",
+        "Sink & counter",
+        "Soap, towel & sanitizer dispensers",
+        "Hard floor scrub & baseboard edge",
+        "Trash & floor zone"
+      ]
+    },
+    dining: {
+      label: "Dining & Food Court",
+      difficultyAdjustment: 1,
+      spots: [
+        "Tabletop & appliance front",
+        "Entry glass & handles",
+        "Hard floor scrub & baseboard edge",
+        "Trash & floor zone"
+      ]
+    },
+    corridor: {
+      label: "Corridor, Elevator & Stairwell",
+      difficultyAdjustment: 1,
+      spots: [
+        "Elevator cab buttons, rails & threshold",
+        "Carpeted traffic lane & walk-off mat",
+        "High-touch door pulls, switches & rails",
+        "Mirror, glass & handles"
+      ]
+    },
+    warehouse: {
+      label: "Warehouse & Loading Dock",
+      difficultyAdjustment: 2,
+      spots: [
+        "Hard floor scrub & baseboard edge",
+        "Trash & floor zone",
+        "High-touch door pulls, switches & rails",
+        "Workstation desk & shelf"
+      ]
+    },
+    fitness: {
+      label: "Locker & Fitness Floor",
+      difficultyAdjustment: 2,
+      spots: [
+        "Cardio & weight equipment touchpoints",
+        "Mirror, glass & handles",
+        "Soap, towel & sanitizer dispensers",
+        "Hard floor scrub & baseboard edge"
+      ]
+    },
+    retailfloor: {
+      label: "Sales Floor & Checkout",
+      difficultyAdjustment: 1,
+      spots: [
+        "POS checkout lane & counter",
+        "Entry glass & handles",
+        "Carpeted traffic lane & walk-off mat",
+        "Hard floor scrub & baseboard edge",
+        "Trash & floor zone"
+      ]
     }
   }
 };
@@ -493,16 +618,32 @@ const translations = {
     deckStampLeft: "⟵ MISS",
     deckStampRight: "RIGHT CALL ⟶",
     openSupervisorTools: "📋 OPEN INSPECTION LOG & SUPERVISOR TOOLS (11–15) →",
-    leagueOffice: "🏢 Office",
-    leagueEducation: "🏫 Education",
-    leagueHealthcare: "🏥 Healthcare",
-    leagueIndustrial: "🏭 Industrial",
-    leagueRetail: "🛍️ Retail",
-    areaBreakroom: "☕ Breakroom",
-    areaRestroom: "🚻 Restroom",
-    areaLobby: "🛋️ Lobby",
-    areaOffice: "💼 Office",
-    areaClassroom: "🎓 Classroom",
+    leagueOffice: "🏢 Office & Corporate",
+    leagueEducation: "🏫 Education & Campus",
+    leagueHealthcare: "🏥 Healthcare & Medical",
+    leagueIndustrial: "🏭 Industrial & Manufacturing",
+    leagueRetail: "🛍️ Retail & Shopping Center",
+    leagueHospitality: "🏨 Hospitality & Hotel",
+    leagueFoodservice: "🍽️ Foodservice & Restaurant",
+    leagueTransit: "✈️ Aviation & Transit Hub",
+    leagueAthletics: "🏟️ Gym & Recreation",
+    leagueMultifamily: "🏘️ Multi-Family & HOA",
+    areaBreakroom: "☕ Breakroom & Pantry",
+    areaRestroom: "🚻 Restroom & Washroom",
+    areaLobby: "🛋️ Lobby & Atrium",
+    areaOffice: "💼 Open Office & Cubicles",
+    areaClassroom: "🎓 Classroom & Lecture Hall",
+    areaConference: "🤝 Conference & Boardroom",
+    areaClinic: "🩺 Patient & Exam Room",
+    areaKitchen: "👨‍🍳 Commercial Kitchen & Prep",
+    areaDining: "🍴 Dining & Food Court",
+    areaCorridor: "🚶 Corridor, Elevator & Stairwell",
+    areaWarehouse: "📦 Warehouse & Loading Dock",
+    areaFitness: "🏋️ Locker & Fitness Floor",
+    areaRetailfloor: "🛒 Sales Floor & Checkout",
+    lbTabShift: "⚡ SHIFT CHALLENGE",
+    lbTabDeck: "🃏 DAILY DECK",
+    deckLeaderboardAction: "🏆 DECK LEADERBOARD",
     gradeClean: "CLEAN",
     gradePartly: "PARTLY CLEAN",
     gradeMissed: "MISSED",
@@ -863,16 +1004,32 @@ const translations = {
     deckStampLeft: "⟵ FALLO",
     deckStampRight: "ACIERTA ⟶",
     openSupervisorTools: "📋 ABRIR REGISTRO Y HERRAMIENTAS DE SUPERVISIÓN (11–15) →",
-    leagueOffice: "🏢 Oficina",
-    leagueEducation: "🏫 Educación",
-    leagueHealthcare: "🏥 Salud",
-    leagueIndustrial: "🏭 Industrial",
-    leagueRetail: "🛍️ Comercio",
-    areaBreakroom: "☕ Sala de descanso",
-    areaRestroom: "🚻 Baño",
-    areaLobby: "🛋️ Vestíbulo",
-    areaOffice: "💼 Oficina",
-    areaClassroom: "🎓 Aula",
+    leagueOffice: "🏢 Corporativo y Oficinas",
+    leagueEducation: "🏫 Escuela y Campus",
+    leagueHealthcare: "🏥 Hospital y Clínica",
+    leagueIndustrial: "🏭 Planta Industrial y Nave",
+    leagueRetail: "🛍️ Tienda y Plaza Comercial",
+    leagueHospitality: "🏨 Hotelería y Hospedaje",
+    leagueFoodservice: "🍽️ Restaurante y Comedor",
+    leagueTransit: "✈️ Aeropuerto y Terminal",
+    leagueAthletics: "🏟️ Gimnasio y Club Deportivo",
+    leagueMultifamily: "🏘️ Condominio y Residencial",
+    areaBreakroom: "☕ Comedor de Empleados y Cocineta",
+    areaRestroom: "🚻 Sanitarios y Tocador",
+    areaLobby: "🛋️ Recepción y Vestíbulo",
+    areaOffice: "💼 Área Operativa y Cubículos",
+    areaClassroom: "🎓 Salón de Clases y Aula",
+    areaConference: "🤝 Sala de Juntas",
+    areaClinic: "🩺 Consultorio y Cuarto Clínico",
+    areaKitchen: "👨‍🍳 Cocina Industrial y Preparación",
+    areaDining: "🍴 Área de Comensales y Terraza",
+    areaCorridor: "🚶 Pasillo, Elevador y Escaleras",
+    areaWarehouse: "📦 Almacén y Andén de Carga",
+    areaFitness: "🏋️ Vestidores y Área de Entrenamiento",
+    areaRetailfloor: "🛒 Piso de Venta y Cajas",
+    lbTabShift: "⚡ RETO DE TURNO",
+    lbTabDeck: "🃏 MAZO DIARIO",
+    deckLeaderboardAction: "🏆 TABLA DEL MAZO",
     gradeClean: "LIMPIO",
     gradePartly: "PARCIAL",
     gradeMissed: "OMITIDO",
@@ -1233,16 +1390,32 @@ const translations = {
     deckStampLeft: "⟵ BŁĄD",
     deckStampRight: "DOBRZE ⟶",
     openSupervisorTools: "📋 OTWÓRZ DZIENNIK I NARZĘDZIA NADZORU (11–15) →",
-    leagueOffice: "🏢 Biuro",
-    leagueEducation: "🏫 Edukacja",
-    leagueHealthcare: "🏥 Zdrowie",
-    leagueIndustrial: "🏭 Przemysł",
-    leagueRetail: "🛍️ Handel",
-    areaBreakroom: "☕ Pokój socjalny",
-    areaRestroom: "🚻 Łazienka",
-    areaLobby: "🛋️ Hol",
-    areaOffice: "💼 Biuro",
-    areaClassroom: "🎓 Sala lekcyjna",
+    leagueOffice: "🏢 Biurowiec i Korporacja",
+    leagueEducation: "🏫 Edukacja i Kampus",
+    leagueHealthcare: "🏥 Placówka Medyczna",
+    leagueIndustrial: "🏭 Przemysł i Produkcja",
+    leagueRetail: "🛍️ Handel i Centrum Handlowe",
+    leagueHospitality: "🏨 Hotelarstwo i Obiekty Noclegowe",
+    leagueFoodservice: "🍽️ Gastronomia i Restauracja",
+    leagueTransit: "✈️ Lotnisko i Węzeł Komunikacyjny",
+    leagueAthletics: "🏟️ Siłownia i Rekreacja",
+    leagueMultifamily: "🏘️ Budynek Wielorodzinny i Wspólnota",
+    areaBreakroom: "☕ Pokój Socjalny i Aneks",
+    areaRestroom: "🚻 Toaleta i Łazienka",
+    areaLobby: "🛋️ Hol Główny i Recepcja",
+    areaOffice: "💼 Biuro Open Space i Boksy",
+    areaClassroom: "🎓 Sala Lekcyjna i Wykładowa",
+    areaConference: "🤝 Sala Konferencyjna",
+    areaClinic: "🩺 Gabinet Zabiegowy i Sala Pacjenta",
+    areaKitchen: "👨‍🍳 Kuchnia Gastronomiczna",
+    areaDining: "🍴 Sala Konsumpcyjna i Strefa Gastronomiczna",
+    areaCorridor: "🚶 Korytarz, Winda i Klatka Schodowa",
+    areaWarehouse: "📦 Magazyn i Rampa Załadunkowa",
+    areaFitness: "🏋️ Szatnia i Strefa Treningowa",
+    areaRetailfloor: "🛒 Sala Sprzedaży i Strefa Kas",
+    lbTabShift: "⚡ WYZWANIE ZMIANY",
+    lbTabDeck: "🃏 TALIA DNIA",
+    deckLeaderboardAction: "🏆 RANKING TALII",
     gradeClean: "CZYSTO",
     gradePartly: "CZĘŚCIOWO",
     gradeMissed: "POMINIĘTO",
@@ -1279,9 +1452,9 @@ const state = {
     hypeLevel: "full",
     discoEnabled: true,
     available:
-      "speechSynthesis" in window &&
-      "SpeechSynthesisUtterance" in window,
-    voices: [],
+      typeof Audio !== "undefined" ||
+      ("speechSynthesis" in window &&
+      "SpeechSynthesisUtterance" in window),
     selectedVoice: null
   },
 
@@ -1773,7 +1946,7 @@ function chooseVoice(language) {
   const voices = state.voice.voices || [];
   const preferredLanguages = {
     en: ["en-US", "en"],
-    es: ["es-US", "es-MX", "es-ES", "es"],
+    es: ["es-MX", "es-US", "es-419", "es"],
     pl: ["pl-PL", "pl"]
   }[language] || ["en-US", "en"];
 
@@ -2003,22 +2176,228 @@ const HOST_LINES = {
     ],
   },
   es: {
-    start: ["¡Vamos... a brillar!", "¡Juego en marcha... demuestra quién manda!", "Cámaras listas... ¡que se vea el brillo!", "Muy bien, campeón... ¡haz que cuente!", "El reloj corre... ¡tú puedes!", "A trabajar... ¡rápido y bien!", "Vamos allá... ¡limpio y veloz!", "Listos... ¡a brillar!", "Tu sala... tu escenario... ¡ya!", "Momento estrella... ¡a brillar!", "¡Es la hora... sala estrella!", "Noventa segundos... ¡que valgan!", "En marcha... ¡el objetivo es impecable!", "Cara de juego... ¡allá vamos!", "A darle... ¡para esto entrenaste!", "Muy bien, estrella... ¡esa sala es tuya!", "Hagamos que brille... ¡ya mismo!", "Luces listas... sala lista... ¡ya!", "El reloj vive... ¡haz lo tuyo!", "Sin presión... ¡solo brilla!", "Allá vamos... ¡máquina de limpiar!", "Luces, cámara... ¡limpieza!", "Tus noventa segundos... ¡empiezan ya!", "Vamos... ¡con todo!"],
-    mid: ["¡Mitad... vas muy bien!", "Buen ritmo... ¡qué bonito!", "Mitad pasada... ¡vas firme!", "Se ve fluido... ¡fluye hermoso!", "Mitad del reto... ¡tú puedes!", "Buen ritmo... ¡marcha hermosa!", "Gran inicio... ¡mitad brillante!", "Te mueves genial... ¡qué estilo!", "Mitad del camino... ¡qué nivel!", "Movimientos suaves... ¡qué arte!", "Vas perfecto... ¡qué preciso!", "Ya se ve limpio... ¡guau!", "Mitad... ¡puro ritmo!", "Gran energía... ¡qué ambiente!", "Vas volando... ¡qué vuelo!", "Punto medio... ¡te ves firme!", "Se ve cerca... ¡ya casi!", "Ritmo hermoso... ¡puro brillo!", "Qué energía... ¡vas bien!", "Mitad... ¡la sala cree en ti!", "Suave y firme... ¡bonito!", "Como profesional... ¡qué clase!", "Mitad... ¡brilla en alto!", "Gran esfuerzo... ¡puro brillo!"],
-    finish: ["¡Tiempo!... ¡obra hermosa!", "¡Y... listo! ¡Hermoso trabajo!", "¡Eso es... puro campeón!", "Se acabó... ¡precioso!", "¡Terminado!... ¡haz reverencia!", "¡Se acabó el tiempo... qué carrera!", "Listo y pulido... ¡literal!", "Para el reloj... ¡impresionante!", "Fin del juego... ¡bien jugado!", "¡Tiempo!... ¡mira ese brillo!", "Todo listo... ¡date el crédito!", "Noventa segundos... ¡clavado!", "Y paramos... ¡trabajo fantástico!", "¡Completo!... ¡la sala brilla!", "Tiempo cumplido... ¡cumpliste!", "¡Listo!... ¡así se hace!", "Suena el silbato... ¡gran carrera!", "Cierre fuerte... ¡da gusto verlo!", "Eso es tiempo... ¡estrella total!", "Reloj parado... ¡el público enloquece!", "Todo terminado... ¡disfrútalo!", "Trato hecho... ¡resultado brillante!", "¡Tiempo!... ¡beso de chef!", "Completo... ¡lo haces ver fácil!"],
-    pass: ["¡Pasa! ¡Esa sala reluce!", "Frescura total... ¡hermoso!", "Pasa con estilo... ¡bien ganado!", "Eso pasa... ¡trabajo precioso!", "Sello puesto... ¡limpio total!", "¡Pasa!... ¡los jueces sonríen!", "Nota máxima... ¡disfrútalo!", "Pase claro... ¡llévate el triunfo!", "¡Pasa!... ¡qué transformación!", "Verificado y victorioso... ¡sí!", "Ese es el nivel... ¡pasa!", "¡Pasa!... ¡la sala parece nueva!", "Estrella de oro... ¡merecida!", "Pasa con honores... ¡guau!", "Cuenta limpia... ¡hermoso trabajo!", "Eso pasa... ¡hazlo tuyo!", "Al marcador le encanta... ¡pasa!", "¡Pasa!... ¡limpieza de foto!", "Clavaste la marca... ¡pasa!", "Vuelta de honor... ¡pasaste!", "¡Pasa!... ¡simplemente increíble!", "La sala aprueba... ¡pasa!", "Final impecable... ¡eso pasa!", "¡Pasa!... ¡recuerda este momento!"],
-    retry: ["Tan cerca... ¿otra carrera?", "Casi... ¡tienes otra en ti!", "Falló... ¡sacúdete y repite!", "Casi lo logras... ¡de nuevo!", "Sin vergüenza... ¡los campeones repiten!", "Por poco... ¡la próxima es tuya!", "Uy, cerca... ¡vamos otra vez!", "Esta vez no... ¡lo lograrás!", "Tan cerca... ¿un intento más?", "Sacúdete el polvo... ¡repite!", "Casi lo tenías... ¡otra vez!", "¡Qué cerca... esfuerzo hermoso!", "Todavía no... pero estás cerca...", "Hora de repetir... ¡creo en ti!", "Falló la marca... ¡recarga y ve!", "Una más... ¡tú puedes!", "Cerca... pero aún no...", "Casi... ¡qué gran corazón!", "Aún no... ¡la sala espera!", "Repite... ¡que cuente!", "Tan cerca... ¿sientes el fuego?", "La próxima es la buena... ¡ve!", "Falló... ¡pero qué corazón!", "Otra vez... ¡más limpio y veloz!"],
-    "pass-big": ["¡Victoria enorme... brillo total!", "Impresionante... ¡vibras perfectas!", "Historia hecha... ¡mira eso!", "Resultado irreal... ¡reverencia!", "Triunfo total... ¡sala transformada!", "Limpieza legendaria... ¡salón de fama!", "Fuera de serie... ¡increíble!", "Obra maestra... ¡oro puro!", "Lo mejor... ¡simplemente perfecto!", "Récord roto... ¡disfrútalo!", "Pura perfección... ¡guau guau!", "Nivel campeón... ¡indiscutible!"],
-    "pass-close": ["Pasó raspando... ¡igual vale!", "Por un pelo... ¡lo lograste!", "Justo bastó... ¡celébralo!", "Victoria ajustada... ¡qué alivio!", "Cierre apretado... ¡hermoso!", "Cruzó la línea... ¡uf!", "Lo logró... ¡por un pelo!", "Fue cerrado... ¡pero es tuyo!", "Apenas pasó... ¡qué alegría!", "Final de foto... ¡pasaste!", "Apenas... ¡pero brillante!", "Sobrevivió... ¡y brillando!"],
-    "retry-far": ["Hoy no... ¡sigues brillando!", "Lejos de la meta... ¡cabeza en alto!", "Fallo grande... ¡corazón gigante!", "Ronda dura... ¡sacúdete!", "Lejos... ¡la próxima!", "Sin vergüenza... ¡recarga y brilla!", "Muy lejos... ¡hermoso intento!", "Ronda difícil... ¡sigues siendo estrella!", "Por lejos... ¡sigue brillando!", "Mala suerte... ¡lindo intento!", "Lejos de eso... ¡vuelve!", "Mal día... ¡brillo intacto!"],
-    hurry: ["¡Diez segundos... qué final!", "Recta final... ¡se ve glorioso!", "Casi en casa... ¡final hermoso!", "¡Qué carrera... momento mágico!", "Últimos segundos... ¡pura magia!", "Cierre total... ¡trabajo increíble!", "Ya viene... ¡la campana!", "Cuenta atrás... ¡me encanta!", "Tan cerca... ¡te ves genial!", "Momentos finales... ¡qué corazón!", "Ya casi... ¡vista preciosa!", "Reloj corriendo... ¡qué brillo!"],
-    "hurry-final": ["Diez... nueve... ¡aquí vamos!", "Diez finales... ¡que cuenten!", "Reloj gritando... ¡brilla igual!", "Últimos segundos... ¡puro corazón!", "Quedan diez... ¡nada guardado!", "La campana... ¡casi suena!", "Ráfaga final... ¡hermoso!", "Diez segundos... ¡fin legendario!", "Casi acaba... ¡momento más brillante!", "Última llamada... ¡todo corazón!", "Diez finales... ¡carrera gloriosa!", "La campana va a sonar... ¡brilla!"],
-    "scoring-wait": ["Jueces mirando... ¡qué nervios!", "Conteniendo el aliento... ¡ya viene!", "Notas en camino... ¡qué emoción!", "Redoble... ¡esto es!", "Jueces decidiendo... ¡momentos guau!", "Esperando... ¡qué carrera!", "Sumando puntos... ¡pinta bien!", "Momento de verdad... ¡brillo!", "Marcador despierta... ¡ya viene!", "Dedos cruzados... ¡trabajo hermoso!", "El veredicto... ¡casi aquí!", "Suspenso... ¡estuviste genial!"],
-    nudge: [
-      "¡Oye, espera! ¡La cámara no detecta movimiento! ¡Entra en cuadro y ataca esa superficie, vamos!",
-      "¡No te congeles ahora! ¡Sin acción en el área, mueve esas manos y haz que brille!",
-      "¡El reloj corre y no vemos movimiento! ¡Entra en la guía de sombra y limpia de arriba abajo!"
+    start: [
+      "¡Órale, a brillar! ¡Es tu momento!",
+      "¡Arranca el juego! ¡Demuestra quién manda aquí!",
+      "¡Cámaras listas! ¡Que se vea ese brillo de campeón!",
+      "¡Venga, crack! ¡Haz que cada segundo cuente!",
+      "¡El reloj ya corre! ¡Tú tienes con qué!",
+      "¡A darle con todo a esa estación! ¡Rápido y fino!",
+      "¡Ahora es cuando! ¡Limpio, veloz e imparable!",
+      "¡Listos, fuera, a brillar! ¡Con todo a esa zona!",
+      "¡Tu área, tu escenario! ¡Arrancamos ya!",
+      "¡Momento estelar! ¡Prende esa zona de puro brillo!",
+      "¡Llegó la hora del show! ¡Presume esa velocidad!",
+      "¡Noventa segundos en el reloj! ¡Hazlos valer!",
+      "¡Órale, vamos con todo! ¡La meta es dejarlo impecable!",
+      "¡Actitud de campeón! ¡A conquistar esa superficie!",
+      "¡A meterle turbo! ¡Para esto te preparaste!",
+      "¡Échale ganas, superestrella! ¡Este lugar es todo tuyo!",
+      "¡Que reluzca de limpio! ¡Empezando ahora mismo!",
+      "¡Luces arriba, cámara fija! ¡Sale, sale, sale!",
+      "¡El cronómetro está vivo! ¡A lucirse en grande!",
+      "¡A toda máquina! ¡Que salga ese brillo espectacular!",
+      "¡Aquí vamos! ¡Modo máquina de limpieza activado!",
+      "¡Luces, cámara, acción! ¡A brillar en esa estación!",
+      "¡Tus noventa segundos arrancan ya! ¡Pásale con todo!",
+      "¡Venga ese ánimo! ¡Rápido, fresco y al cien!"
     ],
+    mid: [
+      "¡Vamos a la mitad y vas volando! ¡Sigue así!",
+      "¡Qué buen ritmo traes! ¡Esa superficie ya está reluciendo!",
+      "¡Vas como rayo! ¡Qué bárbaro, qué precisión!",
+      "¡Mira nada más esa velocidad! ¡No sueltes ese paso!",
+      "¡Estás rompiendo la marca! ¡Qué nivelazo traes!",
+      "¡Puro ritmo eléctrico! ¡Sigue con el acelerador a fondo!",
+      "¡Arrancaste fuerte y sigues todavía mejor! ¡Venga!",
+      "¡Movimiento sin parar! ¡Esa zona está cobrando vida!",
+      "¡Qué paso tan increíble llevas! ¡No le bajes!",
+      "¡Manos rápidas y trazo fino! ¡Me encanta esa energía!",
+      "¡Vas en tiempo de récord! ¡No aflojes ni tantito!",
+      "¡El área se está transformando en vivo! ¡Qué espectáculo!",
+      "¡Saca ese brillo de campeonato! ¡Vas con todo!",
+      "¡Se siente la buena vibra! ¡Sigue dándole al cien!",
+      "¡Vas volando por toda la estación! ¡Increíble!",
+      "¡Mantén la concentración para el empujón fuerte! ¡Eso es!",
+      "¡Ritmo imparable! ¡Cada segundo suma para el podio!",
+      "¡Alta velocidad y pura calidad! ¡Sigue así de fino!",
+      "¡Mira cómo se iluminan las zonas! ¡Qué gran esfuerzo!",
+      "¡La tabla de líderes te está llamando! ¡Échale ganas!",
+      "¡Rápido y sin miedo! ¡Estás dominando la estación!",
+      "¡Te mueves como todo un profesional! ¡Pura maestría!",
+      "¡Súbele toda la energía! ¡Qué bárbaro cómo brilla eso!",
+      "¡Entrega total en la cancha! ¡Que siga reluciendo!"
+    ],
+    finish: [
+      "¡Tiempo! ¡Paren el reloj! ¡Qué ronda tan fenomenal!",
+      "¡Y listo! ¡Estuvo electrizante de principio a fin!",
+      "¡Bum! ¡Se acabó el tiempo! ¡Esfuerzo de puro campeón!",
+      "¡Reloj detenido! ¡Mira nada más esa transformación!",
+      "¡Terminado! ¡Mereces una ovación, qué entrega!",
+      "¡Tiempo cumplido! ¡Qué noventa segundos tan explosivos!",
+      "¡Listo y reluciente! ¡Lo diste absolutamente todo!",
+      "¡Suena la chicharra! ¡Paren el reloj, qué gran ritmo!",
+      "¡Se cierra la ronda! ¡Velocidad y precisión de lujo!",
+      "¡Tiempo! ¡Mira cómo brilla esa estación!",
+      "¡Todo listo! ¡Date un aplauso bien fuerte!",
+      "¡Noventa segundos clavados! ¡Cubriste toda la zona con ganas!",
+      "¡Y paramos! ¡Energía fantástica de principio a fin!",
+      "¡Reto completado! ¡Esa superficie quedó brillando!",
+      "¡Tiempo oficial! ¡Cumpliste bajo presión como los grandes!",
+      "¡Listo! ¡Así es como trabaja un verdadero profesional!",
+      "¡Suena la campana! ¡Gran corrida, vamos a ver el resultado!",
+      "¡Cerraste con todo! ¡Me encantó esa velocidad final!",
+      "¡Se acabó el tiempo! ¡Estrella total del programa!",
+      "¡Para el reloj y el público se pone de pie! ¡Gran ronda!",
+      "¡Todo terminado! ¡Disfruta ese gran esfuerzo!",
+      "¡Trato hecho! ¡Un trabajo impecable contra el reloj!",
+      "¡Tiempo! ¡Pura garra de campana a campana!",
+      "¡Reto superado! ¡Hiciste que se viera facilísimo!"
+    ],
+    pass: [
+      "¡Aprobado! ¡Esa estación quedó reluciendo!",
+      "¡Frescura y brillo total! ¡Qué chulada de trabajo!",
+      "¡Pasaste con mucho estilo! ¡Bien merecido!",
+      "¡Eso es un pase directo! ¡Impecable trabajo!",
+      "¡Sello de calidad puesto! ¡Limpio de verdad!",
+      "¡Aprobado! ¡Los jueces están encantados!",
+      "¡Calificación de lujo! ¡Disfruta esa victoria!",
+      "¡Pase clarísimo! ¡Llévate ese triunfo a casa!",
+      "¡Aprobado! ¡Qué transformación tan increíble!",
+      "¡Verificado y victorioso! ¡Claro que sí!",
+      "¡Ese es el estándar de oro! ¡Aprobado!",
+      "¡Pasaste! ¡El área quedó como nuevecita!",
+      "¡Estrella dorada! ¡Ganada a pulso!",
+      "¡Aprobado con honores! ¡Qué nivelazo!",
+      "¡Resultado impecable! ¡Qué bien te quedó!",
+      "¡Eso es un pase! ¡Hazlo tuyo, campeón!",
+      "¡Al marcador le encanta esto! ¡Aprobado!",
+      "¡Pasaste! ¡Limpieza digna de postal!",
+      "¡Superaste la marca con categoría! ¡Aprobado!",
+      "¡Vuelta de la victoria! ¡Ya estás del otro lado!",
+      "¡Aprobado! ¡Sencillamente espectacular!",
+      "¡La estación lo confirma! ¡Pase directo!",
+      "¡Acabado impecable! ¡Eso es un pase seguro!",
+      "¡Aprobado! ¡Guárdate esta sensación de triunfo!"
+    ],
+    retry: [
+      "¡Uy, cerquita! ¡Échate la revancha y llévate la corona!",
+      "¡En la rayita! ¡La que sigue ya es toda tuya!",
+      "¡Te faltó un pelito! ¡Sacúdete y vuelve con todo!",
+      "¡Casi la armas! ¡Un empujoncito más y sale!",
+      "¡Los campeones no se rajan! ¡Vamos por la revancha!",
+      "¡A nada de lograrlo! ¡La próxima ronda es la buena!",
+      "¡Qué cerca estuvo! ¡Prende los motores otra vez!",
+      "¡Casi llega a la meta, pero traes una velocidad brutal!",
+      "¡A un pasito del objetivo! ¡Date otra vuelta con todo!",
+      "¡Sacúdete eso y vuelve a brillar en la estación!",
+      "¡Ya casi lo tenías en la bolsa! ¡Regresa con más fuerza!",
+      "¡Por poquito! ¡Mete ese mismo fuego en el siguiente intento!",
+      "¡Te quedaste en la puerta! ¡Un intento más y la rompes!",
+      "¡Hora de recargar! ¡Ya le agarraste el modo, dale!",
+      "¡Justo abajito de la línea! ¡Venga esa revancha rápida!",
+      "¡Un round más! ¡Ya lo tienes súper cerca!",
+      "¡Estuvo cerradísimo! ¡Ve por esas zonas y hazlo tuyo!",
+      "¡Qué gran corazón mostraste! ¡Vamos a intentarlo una vez más!",
+      "¡La estación te espera! ¡Entra de nuevo y conquístala!",
+      "¡Revancha! ¡Convierte esas ganas en pura velocidad!",
+      "¡Tan cerca! ¡Un último esfuerzo y aseguras el pase!",
+      "¡La próxima corrida es la ganadora! ¡Órale, vamos!",
+      "¡Buen intento y tremendo esfuerzo! ¡Vamos de nuevo!",
+      "¡Otra vez! ¡Más rápido, más fino y a brillar en grande!"
+    ],
+    "pass-big": [
+      "¡Victoria monumental! ¡Quedó reluciendo de arriba a abajo!",
+      "¡Qué barbaridad! ¡Ese es un puntaje de supercampeón!",
+      "¡Hiciste historia en cámara! ¡Mira nada más ese brillo!",
+      "¡Resultado fuera de serie! ¡Rompiste toda la marca!",
+      "¡Triunfo absoluto! ¡Cada rincón quedó transformado!",
+      "¡Limpieza legendaria! ¡Directito a la cima de la tabla!",
+      "¡De otro planeta! ¡Qué velocidad y qué calidad!",
+      "¡Una verdadera obra maestra! ¡Pura calidad de campeón!",
+      "¡La mejor ronda del día! ¡Sencillamente impecable!",
+      "¡Energía rompe-récords! ¡Disfruta esa gran victoria!",
+      "¡Perfección total en toda la estación! ¡Qué bárbaro!",
+      "¡Nivel de campeón indiscutible! ¡El número uno absoluto!"
+    ],
+    "pass-close": [
+      "¡Pasaste de panzazo! ¡Pero victoria es victoria!",
+      "¡Por un pelito! ¡Le ganaste a la marca!",
+      "¡Justo lo necesario para amarrar el pase! ¡Celébralo!",
+      "¡Victoria apretada! ¡Gran cierre bajo presión!",
+      "¡Estuvo cardíaco pero lo sacaste adelante!",
+      "¡Cruzaste la línea apenitas! ¡Qué final tan emocionante!",
+      "¡La libraste por nada! ¡Ese último acelerón valió oro!",
+      "¡Puntaje cerrado, triunfo grande! ¡Es todo tuyo!",
+      "¡Pasaste a pura garra! ¡Los puntos van para la bolsa!",
+      "¡Final de fotografía y te llevas el pase!",
+      "¡Apenitas pasó la línea, pero ya cuenta en el marcador!",
+      "¡Salvada de campeonato! ¡Sacaste la chamba adelante!"
+    ],
+    "retry-far": [
+      "¡Ronda difícil! ¡Reacomoda el encuadre y vamos con todo!",
+      "¡Esta vez quedó lejos, pero arriba ese ánimo!",
+      "¡Faltaron algunas zonas! ¡Entra de nuevo y préndelas!",
+      "¡Ronda dura, pero el regreso será más fuerte! ¡Ánimo!",
+      "¡Hay mucho margen para subir! ¡Vamos por esa estación otra vez!",
+      "¡No pasa nada! ¡Checa el mapa de zonas y recarga energía!",
+      "¡La cámara quiere ver más acción! ¡Regresa con todo!",
+      "¡Trago amargo, pero alinea la guía y va de nuevo!",
+      "¡Se escaparon las zonas clave! ¡La revancha es la buena!",
+      "¡Sacúdete esta ronda y regresa con toda la actitud!",
+      "¡Reinicia, enfócate y vuelve a conquistar esa superficie!",
+      "¡Todo profesional tiene una ronda de calentamiento! ¡Ahora ve a romperla!"
+    ],
+    hurry: [
+      "¡Recta final! ¡Órale, cierra con todo ese brillo!",
+      "¡Último tramo! ¡Métele velocidad y cierra fuerte!",
+      "¡El reloj aprieta! ¡Empuja, empuja, empuja!",
+      "¡Ya estás en la recta final! ¡Vacía el tanque y hazlo brillar!",
+      "¡Tramo decisivo! ¡A darle con todo a esos últimos detalles!",
+      "¡Velocidad de cierre! ¡Demuéstrales a los jueces de qué estás hecho!",
+      "¡Ya se acerca la campana! ¡Que cada rincón cuente!",
+      "¡Cuenta regresiva en marcha! ¡Súbele el ritmo al máximo!",
+      "¡Ya casi llegas! ¡Manos rápidas para amarrar ese resultado!",
+      "¡Momentos decisivos! ¡Entrega todo lo que traes!",
+      "¡Ya merito! ¡Déjalo reluciente antes de la chicharra!",
+      "¡Los segundos vuelan! ¡Cierra a todo galope hasta la meta!"
+    ],
+    "hurry-final": [
+      "¡Diez, nueve, ocho! ¡A todo vapor hasta la chicharra, vamos!",
+      "¡Últimos diez segundos! ¡No te guardes nada, dale!",
+      "¡El reloj está al rojo vivo! ¡Dame un último cierre explosivo!",
+      "¡Quedan diez segundos! ¡Manos veloces para cerrar con broche de oro!",
+      "¡Diez segundos en el reloj! ¡Con todo a esa última zona!",
+      "¡Ya viene la chicharra! ¡Vacía el tanque ahora mismo!",
+      "¡Ráfaga final! ¡Diez segundos a máxima potencia!",
+      "¡Diez segundos para la gloria! ¡Amarra ese triunfo ya!",
+      "¡Esto ya casi se acaba! ¡Haz que el último segundo valga!",
+      "¡Última llamada en el reloj! ¡A toda máquina hasta la campana!",
+      "¡Diez finales! ¡Esfuerzo de campeón hasta la raya!",
+      "¡La chicharra está por sonar! ¡Cierra con todo, órale!"
+    ],
+    "scoring-wait": [
+      "¡Los jueces revisan la jugada! ¡Ahí viene el puntaje!",
+      "¡Aguanta la respiración! ¡El motor de visión está sumando las zonas!",
+      "¡Calificaciones en camino! ¡Vamos a ver cómo te fue!",
+      "¡Redoble de tambores! ¡Revisando cada zona de la estación!",
+      "¡Los jueces están decidiendo ahora mismo! ¡Momento grande!",
+      "¡Comparando el antes y el después! ¡Atentos todos!",
+      "¡Calculando las barras de limpieza y ritmo! ¡Ya casi!",
+      "¡El momento de la verdad! ¡El marcador se está encendiendo!",
+      "¡Cerrando el veredicto oficial! ¡Aquí viene el resultado!",
+      "¡Dedos cruzados! ¡Vamos a ver ese porcentaje!",
+      "¡El veredicto está casi listo! ¡Qué gran ronda te aventaste!",
+      "¡Máximo suspenso en la cabina! ¡El puntaje sale ya!"
+    ],
+    nudge: [
+      "¡Ey, aguanta! ¡La cámara no ve nada de movimiento! ¡Entra a cuadro y dale con todo a esa estación, órale!",
+      "¡No te me quedes congelado! ¡Todavía no detectamos acción en la zona, mueve esas manos y ponla a brillar!",
+      "¡Despierta esa cámara! ¡Cero movimiento en pantalla ahora mismo, entra en acción y trabaja esa superficie!",
+      "¡El reloj sigue corriendo y la imagen está quieta! ¡Pásale al cuadro y dale brillo a ese objetivo, tú puedes!",
+      "¡Alerta en la estación! ¡Aún no vemos movimiento de limpieza, entra en la guía de sombra y prende esas zonas!",
+      "¡Venga, muéstrame esa energía! ¡El sensor de movimiento está en ceros, entra a cuadro y dale de arriba a abajo ya!"
+    ]
   },
   pl: {
     start: ["No to... czas błyszczeć!", "Gra trwa... pokaż, kto tu rządzi!", "Kamery gotowe... niech widać blask!", "Dobra, mistrzu... niech się liczy!", "Zegar tyka... dasz radę!", "Do pracy... szybko i dobrze!", "No to... czysto i sprawnie!", "Gotowi... do blasku!", "Twój pokój... twoja scena... start!", "Wielka chwila... sprzątamy!", "Showtime... gwiazda sprząta!", "Dziewięćdziesiąt sekund... wykorzystaj je!", "Zaczynamy... cel to perfekcja!", "Mina gracza... jedziemy!", "Do boju... po to trenowałeś!", "Dobra, gwiazdo... ten pokój jest twój!", "Niech błyszczy... już teraz!", "Światła gotowe... sala gotowa... start!", "Zegar żyje... rób swoje!", "Bez presji... po prostu błyszcz!", "Jedziemy... maszyno czystości!", "Światła, kamera... sprzątanie!", "Twoje dziewięćdziesiąt sekund... start!", "Dawaj... pełną parą!"],
@@ -2402,7 +2781,7 @@ const CLIPS_MANIFEST = {
     "pl:start-12": "available", "pl:start-13": "available", "pl:start-14": "available", "pl:start-15": "available",
     "pl:start-16": "available", "pl:start-17": "available", "pl:start-18": "available", "pl:start-19": "available",
     "pl:start-20": "available", "pl:start-21": "available", "pl:start-22": "available", "pl:start-23": "available",
-    "es:nudge-00": "available", "es:nudge-01": "available", "es:nudge-02": "available",
+    "es:nudge-00": "available", "es:nudge-01": "available", "es:nudge-02": "available", "es:nudge-03": "available", "es:nudge-04": "available", "es:nudge-05": "available",
     "pl:nudge-00": "available", "pl:nudge-01": "available", "pl:nudge-02": "available",
     "es:consent-00": "available", "pl:consent-00": "available",
     "es:num-00": "available", "es:num-01": "available", "es:num-02": "available", "es:num-03": "available",
@@ -2437,26 +2816,37 @@ function clipStatus(lang, beat, id) {
   if (entry === "mock" || entry === "available") return entry;
   return "missing";
 }
+const PACE_SAFE_MID_INDICES = [1, 3, 5, 6, 7, 9, 10, 11, 13, 14, 16, 17, 18, 20, 21, 23];
+const HALFWAY_MID_INDICES = [0, 2, 4, 8, 12, 15, 19, 22];
+
 function pickHostLine(beat, language) {
   const lang = HOST_LINES[language] ? language : "en";
-  const pool = (HOST_LINES[lang] && HOST_LINES[lang][beat]) || HOST_LINES.en[beat] || [];
-  if (!pool.length) return { id: "00", text: "" };
+  const actualBeat = beat === "pace" ? "mid" : beat;
+  const pool = (HOST_LINES[lang] && HOST_LINES[lang][actualBeat]) || HOST_LINES.en[actualBeat] || [];
+  if (!pool.length) return { id: "00", text: "", clipBeat: actualBeat };
+
+  const allowedIndices = beat === "pace"
+    ? PACE_SAFE_MID_INDICES.filter((i) => i < pool.length)
+    : beat === "mid"
+      ? (lang === "es" ? [0] : HALFWAY_MID_INDICES.filter((i) => i < pool.length))
+      : pool.map((_, index) => index);
 
   const key = `${lang}:${beat}`;
   let used = usedHostLines[key];
-  if (!used || used.length >= pool.length) {
+  if (!used || used.length >= allowedIndices.length) {
     used = usedHostLines[key] = [];
   }
 
-  const remaining = pool.map((_, index) => index).filter((index) => !used.includes(index));
-  const availablePool = remaining.filter(
-    (index) => clipStatus(lang, beat, hostLineId(index)) === "available"
+  const remaining = allowedIndices.filter((index) => !used.includes(index));
+  const poolToCheck = remaining.length ? remaining : allowedIndices;
+  const availablePool = poolToCheck.filter(
+    (index) => clipStatus(lang, actualBeat, hostLineId(index)) === "available"
   );
-  const candidates = availablePool.length ? availablePool : remaining;
+  const candidates = availablePool.length ? availablePool : poolToCheck;
   const pick = candidates[Math.floor(Math.random() * candidates.length)];
   used.push(pick);
 
-  return { id: hostLineId(pick), text: pool[pick] };
+  return { id: hostLineId(pick), text: pool[pick], clipBeat: actualBeat };
 }
 
 function voiceNameFor(language) {
@@ -2525,12 +2915,17 @@ function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null)
     };
 
     const played = audio.play();
-    if (played && typeof played.catch === "function") {
-      played.catch((err) => {
-        if (err && err.name === "NotAllowedError") {
-          state.voice.pendingAutoplayAudio = audio;
+    if (played && typeof played.then === "function") {
+      played.then(() => {
+        state.voice.pendingAutoplayIntro = false;
+        state.voice.pendingAutoplayAudio = null;
+      }).catch((err) => {
+        if (err && (err.name === "NotAllowedError" || audio.paused)) {
+          cleanup();
+          state.voice.pendingAutoplayIntro = true;
           return;
         }
+        cleanup();
         speakText(fallbackText, prosody);
         if (typeof onDone === "function") setTimeout(onDone, 900);
       });
@@ -2595,12 +2990,12 @@ function speakHost(beat, overrideText) {
   }
   // Cancel any currently playing or pending scheduled voice line so two voices never overlap
   stopSpeech();
-  const isLiveBeat = beat === "start" || beat === "mid" || beat === "hurry" || beat === "hurry-final" || beat === "nudge";
-  if (isLiveBeat) {
+  const isLiveBeat = beat === "start" || beat === "mid" || beat === "pace" || beat === "hurry" || beat === "hurry-final" || beat === "nudge";
+  if (isLiveBeat && beat !== "pace") {
     playLiveHypeSting(beat);
   }
 
-  const base = HOST_PROSODY[beat] || HOST_PROSODY.start;
+  const base = HOST_PROSODY[beat === "pace" ? "mid" : beat] || HOST_PROSODY.start;
   const deliverHostLine = () => {
     if (overrideText) {
       state.voice.lastPath = "dynamic";
@@ -2613,8 +3008,8 @@ function speakHost(beat, overrideText) {
 
     const line = pickHostLine(beat, state.language);
     if (!line.text) return;
-
-    const status = clipStatus(state.language, beat, line.id);
+    const clipBeat = line.clipBeat || (beat === "pace" ? "mid" : beat);
+    const status = clipStatus(state.language, clipBeat, line.id);
 
     if (status === "mock") {
       state.voice.lastPath = "mock";
@@ -2627,10 +3022,10 @@ function speakHost(beat, overrideText) {
 
     if (status === "available") {
       state.voice.lastPath = "clip";
-      playHostClip(clipUrlFor(state.language, beat, line.id), line.text, {
+      playHostClip(clipUrlFor(state.language, clipBeat, line.id), line.text, {
         rate: base.rate + prosodyJitter(line.text, 0.03),
         pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
-      }, beat);
+      }, clipBeat);
       return;
     }
 
@@ -2640,10 +3035,9 @@ function speakHost(beat, overrideText) {
       pitch: base.pitch + prosodyJitter(`${line.text}:p`, 0.03)
     });
   };
-  if (isLiveBeat) {
+  if (isLiveBeat && beat !== "pace") {
     const scheduledGeneration = state.voice.speakGeneration || 0;
     setTimeout(() => {
-      // Muted/stopped/navigated during the sting: never speak.
       if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGeneration) return;
       deliverHostLine();
     }, 320);
@@ -2653,10 +3047,10 @@ function speakHost(beat, overrideText) {
 }
 
 function speakWelcomeIntro(language = state.language) {
-  if (!state.voice.available || state.voice.muted || SELFTEST_MODE) return null;
+  if (state.voice.muted || SELFTEST_MODE) return null;
   stopSpeech();
   const lang = HOST_LINES[language] ? language : "en";
-  const url = `assets/audio/${lang}/welcome-intro.mp3`;
+  const url = `assets/audio/${lang}/welcome-intro.mp3?v=20261031-27`;
   const fallback = t("welcomeBody");
   state.voice.lastPath = "clip";
   return playHostClip(url, fallback, { rate: 1.0, pitch: 1.0 }, "welcome-intro");
@@ -3059,10 +3453,12 @@ function announceTime(secondsRemaining) {
   const rounded = Math.ceil(secondsRemaining);
   if (rounded === 45) {
     speakHost("mid");
-  } else if (rounded === 30 || rounded === 20) {
+  } else if (rounded === 30 || rounded === 20 || rounded === 16) {
     speakHost("hurry");
   } else if (rounded === 10) {
     speakHost("hurry-final");
+  } else if ([83, 76, 69, 62, 54, 38, 23].includes(rounded)) {
+    speakHost("pace");
   }
 }
 
@@ -3262,7 +3658,7 @@ function stopSpeech() {
   showAnnouncerStatus("");
 }
 
-const HYPE_LEVEL_KEY = "cleanquest.hypeLevel.v2";
+const HYPE_LEVEL_KEY = "cleanquest.hypeLevel.v3";
 
 function loadHypeLevel() {
   try {
@@ -3511,8 +3907,9 @@ function startDiscoHouseGroove() {
       const sectionCutoffMult = 0.85 + (bar8 / 7) * 0.65;
       const swingOffset = step % 2 === 1 ? trk.swingSec : 0;
       const now = discoCtx.currentTime + swingOffset;
-      const screenMix = state.screen === "deck" || state.screen === "leaderboard" ? 0.92 : state.screen === "results" ? 0.58 : 0.38;
-      const duck = (state.voice.currentAudio ? 0.22 : 1.0) * screenMix;
+      const screenMix = state.screen === "welcome" || state.screen === "deck" || state.screen === "leaderboard" ? 0.92 : state.screen === "results" ? 0.58 : 0.38;
+      const isVoiceActivelyPlaying = Boolean(state.voice.currentAudio && !state.voice.currentAudio.paused);
+      const duck = (isVoiceActivelyPlaying ? 0.34 : 1.0) * screenMix;
       const isKickStep = step % 4 === 0 || (isTurnaroundBar && (step === 14 || step === 15));
       const sidechain = step % 4 === 0 ? 0.40 : step % 4 === 1 ? 0.78 : 1.0;
 
@@ -3840,7 +4237,11 @@ function navigateTo(screen) {
   }
 
   if (screen === "leaderboard") {
-    renderLeaderboard();
+    if (!state._keepDeckLeaderboardMode) {
+      state.leaderboardMode = "shift";
+    }
+    state._keepDeckLeaderboardMode = false;
+    setLeaderboardMode(state.leaderboardMode || "shift");
     if (!SELFTEST_MODE) triggerArcadeFx("confetti");
   }
 
@@ -4405,10 +4806,24 @@ function updateTrackDebug(stream = state.camera.stream) {
     `enabled: ${track.enabled}${dimensions}`;
 }
 
+const DEFAULT_CHECKIN_SITES = [
+  "Site 1 · Breakroom & Restroom",
+  "🏢 Site 2 · Corporate Tower HQ (Fl 4 Open Office & Pantry)",
+  "🏥 Site 3 · St. Jude Medical Pavilion (Outpatient Clinic)",
+  "🏫 Site 4 · Lincoln STEM Academy (North Wing Classrooms)",
+  "🏨 Site 5 · Grand Meridian Hotel & Suites (Main Lobby & Atrium)",
+  "🍽️ Site 6 · Central Commissary & Restaurant Kitchen",
+  "✈️ Site 7 · Metro International Terminal B (Concourse & Washrooms)",
+  "🏭 Site 8 · Apex Logistics Fulfillment Hub (Warehouse & Dock)"
+];
+
 function renderCheckinSites() {
   const sel = els.siteSelect;
   if (!sel) return;
-  const sites = loadAdminStore().sites || [];
+  const storeSites = loadAdminStore().sites || [];
+  const sites = storeSites.length > 1
+    ? storeSites
+    : Array.from(new Set([...storeSites, ...DEFAULT_CHECKIN_SITES]));
   const label = document.querySelector(".checkin-site-label");
   if (!sites.length) {
     if (label) label.classList.add("hidden");
@@ -4906,7 +5321,7 @@ function updateTimer() {
 }
 
 function checkTimeAnnouncement(previousMs, currentMs) {
-  [75, 60, 45, 30, 20, 10].forEach((seconds) => {
+  [83, 76, 69, 62, 54, 45, 38, 30, 23, 16, 10].forEach((seconds) => {
     if (state.timer.announcements[seconds]) return;
 
     const threshold = seconds * 1000;
@@ -5130,16 +5545,19 @@ function updateTimerUI() {
   const atLimit = elapsed >= durationMs;
 
   if (state.timer.running) {
-    els.startPauseButton.textContent = t("stop");
+    els.startPauseButton.textContent = `⏱ ${t("live")}`;
+    els.startPauseButton.disabled = true;
+    els.resetButton?.classList.add("hidden");
     setLiveBadge("live");
   } else if (atLimit) {
     els.startPauseButton.textContent = t("start");
+    els.startPauseButton.disabled = false;
+    els.resetButton?.classList.add("hidden");
     setLiveBadge("finished");
-  } else if (elapsed > 0) {
-    els.startPauseButton.textContent = t("resume");
-    setLiveBadge("paused");
   } else {
     els.startPauseButton.textContent = t("start");
+    els.startPauseButton.disabled = false;
+    els.resetButton?.classList.add("hidden");
     setLiveBadge("ready");
   }
 }
@@ -5180,13 +5598,10 @@ function formatTimer(milliseconds) {
 async function handleStartPause() {
   unlockAudio();
 
+  // Once the challenge countdown has started, never allow stopping/pausing the counter mid-run.
   if (state.timer.running) {
-    pauseTimer();
-    stopDiscoHouseGroove();
-    playTone(420, 0.07);
     return;
   }
-
   if (state.timer.elapsedMs <= 0) {
 
     if (!state.demoMode) {
@@ -5818,101 +6233,320 @@ const SPOT_LOGIC_PROFILES = {
     surfaceWeight: 0.55,
     zoneWeight: 0.25,
     objectWeight: 0.2,
+    zoneWeights: [0.85, 0.95, 0.85, 1.15, 1.30, 1.15, 0.90, 0.95, 0.90],
     ruleSummary: "55% SURFACE GLEAM · 25% ZONES · 20% ITEMS",
     focusNote: "Grades basin/counter film removal and cleared counter items.",
-    focusNote_es: "Evalúa la eliminación de película en lavabo/encimera y los objetos retirados de la encimera.",
-    focusNote_pl: "Ocenia usuwanie filmu z umywalki/blatu i usunięte przedmioty z blatu."
+    focusNote_es: "Evalúa el retiro de sarro y jabón en tarja/mostrador y el despeje de objetos.",
+    focusNote_pl: "Ocenia usuwanie osadu ze zlewu/blatu i usunięte przedmioty z blatu."
   },
   "Sink & mirror counter": {
     surfaceWeight: 0.6,
     zoneWeight: 0.25,
     objectWeight: 0.15,
+    zoneWeights: [1.15, 1.25, 1.15, 1.05, 1.15, 1.05, 0.75, 0.70, 0.75],
     ruleSummary: "60% MIRROR/BASIN GLEAM · 25% ZONES · 15% ITEMS",
     focusNote: "Grades streak-free mirror/sink reflection and counter clearance.",
-    focusNote_es: "Evalúa el reflejo sin rayas en espejo/lavabo y el despeje de la encimera.",
+    focusNote_es: "Evalúa el brillo sin marcas en espejo y lavabo y el despeje de la cubierta.",
     focusNote_pl: "Ocenia odbicie bez smug w lustrze/umywalce i porządek na blacie."
   },
   "Workstation desk & shelf": {
     surfaceWeight: 0.35,
     zoneWeight: 0.25,
     objectWeight: 0.4,
+    zoneWeights: [0.95, 1.05, 0.95, 1.15, 1.25, 1.15, 0.85, 0.80, 0.85],
     ruleSummary: "40% ITEM ORDER · 35% SURFACE · 25% ZONES",
     focusNote: "Grades desk/bookshelf clutter organization and surface dust zones.",
-    focusNote_es: "Evalúa la organización del desorden en escritorio/estantes y las zonas de polvo.",
+    focusNote_es: "Evalúa el orden de objetos en escritorio/repisa y el retiro de polvo superficial.",
     focusNote_pl: "Ocenia organizację biurka/półek i strefy kurzu na powierzchniach."
   },
   "Workstation desk surface": {
     surfaceWeight: 0.35,
     zoneWeight: 0.25,
     objectWeight: 0.4,
+    zoneWeights: [0.90, 1.00, 0.90, 1.20, 1.30, 1.20, 0.85, 0.80, 0.85],
     ruleSummary: "40% ITEM ORDER · 35% SURFACE · 25% ZONES",
-    focusNote: "Grades desk/bookshelf clutter organization and surface dust zones.",
-    focusNote_es: "Evalúa la organización del desorden en escritorio/estantes y las zonas de polvo.",
-    focusNote_pl: "Ocenia organizację biurka/półek i strefy kurzu na powierzchniach."
+    focusNote: "Grades desk clutter organization and work surface dust zones.",
+    focusNote_es: "Evalúa el orden de artículos sobre el escritorio y la limpieza de polvo en la superficie.",
+    focusNote_pl: "Ocenia organizację biurka i strefy kurzu na powierzchni roboczej."
   },
   "Tabletop & appliance front": {
     surfaceWeight: 0.5,
     zoneWeight: 0.25,
     objectWeight: 0.25,
+    zoneWeights: [0.95, 1.05, 0.95, 1.15, 1.25, 1.15, 0.85, 0.80, 0.85],
     ruleSummary: "50% TABLE WIPE · 25% ZONES · 25% ITEMS",
     focusNote: "Grades tabletop wipe uniformity and cleared cups/containers.",
-    focusNote_es: "Evalúa la uniformidad de limpieza de la mesa y las tazas/envases retirados.",
+    focusNote_es: "Evalúa el limpión uniforme de la mesa, frentes sin grasa y retiro de vasos o envases.",
     focusNote_pl: "Ocenia równomierność czyszczenia blatu i usunięte kubki/pojemniki."
   },
   "Mirror, glass & handles": {
     surfaceWeight: 0.7,
     zoneWeight: 0.25,
     objectWeight: 0.05,
+    zoneWeights: [1.15, 1.25, 1.15, 1.10, 1.20, 1.10, 0.70, 0.65, 0.70],
     ruleSummary: "70% STREAK-FREE GLASS · 25% ZONES · 5% ITEMS",
     focusNote: "Grades reflection uniformity and high-touch handle zone clarity.",
-    focusNote_es: "Evalúa la uniformidad del reflejo y la claridad de manijas de alto contacto.",
+    focusNote_es: "Evalúa el acabado sin rayas en vidrio/espejo y el desinfectado de manijas.",
     focusNote_pl: "Ocenia równomierność odbicia i czystość stref klamek dotykowych."
   },
   "Entry glass & handles": {
     surfaceWeight: 0.7,
     zoneWeight: 0.25,
     objectWeight: 0.05,
+    zoneWeights: [1.10, 1.20, 1.10, 1.15, 1.25, 1.15, 0.70, 0.65, 0.70],
     ruleSummary: "70% STREAK-FREE GLASS · 25% ZONES · 5% ITEMS",
-    focusNote: "Grades reflection uniformity and high-touch handle zone clarity.",
-    focusNote_es: "Evalúa la uniformidad del reflejo y la claridad de manijas de alto contacto.",
-    focusNote_pl: "Ocenia równomierność odbicia i czystość stref klamek dotykowych."
+    focusNote: "Grades entry door glass clarity and fingerprint removal on pulls.",
+    focusNote_es: "Evalúa la transparencia sin huellas en vidrios de acceso y jaladeras.",
+    focusNote_pl: "Ocenia przejrzystość szyby wejściowej i usunięcie śladów palców z uchwytów."
   },
   "Fixture row & partition": {
     surfaceWeight: 0.6,
     zoneWeight: 0.3,
     objectWeight: 0.1,
+    zoneWeights: [1.10, 1.15, 1.10, 1.05, 1.10, 1.05, 0.80, 0.85, 0.80],
     ruleSummary: "60% FIXTURE GLEAM · 30% TOP-DOWN ZONES · 10% ITEMS",
     focusNote: "Grades top-to-bottom fixture & partition surface pass.",
-    focusNote_es: "Evalúa la pasada de arriba abajo en aparatos y mamparas.",
+    focusNote_es: "Evalúa la pasada de arriba hacia abajo en muebles sanitarios y mamparas.",
     focusNote_pl: "Ocenia przejście od góry do dołu po armaturze i przegrodach."
   },
   "Trash & floor zone": {
     surfaceWeight: 0.4,
     zoneWeight: 0.35,
     objectWeight: 0.25,
+    zoneWeights: [0.75, 0.80, 0.75, 1.00, 1.10, 1.00, 1.20, 1.20, 1.20],
     ruleSummary: "40% FLOOR PASS · 35% ZONE COVERAGE · 25% DEBRIS",
-    focusNote: "Grades lower-zone debris clearance and floor pass uniformity.",
-    focusNote_es: "Evalúa el despeje de residuos en la zona baja y la uniformidad del piso.",
+    focusNote: "Grades lower-zone debris clearance, liner reset, and floor pass uniformity.",
+    focusNote_es: "Evalúa el retiro de basura en piso, cambio de bolsa en bote y trapeado uniforme.",
     focusNote_pl: "Ocenia usuwanie odpadów w dolnej strefie i równomierność podłogi."
+  },
+  "Entry door & dispenser zone": {
+    surfaceWeight: 0.55,
+    zoneWeight: 0.30,
+    objectWeight: 0.15,
+    zoneWeights: [1.00, 1.10, 1.00, 1.15, 1.25, 1.15, 0.80, 0.75, 0.80],
+    ruleSummary: "55% TOUCHPOINT WIPE · 30% ZONES · 15% ITEMS",
+    focusNote: "Grades push-plate/handle sanitation and dispenser front wipe-down.",
+    focusNote_es: "Evalúa la desinfección de placas de empuje, manijas y frente de despachadores.",
+    focusNote_pl: "Ocenia dezynfekcję płyt popychowych, klamek i frontów dozowników."
+  },
+  "Reception counter": {
+    surfaceWeight: 0.50,
+    zoneWeight: 0.25,
+    objectWeight: 0.25,
+    zoneWeights: [0.90, 1.00, 0.90, 1.20, 1.30, 1.20, 0.85, 0.80, 0.85],
+    ruleSummary: "50% SURFACE GLEAM · 25% ZONES · 25% ITEM ORDER",
+    focusNote: "Grades reception transaction ledge polish and brochure/item alignment.",
+    focusNote_es: "Evalúa el brillo del mostrador de recepción y el orden de folletos y artículos.",
+    focusNote_pl: "Ocenia połysk lady recepcyjnej oraz uporządkowanie materiałów i przedmiotów."
+  },
+  "Waiting area floor": {
+    surfaceWeight: 0.45,
+    zoneWeight: 0.35,
+    objectWeight: 0.20,
+    zoneWeights: [0.75, 0.80, 0.75, 1.00, 1.10, 1.00, 1.20, 1.20, 1.20],
+    ruleSummary: "45% FLOOR PASS · 35% ZONE COVERAGE · 20% DEBRIS",
+    focusNote: "Grades waiting lounge floor sweep/mop coverage and litter removal under seating.",
+    focusNote_es: "Evalúa el barrido/trapeado parejo en sala de espera y el retiro de basura bajo los asientos.",
+    focusNote_pl: "Ocenia równomierne mycie podłogi w poczekalni i usunięcie śmieci spod siedzeń."
+  },
+  "Conference table & chairs": {
+    surfaceWeight: 0.45,
+    zoneWeight: 0.25,
+    objectWeight: 0.30,
+    zoneWeights: [0.85, 0.95, 0.85, 1.20, 1.30, 1.20, 0.90, 0.85, 0.90],
+    ruleSummary: "45% TABLE WIPE · 30% ITEM ORDER · 25% ZONES",
+    focusNote: "Grades conference tabletop streak removal, cup clearance, and chair alignment.",
+    focusNote_es: "Evalúa el limpión sin marcas en mesa de juntas, retiro de tazas y alineación de sillas.",
+    focusNote_pl: "Ocenia czyszczenie stołu konferencyjnego bez smug, usunięcie kubków i ustawienie krzeseł."
+  },
+  "Entry & glass partition": {
+    surfaceWeight: 0.65,
+    zoneWeight: 0.25,
+    objectWeight: 0.10,
+    zoneWeights: [1.10, 1.20, 1.10, 1.15, 1.25, 1.15, 0.70, 0.65, 0.70],
+    ruleSummary: "65% STREAK-FREE GLASS · 25% ZONES · 10% ITEMS",
+    focusNote: "Grades office partition glass smudge removal and doorway frame pass.",
+    focusNote_es: "Evalúa la eliminación de manchas en canceles de vidrio y marcos de entrada.",
+    focusNote_pl: "Ocenia usuwanie smug ze szklanych ścianek działowych i ościeżnic drzwi."
+  },
+  "Board rail & front desk": {
+    surfaceWeight: 0.45,
+    zoneWeight: 0.30,
+    objectWeight: 0.25,
+    zoneWeights: [1.05, 1.15, 1.05, 1.15, 1.20, 1.15, 0.75, 0.75, 0.75],
+    ruleSummary: "45% SURFACE · 30% ZONES · 25% ITEM ORDER",
+    focusNote: "Grades marker dust removal on board tray and instructor desk organization.",
+    focusNote_es: "Evalúa el retiro de polvo de plumón/gis en el riel del pizarrón y el orden del escritorio frontal.",
+    focusNote_pl: "Ocenia usunięcie pyłu z listwy tablicy oraz porządek na biurku prowadzącego."
+  },
+  "Student desk row": {
+    surfaceWeight: 0.45,
+    zoneWeight: 0.30,
+    objectWeight: 0.25,
+    zoneWeights: [0.90, 1.00, 0.90, 1.15, 1.20, 1.15, 0.90, 0.90, 0.90],
+    ruleSummary: "45% TABLE WIPE · 30% ZONE COVERAGE · 25% ITEMS",
+    focusNote: "Grades multi-desk top sanitization, row alignment, and stray item clearance.",
+    focusNote_es: "Evalúa la desinfección de cubiertas de pupitres, alineación de filas y retiro de basura.",
+    focusNote_pl: "Ocenia dezynfekcję blatów ławek, równe ustawienie rzędów i usunięcie pozostawionych rzeczy."
+  },
+  "Doorway & sink area": {
+    surfaceWeight: 0.55,
+    zoneWeight: 0.30,
+    objectWeight: 0.15,
+    zoneWeights: [0.95, 1.05, 0.95, 1.15, 1.25, 1.15, 0.85, 0.80, 0.85],
+    ruleSummary: "55% SURFACE GLEAM · 30% ZONES · 15% ITEMS",
+    focusNote: "Grades classroom handwashing basin polish and entry door touchpoint wipe.",
+    focusNote_es: "Evalúa la limpieza de la tarja del salón, salpicaduras y desinfección de la puerta.",
+    focusNote_pl: "Ocenia czystość zlewu w sali, usunięcie zachlapań i przetarcie strefy drzwi."
+  },
+  "Urinal, toilet & stall hardware": {
+    surfaceWeight: 0.60,
+    zoneWeight: 0.30,
+    objectWeight: 0.10,
+    zoneWeights: [1.05, 1.15, 1.05, 1.10, 1.20, 1.10, 0.80, 0.75, 0.80],
+    ruleSummary: "60% FIXTURE GLEAM · 30% TOP-DOWN ZONES · 10% ITEMS",
+    focusNote: "Grades porcelain bowl/urinal scale removal, flush valve polish, and stall latch sanitation.",
+    focusNote_es: "Evalúa el desincrustado de mingitorio e inodoro, brillo de fluxómetro y desinfección de pasadores.",
+    focusNote_pl: "Ocenia usunięcie kamienia z pisuaru i toalety, połysk spłuczki oraz dezynfekcję zamków kabiny."
+  },
+  "Soap, towel & sanitizer dispensers": {
+    surfaceWeight: 0.55,
+    zoneWeight: 0.30,
+    objectWeight: 0.15,
+    zoneWeights: [1.05, 1.15, 1.05, 1.15, 1.25, 1.15, 0.75, 0.70, 0.75],
+    ruleSummary: "55% TOUCHPOINT WIPE · 30% ZONES · 15% ITEMS",
+    focusNote: "Grades dispenser housing wipe, nozzle drip removal, and wall drop-zone cleanliness.",
+    focusNote_es: "Evalúa la limpieza de carcasas de despachadores, retiro de escurrimientos de jabón/gel y pared limpia.",
+    focusNote_pl: "Ocenia czystość obudowy dozowników, usunięcie zacieków mydła/żelu i czystość ściany pod nimi."
+  },
+  "High-touch door pulls, switches & rails": {
+    surfaceWeight: 0.60,
+    zoneWeight: 0.30,
+    objectWeight: 0.10,
+    zoneWeights: [0.95, 1.05, 0.95, 1.25, 1.35, 1.25, 0.75, 0.70, 0.75],
+    ruleSummary: "60% TOUCHPOINT WIPE · 30% ZONES · 10% ITEMS",
+    focusNote: "Grades disinfectant dwell pass across door pulls, push bars, light switches, and handrails.",
+    focusNote_es: "Evalúa la pasada desinfectante en jaladeras, barras de empuje, apagadores y pasamanos.",
+    focusNote_pl: "Ocenia dezynfekcję uchwytów drzwiowych, dźwigni antypanicznych, włączników i poręczy."
+  },
+  "Commercial prep table & hood apron": {
+    surfaceWeight: 0.60,
+    zoneWeight: 0.25,
+    objectWeight: 0.15,
+    zoneWeights: [1.10, 1.20, 1.10, 1.15, 1.25, 1.15, 0.70, 0.65, 0.70],
+    ruleSummary: "60% DEGREASE GLEAM · 25% ZONES · 15% ITEMS",
+    focusNote: "Grades stainless prep table food-contact degreasing, hood apron film removal, and tool clearance.",
+    focusNote_es: "Evalúa el desengrasado de mesa de acero inoxidable, faldón de campana sin cochambre y despeje de utensilios.",
+    focusNote_pl: "Ocenia odtłuszczenie stołu roboczego ze stali nierdzewnej, czystość okapu i uprzątnięcie narzędzi."
+  },
+  "POS checkout lane & counter": {
+    surfaceWeight: 0.45,
+    zoneWeight: 0.25,
+    objectWeight: 0.30,
+    zoneWeights: [0.90, 1.00, 0.90, 1.20, 1.30, 1.20, 0.85, 0.80, 0.85],
+    ruleSummary: "45% SURFACE · 30% ITEM ORDER · 25% ZONES",
+    focusNote: "Grades conveyor belt/counter wipe, PIN pad & scanner glass clarity, and stray merchandise clearance.",
+    focusNote_es: "Evalúa la limpieza de banda y mostrador de caja, lector óptico/terminal bancaria y despeje de mercancía.",
+    focusNote_pl: "Ocenia czystość taśmy i lady kasowej, czytnika oraz terminala płatniczego i uporządkowanie towarów."
+  },
+  "Patient bed rails & exam table": {
+    surfaceWeight: 0.60,
+    zoneWeight: 0.30,
+    objectWeight: 0.10,
+    zoneWeights: [1.00, 1.10, 1.00, 1.20, 1.30, 1.20, 0.75, 0.70, 0.75],
+    ruleSummary: "60% CLINICAL WIPE · 30% TOP-DOWN ZONES · 10% ITEMS",
+    focusNote: "Grades clinical top-down disinfection of bed side rails, call pendant, and exam table upholstery.",
+    focusNote_es: "Evalúa la desinfección clínica de arriba hacia abajo en barandales de cama, timbre y mesa de exploración.",
+    focusNote_pl: "Ocenia kliniczną dezynfekcję barierek łóżka, pilota przyzywowego i tapicerki stołu zabiegowego."
+  },
+  "Elevator cab buttons, rails & threshold": {
+    surfaceWeight: 0.55,
+    zoneWeight: 0.35,
+    objectWeight: 0.10,
+    zoneWeights: [0.95, 1.05, 0.95, 1.15, 1.20, 1.15, 0.85, 0.85, 0.85],
+    ruleSummary: "55% TOUCHPOINT WIPE · 35% ZONES · 10% DEBRIS",
+    focusNote: "Grades call button panel polish, cab handrail wipe, and sill track debris extraction.",
+    focusNote_es: "Evalúa el brillo sin huellas en botonera y pasamanos del elevador y el riel de piso libre de basura.",
+    focusNote_pl: "Ocenia czystość panelu przycisków i poręczy w windzie oraz usunięcie brudu z prowadnicy progu."
+  },
+  "Cardio & weight equipment touchpoints": {
+    surfaceWeight: 0.55,
+    zoneWeight: 0.30,
+    objectWeight: 0.15,
+    zoneWeights: [1.00, 1.15, 1.00, 1.15, 1.25, 1.15, 0.80, 0.70, 0.80],
+    ruleSummary: "55% TOUCHPOINT WIPE · 30% ZONES · 15% ITEMS",
+    focusNote: "Grades sweat/film removal on console screens, heart-rate grips, benches, and dumbbell racks.",
+    focusNote_es: "Evalúa el retiro de sudor en pantallas de cardio, manubrios, bancas y orden de mancuernas.",
+    focusNote_pl: "Ocenia usunięcie śladów potu z konsol, uchwytów, ławek oraz uporządkowanie stojaka z hantlami."
+  },
+  "Vending bank, microwave & fridge handles": {
+    surfaceWeight: 0.50,
+    zoneWeight: 0.25,
+    objectWeight: 0.25,
+    zoneWeights: [1.00, 1.10, 1.00, 1.15, 1.25, 1.15, 0.80, 0.75, 0.80],
+    ruleSummary: "50% TOUCHPOINT WIPE · 25% ZONES · 25% ITEMS",
+    focusNote: "Grades appliance door pulls, keypad/button panels, microwave splatter removal, and counter order.",
+    focusNote_es: "Evalúa la desinfección de manijas de refri y microondas, botoneras de máquinas expendedoras y retiro de salpicaduras.",
+    focusNote_pl: "Ocenia czystość uchwytów lodówki i mikrofalówki, paneli automatów vendingowych oraz usunięcie zabrudzeń."
+  },
+  "Carpeted traffic lane & walk-off mat": {
+    surfaceWeight: 0.40,
+    zoneWeight: 0.35,
+    objectWeight: 0.25,
+    zoneWeights: [0.75, 0.80, 0.75, 1.00, 1.10, 1.00, 1.20, 1.20, 1.20],
+    ruleSummary: "40% FLOOR PASS · 35% ZONE COVERAGE · 25% DEBRIS",
+    focusNote: "Grades walk-off mat soil extraction, traffic-lane vacuum pass uniformity, and visible lint/debris removal.",
+    focusNote_es: "Evalúa el aspirado uniforme en pasillo alfombrado y tapete atrapamugre sin pelusa ni basura visible.",
+    focusNote_pl: "Ocenia równomierne odkurzenie ciągu na wykładzinie i maty wejściowej oraz usunięcie widocznych zanieczyszczeń."
+  },
+  "Hard floor scrub & baseboard edge": {
+    surfaceWeight: 0.45,
+    zoneWeight: 0.35,
+    objectWeight: 0.20,
+    zoneWeights: [0.75, 0.80, 0.75, 1.00, 1.10, 1.00, 1.20, 1.20, 1.20],
+    ruleSummary: "45% FLOOR PASS · 35% ZONE COVERAGE · 20% DEBRIS",
+    focusNote: "Grades hard floor soil/scuff removal, grout or tile uniformity, and corner/baseboard edge detailing.",
+    focusNote_es: "Evalúa el tallado parejo de piso duro sin manchas y el detallado limpio en esquinas y orilla del zoclo.",
+    focusNote_pl: "Ocenia równomierne wyszorowanie podłogi twardej bez smug oraz dokładne doczyszczenie narożników i cokołów."
   }
 };
 
 const RULE_SUMMARY_PHRASES = {
   es: {
-    "SURFACE GLEAM": "BRILLO DE SUPERFICIE", "MIRROR/BASIN GLEAM": "BRILLO DE ESPEJO Y LAVABO",
-    "ITEM ORDER": "ORDEN DE OBJETOS", "TABLE WIPE": "LIMPIEZA DE MESA",
-    "STREAK-FREE GLASS": "CRISTAL SIN RAYAS", "FIXTURE GLEAM": "BRILLO DE APARATOS",
-    "TOP-DOWN ZONES": "ZONAS DE ARRIBA ABAJO", "FLOOR PASS": "PASADA DE PISO",
-    "ZONE COVERAGE": "COBERTURA DE ZONAS", "SURFACE": "SUPERFICIE", "ZONES": "ZONAS",
-    "ITEMS": "OBJETOS", "DEBRIS": "RESIDUOS"
+    "SURFACE GLEAM": "BRILLO DE SUPERFICIE",
+    "MIRROR/BASIN GLEAM": "BRILLO DE ESPEJO Y LAVABO",
+    "DEGREASE GLEAM": "DESENGRASADO Y BRILLO",
+    "TOUCHPOINT WIPE": "DESINFECCIÓN DE CONTACTO",
+    "CLINICAL WIPE": "DESINFECCIÓN CLÍNICA",
+    "ITEM ORDER": "ORDEN DE OBJETOS",
+    "TABLE WIPE": "LIMPIEZA DE MESA",
+    "STREAK-FREE GLASS": "VIDRIO SIN MARCAS",
+    "FIXTURE GLEAM": "BRILLO DE SANITARIOS",
+    "TOP-DOWN ZONES": "ZONAS DE ARRIBA ABAJO",
+    "FLOOR PASS": "PASADA DE PISO",
+    "ZONE COVERAGE": "COBERTURA DE ZONAS",
+    "SURFACE": "SUPERFICIE",
+    "ZONES": "ZONAS",
+    "ITEMS": "OBJETOS",
+    "DEBRIS": "RESIDUOS"
   },
   pl: {
-    "SURFACE GLEAM": "POŁYSK POWIERZCHNI", "MIRROR/BASIN GLEAM": "POŁYSK LUSTRA I UMYWALKI",
-    "ITEM ORDER": "PORZĄDEK PRZEDMIOTÓW", "TABLE WIPE": "CZYSTOŚĆ BLATU",
-    "STREAK-FREE GLASS": "SZKŁO BEZ SMUG", "FIXTURE GLEAM": "POŁYSK ARMATURY",
-    "TOP-DOWN ZONES": "STREFY OD GÓRY DO DOŁU", "FLOOR PASS": "PRZEJŚCIE PODŁOGI",
-    "ZONE COVERAGE": "POKRYCIE STREF", "SURFACE": "POWIERZCHNIA", "ZONES": "STREFY",
-    "ITEMS": "PRZEDMIOTY", "DEBRIS": "ODPADY"
+    "SURFACE GLEAM": "POŁYSK POWIERZCHNI",
+    "MIRROR/BASIN GLEAM": "POŁYSK LUSTRA I UMYWALKI",
+    "DEGREASE GLEAM": "ODTŁUSZCZENIE I POŁYSK",
+    "TOUCHPOINT WIPE": "DEZYNFEKCJA DOTYKOWA",
+    "CLINICAL WIPE": "DEZYNFEKCJA KLINICZNA",
+    "ITEM ORDER": "PORZĄDEK PRZEDMIOTÓW",
+    "TABLE WIPE": "CZYSTOŚĆ BLATU",
+    "STREAK-FREE GLASS": "SZKŁO BEZ SMUG",
+    "FIXTURE GLEAM": "POŁYSK ARMATURY",
+    "TOP-DOWN ZONES": "STREFY OD GÓRY DO DOŁU",
+    "FLOOR PASS": "PRZEJŚCIE PODŁOGI",
+    "ZONE COVERAGE": "POKRYCIE STREF",
+    "SURFACE": "POWIERZCHNIA",
+    "ZONES": "STREFY",
+    "ITEMS": "PRZEDMIOTY",
+    "DEBRIS": "ODPADY"
   }
 };
 
@@ -5931,10 +6565,11 @@ function getSpotScoringProfile(spotName = state.checkin?.assignedSpot) {
       surfaceWeight: 0.5,
       zoneWeight: 0.25,
       objectWeight: 0.25,
+      zoneWeights: [1, 1, 1, 1, 1, 1, 1, 1, 1],
       ruleSummary: "50% SURFACE · 25% ZONES · 25% ITEMS",
       focusNote: "Grades visible surface improvement across 9 zones and item clearance.",
-    focusNote_es: "Evalúa la mejora visible en 9 zonas y el despeje de objetos.",
-    focusNote_pl: "Ocenia widoczną poprawę w 9 strefach i usuwanie przedmiotów."
+      focusNote_es: "Evalúa la mejora visible en 9 zonas y el despeje de objetos.",
+      focusNote_pl: "Ocenia widoczną poprawę w 9 strefach i usuwanie przedmiotów."
     }
   );
 }
@@ -7233,9 +7868,13 @@ function renderResults() {
     : score.simulated ? "DEMO" : "RESCAN";
 
   const scoreHero = els.cleanlinessScore.closest(".score-hero");
+  const verdictBeat = selectVerdictBeat();
+  const isLowOrRescan = !scorable || verdictBeat === "retry" || verdictBeat === "retry-far" || (Number.isFinite(weightedHero ?? score.cleanliness) && (weightedHero ?? score.cleanliness) < (CONFIG.verdictTiers?.passMark || 70));
   scoreHero?.classList.toggle("insufficient", !scorable);
   scoreHero?.classList.toggle("verified", Boolean(score.verified));
-
+  const resultsScreenEl = document.getElementById("resultsScreen");
+  resultsScreenEl?.classList.toggle("verdict-is-low", isLowOrRescan);
+  resultsScreenEl?.classList.toggle("verdict-is-pass", !isLowOrRescan);
   if (els.scoreEvidenceState) {
     const stateLabel = score.judgeDemo
       ? "SAMPLE RUN"
@@ -8609,6 +9248,7 @@ function renderDeck() {
   els.deckNextButton?.classList.add("hidden");
   els.deckPracticeAgain?.classList.toggle("hidden", !finished);
   els.deckDone?.classList.toggle("hidden", !finished);
+  document.getElementById("deckLeaderboardButton")?.classList.toggle("hidden", !finished);
   renderDeckSponsorSlot(false, null);
 
   const vStamp = document.getElementById("deckVerdictStamp");
@@ -8632,10 +9272,10 @@ function renderDeck() {
       progress.completedDates.push(today);
       saveDeckProgress(progress);
     }
-
     if (els.deckStreak) {
       els.deckStreak.textContent = t("deckStreak", { n: streak.count });
     }
+    recordDeckSessionToLeaderboard(deck.correct, deck.order.length, streak.count);
 
     renderDeckIllustration("surface", true);
     triggerDeckParticleBurst(true);
@@ -9035,8 +9675,223 @@ function populateLeaderboardFloaters() {
   });
 }
 
+const DECK_LEADERBOARD_KEY = "cleanquest.deckLeaderboard.v1";
+
+function loadDeckLeaderboard() {
+  const defaults = [
+    { id: "deck-rival-1", name: "Elena", accuracy: 100, streak: 14, xp: 1400 },
+    { id: "deck-rival-2", name: "Mateo", accuracy: 96, streak: 11, xp: 1150 },
+    { id: "deck-rival-3", name: "Kasia", accuracy: 92, streak: 9, xp: 950 }
+  ];
+  try {
+    const raw = JSON.parse(localStorage.getItem(DECK_LEADERBOARD_KEY));
+    if (Array.isArray(raw) && raw.length) return raw;
+  } catch {}
+  return defaults;
+}
+
+function recordDeckSessionToLeaderboard(correct = 0, total = 5, streakCount = 1) {
+  try {
+    const board = loadDeckLeaderboard().filter((e) => !e.viewerOwned);
+    const acc = total > 0 ? Math.round((correct / total) * 100) : 0;
+    const xp = Math.max(100, correct * 100 + Math.max(0, streakCount) * 50);
+    const playerName = els.playerName?.value?.trim() || t("defaultPlayer");
+    board.push({
+      id: "deck-you",
+      name: playerName,
+      accuracy: acc,
+      streak: Math.max(1, streakCount),
+      xp,
+      viewerOwned: true
+    });
+    board.sort((a, b) => (b.xp - a.xp) || (b.accuracy - a.accuracy) || (b.streak - a.streak));
+    localStorage.setItem(DECK_LEADERBOARD_KEY, JSON.stringify(board));
+    return board;
+  } catch {
+    return loadDeckLeaderboard();
+  }
+}
+
+function setLeaderboardMode(mode = "shift") {
+  state.leaderboardMode = mode === "deck" ? "deck" : "shift";
+  const shiftBtn = document.getElementById("lbTabShift");
+  const deckBtn = document.getElementById("lbTabDeck");
+  shiftBtn?.classList.toggle("active", state.leaderboardMode === "shift");
+  shiftBtn?.setAttribute("aria-selected", String(state.leaderboardMode === "shift"));
+  deckBtn?.classList.toggle("active", state.leaderboardMode === "deck");
+  deckBtn?.setAttribute("aria-selected", String(state.leaderboardMode === "deck"));
+  renderLeaderboard();
+}
+
+function renderDeckLeaderboardView() {
+  const raw = loadDeckLeaderboard();
+  const streakObj = loadStreak();
+  const progress = loadDeckProgress();
+  let hasViewer = raw.some((e) => e.viewerOwned);
+  const entries = raw.slice();
+  if (!hasViewer && (streakObj.count > 0 || (progress.completedDates && progress.completedDates.length > 0) || (state.deck && state.deck.index > 0))) {
+    const correct = state.deck?.correct || 4;
+    const total = state.deck?.order?.length || 5;
+    const acc = Math.round((correct / Math.max(1, total)) * 100);
+    const xp = correct * 100 + Math.max(1, streakObj.count) * 50;
+    entries.push({
+      id: "deck-you",
+      name: els.playerName?.value?.trim() || t("defaultPlayer"),
+      accuracy: acc,
+      streak: Math.max(1, streakObj.count),
+      xp,
+      viewerOwned: true
+    });
+  }
+  entries.sort((a, b) => (b.xp - a.xp) || (b.accuracy - a.accuracy) || (b.streak - a.streak));
+  const ranked = entries.map((e, i) => ({ ...e, rank: i + 1, isViewer: Boolean(e.viewerOwned) }));
+  const youRanked = ranked.find((e) => e.isViewer) || null;
+  const nextRival = youRanked && youRanked.rank > 1 ? ranked[youRanked.rank - 2] : ranked[ranked.length - 1];
+
+  const headerSpans = document.querySelectorAll("#leaderboardScreen .leaderboard-header span");
+  if (headerSpans.length >= 5) {
+    headerSpans[2].textContent = "ACCURACY";
+    headerSpans[3].textContent = "STREAK";
+    headerSpans[4].textContent = "DECK XP";
+  }
+
+  const rivalBanner = document.getElementById("leaderboardRivalBanner");
+  if (rivalBanner) {
+    rivalBanner.innerHTML = "";
+    const head = document.createElement("div");
+    head.className = "rival-chase-head";
+    const tag = document.createElement("span");
+    tag.className = "rival-chase-tag";
+    const pill = document.createElement("span");
+    pill.className = "rival-xp-pill";
+    const copy = document.createElement("div");
+    copy.className = "rival-chase-copy";
+    const track = document.createElement("div");
+    track.className = "rival-progress-track";
+    const fill = document.createElement("div");
+    fill.className = "rival-progress-fill";
+
+    if (youRanked && nextRival && youRanked.rank > 1) {
+      const gapXp = Math.max(50, nextRival.xp - youRanked.xp + 50);
+      const pctFill = Math.max(15, Math.min(96, Math.round((youRanked.xp / Math.max(1, nextRival.xp)) * 100)));
+      tag.textContent = `🃏 DAILY DECK TARGET · RANK #${nextRival.rank}`;
+      pill.textContent = `🔥 +${gapXp} XP TO RANK UP`;
+      copy.textContent = `Only +${gapXp} XP (${Math.ceil(gapXp / 100)} cards) to overtake #${nextRival.rank} ${nextRival.name} (${nextRival.xp} XP)!`;
+      fill.style.width = `${pctFill}%`;
+    } else if (youRanked && youRanked.rank === 1) {
+      tag.textContent = "👑 #1 DAILY DECK CHAMPION";
+      pill.textContent = `🔥 ${youRanked.streak}d STREAK`;
+      copy.textContent = `YOU lead the Daily Deck board with ${youRanked.xp} XP (${youRanked.accuracy}% accuracy)!`;
+      fill.style.width = "100%";
+    } else {
+      tag.textContent = "🃏 DAILY DECK STANDINGS · +100 XP PER CARD";
+      pill.textContent = "🔥 BUILD YOUR STREAK";
+      copy.textContent = "Swipe 5 Daily Deck training cards to earn Deck XP, build your daily streak, and climb the board!";
+      fill.style.width = "28%";
+    }
+    head.append(tag, pill);
+    track.appendChild(fill);
+    rivalBanner.append(head, copy, track);
+  }
+
+  const podiumEl = document.getElementById("leaderboardPodiumStage");
+  if (podiumEl) {
+    podiumEl.innerHTML = "";
+    const buildDeckPillar = (entry, place, medal) => {
+      const col = document.createElement("div");
+      col.className = `podium-pillar podium-${place}${entry?.isViewer ? " is-you-podium" : ""}`;
+      const med = document.createElement("div");
+      med.className = "podium-medal";
+      med.textContent = medal;
+      const nm = document.createElement("strong");
+      nm.className = "podium-name";
+      nm.textContent = entry ? entry.name : "OPEN SPOT";
+      if (entry?.isViewer) {
+        const youBadge = document.createElement("span");
+        youBadge.className = "you-pill";
+        youBadge.textContent = "YOU";
+        nm.appendChild(youBadge);
+      }
+      const sc = document.createElement("span");
+      sc.className = "podium-score";
+      sc.textContent = entry ? `${entry.xp} XP` : "500+ XP";
+      const tm = document.createElement("small");
+      tm.className = "podium-time";
+      tm.textContent = entry ? `🔥 ${entry.streak}d · ${entry.accuracy}%` : "Unclaimed";
+      col.append(med, nm, sc, tm);
+      return col;
+    };
+    podiumEl.append(
+      buildDeckPillar(ranked[1] || null, 2, "🥈 #2"),
+      buildDeckPillar(ranked[0] || null, 1, "👑 #1"),
+      buildDeckPillar(ranked[2] || null, 3, "🥉 #3")
+    );
+  }
+
+  els.leaderboardList.innerHTML = "";
+  const appendDeckRow = (entry, isUnranked = false) => {
+    const row = document.createElement("div");
+    row.className = "leaderboard-row";
+    if (!isUnranked && entry.rank >= 1 && entry.rank <= 3) row.classList.add(`rank-${entry.rank}`);
+    if (entry.isViewer || isUnranked) row.classList.add("latest", "is-you-row");
+    const rank = document.createElement("span");
+    rank.className = "rank";
+    rank.textContent = isUnranked ? "—" : entry.rank === 1 ? "🥇 1" : entry.rank === 2 ? "🥈 2" : entry.rank === 3 ? "🥉 3" : `#${entry.rank}`;
+    const nameWrap = document.createElement("span");
+    nameWrap.className = "player-name";
+    const nameLine = document.createElement("span");
+    nameLine.className = "lb-name-line";
+    const nameStrong = document.createElement("strong");
+    nameStrong.textContent = entry.name || t("defaultPlayer");
+    nameLine.appendChild(nameStrong);
+    if (entry.isViewer || isUnranked) {
+      const youBadge = document.createElement("span");
+      youBadge.className = "you-pill";
+      youBadge.textContent = "YOU";
+      nameLine.appendChild(youBadge);
+    }
+    const miniBar = document.createElement("span");
+    miniBar.className = "lb-mini-bar";
+    const miniFill = document.createElement("i");
+    miniFill.style.width = `${Math.max(12, Math.min(100, Number(entry.accuracy) || 0))}%`;
+    miniBar.appendChild(miniFill);
+    nameWrap.append(nameLine, miniBar);
+    const quality = document.createElement("span");
+    quality.className = "quality";
+    quality.textContent = Number.isFinite(entry.accuracy) ? `${entry.accuracy}%` : "—";
+    const time = document.createElement("span");
+    time.className = "time";
+    time.textContent = `🔥 ${entry.streak || 0}d`;
+    const style = document.createElement("span");
+    style.className = "style";
+    style.textContent = `${entry.xp || 0} XP`;
+    row.append(rank, nameWrap, quality, time, style);
+    els.leaderboardList.appendChild(row);
+  };
+  ranked.forEach((e) => appendDeckRow(e, false));
+  if (!youRanked) {
+    appendDeckRow({
+      name: els.playerName?.value?.trim() || t("defaultPlayer"),
+      accuracy: null,
+      streak: streakObj.count || 0,
+      xp: (streakObj.count || 0) * 50,
+      isViewer: true
+    }, true);
+  }
+}
+
 function renderLeaderboard() {
   populateLeaderboardFloaters();
+  if (state.leaderboardMode === "deck") {
+    renderDeckLeaderboardView();
+    return;
+  }
+  const headerSpans = document.querySelectorAll("#leaderboardScreen .leaderboard-header span");
+  if (headerSpans.length >= 5) {
+    headerSpans[2].textContent = t("quality");
+    headerSpans[3].textContent = t("time");
+    headerSpans[4].textContent = t("style");
+  }
   const rawBoard = loadLeaderboard();
   let savedViewerRunId = state.latestRunId;
   if (!savedViewerRunId) {
@@ -9048,7 +9903,6 @@ function renderLeaderboard() {
 
   els.leaderboardList.innerHTML = "";
   renderCrewAndConsistencyUI();
-
   let youRanked = visible.find((e) => e.isViewer || e.viewerOwned === true || (savedViewerRunId && (e.id === savedViewerRunId || e.runId === savedViewerRunId)));
   if (youRanked) youRanked.isViewer = true;
   const nextRival = youRanked && youRanked.rank > 1 ? visible[youRanked.rank - 2] : (!youRanked && visible.length ? visible[visible.length - 1] : null);
@@ -9647,45 +10501,128 @@ function renderScoreBreakdown(runInput) {
 
 const SPOT_TRANSLATIONS = {
   es: {
-    "Sink & counter": "Fregadero y encimera",
-    "Sink & mirror counter": "Fregadero y espejo",
-    "Workstation desk & shelf": "Escritorio y estante",
-    "Tabletop & appliance front": "Mesa y electrodomésticos",
-    "Mirror, glass & handles": "Espejo, vidrio y manijas",
-    "Fixture row & partition": "Sanitarios y mampara",
-    "Trash & floor zone": "Papelera y zona de piso",
+    "Sink & counter": "Tarja y mostrador",
+    "Workstation desk & shelf": "Escritorio de trabajo y repisa",
+    "Tabletop & appliance front": "Mesa y frente de electrodomésticos",
+    "Mirror, glass & handles": "Espejo, vidrios y manijas",
+    "Fixture row & partition": "Batería de sanitarios y mampara",
+    "Trash & floor zone": "Bote de basura y zona de piso",
+    "Sink & mirror counter": "Lavabo y cubierta con espejo",
+    "Entry door & dispenser zone": "Puerta de entrada y zona de despachadores",
+    "Entry glass & handles": "Vidrio de acceso y manijas",
+    "Reception counter": "Mostrador de recepción",
+    "Waiting area floor": "Piso de sala de espera",
+    "Workstation desk surface": "Superficie de escritorio de trabajo",
+    "Conference table & chairs": "Mesa de juntas y sillas",
+    "Entry & glass partition": "Acceso y cancel de vidrio",
+    "Board rail & front desk": "Riel de pizarrón y escritorio frontal",
+    "Student desk row": "Fila de pupitres y bancas",
+    "Doorway & sink area": "Entrada y área de tarja",
     "Reception counter & glass": "Mostrador de recepción y vidrio",
-    "Entry glass & floor mat": "Vidrio de entrada y tapete",
-    "Whiteboard rail & teacher desk": "Pizarra y escritorio",
-    "Student table row & floor": "Fila de mesas y piso"
+    "Entry glass & floor mat": "Vidrio de acceso y tapete",
+    "Whiteboard rail & teacher desk": "Riel de pizarrón y escritorio del maestro",
+    "Student table row & floor": "Fila de bancas y piso",
+    "Urinal, toilet & stall hardware": "Mingitorio, inodoro y herrajes de mampara",
+    "Soap, towel & sanitizer dispensers": "Despachadores de jabón, toalla y gel",
+    "High-touch door pulls, switches & rails": "Jaladeras, apagadores y barandales de alto contacto",
+    "Commercial prep table & hood apron": "Mesa de preparación y faldón de campana",
+    "POS checkout lane & counter": "Línea de cajas y mostrador de cobro",
+    "Patient bed rails & exam table": "Barandales de cama y mesa de exploración",
+    "Elevator cab buttons, rails & threshold": "Botonera, pasamanos y riel de elevador",
+    "Cardio & weight equipment touchpoints": "Puntos de contacto en aparatos de cardio y pesas",
+    "Vending bank, microwave & fridge handles": "Máquinas expendedoras y manijas de microondas y refri",
+    "Carpeted traffic lane & walk-off mat": "Pasillo alfombrado y tapete de entrada",
+    "Hard floor scrub & baseboard edge": "Tallado de piso duro y orilla de zoclo"
   },
   pl: {
     "Sink & counter": "Zlew i blat",
-    "Sink & mirror counter": "Zlew i lustro",
-    "Workstation desk & shelf": "Biurko i półka",
+    "Workstation desk & shelf": "Biurko robocze i półka",
     "Tabletop & appliance front": "Stół i fronty urządzeń",
-    "Mirror, glass & handles": "Lustro, szkło i klamki",
-    "Fixture row & partition": "Armatura i przegroda",
+    "Mirror, glass & handles": "Lustro, szyby i klamki",
+    "Fixture row & partition": "Rząd armatury i przegroda",
     "Trash & floor zone": "Kosz i strefa podłogi",
+    "Sink & mirror counter": "Umywalka i blat z lustrem",
+    "Entry door & dispenser zone": "Drzwi wejściowe i strefa dozowników",
+    "Entry glass & handles": "Szyba wejściowa i uchwyty",
+    "Reception counter": "Lada recepcyjna",
+    "Waiting area floor": "Podłoga poczekalni",
+    "Workstation desk surface": "Powierzchnia biurka roboczego",
+    "Conference table & chairs": "Stół konferencyjny i krzesła",
+    "Entry & glass partition": "Wejście i szklana ścianka działowa",
+    "Board rail & front desk": "Listwa tablicy i biurko prowadzącego",
+    "Student desk row": "Rząd ławek szkolnych",
+    "Doorway & sink area": "Strefa wejścia i zlewu",
     "Reception counter & glass": "Lada recepcji i szkło",
     "Entry glass & floor mat": "Szyba wejściowa i wycieraczka",
     "Whiteboard rail & teacher desk": "Tablica i biurko nauczyciela",
-    "Student table row & floor": "Rząd ławek i podłoga"
+    "Student table row & floor": "Rząd ławek i podłoga",
+    "Urinal, toilet & stall hardware": "Pisuar, toaleta i okucia kabiny",
+    "Soap, towel & sanitizer dispensers": "Dozowniki mydła, ręczników i płynu do dezynfekcji",
+    "High-touch door pulls, switches & rails": "Klamki, włączniki i poręcze częstego dotyku",
+    "Commercial prep table & hood apron": "Stół roboczy gastronomiczny i fartuch okapu",
+    "POS checkout lane & counter": "Boks kasowy POS i lada",
+    "Patient bed rails & exam table": "Barierki łóżka pacjenta i stół zabiegowy",
+    "Elevator cab buttons, rails & threshold": "Przyciski, poręcze i próg kabiny windy",
+    "Cardio & weight equipment touchpoints": "Punkty dotyku sprzętu cardio i siłowego",
+    "Vending bank, microwave & fridge handles": "Automaty vendingowe oraz uchwyty mikrofalówki i lodówki",
+    "Carpeted traffic lane & walk-off mat": "Ciąg komunikacyjny na wykładzinie i mata wejściowa",
+    "Hard floor scrub & baseboard edge": "Szorowanie podłogi twardej i krawędź cokołu"
   }
 };
 
+const SPOT_ICON_MAP = {
+  "Sink & counter": "🚰",
+  "Workstation desk & shelf": "🖥️",
+  "Tabletop & appliance front": "🍽️",
+  "Mirror, glass & handles": "🪞",
+  "Fixture row & partition": "🚽",
+  "Trash & floor zone": "🗑️",
+  "Sink & mirror counter": "🚰",
+  "Entry door & dispenser zone": "🚪",
+  "Entry glass & handles": "🪞",
+  "Reception counter": "🖥️",
+  "Waiting area floor": "🗑️",
+  "Workstation desk surface": "🖥️",
+  "Conference table & chairs": "🍽️",
+  "Entry & glass partition": "🪞",
+  "Board rail & front desk": "📋",
+  "Student desk row": "📋",
+  "Doorway & sink area": "🚰",
+  "Urinal, toilet & stall hardware": "🚽",
+  "Soap, towel & sanitizer dispensers": "🧴",
+  "High-touch door pulls, switches & rails": "🚪",
+  "Commercial prep table & hood apron": "🍳",
+  "POS checkout lane & counter": "🛒",
+  "Patient bed rails & exam table": "🛏️",
+  "Elevator cab buttons, rails & threshold": "🛗",
+  "Cardio & weight equipment touchpoints": "🏋️",
+  "Vending bank, microwave & fridge handles": "🧊",
+  "Carpeted traffic lane & walk-off mat": "🧹",
+  "Hard floor scrub & baseboard edge": "🪣"
+};
+
 function spotIconFor(spotName) {
-  const s = String(spotName || "").toLowerCase();
+  const raw = String(spotName || "").trim();
+  if (SPOT_ICON_MAP[raw]) return SPOT_ICON_MAP[raw];
+  const s = raw.toLowerCase();
+  if (s.includes("elevator")) return "🛗";
+  if (s.includes("cardio") || s.includes("weight") || s.includes("fitness")) return "🏋️";
+  if (s.includes("patient") || s.includes("exam") || s.includes("bed")) return "🛏️";
+  if (s.includes("pos") || s.includes("checkout")) return "🛒";
+  if (s.includes("prep table") || s.includes("hood")) return "🍳";
+  if (s.includes("vending") || s.includes("fridge") || s.includes("microwave")) return "🧊";
+  if (s.includes("soap") || s.includes("sanitizer") || (s.includes("dispenser") && !s.includes("entry door"))) return "🧴";
+  if (s.includes("carpet") || s.includes("walk-off")) return "🧹";
+  if (s.includes("hard floor") || s.includes("baseboard") || s.includes("scrub")) return "🪣";
+  if (s.includes("urinal") || s.includes("toilet") || s.includes("fixture") || s.includes("partition") || s.includes("stall")) return "🚽";
   if (s.includes("sink") || s.includes("basin")) return "🚰";
   if (s.includes("mirror") || s.includes("glass")) return "🪞";
   if (s.includes("trash") || s.includes("floor") || s.includes("mat")) return "🗑️";
-  if (s.includes("fixture") || s.includes("partition") || s.includes("stall")) return "🚽";
+  if (s.includes("door") || s.includes("pulls") || s.includes("switches") || s.includes("entry")) return "🚪";
   if (s.includes("table") || s.includes("appliance")) return "🍽️";
   if (s.includes("board") || s.includes("student")) return "📋";
-  if (s.includes("door") || s.includes("entry")) return "🚪";
   return "🖥️";
 }
-
 function localizedSpotName(spotName) {
   const raw = String(spotName || "");
   const icon = spotIconFor(raw);
@@ -10076,18 +11013,18 @@ async function openQrScannerModal() {
   if (els.qrStickerQuickGrid) {
     els.qrStickerQuickGrid.innerHTML = "";
     const presets = [
-      { code: "CQ-QR-OFFICE-BREAKROOM-SINK", label: "Office · Breakroom", spot: "Sink & counter" },
-      { code: "CQ-QR-HEALTHCARE-RESTROOM-FIXTURE", label: "Healthcare · Restroom", spot: "Fixture row & partition" },
-      { code: "CQ-QR-EDUCATION-CLASSROOM-WORKSTATION", label: "Education · Classroom", spot: "Workstation desk & shelf" },
-      { code: "CQ-QR-RETAIL-LOBBY-MIRROR", label: "Retail · Lobby", spot: "Mirror, glass & handles" },
-      { code: "CQ-QR-INDUSTRIAL-OFFICE-TABLETOP", label: "Industrial · Office", spot: "Tabletop & appliance front" }
+      { code: "CQ-QR-OFFICE-BREAKROOM-SINK", icon: "🏢", label: "Office · Breakroom", spot: "Sink & counter" },
+      { code: "CQ-QR-HEALTHCARE-RESTROOM-FIXTURE", icon: "🏥", label: "Healthcare · Restroom", spot: "Fixture row & partition" },
+      { code: "CQ-QR-EDUCATION-CLASSROOM-WORKSTATION", icon: "🏫", label: "Education · Classroom", spot: "Workstation desk & shelf" },
+      { code: "CQ-QR-RETAIL-LOBBY-MIRROR", icon: "🛍️", label: "Retail · Lobby", spot: "Mirror, glass & handles" },
+      { code: "CQ-QR-INDUSTRIAL-OFFICE-TABLETOP", icon: "🏭", label: "Industrial · Office", spot: "Tabletop & appliance front" }
     ];
     presets.forEach((p) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = "qr-sticker-chip";
       btn.dataset.qrCode = p.code;
-      btn.innerHTML = `<span class="qr-mini-svg">${renderQrCodeSvg(p.code, 42)}</span><span class="qr-sticker-meta"><strong>${p.code}</strong><small>${p.label} → ${p.spot}</small></span>`;
+      btn.innerHTML = `<span class="qr-station-icon" aria-hidden="true">${p.icon}</span><span class="qr-sticker-meta"><strong>${p.code}</strong><small>${p.label} → ${p.spot}</small></span>`;
       btn.addEventListener("click", () => applyAreaQrPayload(p.code));
       els.qrStickerQuickGrid.appendChild(btn);
     });
@@ -10840,19 +11777,25 @@ function bumpSponsorImpression(kind = "home") {
 }
 
 function buildSponsorLogoSvg() {
-  return `<svg class="sponsor-logo-svg" viewBox="0 0 600 84" role="img" aria-label="Sponsor Banner Image Placeholder (600x84 aspect ratio)">
+  return `<svg class="sponsor-logo-svg" viewBox="0 0 600 84" role="img" aria-label="Sponsor Brand Logo">
     <defs>
       <linearGradient id="spGrad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#0f3454"/><stop offset="55%" stop-color="#092138"/><stop offset="100%" stop-color="#143d52"/>
+        <stop offset="0%" stop-color="#0a233c"/><stop offset="50%" stop-color="#07182b"/><stop offset="100%" stop-color="#0d2b45"/>
+      </linearGradient>
+      <linearGradient id="crestGrad" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0%" stop-color="#39f5bc"/><stop offset="100%" stop-color="#45eaff"/>
       </linearGradient>
     </defs>
-    <rect x="2" y="2" width="596" height="80" rx="14" fill="url(#spGrad)" stroke="#ffd35c" stroke-width="1.8" stroke-dasharray="6 3"/>
-    <circle cx="52" cy="42" r="26" fill="rgba(57,245,188,0.18)" stroke="#39f5bc" stroke-width="2"/>
-    <path d="M52 22 l5 13 l13 5 l-13 5 l-5 13 l-5-13 l-13-5 l13-5 z" fill="#ffd35c"/>
-    <text x="96" y="39" fill="#ffffff" font-size="18" font-weight="900" letter-spacing="0.06em">SPONSOR BANNER IMAGE</text>
-    <text x="96" y="61" fill="#45eaff" font-size="12.5" font-weight="800" letter-spacing="0.05em">YOUR BRAND LOGO ARTWORK HERE · 600 × 84 AD SLOT</text>
-    <rect x="492" y="14" width="92" height="24" rx="12" fill="rgba(255,211,92,0.18)" stroke="#ffd35c" stroke-width="1.2"/>
-    <text x="538" y="30" text-anchor="middle" fill="#ffd35c" font-size="10.5" font-weight="900" letter-spacing="0.08em">SPONSORED</text>
+    <rect x="2" y="2" width="596" height="80" rx="14" fill="url(#spGrad)" stroke="rgba(69,234,255,0.38)" stroke-width="1.5"/>
+    <g transform="translate(172, 14)">
+      <path d="M28 4 L48 12 L48 30 C48 43 39 51 28 55 C17 51 8 43 8 30 L8 12 Z" fill="rgba(57,245,188,0.14)" stroke="url(#crestGrad)" stroke-width="2.2"/>
+      <path d="M28 15 l3.8 9.2 l9.2 3.8 l-9.2 3.8 l-3.8 9.2 l-3.8-9.2 l-9.2-3.8 l9.2-3.8 z" fill="#ffd35c"/>
+      <circle cx="39" cy="17" r="2.2" fill="#39f5bc"/>
+      <text x="64" y="33" fill="#f4f8ff" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="900" letter-spacing="0.14em">YOUR LOGO</text>
+      <text x="65" y="49" fill="rgba(165,216,255,0.72)" font-family="Plus Jakarta Sans, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.34em">HERE · PRO SERIES</text>
+    </g>
+    <rect x="500" y="12" width="84" height="20" rx="10" fill="rgba(255,211,92,0.12)" stroke="rgba(255,211,92,0.45)" stroke-width="1"/>
+    <text x="542" y="25.5" text-anchor="middle" fill="rgba(255,211,92,0.85)" font-size="9" font-weight="800" letter-spacing="0.1em">SPONSORED</text>
   </svg>`;
 }
 
@@ -13230,6 +14173,19 @@ function bindEvents() {
       }
     }
   }, { passive: true });
+  const lbTabShift = document.getElementById("lbTabShift");
+  const lbTabDeck = document.getElementById("lbTabDeck");
+  if (lbTabShift) lbTabShift.addEventListener("click", () => setLeaderboardMode("shift"));
+  if (lbTabDeck) lbTabDeck.addEventListener("click", () => setLeaderboardMode("deck"));
+  [document.getElementById("deckLeaderboardButton"), document.getElementById("deckTopLeaderboardPill")].forEach((b) => {
+    if (b) {
+      b.addEventListener("click", () => {
+        state.leaderboardMode = "deck";
+        state._keepDeckLeaderboardMode = true;
+        navigateTo("leaderboard");
+      });
+    }
+  });
   window.addEventListener("online", () => {
     void processOfflineRunQueue();
   });
@@ -13279,7 +14235,7 @@ function initializeApp() {
     els.proofGridPanel?.classList.remove("hidden");
     els.analysisMetaPanel?.classList.remove("hidden");
   }
-  setHypeLevel(loadHypeLevel(), false);
+  setHypeLevel("full", false);
   setLanguage(loadSavedLanguage());
   syncConsentUI();
   syncCleanerPinUI();
@@ -13303,32 +14259,37 @@ function initializeApp() {
 
   if (!SELFTEST_MODE && !state.voice.muted) {
     startDiscoHouseGroove();
-    setTimeout(() => {
-      if (!state.voice.muted && state.screen === "welcome") {
-        speakWelcomeIntro(state.language);
-      }
-    }, 150);
-    let initialGestureHandled = false;
+    speakWelcomeIntro(state.language);
+    const gestureEvents = ["pointerup", "touchend", "click", "pointerdown", "keydown"];
+    const removeGestureListeners = () => {
+      gestureEvents.forEach((evt) => document.removeEventListener(evt, onFirstGesture, true));
+    };
     const onFirstGesture = (event) => {
-      if (initialGestureHandled) return;
-      initialGestureHandled = true;
-      document.removeEventListener("pointerdown", onFirstGesture, true);
-      document.removeEventListener("keydown", onFirstGesture, true);
       unlockAudio();
-      if (state.voice.muted || SELFTEST_MODE) return;
+      try { discoCtx?.resume?.().catch(() => {}); } catch {}
+      if (state.voice.muted || SELFTEST_MODE) {
+        removeGestureListeners();
+        return;
+      }
       startDiscoHouseGroove();
-      // If the user's first tap is on an interactive button/control, let that button's own handler trigger its voice clip without competing
-      if (event?.target?.closest?.("button, a, input, select, label")) return;
-      if (!state.voice.currentAudio && activeVoiceAudios.size === 0) {
+      const clickedSpecial = event?.target?.closest?.(".language-button, #welcomeContinue, #muteButton, #consentReadAloud");
+      if (clickedSpecial) {
+        state.voice.pendingAutoplayIntro = false;
+        if (discoCtx && discoCtx.state === "running") removeGestureListeners();
+        return;
+      }
+      if (state.voice.pendingAutoplayIntro || (!state.voice.currentAudio && activeVoiceAudios.size === 0)) {
         if (state.editingFtue && state.cleanerFtueStep === 3 && !hasConsent()) {
           speakConsentAloud();
         } else if (state.screen === "welcome") {
           speakWelcomeIntro(state.language);
         }
       }
+      if (discoCtx && discoCtx.state === "running" && !state.voice.pendingAutoplayIntro) {
+        removeGestureListeners();
+      }
     };
-    document.addEventListener("pointerdown", onFirstGesture, true);
-    document.addEventListener("keydown", onFirstGesture, true);
+    gestureEvents.forEach((evt) => document.addEventListener(evt, onFirstGesture, true));
   }
 }
 

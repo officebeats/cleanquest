@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031-26" />
+  <link rel="stylesheet" href="styles.css?v=20261031-27" />
 </head>
 
 <body>
@@ -326,21 +326,34 @@
           <label class="checkin-area-label" for="buildingLeagueSelect">
             <span data-i18n="leagueLabel">🏢 BUILDING</span>
             <select id="buildingLeagueSelect" class="area-select">
-              <option value="office" data-i18n="leagueOffice">🏢 Office</option>
-              <option value="education" data-i18n="leagueEducation">🏫 Education</option>
-              <option value="healthcare" data-i18n="leagueHealthcare">🏥 Healthcare</option>
-              <option value="industrial" data-i18n="leagueIndustrial">🏭 Industrial</option>
-              <option value="retail" data-i18n="leagueRetail">🛍️ Retail</option>
+              <option value="office" data-i18n="leagueOffice">🏢 Office &amp; Corporate</option>
+              <option value="education" data-i18n="leagueEducation">🏫 Education &amp; Campus</option>
+              <option value="healthcare" data-i18n="leagueHealthcare">🏥 Healthcare &amp; Medical</option>
+              <option value="industrial" data-i18n="leagueIndustrial">🏭 Industrial &amp; Manufacturing</option>
+              <option value="retail" data-i18n="leagueRetail">🛍️ Retail &amp; Shopping Center</option>
+              <option value="hospitality" data-i18n="leagueHospitality">🏨 Hospitality &amp; Hotel</option>
+              <option value="foodservice" data-i18n="leagueFoodservice">🍽️ Foodservice &amp; Restaurant</option>
+              <option value="transit" data-i18n="leagueTransit">✈️ Aviation &amp; Transit Hub</option>
+              <option value="athletics" data-i18n="leagueAthletics">🏟️ Gym &amp; Recreation</option>
+              <option value="multifamily" data-i18n="leagueMultifamily">🏘️ Multi-Family &amp; HOA</option>
             </select>
           </label>
           <label class="checkin-area-label" for="areaTemplateSelect">
             <span data-i18n="areaLabel">🚪 AREA</span>
             <select id="areaTemplateSelect" class="area-select">
-              <option value="breakroom" data-i18n="areaBreakroom">☕ Breakroom</option>
-              <option value="restroom" data-i18n="areaRestroom">🚻 Restroom</option>
-              <option value="lobby" data-i18n="areaLobby">🛋️ Lobby</option>
-              <option value="office" data-i18n="areaOffice">💼 Office</option>
-              <option value="classroom" data-i18n="areaClassroom">🎓 Classroom</option>
+              <option value="breakroom" data-i18n="areaBreakroom">☕ Breakroom &amp; Pantry</option>
+              <option value="restroom" data-i18n="areaRestroom">🚻 Restroom &amp; Washroom</option>
+              <option value="lobby" data-i18n="areaLobby">🛋️ Lobby &amp; Atrium</option>
+              <option value="office" data-i18n="areaOffice">💼 Open Office &amp; Cubicles</option>
+              <option value="classroom" data-i18n="areaClassroom">🎓 Classroom &amp; Lecture Hall</option>
+              <option value="conference" data-i18n="areaConference">🤝 Conference &amp; Boardroom</option>
+              <option value="clinic" data-i18n="areaClinic">🩺 Patient &amp; Exam Room</option>
+              <option value="kitchen" data-i18n="areaKitchen">👨‍🍳 Commercial Kitchen &amp; Prep</option>
+              <option value="dining" data-i18n="areaDining">🍴 Dining &amp; Food Court</option>
+              <option value="corridor" data-i18n="areaCorridor">🚶 Corridor, Elevator &amp; Stairwell</option>
+              <option value="warehouse" data-i18n="areaWarehouse">📦 Warehouse &amp; Loading Dock</option>
+              <option value="fitness" data-i18n="areaFitness">🏋️ Locker &amp; Fitness Floor</option>
+              <option value="retailfloor" data-i18n="areaRetailfloor">🛒 Sales Floor &amp; Checkout</option>
             </select>
           </label>
           <div class="checkin-spot-qr-row">
@@ -859,8 +872,12 @@
             </button>
           </div>
         </div>
+        <div id="leaderboardModeBar" class="leaderboard-mode-bar" role="tablist" aria-label="Leaderboard Mode">
+          <button id="lbTabShift" class="mvp-tab-chip active" type="button" role="tab" aria-selected="true" data-i18n="lbTabShift">⚡ SHIFT CHALLENGE</button>
+          <button id="lbTabDeck" class="mvp-tab-chip" type="button" role="tab" aria-selected="false" data-i18n="lbTabDeck">🃏 DAILY DECK</button>
+        </div>
         <div id="leaderboardRivalBanner" class="leaderboard-rival-banner hologram-card"></div>
-        <div id="crewLeaderboardSummary" class="crew-summary-bar hologram-card"></div>
+        <div id="crewLeaderboardSummary" class="crew-summary-bar hologram-card hidden" aria-hidden="true"></div>
         <div id="personalRecordBar" class="crew-summary-bar hologram-card">
           <div class="consent-gate-head">
             <div id="personalRecordSummary" class="personal-record-summary"></div>
@@ -1225,6 +1242,9 @@
             <button id="discoNextTrackButton" class="disco-track-pill" type="button" title="Next track (1/3)">
               <span id="discoTrackBadge">1/3</span> ⏭
             </button>
+            <button id="deckTopLeaderboardPill" class="disco-track-pill" type="button" title="Daily Deck Leaderboard" aria-label="Daily Deck Leaderboard">
+              🏆
+            </button>
           </div>
         </div>
 
@@ -1295,6 +1315,14 @@
             data-i18n="deckPracticeAgain"
           >
             🔄 PRACTICE ANOTHER 5 CARDS
+          </button>
+          <button
+            id="deckLeaderboardButton"
+            class="secondary-button hidden"
+            type="button"
+            data-i18n="deckLeaderboardAction"
+          >
+            🏆 DECK LEADERBOARD
           </button>
           <button
             id="deckDone"
@@ -1398,7 +1426,7 @@
   <canvas id="arcadeFxCanvas" class="arcade-fx-canvas" aria-hidden="true"></canvas>
   <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
   <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
-  <script src="deck.js?v=20261031-26"></script>
-  <script src="app.js?v=20261031-26"></script>
+  <script src="deck.js?v=20261031-27"></script>
+  <script src="app.js?v=20261031-27"></script>
 </body>
 </html>
