@@ -293,7 +293,7 @@
     margin: 10px 0 16px;
   }
   .copy-box-head {
-    display: flex;
+      <a class="btn-link alt" href="https://dev.meta.ai/billing" target="_blank" rel="noopener">3. Meta API Billing &amp; Credits ↗</a>
     align-items: center;
     justify-content: space-between;
     gap: 12px;
@@ -439,9 +439,9 @@
 
     <h3>✅ Completed (Already Done in Your Orca Browser)</h3>
     <ol class="numbered-steps">
-      <li><strong>Created &amp; Saved Your Meta Model API Key:</strong> Minted key <code>CleanQuest</code> (<code>LLM_1424…ogo4</code>) on <a href="https://dev.meta.ai/api-keys?team_id=1630664498630649&amp;project_id=1738477500698778" target="_blank" rel="noopener">dev.meta.ai/api-keys ↗</a> and saved it directly into CleanQuest <code>⚙ Settings</code> in your Orca browser.</li>
+      <li><strong>Created &amp; Saved Your Meta Model API Key:</strong> Minted the <code>CleanQuest</code> API key on <a href="https://dev.meta.ai/api-keys" target="_blank" rel="noopener">dev.meta.ai/api-keys ↗</a> and saved it directly into CleanQuest <code>⚙ Settings</code> in your Orca browser.</li>
       <li><strong>Added 1-Tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in Settings:</strong> Verifies live <code>muse-spark-1.3</code> and <code>meta-models/muse-spark-open-1026</code> responses with <code>✓ verified</code> / <code>⚠ error</code> badges.</li>
-      <li><strong>Probed Live Meta API &amp; Identified Billing Hold:</strong> Tested <code>api.meta.ai/v1/chat/completions</code>, which returned <code>HTTP 402</code> because <a href="https://dev.meta.ai/billing?team_id=1630664498630649&amp;project_id=1738477500698778" target="_blank" rel="noopener">dev.meta.ai/billing ↗</a> currently shows <em>"Model API access suspended due to failed payment — $22.50 past due on Visa •••• 1402"</em>.</li>
+      <li><strong>Probed Live Meta API &amp; Identified Billing Hold:</strong> Tested <code>api.meta.ai/v1/chat/completions</code>, which returned <code>HTTP 402 (billing_not_configured)</code> because <a href="https://dev.meta.ai/billing" target="_blank" rel="noopener">dev.meta.ai/billing ↗</a> has an active payment hold that must be cleared in your browser.</li>
     </ol>
 
     <h3>⏳ Left for You to Do (4 Quick Actions)</h3>
@@ -449,7 +449,7 @@
       <li>
         <strong>Click <code>Make payment</code> on Meta Billing (Open in Orca Tab 1):</strong>
         <ul>
-          <li>In <a href="https://dev.meta.ai/billing?team_id=1630664498630649&amp;project_id=1738477500698778" target="_blank" rel="noopener">dev.meta.ai/billing ↗</a>, click the blue <strong><code>Make payment</code></strong> button (<code>$22.50</code> on <code>Visa •••• 1402</code>) to un-suspend your Meta Model API key.</li>
+          <li>In <a href="https://dev.meta.ai/billing" target="_blank" rel="noopener">dev.meta.ai/billing ↗</a>, click the blue <strong><code>Make payment</code></strong> button to clear the billing hold and un-suspend your Meta Model API key.</li>
           <li>Confirm your <strong>$150 Spend Limit</strong> is set on that page, and remind <strong>Bill</strong> and <strong>Dom</strong> to claim their individual $150 credits before <strong>Wed Nov 4, 9:00 PM ET</strong>.</li>
         </ul>
       </li>
