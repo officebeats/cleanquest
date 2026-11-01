@@ -7206,8 +7206,8 @@ async function generateLiveAiBonusCard(forceNetwork = false) {
   const { seasonNum, daysLeft } = getBiWeeklySeasonMeta();
   const areaKey = state.checkin?.areaKey || "breakroom";
   const cached = loadCachedBiWeeklySeason();
-  // If cached for this 14-day bi-weekly season & station and not already viewing it, serve from 0-token cache
-  if (!forceNetwork && cached && cached.seasonNum === seasonNum && cached.areaKey === areaKey && !state.deck?.isBiWeeklySeason) {
+  // If cached for this 14-day bi-weekly season & station, always serve from the 0-token local cache unless forceNetwork is true
+  if (!forceNetwork && cached && cached.seasonNum === seasonNum && cached.areaKey === areaKey) {
     applyBiWeeklyCardsToDeck(cached);
     return cached;
   }
@@ -10055,6 +10055,7 @@ const DECK_LEADERBOARD_KEY = "cleanquest.deckLeaderboard.v1";
 
 function loadDeckLeaderboard() {
   try {
+    const { seasonNum } = getBiWeeklySeasonMeta();
     const raw = JSON.parse(localStorage.getItem(DECK_LEADERBOARD_KEY));
     if (Array.isArray(raw)) {
       return raw.filter(
@@ -10063,7 +10064,8 @@ function loadDeckLeaderboard() {
           typeof e === "object" &&
           !e.sample &&
           !e.isSample &&
-          !/^deck-rival-/.test(String(e.id || ""))
+          !/^deck-rival-/.test(String(e.id || "")) &&
+          (!e.seasonNum || e.seasonNum === seasonNum)
       );
     }
   } catch {}
@@ -10072,6 +10074,7 @@ function loadDeckLeaderboard() {
 
 function recordDeckSessionToLeaderboard(correct = 0, total = 5, streakCount = 1) {
   try {
+    const { seasonNum } = getBiWeeklySeasonMeta();
     const board = loadDeckLeaderboard().filter((e) => !e.viewerOwned);
     const acc = total > 0 ? Math.round((correct / total) * 100) : 0;
     const xp = Math.max(0, correct * 100 + Math.max(0, streakCount) * 50);
@@ -10082,6 +10085,7 @@ function recordDeckSessionToLeaderboard(correct = 0, total = 5, streakCount = 1)
       accuracy: acc,
       streak: Math.max(1, streakCount),
       xp,
+      seasonNum,
       viewerOwned: true
     });
     board.sort((a, b) => (b.xp - a.xp) || (b.accuracy - a.accuracy) || (b.streak - a.streak));
