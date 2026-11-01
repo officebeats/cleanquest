@@ -7136,43 +7136,49 @@ async function verifyLiveTelemetry() {
   const saved = loadCloudSettings();
   if (statusEl) {
     statusEl.classList.remove("hidden");
-    statusEl.textContent = "⏳ Sending live telemetry probe to configured provider(s)…";
+    statusEl.textContent = "⏳ Testing API key(s) with a synthetic probe…";
   }
   if (btn) btn.disabled = true;
   const prevDemo = state.demoMode;
   const prevJudge = state.judgeDemo;
+  const logSnapshot = loadProviderLog();
   try {
     state.demoMode = false;
     state.judgeDemo = false;
     const before = { ...createDemoCapture("before"), placeholder: false };
     const after = { ...createDemoCapture("after"), placeholder: false };
     const results = [];
+    const fmtStatus = (label, r) => {
+      const ok = r?.status === "verified";
+      const reason = r?.reason ? ` (${r.reason})` : "";
+      return `${ok ? "✓" : "⚠"} ${label}: ${r?.status || "error"}${reason}`;
+    };
 
     if (saved.metaKey) {
       localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify({ ...saved, provider: "meta" }));
       const rMeta = await getVerifiedScore({}, before, after);
-      if (rMeta?.status === "verified") {
-        await getSamOverlays({ verified: rMeta }, before, after);
-      }
-      results.push(`Primary (${rMeta?.provider || "meta"} · ${rMeta?.model || CONFIG.cloud.model}): ${rMeta?.status || "done"}`);
+      results.push(fmtStatus(`Primary (${rMeta?.provider || "meta"} · ${rMeta?.model || CONFIG.cloud.model})`, rMeta));
     }
 
     if (saved.basetenKey || (!saved.metaKey && saved.provider === "baseten")) {
       localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify({ ...saved, provider: "baseten" }));
       const rBase = await getVerifiedScore({}, before, after);
-      results.push(`Baseten (${CONFIG.cloud.baseten.model}): ${rBase?.status || "done"}`);
+      results.push(fmtStatus(`Baseten (${CONFIG.cloud.baseten.model})`, rBase));
     }
 
     if (!saved.metaKey && !saved.basetenKey) {
-      const rFallback = await getVerifiedScore({}, before, after);
-      results.push(`No API key entered (${rFallback?.status || "offline/mock"} logged — paste Meta or Baseten key above first)`);
+      results.push("⚠ No API key entered — paste your Meta or Baseten key above and tap SAVE KEYS first.");
     }
 
+    // Restore provider log so synthetic key-check probes never masquerade as real camera runs
+    try {
+      localStorage.setItem(PROVIDER_LOG_KEY, JSON.stringify(logSnapshot));
+    } catch {}
     localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(saved));
     refreshSettingsInputs();
     renderProviderLog();
     if (statusEl) {
-      statusEl.textContent = `✓ ${results.join(" · ")}`;
+      statusEl.textContent = `${results.join(" · ")} — Next: complete 1 real camera run per provider to record prize-eligible log entries.`;
     }
     return results;
   } finally {
