@@ -1880,6 +1880,7 @@ function playAnnouncerCue() {
 }
 
 const activeVoiceAudios = new Set();
+const activeVoiceBufferSources = new Set();
 
 function killAllActiveVoiceAudios() {
   activeVoiceAudios.forEach((a) => {
@@ -1894,11 +1895,20 @@ function killAllActiveVoiceAudios() {
     } catch {}
   });
   activeVoiceAudios.clear();
+  activeVoiceBufferSources.forEach((src) => {
+    try {
+      src.onended = null;
+      src.stop();
+      src.disconnect();
+    } catch {}
+  });
+  activeVoiceBufferSources.clear();
   if (state.voice.currentAudio) {
     try {
       state.voice.currentAudio.onended = null;
       state.voice.currentAudio.onerror = null;
-      state.voice.currentAudio.pause();
+      state.voice.currentAudio.pause?.();
+      state.voice.currentAudio.stop?.();
     } catch {}
     state.voice.currentAudio = null;
   }
@@ -2721,10 +2731,18 @@ function speakScoreNumber(value, unit = "percent", onComplete = null) {
     const scheduledGeneration = state.voice.speakGeneration || 0;
     // Decode and splice number + unit clips in WebAudio with silence trimming so "75%" plays as one smooth phrase
     (async () => {
+      let finished = false;
+      const finishOnce = () => {
+        if (finished) return;
+        finished = true;
+        if (typeof onComplete === "function") onComplete();
+      };
       try {
         const ctx = ensureDiscoAudioGraph();
         if (!ctx) throw new Error("no-ctx");
-        if (ctx.state === "suspended") await ctx.resume().catch(() => {});
+        if (ctx.state === "suspended") {
+          ctx.resume().catch(() => {});
+        }
         const decodedList = await Promise.all(
           urls.map(async (u) => {
             const r = await fetch(u);
@@ -2733,25 +2751,24 @@ function speakScoreNumber(value, unit = "percent", onComplete = null) {
           })
         );
         if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGeneration) return;
-        const sr = ctx.sampleRate;
+        const sr = decodedList[0]?.sampleRate || ctx.sampleRate || 24000;
         const trimmedArrays = decodedList.map((buf) => {
           const data = buf.getChannelData(0);
           let start = 0;
           let end = data.length - 1;
           while (start < end && Math.abs(data[start]) < 0.018) start += 1;
           while (end > start && Math.abs(data[end]) < 0.018) end -= 1;
-          const pad = Math.floor(buf.sampleRate * 0.015);
+          const pad = Math.floor(buf.sampleRate * 0.012);
           start = Math.max(0, start - pad);
           end = Math.min(data.length - 1, end + pad);
-          return { samples: data.subarray(start, end + 1), sampleRate: buf.sampleRate };
+          return data.subarray(start, end + 1);
         });
-        const overlapSamples = Math.floor(sr * 0.022);
-        const totalLen = trimmedArrays.reduce((sum, item, idx) => sum + item.samples.length - (idx > 0 ? overlapSamples : 0), 0);
-        const outBuf = ctx.createBuffer(1, Math.max(1, totalLen), trimmedArrays[0]?.sampleRate || sr);
+        const overlapSamples = Math.floor(sr * 0.025);
+        const totalLen = trimmedArrays.reduce((sum, arr, idx) => sum + arr.length - (idx > 0 ? overlapSamples : 0), 0);
+        const outBuf = ctx.createBuffer(1, Math.max(1, totalLen), sr);
         const outData = outBuf.getChannelData(0);
         let writePos = 0;
-        trimmedArrays.forEach((item, idx) => {
-          const arr = item.samples;
+        trimmedArrays.forEach((arr, idx) => {
           for (let i = 0; i < arr.length; i += 1) {
             const pos = writePos + i;
             if (pos >= outData.length) break;
@@ -2764,15 +2781,31 @@ function speakScoreNumber(value, unit = "percent", onComplete = null) {
           }
           writePos += Math.max(1, arr.length - overlapSamples);
         });
+        killAllActiveVoiceAudios();
         const src = ctx.createBufferSource();
         src.buffer = outBuf;
         src.connect(ctx.destination);
+        activeVoiceBufferSources.add(src);
+        state.voice.currentAudio = src;
+        const durMs = Math.ceil((outBuf.duration || 1.2) * 1000) + 120;
+        const safetyTimer = setTimeout(() => {
+          activeVoiceBufferSources.delete(src);
+          if (state.voice.currentAudio === src) state.voice.currentAudio = null;
+          if ((state.voice.speakGeneration || 0) === scheduledGeneration && !state.voice.muted) {
+            finishOnce();
+          }
+        }, durMs);
         src.onended = () => {
-          if (typeof onComplete === "function") onComplete();
+          clearTimeout(safetyTimer);
+          activeVoiceBufferSources.delete(src);
+          if (state.voice.currentAudio === src) state.voice.currentAudio = null;
+          if ((state.voice.speakGeneration || 0) === scheduledGeneration && !state.voice.muted) {
+            finishOnce();
+          }
         };
         src.start();
       } catch {
-        if (typeof onComplete === "function") onComplete();
+        finishOnce();
       }
     })();
     return urls;
@@ -3180,8 +3213,13 @@ function announceGameVerdict() {
           setTimeout(() => pill?.classList.remove("is-playing"), 2200);
         }
       };
-      // Play the natural, full-sentence human verdict reaction clip directly
-      playVerdictAndFinish();
+      if (spokenScore !== null) {
+        speakScoreNumber(spokenScore, "percent", () => {
+          setTimeout(playVerdictAndFinish, 120);
+        });
+      } else {
+        playVerdictAndFinish();
+      }
     }, 340);
   }, 540);
 }
