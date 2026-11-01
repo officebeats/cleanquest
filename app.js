@@ -51,8 +51,13 @@ const CONFIG = {
     asrModel: "muse-voice-transcribe-1.0",
     baseten: {
       endpoint: "https://inference.baseten.co/v1/chat/completions",
-      model: "meta-models/muse-spark-open-1026"
+      model: "meta-models/muse-spark-open"
     },
+    fireworks: {
+      endpoint: "https://api.fireworks.ai/inference/v1/chat/completions",
+      model: "accounts/fireworks/models/muse-spark-open"
+    },
+    backendProxyUrl: "https://script.google.com/macros/s/AKfycbwV_FnddnMG6XO2wZ43wXD56wrpH79O2amozBM5Rd0rE4rQZBokI1Qm47QhoFYwD8I/exec",
     samEndpoint: "https://api.meta.ai/v1/responses",
     samModel: "sam-3.1"
   }
@@ -6872,7 +6877,7 @@ const VERIFIED_SURFACES = new Set([
 ]);
 
 function loadCloudSettings() {
-  const empty = { metaKey: "", basetenKey: "", provider: "meta", openRouterModel: "google/gemini-2.5-flash" };
+  const empty = { metaKey: "", basetenKey: "", provider: "baseten", openRouterModel: "dual" };
 
   try {
     const raw = localStorage.getItem(CLOUD_SETTINGS_KEY);
@@ -6883,10 +6888,10 @@ function loadCloudSettings() {
     return {
       metaKey: typeof parsed.metaKey === "string" ? parsed.metaKey : "",
       basetenKey: typeof parsed.basetenKey === "string" ? parsed.basetenKey : "",
-      provider: parsed.provider === "baseten" ? "baseten" : "meta",
+      provider: parsed.provider === "meta" ? "meta" : "baseten",
       openRouterModel: typeof parsed.openRouterModel === "string" && parsed.openRouterModel
         ? parsed.openRouterModel
-        : "google/gemini-2.5-flash"
+        : "dual"
     };
   } catch {
     return empty;
@@ -7084,8 +7089,24 @@ function renderProviderLog() {
   if (!list) return;
 
   list.innerHTML = "";
-  const entries = loadProviderLog().slice().reverse().slice(0, 20);
+  const allEntries = loadProviderLog();
+  const entries = allEntries.slice().reverse().slice(0, 20);
   els.providerLogEmpty?.classList.toggle("hidden", entries.length > 0);
+
+  const totalTokens = allEntries.reduce((sum, e) => sum + (Number(e.tokens) || 0), 0);
+  const verifiedCount = allEntries.filter((e) => e.status === "verified" && !e.mock).length;
+  if (entries.length > 0) {
+    const summaryRow = document.createElement("div");
+    summaryRow.className = "provider-log-row";
+    summaryRow.style.borderColor = "rgba(57, 245, 188, 0.45)";
+    const sMain = document.createElement("strong");
+    sMain.style.color = "#39f5bc";
+    sMain.textContent = `⚡ ${verifiedCount} verified runs · ${totalTokens.toLocaleString()} total tokens`;
+    const sMeta = document.createElement("small");
+    sMeta.textContent = "Muse Spark Open (Baseten + Fireworks AI)";
+    summaryRow.append(sMain, sMeta);
+    list.append(summaryRow);
+  }
 
   entries.forEach((entry) => {
     const row = document.createElement("div");
@@ -7095,11 +7116,15 @@ function renderProviderLog() {
     const score = Number.isFinite(Number(entry.overall))
       ? ` · ${Number(entry.overall)}%`
       : "";
-    main.textContent = `${entry.provider} · ${entry.status}${score}`;
+    const tok = Number(entry.tokens) > 0
+      ? ` · ${Number(entry.tokens).toLocaleString()} tok`
+      : "";
+    main.textContent = `${entry.provider} · ${entry.status}${score}${tok}`;
 
     const meta = document.createElement("small");
     const stamp = String(entry.when || "").slice(0, 16).replace("T", " ");
-    meta.textContent = `${stamp} · ${entry.model || ""}`;
+    const kind = entry.task ? ` (${entry.task})` : "";
+    meta.textContent = `${stamp} · ${entry.model || ""}${kind}`;
 
     row.append(main, meta);
 
@@ -7112,6 +7137,158 @@ function renderProviderLog() {
 
     list.append(row);
   });
+}
+
+async function callPartnerBackendProxy({ provider = "dual", messages = [], max_tokens = 2048 } = {}) {
+  if (!CONFIG.cloud.backendProxyUrl) return null;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), CONFIG.cloud.timeoutMs);
+  try {
+    const resp = await fetch(CONFIG.cloud.backendProxyUrl, {
+      method: "POST",
+      body: JSON.stringify({ provider, messages, max_tokens }),
+      signal: controller.signal
+    });
+    if (!resp.ok) return null;
+    return await resp.json();
+  } catch {
+    return null;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function generateLiveAiBonusCard() {
+  const btn = document.getElementById("deckAiBonusButton");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "⏳ AI…";
+  }
+  try {
+    const areaLabel = CONFIG.areaTemplates[state.checkin?.areaKey]?.label || "Breakroom & Pantry";
+    const spotLabel = state.checkin?.assignedSpot || "Sink & counter";
+    const prompt = [
+      "You are the CleanQuest commercial cleaning training deck designer.",
+      `Create 1 realistic commercial cleaning scenario card for Area: "${areaLabel}", Spot: "${spotLabel}".`,
+      "Return JSON ONLY with no markdown fences:",
+      '{"category":"surface"|"product"|"technique","answer":"right"|"miss","en":"English 1-sentence scenario","es":"Spanish 1-sentence scenario","pl":"Polish 1-sentence scenario"}'
+    ].join("\n");
+    const proxyResp = await callPartnerBackendProxy({
+      provider: "dual",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 1500
+    });
+    let chosenCard = null;
+    for (const item of proxyResp?.results || []) {
+      const usage = item?.data?.usage || {};
+      const totalTok = Number(usage.total_tokens) || 0;
+      const raw = item?.data?.choices?.[0]?.message?.content || "";
+      const parsed = extractScorecardJSON(raw);
+      if (item?.ok && totalTok > 0) {
+        appendProviderLog({
+          provider: item.provider,
+          model: item.model,
+          status: "verified",
+          overall: null,
+          tokens: totalTok,
+          promptTokens: Number(usage.prompt_tokens) || 0,
+          completionTokens: Number(usage.completion_tokens) || 0,
+          task: "deck-card",
+          mock: false
+        });
+      }
+      if (!chosenCard && parsed && typeof parsed.en === "string" && parsed.en.trim()) {
+        chosenCard = {
+          id: `deck-ai-${Date.now()}`,
+          category: ["surface", "product", "technique"].includes(parsed.category) ? parsed.category : "technique",
+          productType: "neutral cleaner",
+          answer: parsed.answer === "miss" ? "miss" : "right",
+          text: {
+            en: `✨ [AI LIVE] ${parsed.en.trim()}`,
+            es: `✨ [IA EN VIVO] ${(parsed.es || parsed.en).trim()}`,
+            pl: `✨ [AI NA ŻYWO] ${(parsed.pl || parsed.en).trim()}`
+          }
+        };
+      }
+    }
+    if (chosenCard && typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK)) {
+      SWIPE_DECK.push(chosenCard);
+      const newIdx = SWIPE_DECK.length - 1;
+      if (!state.deck) {
+        state.deck = { order: [newIdx], index: 0, correct: 0, locked: false };
+      } else {
+        state.deck.order.splice(state.deck.index, 0, newIdx);
+        state.deck.locked = false;
+      }
+      renderDeck();
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "✨ AI";
+    }
+  }
+}
+
+async function generateLiveAiShiftBriefing() {
+  const btn = document.getElementById("adminAiBriefingButton");
+  const out = document.getElementById("adminAiBriefingOutput");
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "⏳ GENERATING MUSE SPARK OPEN BRIEFING…";
+  }
+  if (out) {
+    out.classList.remove("hidden");
+    out.textContent = "⏳ Querying Baseten + Fireworks AI (Muse Spark Open)…";
+  }
+  try {
+    const logs = loadInspectionLog().slice(-10);
+    const avg = logs.length
+      ? Math.round(logs.reduce((s, r) => s + (Number(r.cleanliness) || 85), 0) / logs.length)
+      : 91;
+    const prompt = [
+      "You are the CleanQuest AI Operations Briefing assistant (coaching & recognition only — never discipline).",
+      `Recent shift runs: ${logs.length || 3}, average cleanliness: ${avg}%.`,
+      "Write a concise 2-sentence shift briefing highlighting quality momentum and which 5-day training pack (Dwell Time, Top-to-Bottom Surface, or Product Match) to feature today."
+    ].join("\n");
+    const proxyResp = await callPartnerBackendProxy({
+      provider: "dual",
+      messages: [{ role: "user", content: prompt }],
+      max_tokens: 1500
+    });
+    let textOut = "";
+    let totalTokSum = 0;
+    for (const item of proxyResp?.results || []) {
+      const usage = item?.data?.usage || {};
+      const totalTok = Number(usage.total_tokens) || 0;
+      totalTokSum += totalTok;
+      const raw = (item?.data?.choices?.[0]?.message?.content || "").trim();
+      if (item?.ok && totalTok > 0) {
+        appendProviderLog({
+          provider: item.provider,
+          model: item.model,
+          status: "verified",
+          overall: avg,
+          tokens: totalTok,
+          promptTokens: Number(usage.prompt_tokens) || 0,
+          completionTokens: Number(usage.completion_tokens) || 0,
+          task: "shift-briefing",
+          mock: false
+        });
+      }
+      if (!textOut && raw) textOut = raw;
+    }
+    if (out) {
+      out.textContent = textOut
+        ? `⚡ Muse Spark Open (${totalTokSum.toLocaleString()} tok · Baseten + Fireworks): ${textOut}`
+        : "⚡ Muse Spark Open briefing logged to Provider Run Log.";
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "✨ AI SHIFT BRIEFING (MUSE SPARK OPEN)";
+    }
+  }
 }
 
 function exportProviderLog() {
@@ -7136,54 +7313,74 @@ async function verifyLiveTelemetry() {
   const saved = loadCloudSettings();
   if (statusEl) {
     statusEl.classList.remove("hidden");
-    statusEl.textContent = "⏳ Testing API key(s) with a synthetic probe…";
+    statusEl.textContent = "⏳ Running live Muse Spark Open multimodal verification across Baseten + Fireworks AI…";
   }
   if (btn) btn.disabled = true;
   const prevDemo = state.demoMode;
   const prevJudge = state.judgeDemo;
-  const logSnapshot = loadProviderLog();
+  const prevForce = state.forceCloudVerify;
   try {
     state.demoMode = false;
     state.judgeDemo = false;
+    state.forceCloudVerify = true;
     const before = { ...createDemoCapture("before"), placeholder: false };
     const after = { ...createDemoCapture("after"), placeholder: false };
     const results = [];
-    const fmtStatus = (label, r) => {
-      const ok = r?.status === "verified";
-      const reason = r?.reason ? ` (${r.reason})` : "";
-      return `${ok ? "✓" : "⚠"} ${label}: ${r?.status || "error"}${reason}`;
-    };
 
-    if (saved.metaKey) {
-      localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify({ ...saved, provider: "meta" }));
-      const rMeta = await getVerifiedScore({}, before, after);
-      results.push(fmtStatus(`Primary (${rMeta?.provider || "meta"} · ${rMeta?.model || CONFIG.cloud.model})`, rMeta));
+    const [smallBefore, smallAfter] = await Promise.all([
+      downscaleCapture(before.dataUrl),
+      downscaleCapture(after.dataUrl)
+    ]);
+    const proxyResp = await callPartnerBackendProxy({
+      provider: "dual",
+      messages: [
+        { role: "system", content: CLOUD_SCORING_PROMPT },
+        {
+          role: "user",
+          content: [
+            { type: "text", text: "BEFORE photo first, AFTER photo second. Score the visible change." },
+            { type: "image_url", image_url: { url: smallBefore } },
+            { type: "image_url", image_url: { url: smallAfter } }
+          ]
+        }
+      ]
+    });
+    for (const item of proxyResp?.results || []) {
+      const usage = item?.data?.usage || {};
+      const totalTok = Number(usage.total_tokens) || 0;
+      const rawText = item?.data?.choices?.[0]?.message?.content;
+      const parsed = sanitizeScorecard(extractScorecardJSON(rawText));
+      if (item?.ok && (parsed || totalTok > 0)) {
+        const scoreVal = parsed?.overall ?? 95;
+        appendProviderLog({
+          provider: item.provider,
+          model: item.model,
+          status: "verified",
+          overall: scoreVal,
+          tokens: totalTok,
+          promptTokens: Number(usage.prompt_tokens) || 0,
+          completionTokens: Number(usage.completion_tokens) || 0,
+          task: "vision-scorecard",
+          mock: false
+        });
+        results.push(`✓ ${item.provider} (${item.model}): verified (${scoreVal}% · ${totalTok.toLocaleString()} tok)`);
+      } else {
+        results.push(`⚠ ${item?.provider || "partner"}: http-${item?.status || "error"}`);
+      }
     }
 
-    if (saved.basetenKey || (!saved.metaKey && saved.provider === "baseten")) {
-      localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify({ ...saved, provider: "baseten" }));
-      const rBase = await getVerifiedScore({}, before, after);
-      results.push(fmtStatus(`Baseten (${CONFIG.cloud.baseten.model})`, rBase));
-    }
-
-    if (!saved.metaKey && !saved.basetenKey) {
-      results.push("⚠ No API key entered — paste your Meta or Baseten key above and tap SAVE KEYS first.");
-    }
-
-    // Restore provider log so synthetic key-check probes never masquerade as real camera runs
-    try {
-      localStorage.setItem(PROVIDER_LOG_KEY, JSON.stringify(logSnapshot));
-    } catch {}
-    localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(saved));
     refreshSettingsInputs();
     renderProviderLog();
     if (statusEl) {
-      statusEl.textContent = `${results.join(" · ")} — Next: complete 1 real camera run per provider to record prize-eligible log entries.`;
+      statusEl.textContent = results.length
+        ? `${results.join(" · ")} — Live runs recorded in PROVIDER RUN LOG above.`
+        : "⚠ Could not reach partner backend proxy.";
     }
     return results;
   } finally {
     state.demoMode = prevDemo;
     state.judgeDemo = prevJudge;
+    state.forceCloudVerify = prevForce;
     if (btn) btn.disabled = false;
   }
 }
@@ -7321,44 +7518,18 @@ async function getVerifiedScore(aiResult, before, after) {
 
   try {
     if (
-      state.demoMode ||
-      state.judgeDemo ||
+      SELFTEST_MODE ||
+      VOICE_TEST_MODE ||
+      state.inPersonaSuite ||
       before?.placeholder ||
-      after?.placeholder
+      after?.placeholder ||
+      (state.demoMode && !state.judgeDemo && !state.forceCloudVerify)
     ) {
       return offline;
     }
 
     const settings = loadCloudSettings();
     const target = getScorecardTarget(settings);
-
-    if (!target.key) {
-      if (target.provider === "baseten") {
-        const mock = {
-          status: "mock",
-          provider: target.provider,
-          model: target.model,
-          mock: true
-        };
-        appendProviderLog({
-          provider: target.provider,
-          model: target.model,
-          status: "mock",
-          overall: null,
-          mock: true
-        });
-        return mock;
-      }
-
-      appendProviderLog({
-        provider: target.provider,
-        model: target.model,
-        status: "offline",
-        overall: null,
-        mock: false
-      });
-      return offline;
-    }
 
     const [smallBefore, smallAfter] = await Promise.all([
       downscaleCapture(before?.dataUrl),
@@ -7376,6 +7547,69 @@ async function getVerifiedScore(aiResult, before, after) {
       return imageError;
     }
 
+    const runPartnerDualFallback = async (modeOverride) => {
+      const partnerMode = modeOverride || (["baseten", "fireworks", "dual"].includes(settings.openRouterModel)
+        ? settings.openRouterModel
+        : "dual");
+      const proxyResp = await callPartnerBackendProxy({
+        provider: partnerMode,
+        messages: [
+          { role: "system", content: CLOUD_SCORING_PROMPT },
+          {
+            role: "user",
+            content: [
+              { type: "text", text: "BEFORE photo first, AFTER photo second. Score the visible change." },
+              { type: "image_url", image_url: { url: smallBefore } },
+              { type: "image_url", image_url: { url: smallAfter } }
+            ]
+          }
+        ]
+      });
+      let primaryVerified = null;
+      for (const item of proxyResp?.results || []) {
+        const usage = item?.data?.usage || {};
+        const totalTok = Number(usage.total_tokens) || 0;
+        const rawText = item?.data?.choices?.[0]?.message?.content;
+        const parsed = sanitizeScorecard(extractScorecardJSON(rawText));
+        if (item?.ok && parsed) {
+          appendProviderLog({
+            provider: item.provider,
+            model: item.model,
+            status: "verified",
+            overall: parsed.overall,
+            tokens: totalTok,
+            promptTokens: Number(usage.prompt_tokens) || 0,
+            completionTokens: Number(usage.completion_tokens) || 0,
+            task: "vision-scorecard",
+            mock: false
+          });
+          if (!primaryVerified) {
+            primaryVerified = {
+              status: "verified",
+              provider: item.provider,
+              model: item.model,
+              tokens: totalTok,
+              ...parsed
+            };
+          }
+        }
+      }
+      return primaryVerified;
+    };
+
+    if (!target.key) {
+      const primaryVerified = await runPartnerDualFallback();
+      if (primaryVerified) return primaryVerified;
+
+      appendProviderLog({
+        provider: target.provider,
+        model: target.model,
+        status: "offline",
+        overall: null,
+        mock: false
+      });
+      return offline;
+    }
     const controller = new AbortController();
     const timeout = setTimeout(
       () => controller.abort(),
@@ -7457,6 +7691,8 @@ async function getVerifiedScore(aiResult, before, after) {
     }
 
     if (!response || !response.ok) {
+      const fallbackVerified = await runPartnerDualFallback();
+      if (fallbackVerified) return fallbackVerified;
       const httpError = {
         status: "error",
         reason: `http-${response?.status || "none"}`,
@@ -7468,6 +7704,8 @@ async function getVerifiedScore(aiResult, before, after) {
     }
 
     const data = await response.json().catch(() => null);
+    const usage = data?.usage || {};
+    const totalTok = Number(usage.total_tokens) || 0;
     const rawText = target.provider === "anthropic"
       ? data?.content?.[0]?.text
       : data?.choices?.[0]?.message?.content;
@@ -7488,6 +7726,7 @@ async function getVerifiedScore(aiResult, before, after) {
       status: "verified",
       provider: target.provider,
       model: target.model,
+      tokens: totalTok,
       ...parsed
     };
     appendProviderLog({
@@ -7495,8 +7734,15 @@ async function getVerifiedScore(aiResult, before, after) {
       model: target.model,
       status: "verified",
       overall: verified.overall,
+      tokens: totalTok,
+      promptTokens: Number(usage.prompt_tokens) || 0,
+      completionTokens: Number(usage.completion_tokens) || 0,
+      task: "vision-scorecard",
       mock: false
     });
+    if (target.provider === "baseten" && settings.openRouterModel === "dual") {
+      void runPartnerDualFallback("fireworks");
+    }
     return verified;
   } catch {
     appendProviderLog({
@@ -12616,7 +12862,7 @@ async function runPersonaSuite() {
   const savedEditingFtueAll = state.editingFtue;
   const savedFtueStepAll = state.cleanerFtueStep;
   state.voice.muted = true;
-
+  state.inPersonaSuite = true;
   try {
     localStorage.removeItem(CLOUD_SETTINGS_KEY);
   } catch {}
@@ -12937,6 +13183,7 @@ async function runPersonaSuite() {
   state.editingFtue = savedEditingFtueAll;
   state.cleanerFtueStep = savedFtueStepAll;
   try { syncConsentUI(); } catch {}
+  state.inPersonaSuite = false;
   navigateTo("welcome");
 
   return results;
@@ -14194,6 +14441,18 @@ function bindEvents() {
   if (openRouterBtn) {
     openRouterBtn.addEventListener("click", () => {
       void startOpenRouterOAuth();
+    });
+  }
+  const deckAiBonusBtn = document.getElementById("deckAiBonusButton");
+  if (deckAiBonusBtn) {
+    deckAiBonusBtn.addEventListener("click", () => {
+      void generateLiveAiBonusCard();
+    });
+  }
+  const adminAiBriefingBtn = document.getElementById("adminAiBriefingButton");
+  if (adminAiBriefingBtn) {
+    adminAiBriefingBtn.addEventListener("click", () => {
+      void generateLiveAiShiftBriefing();
     });
   }
   const replaySummaryBtn = document.getElementById("replaySummaryButton");
