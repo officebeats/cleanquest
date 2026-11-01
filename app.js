@@ -3370,11 +3370,14 @@ const DISCLOSURE_TRACKS = [
 
 function updateDiscoTrackUI() {
   const trk = DISCLOSURE_TRACKS[discoTrackIndex] || DISCLOSURE_TRACKS[0];
+  const txt = `${discoTrackIndex + 1}/${DISCLOSURE_TRACKS.length}`;
   const badge = document.getElementById("discoTrackBadge");
-  if (badge) badge.textContent = `${discoTrackIndex + 1}/${DISCLOSURE_TRACKS.length}`;
+  if (badge) badge.textContent = txt;
+  const lbBadge = document.getElementById("leaderboardTrackBadge");
+  if (lbBadge) lbBadge.textContent = txt;
   const settingsBtn = document.getElementById("settingsTrackCycleButton");
   if (settingsBtn) {
-    settingsBtn.textContent = `🎵 Track ${discoTrackIndex + 1}/${DISCLOSURE_TRACKS.length} · ${trk.name} ⏭`;
+    settingsBtn.textContent = `🎵 Track ${txt} · ${trk.name} ⏭`;
   }
 }
 
@@ -3456,9 +3459,10 @@ function triggerNoiseBurst(ctx, dest, time, duration, filterType, freq, q, peakG
 
 function startDiscoHouseGroove() {
   if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) return;
-  const btn = document.getElementById("discoGrooveButton");
-  btn?.classList.add("active");
-  btn?.setAttribute("aria-pressed", "true");
+  [document.getElementById("discoGrooveButton"), document.getElementById("leaderboardMusicButton")].forEach((b) => {
+    b?.classList.add("active");
+    b?.setAttribute("aria-pressed", "true");
+  });
   updateDiscoTrackUI();
   if (discoTimerId) return;
   try {
@@ -3488,7 +3492,7 @@ function startDiscoHouseGroove() {
       const sectionCutoffMult = 0.85 + (bar8 / 7) * 0.65;
       const swingOffset = step % 2 === 1 ? trk.swingSec : 0;
       const now = discoCtx.currentTime + swingOffset;
-      const screenMix = state.screen === "deck" ? 1.0 : state.screen === "results" || state.screen === "leaderboard" ? 0.58 : 0.38;
+      const screenMix = state.screen === "deck" || state.screen === "leaderboard" ? 0.92 : state.screen === "results" ? 0.58 : 0.38;
       const duck = (state.voice.currentAudio ? 0.22 : 1.0) * screenMix;
       const isKickStep = step % 4 === 0 || (isTurnaroundBar && (step === 14 || step === 15));
       const sidechain = step % 4 === 0 ? 0.40 : step % 4 === 1 ? 0.78 : 1.0;
@@ -3521,10 +3525,15 @@ function startDiscoHouseGroove() {
 
         triggerNoiseBurst(discoCtx, dest, now, 0.014, "bandpass", 2500, 1.8, kVel * 0.36);
 
-        if (step % 4 === 0 && state.screen === "deck" && els.deckCard && !els.deckCard.classList.contains("swiping")) {
-          els.deckCard.classList.remove("beat-thump");
-          void els.deckCard.offsetWidth;
-          els.deckCard.classList.add("beat-thump");
+        if (step % 4 === 0) {
+          document.body.classList.remove("music-beat-thump");
+          void document.body.offsetWidth;
+          document.body.classList.add("music-beat-thump");
+          if (state.screen === "deck" && els.deckCard && !els.deckCard.classList.contains("swiping")) {
+            els.deckCard.classList.remove("beat-thump");
+            void els.deckCard.offsetWidth;
+            els.deckCard.classList.add("beat-thump");
+          }
         }
       }
       if (isTurnaroundBar && step >= 12) {
@@ -3710,12 +3719,12 @@ function stopDiscoHouseGroove() {
     discoTimerId = null;
   }
 }
-
 function toggleDiscoGroove() {
   state.voice.discoEnabled = state.voice.discoEnabled === false;
-  const btn = document.getElementById("discoGrooveButton");
-  btn?.classList.toggle("active", state.voice.discoEnabled);
-  btn?.setAttribute("aria-pressed", String(state.voice.discoEnabled));
+  [document.getElementById("discoGrooveButton"), document.getElementById("leaderboardMusicButton")].forEach((btn) => {
+    btn?.classList.toggle("active", state.voice.discoEnabled);
+    btn?.setAttribute("aria-pressed", String(state.voice.discoEnabled));
+  });
   if (state.voice.discoEnabled) {
     if (state.voice.muted) setHypeLevel("full");
     startDiscoHouseGroove();
@@ -8986,26 +8995,118 @@ function visibleLeaderboard(entries, viewerRunId = state.latestRunId) {
 }
 
 function renderLeaderboard() {
-  const visible = visibleLeaderboard(loadLeaderboard(), state.latestRunId);
+  const rawBoard = loadLeaderboard();
+  const visible = visibleLeaderboard(rawBoard, state.latestRunId);
 
   els.leaderboardList.innerHTML = "";
   renderCrewAndConsistencyUI();
+
+  // Build competitive board that always includes Top-3 Podium rivals and the user's "YOU" placement
+  const latestWeighted = computeWeightedRunScore();
+  const youScore = Number.isFinite(latestWeighted) ? latestWeighted : 75;
+  const youTimeMs = Number(state.result?.elapsedMs || state.timer?.elapsedMs || 78000) || 78000;
+  const youStyle = Number(state.result?.ai?.styleScore ?? 8.5);
+
+  let boardPool = visible.length ? visible.map((e) => ({ ...e })) : [
+    { id: "rival-1", name: "Jordan", cleanliness: 100, weightedScore: 100, timeMs: 68400, styleScore: 9.4 },
+    { id: "rival-2", name: "Alex", cleanliness: 98, weightedScore: 98, timeMs: 71200, styleScore: 9.1 },
+    { id: "rival-3", name: "Sam", cleanliness: 96, weightedScore: 96, timeMs: 74200, styleScore: 8.8 }
+  ];
+
+  let viewerItem = boardPool.find((e) => e.isViewer || (state.latestRunId && e.id === state.latestRunId) || String(e.name || "").toLowerCase() === "player" || String(e.name || "").toLowerCase() === "you");
+  if (!viewerItem) {
+    viewerItem = {
+      id: state.latestRunId || "you-current",
+      name: "YOU",
+      cleanliness: youScore,
+      weightedScore: youScore,
+      timeMs: youTimeMs,
+      styleScore: youStyle,
+      isViewer: true
+    };
+    boardPool.push(viewerItem);
+  } else {
+    viewerItem.isViewer = true;
+  }
+
+  const rankedPool = sortLeaderboard(boardPool).map((entry, idx) => ({
+    ...entry,
+    rank: idx + 1
+  }));
+  const youRanked = rankedPool.find((e) => e.isViewer) || rankedPool[rankedPool.length - 1];
+  const nextRival = youRanked && youRanked.rank > 1 ? rankedPool[youRanked.rank - 2] : null;
+
+  // 1. Render Competitive Rival Chase / Next Rank Incentive Banner
+  const rivalBanner = document.getElementById("leaderboardRivalBanner");
+  if (rivalBanner) {
+    const curScore = Number.isFinite(youRanked?.weightedScore) ? youRanked.weightedScore : Number(youRanked?.cleanliness || 75);
+    if (nextRival) {
+      const rivScore = Number.isFinite(nextRival.weightedScore) ? nextRival.weightedScore : Number(nextRival.cleanliness || 96);
+      const gap = Math.max(1, rivScore - curScore + 1);
+      const pctFill = Math.max(18, Math.min(96, Math.round((curScore / Math.max(1, rivScore)) * 100)));
+      const cleanRivName = String(nextRival.name || "Rival").replace(/\s*·\s*sample/i, "");
+      rivalBanner.innerHTML = `
+        <div class="rival-chase-head">
+          <span class="rival-chase-tag">🔥 NEXT TARGET TO BEAT · RANK #${nextRival.rank}</span>
+          <span class="rival-xp-pill">⚡ +250 XP BONUS</span>
+        </div>
+        <div class="rival-chase-copy">
+          Only <strong>+${gap}%</strong> to overtake <strong>#${nextRival.rank} ${cleanRivName} (${rivScore}%)</strong>!
+        </div>
+        <div class="rival-progress-track">
+          <div class="rival-progress-fill" style="width:${pctFill}%"></div>
+        </div>
+      `;
+    } else {
+      rivalBanner.innerHTML = `
+        <div class="rival-chase-head">
+          <span class="rival-chase-tag">👑 #1 DEFENDING CHAMPION</span>
+          <span class="rival-xp-pill">🏆 +500 XP CROWN</span>
+        </div>
+        <div class="rival-chase-copy">
+          <strong>YOU</strong> hold the #1 spot at <strong>${curScore}%</strong> — beat your time to lock the crown!
+        </div>
+      `;
+    }
+  }
+
+  // 2. Render 3-Pillar Championship Podium Stage (Silver #2 | Gold #1 | Bronze #3)
+  const podiumEl = document.getElementById("leaderboardPodiumStage");
+  if (podiumEl) {
+    const p1 = rankedPool[0];
+    const p2 = rankedPool[1];
+    const p3 = rankedPool[2];
+    const cardHtml = (p, place, medal) => {
+      if (!p) return "";
+      const sc = Number.isFinite(p.weightedScore) ? p.weightedScore : p.cleanliness;
+      const nm = p.isViewer ? "YOU" : String(p.name || "Player").replace(/\s*·\s*sample/i, "");
+      return `
+        <div class="podium-pillar podium-${place}${p.isViewer ? " is-you-podium" : ""}">
+          <div class="podium-medal">${medal}</div>
+          <strong class="podium-name">${nm}${p.isViewer ? ' <span class="you-pill">YOU</span>' : ""}</strong>
+          <span class="podium-score">${sc}%</span>
+          <small class="podium-time">${formatTimer(Number(p.timeMs || 0))}</small>
+        </div>
+      `;
+    };
+    podiumEl.innerHTML = `${cardHtml(p2, 2, "🥈 #2")}${cardHtml(p1, 1, "👑 #1")}${cardHtml(p3, 3, "🥉 #3")}`;
+  }
+
   if (!visible.length) {
     const empty = document.createElement("p");
     empty.className = "fine-print";
     empty.textContent = t("leaderboardEmpty");
     els.leaderboardList.appendChild(empty);
-    return;
   }
-  visible.forEach((entry) => {
+
+  rankedPool.forEach((entry) => {
     const row = document.createElement("div");
     row.className = "leaderboard-row";
     if (entry.rank >= 1 && entry.rank <= 3) {
       row.classList.add(`rank-${entry.rank}`);
     }
-
-    if (entry.id === state.latestRunId || entry.isViewer) {
-      row.classList.add("latest");
+    if (entry.isViewer) {
+      row.classList.add("latest", "is-you-row");
     }
 
     const rank = document.createElement("span");
@@ -9016,17 +9117,27 @@ function renderLeaderboard() {
         ? "🥈 2"
         : entry.rank === 3
           ? "🥉 3"
-          : String(entry.rank);
+          : `#${entry.rank}`;
 
+    const displayScore = Number.isFinite(entry.weightedScore) ? entry.weightedScore : entry.cleanliness;
+    const cleanName = String(entry.name || t("defaultPlayer")).replace(/\s*·\s*sample/i, "");
     const name = document.createElement("span");
     name.className = "player-name";
-    name.textContent = entry.name || t("defaultPlayer");
+    const gapTag = entry.isViewer && nextRival
+      ? `<em class="you-gap-tag">▲ +${Math.max(1, (Number.isFinite(nextRival.weightedScore) ? nextRival.weightedScore : nextRival.cleanliness) - displayScore + 1)}% TO #${nextRival.rank}</em>`
+      : "";
+    name.innerHTML = `
+      <span class="lb-name-line">
+        <strong>${entry.isViewer ? (cleanName.toUpperCase() === "YOU" ? "Player" : cleanName) : cleanName}</strong>
+        ${entry.isViewer ? '<span class="you-pill">YOU</span>' : ""}
+        ${gapTag}
+      </span>
+      <span class="lb-mini-bar"><i style="width:${Math.max(12, Math.min(100, Number(displayScore) || 50))}%"></i></span>
+    `;
 
     const quality = document.createElement("span");
     quality.className = "quality";
-    const displayScore = Number.isFinite(entry.weightedScore) ? entry.weightedScore : entry.cleanliness;
-    quality.textContent =
-      Number.isFinite(displayScore) ? `${displayScore}%` : "—";
+    quality.textContent = Number.isFinite(displayScore) ? `${displayScore}%` : "—";
 
     const time = document.createElement("span");
     time.className = "time";
@@ -12951,14 +13062,12 @@ function bindEvents() {
       } catch (error) {}
     });
   }
-  const discoBtn = document.getElementById("discoGrooveButton");
-  if (discoBtn) {
-    discoBtn.addEventListener("click", toggleDiscoGroove);
-  }
-  const discoNextBtn = document.getElementById("discoNextTrackButton");
-  if (discoNextBtn) {
-    discoNextBtn.addEventListener("click", cycleDiscoTrack);
-  }
+  [document.getElementById("discoGrooveButton"), document.getElementById("leaderboardMusicButton")].forEach((b) => {
+    if (b) b.addEventListener("click", toggleDiscoGroove);
+  });
+  [document.getElementById("discoNextTrackButton"), document.getElementById("leaderboardNextTrackButton")].forEach((b) => {
+    if (b) b.addEventListener("click", cycleDiscoTrack);
+  });
   const settingsTrackBtn = document.getElementById("settingsTrackCycleButton");
   if (settingsTrackBtn) {
     settingsTrackBtn.addEventListener("click", cycleDiscoTrack);
