@@ -24,15 +24,12 @@ https://officebeats.github.io/cleanquest/ or open `index.html` in a mobile brows
 | timer | Spot bar + QR, 4-mode Before-shadow ghost, 3x3 live zone grid + idle nudge, dwell cue, host callouts at 75/60/45/30/20/10s, big Finish |
 | results | Weighted TOTAL hero (50/25/25), 3 bars + details, honest surface map, uncropped evidence + full-screen lightbox, 1-tap read-only Dispute, voice note, pose |
 | leaderboard | Top-10 + own (weighted sort; practice runs excluded), crew matchup/MVP, personal record |
-| records | Inspection log + supervisor panes 11–15 (pledge-gated tools, sites+QR stickers, bulk invite, training gaps, assign packs) |
-| settings | API keys, provider toggle (Meta Model API / Baseten Spark Open), hype levels (default off), voice/test buttons |
-| deck | Daily swipe deck: 30 trilingual cards (EN/ES/PL fields in `deck.js`), pointer-drag + stamps + keys, missed-card repeat, 5/day |
+| records | Inspection log + supervisor panes 11–15 (pledge-gated tools, sites+QR stickers, bulk invite, training gaps + 1-tap `✨ AI SHIFT BRIEFING`, assign packs) |
+| settings | API keys, provider toggle (Meta Model API / Partner Cloud `Muse Spark Open` with Baseten Primary → Fireworks Failover default + Dual Benchmark option), 1-tap `⚡ TEST & LOG TELEMETRY`, cumulative token counter, hype levels |
+| deck | Daily swipe deck: 30 static trilingual cards (`deck.js`) + automated 14-day Bi-Weekly AI Season Pack rotation (3 station cards + localized Season Theme cached across server & `localStorage`), pointer-drag + stamps + keys, missed-card repeat, 5/day |
 | spectator | `?spectator=1` distance board (weighted display, 15s refresh) |
 
-Providers: on-device vision always runs (offline note when no key). With keys:
-Meta Model API = Muse Spark scorecards + SAM 3.1 overlays + transcription;
-Baseten = Spark Open second provider behind toggle, every run in exportable log.
-
+Providers: on-device vision always runs. Cloud verification works out-of-the-box via the serverless proxy (`CONFIG.cloud.backendProxyUrl`) routing to Baseten (`meta-models/muse-spark-open`) as primary with automatic failover to Fireworks AI (`accounts/fireworks/models/muse-spark-open`), or with user-supplied keys in Settings (Meta Model API `muse-spark-1.3` + `sam-3.1` + `muse-voice-transcribe-1.0`). Every verified run and token count is logged to the exportable `PROVIDER RUN LOG`.
 ## Code anchors
 - `app.js` — everything. `HOST_LINES` = host script lines (`start`, `mid`,
   `finish`, `pass`, `retry`, `pass-big`, `pass-close`, `retry-far`, `hurry`,

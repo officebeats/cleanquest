@@ -7176,7 +7176,45 @@ function stripSeasonBracketPrefix(str) {
     .trim();
 }
 
-function normalizeSeasonCard(c, idx, seasonNum, areaKey, theme) {
+function localizeSeasonTheme(rawTheme, lang = "en", areaKey = "breakroom") {
+  if (rawTheme && typeof rawTheme === "object") {
+    return String(rawTheme[lang] || rawTheme.en || Object.values(rawTheme)[0] || "");
+  }
+  const tStr = String(rawTheme || "").trim();
+  const knownMap = {
+    "vending & pantry handle hygiene": {
+      es: "Higiene de Asas y Expendedoras",
+      pl: "Higiena Uchwytów i Automatów"
+    },
+    "breakroom touchpoints": {
+      es: "Puntos de Contacto del Comedor",
+      pl: "Punkty Dotykowe w Pokoju Socjalnym"
+    },
+    "sink & counter shine": {
+      es: "Brillo de Fregadero y Encimera",
+      pl: "Połysk Zlewu i Blatu"
+    },
+    "station mastery": {
+      es: "Dominio de la Estación",
+      pl: "Mistrzostwo Stacji"
+    }
+  };
+  const lower = tStr.toLowerCase();
+  if (lang === "es" || lang === "pl") {
+    if (knownMap[lower]?.[lang]) return knownMap[lower][lang];
+    const areaFallbacks = {
+      breakroom: { es: "Higiene de Comedor y Cocina", pl: "Higiena Pokoju Socjalnego" },
+      restroom: { es: "Higiene de Baños y Lavabos", pl: "Higiena Łazienek i Armatury" },
+      lobby: { es: "Entradas y Cristales Impecables", pl: "Czyste Wejścia i Przeszklenia" },
+      office: { es: "Escritorios y Superficies de Oficina", pl: "Biurka i Powierzchnie Biurowe" }
+    };
+    if (areaFallbacks[areaKey]?.[lang]) return areaFallbacks[areaKey][lang];
+    return lang === "es" ? "Dominio de la Estación" : "Mistrzostwo Stacji";
+  }
+  return tStr || "Station Mastery";
+}
+
+function normalizeSeasonCard(c, idx, seasonNum, areaKey, themeObjOrStr) {
   if (!c || typeof c !== "object") return null;
   const cat = ["surface", "product", "technique"].includes(c.c || c.category)
     ? (c.c || c.category)
@@ -7195,21 +7233,25 @@ function normalizeSeasonCard(c, idx, seasonNum, areaKey, theme) {
   const cleanEs = stripSeasonBracketPrefix(rawEs || cleanEn);
   const cleanPl = stripSeasonBracketPrefix(rawPl || cleanEn);
   if (!cleanEn) return null;
+  const thmEn = localizeSeasonTheme(themeObjOrStr, "en", areaKey);
+  const thmEs = localizeSeasonTheme(themeObjOrStr, "es", areaKey);
+  const thmPl = localizeSeasonTheme(themeObjOrStr, "pl", areaKey);
   const defaultWhyEn = ans === "right"
-    ? `Season #${seasonNum} (${theme}): Proper technique protects surfaces and prevents cross-contamination.`
-    : `Season #${seasonNum} (${theme}): Avoid shortcuts that damage surfaces or spread soil.`;
+    ? `Season #${seasonNum} (${thmEn}): Proper technique protects surfaces and prevents cross-contamination.`
+    : `Season #${seasonNum} (${thmEn}): Avoid shortcuts that damage surfaces or spread soil.`;
   const defaultWhyEs = ans === "right"
-    ? `Temporada #${seasonNum} (${theme}): La técnica correcta protege las superficies y evita la contaminación cruzada.`
-    : `Temporada #${seasonNum} (${theme}): Evita atajos que dañen las superficies o esparzan suciedad.`;
+    ? `Temporada #${seasonNum} (${thmEs}): La técnica correcta protege las superficies y evita la contaminación cruzada.`
+    : `Temporada #${seasonNum} (${thmEs}): Evita atajos que dañen las superficies o esparzan suciedad.`;
   const defaultWhyPl = ans === "right"
-    ? `Sezon #${seasonNum} (${theme}): Właściwa technika chroni powierzchnie i zapobiega zanieczyszczeniom krzyżowym.`
-    : `Sezon #${seasonNum} (${theme}): Unikaj dróg na skróty, które niszczą powierzchnie lub roznoszą brud.`;
+    ? `Sezon #${seasonNum} (${thmPl}): Właściwa technika chroni powierzchnie i zapobiega zanieczyszczeniom krzyżowym.`
+    : `Sezon #${seasonNum} (${thmPl}): Unikaj dróg na skróty, które niszczą powierzchnie lub roznoszą brud.`;
   return {
     id: c.id || `season-${seasonNum}-${areaKey}-${idx + 1}`,
     category: cat,
     answer: ans,
     isSeasonCard: true,
     seasonNum,
+    areaKey,
     text: `🗓️ Season #${seasonNum}: ${cleanEn}`,
     text_es: `🗓️ Temporada #${seasonNum}: ${cleanEs}`,
     text_pl: `🗓️ Sezon #${seasonNum}: ${cleanPl}`,
@@ -7228,12 +7270,25 @@ function loadCachedBiWeeklySeason() {
     if (!raw || typeof raw !== "object" || !Array.isArray(raw.cards) || !raw.cards.length) return null;
     const sNum = Number(raw.seasonNum) || getBiWeeklySeasonMeta().seasonNum;
     const aKey = raw.areaKey || "breakroom";
-    const thm = raw.theme || "Station Mastery";
+    const thmObj = {
+      en: raw.theme_en || localizeSeasonTheme(raw.theme, "en", aKey),
+      es: raw.theme_es || localizeSeasonTheme(raw.theme, "es", aKey),
+      pl: raw.theme_pl || localizeSeasonTheme(raw.theme, "pl", aKey)
+    };
     const normalizedCards = raw.cards
-      .map((c, i) => normalizeSeasonCard(c, i, sNum, aKey, thm))
+      .map((c, i) => normalizeSeasonCard(c, i, sNum, aKey, thmObj))
       .filter(Boolean);
     if (!normalizedCards.length) return null;
-    return { ...raw, cards: normalizedCards };
+    return {
+      ...raw,
+      seasonNum: sNum,
+      areaKey: aKey,
+      theme: thmObj.en,
+      theme_en: thmObj.en,
+      theme_es: thmObj.es,
+      theme_pl: thmObj.pl,
+      cards: normalizedCards
+    };
   } catch {
     return null;
   }
@@ -7243,11 +7298,16 @@ function ensureSeasonCardsInSwipeDeck(pack) {
   if (!pack || !Array.isArray(pack.cards) || !pack.cards.length) return [];
   const sNum = Number(pack.seasonNum) || getBiWeeklySeasonMeta().seasonNum;
   const aKey = pack.areaKey || "breakroom";
-  const thm = pack.theme || "Station Mastery";
+  const thmObj = {
+    en: pack.theme_en || localizeSeasonTheme(pack.theme, "en", aKey),
+    es: pack.theme_es || localizeSeasonTheme(pack.theme, "es", aKey),
+    pl: pack.theme_pl || localizeSeasonTheme(pack.theme, "pl", aKey)
+  };
   const normalized = pack.cards
-    .map((c, i) => normalizeSeasonCard(c, i, sNum, aKey, thm))
+    .map((c, i) => normalizeSeasonCard(c, i, sNum, aKey, thmObj))
     .filter(Boolean);
   state.seasonCards = normalized;
+  state.seasonCardsMeta = { seasonNum: sNum, areaKey: aKey };
   return normalized;
 }
 
@@ -7276,19 +7336,27 @@ function parseSeasonPackFromItem(item, seasonNum, daysLeft, areaKey, areaLabel) 
     ? parsed.cards
     : (parsed && typeof parsed.en === "string" ? [parsed] : []);
   if (!rawCards.length) return null;
-  const theme = typeof parsed?.theme === "string" && parsed.theme.trim()
+  const baseTheme = typeof parsed?.theme === "string" && parsed.theme.trim()
     ? parsed.theme.trim()
     : `${areaLabel} Mastery`;
+  const thmObj = {
+    en: baseTheme,
+    es: (typeof parsed?.theme_es === "string" && parsed.theme_es.trim()) || localizeSeasonTheme(baseTheme, "es", areaKey),
+    pl: (typeof parsed?.theme_pl === "string" && parsed.theme_pl.trim()) || localizeSeasonTheme(baseTheme, "pl", areaKey)
+  };
   const cards = rawCards
     .slice(0, 3)
-    .map((c, idx) => normalizeSeasonCard(c, idx, seasonNum, areaKey, theme))
+    .map((c, idx) => normalizeSeasonCard(c, idx, seasonNum, areaKey, thmObj))
     .filter(Boolean);
   if (!cards.length) return null;
   return {
     seasonNum,
     daysLeft,
     areaKey,
-    theme,
+    theme: thmObj.en,
+    theme_en: thmObj.en,
+    theme_es: thmObj.es,
+    theme_pl: thmObj.pl,
     cards,
     generatedAt: new Date().toISOString()
   };
@@ -9367,6 +9435,25 @@ function localizedDeckField(card, field) {
   return String(val || "");
 }
 
+function getActiveMatchingSeasonCards() {
+  if (SELFTEST_MODE || VOICE_TEST_MODE || state.inPersonaSuite) return [];
+  const { seasonNum } = getBiWeeklySeasonMeta();
+  const areaKey = state.checkin?.areaKey || "breakroom";
+  if (
+    Array.isArray(state.seasonCards) &&
+    state.seasonCards.length &&
+    state.seasonCardsMeta?.seasonNum === seasonNum &&
+    state.seasonCardsMeta?.areaKey === areaKey
+  ) {
+    return state.seasonCards;
+  }
+  const cached = loadCachedBiWeeklySeason();
+  if (cached && cached.seasonNum === seasonNum && cached.areaKey === areaKey) {
+    return ensureSeasonCardsInSwipeDeck(cached);
+  }
+  return [];
+}
+
 function buildDailyDeck(prioritySeasonCards = null) {
   const source = (typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK))
     ? SWIPE_DECK
@@ -9376,9 +9463,7 @@ function buildDailyDeck(prioritySeasonCards = null) {
   const progress = loadDeckProgress();
   const seasonPool = Array.isArray(prioritySeasonCards)
     ? prioritySeasonCards
-    : (!SELFTEST_MODE && !VOICE_TEST_MODE && !state.inPersonaSuite
-      ? (state.seasonCards?.length ? state.seasonCards : (loadCachedBiWeeklySeason()?.cards || []))
-      : []);
+    : getActiveMatchingSeasonCards();
   const byId = new Map([...source, ...seasonPool].map((card) => [card.id, card]));
   const order = [];
 
@@ -9415,13 +9500,16 @@ function openDeck() {
   const { seasonNum } = getBiWeeklySeasonMeta();
   const areaKey = state.checkin?.areaKey || "breakroom";
   const cachedSeason = loadCachedBiWeeklySeason();
-  if (cachedSeason && cachedSeason.seasonNum === seasonNum) {
+  if (cachedSeason && cachedSeason.seasonNum === seasonNum && cachedSeason.areaKey === areaKey) {
     ensureSeasonCardsInSwipeDeck(cachedSeason);
+  } else {
+    state.seasonCards = [];
+    state.seasonCardsMeta = null;
   }
   state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false, answeredCurrent: false };
   navigateTo("deck");
   renderDeck();
-  // Zero-touch automated bi-weekly rotation: if the 14-day clock rolled over and this station isn't cached yet, sync automatically
+  // Zero-touch automated bi-weekly rotation: if the 14-day clock rolled over or station changed, sync automatically
   if (!SELFTEST_MODE && !VOICE_TEST_MODE && !state.inPersonaSuite && (!cachedSeason || cachedSeason.seasonNum !== seasonNum || cachedSeason.areaKey !== areaKey)) {
     void generateLiveAiBonusCard(false, true);
   }
@@ -12513,8 +12601,11 @@ function renderPersonalRecordUI() {
     const daysWord = lang === "es" ? `${daysLeft}d restantes` : lang === "pl" ? `zostało ${daysLeft}d` : `${daysLeft}d left`;
     const streakWord = lang === "es" ? "Racha" : lang === "pl" ? "Seria" : "Streak";
     const masteredWord = lang === "es" ? "Dominadas" : lang === "pl" ? "Opanowane" : "Mastered";
-    const seasonTag = cachedSeason?.theme
-      ? `🗓️ ${seasonWord} #${seasonNum} (${cachedSeason.theme} · ${daysWord})`
+    const localTheme = cachedSeason
+      ? (lang === "es" ? cachedSeason.theme_es : lang === "pl" ? cachedSeason.theme_pl : cachedSeason.theme_en || cachedSeason.theme)
+      : "";
+    const seasonTag = localTheme
+      ? `🗓️ ${seasonWord} #${seasonNum} (${localTheme} · ${daysWord})`
       : `🗓️ ${seasonWord} #${seasonNum} (${daysWord})`;
     lbDeckEl.textContent = `🃏 ${seasonTag} · 🔥 ${rec.streakDays}d ${streakWord} · ${masteredCards}/30 ${masteredWord} · ${deckXp} XP`;
   }

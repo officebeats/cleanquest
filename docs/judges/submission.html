@@ -465,14 +465,14 @@
     <span class="step-badge">Step 1 · Credits &amp; Live Partner Telemetry Status</span>
     <h2>What Is Completed vs. What Is Left</h2>
 
-    <h3>✅ Completed (Live Serverless Dual-Partner Backend Active Out-of-the-Box)</h3>
+    <h3>✅ Completed (Live Zero-Key Serverless <code>Muse Spark Open</code> Architecture Active Out-of-the-Box)</h3>
     <ol class="numbered-steps">
-      <li><strong>Serverless Dual-Partner Backend Proxy Deployed (Zero User Key Setup Required):</strong> Deployed a private Google Apps Script backend proxy (with server-side <code>ScriptProperties</code> secrets and rate limiting) that executes <strong>both Baseten (<code>meta-models/muse-spark-open</code>) AND Fireworks AI (<code>accounts/fireworks/models/muse-spark-open</code>) in parallel</strong> on every challenge run — so judges and users get live <code>Muse Spark Open</code> multimodal vision scorecards + <code>box_2d</code> overlays out of the box without entering any API key.</li>
-      <li><strong>3 Live <code>Muse Spark Open</code> Features Across the Product (Token &amp; API Maximized):</strong>
+      <li><strong>Zero-Key Serverless Backend Proxy with Primary + Automatic Failover (50% Call Reduction):</strong> Deployed a private Google Apps Script backend proxy (with server-side <code>ScriptProperties</code> secrets and rate limiting) that routes every cloud request to <strong>Baseten (<code>meta-models/muse-spark-open</code>) as primary</strong> and automatically fails over to <strong>Fireworks AI (<code>accounts/fireworks/models/muse-spark-open</code>)</strong> on timeout or error (cutting API calls and token spend by 50%, while keeping <code>Dual Parallel</code> selectable in Settings for side-by-side benchmarking). Judges and cleaners get live <code>Muse Spark Open</code> multimodal vision scorecards + <code>box_2d</code> overlays out of the box without entering any API key.</li>
+      <li><strong>3 Live <code>Muse Spark Open</code> Workflows Across the 15-Screen MVP (Token &amp; API Optimized):</strong>
         <ul>
-          <li><strong>Dual-Cloud Vision Scorecard + <code>box_2d</code> Audit:</strong> Every challenge run (and <code>⚡ 10-SECOND JUDGE DEMO</code>) fires parallel multimodal calls to both Baseten and Fireworks AI (~5,700 tokens/run) and logs both verified entries + exact token counts to <code>PROVIDER RUN LOG</code>.</li>
-          <li><strong>Token-Efficient Bi-Weekly AI Season Packs in Daily Deck (<code>✨ AI</code>):</strong> Tapping <code>✨ AI</code> in the Daily Swipe Deck batches a <strong>14-Day Bi-Weekly Season Theme + 3 trilingual (<code>EN / ES / PL</code>) commercial cleaning cards in 1 compact JSON call</strong> (~3× lower token overhead per card) and caches the pack for the 14-day competition window to drive bi-weekly Leaderboard competition.</li>
-          <li><strong>Live <code>✨ AI SHIFT BRIEFING</code> in Supervisor Insights:</strong> Tapping <code>✨ AI SHIFT BRIEFING (MUSE SPARK OPEN)</code> in Supervisor Pane 14 synthesizes the site's inspection log into a coaching &amp; training pack briefing via <code>Muse Spark Open</code>.</li>
+          <li><strong>1 · Before/After Vision Scorecard + <code>box_2d</code> Surface Overlays (Screen 8 · ~56% Token Reduction):</strong> Downscales Before/After captures to <code>512px</code> @ <code>0.72</code> JPEG (~55% smaller image payload) with concise reasoning caps, grading each surface + <code>box_2d</code> bounding boxes and logging exact token counts to <code>PROVIDER RUN LOG</code>.</li>
+          <li><strong>2 · Zero-Touch Automated 14-Day Bi-Weekly Season Engine in Daily Deck &amp; Leaderboard (Screens 9–10 · <code>0-Token</code> Repeat Plays):</strong> Opening the Daily Swipe Deck automatically checks the 14-day season clock. The first request of a new 2-week season batches a <strong>localized Season Theme (<code>EN / ES / PL</code>) + 3 trilingual commercial cleaning cards in 1 compact JSON call</strong> (~3× lower token overhead per card) and caches the pack in both <strong>server-side <code>ScriptProperties</code> and browser <code>localStorage</code></strong> so every subsequent play across the 14-day competition window costs <strong><code>0</code> LLM tokens</strong>.</li>
+          <li><strong>3 · Fingerprint-Cached <code>✨ AI SHIFT BRIEFING</code> in Supervisor Insights (Screen 14 · <code>0-Token</code> Cache Hits):</strong> Tapping <code>✨ AI SHIFT BRIEFING (MUSE SPARK OPEN)</code> in Supervisor Pane 14 synthesizes the site's inspection log into a localized 2-sentence coaching &amp; 5-day training pack briefing via <code>Muse Spark Open</code> and caches it by log fingerprint until a new shift run is recorded.</li>
         </ul>
       </li>
       <li><strong>1-Tap <code>⚡ TEST &amp; LOG TELEMETRY</code> + Cumulative Token Counter in Settings:</strong> Displays total verified runs and cumulative tokens across <code>Baseten</code> + <code>Fireworks AI</code> right at the top of <code>PROVIDER RUN LOG</code>.</li>
@@ -599,7 +599,7 @@
         <pre class="copy-content">Track: Indie Developer Track
 Theme: Build for Your World
 Bonus Prizes:
-1. Best Build on Meta Open Weights ($10,000) — Muse Spark Open via Baseten (meta-models/muse-spark-open-1026)
+1. Best Build on Meta Open Weights ($10,000) — Muse Spark Open via Baseten (meta-models/muse-spark-open) + Fireworks AI Failover (accounts/fireworks/models/muse-spark-open)
 2. Most Viral ($20,000) — X (Twitter) Demo Video
 3. Community Vote ($10,000)</pre>
       </div>
@@ -620,7 +620,7 @@ Bonus Prizes:
         <strong>4. One-Sentence Pitch</strong>
         <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy</button>
       </div>
-      <pre class="copy-content">CleanQuest turns the invisible 2 a.m. commercial cleaning shift into a trilingual AI-verified game, daily micro-training deck, geofenced inspection log, and portable career passport owned by the cleaner.</pre>
+      <pre class="copy-content">CleanQuest turns the invisible 2 a.m. commercial cleaning shift into a trilingual AI-verified game, automated 2-week micro-training season deck, geofenced inspection log, and portable career passport owned by the cleaner.</pre>
     </div>
 
     <div class="copy-box">
@@ -649,13 +649,13 @@ Live Breakroom Spectator Board: https://officebeats.github.io/cleanquest/?specta
    - After snapping an in-app Before photo, a locked 1:30 countdown runs while a neural host voice hypes the cleaner every 6–8 seconds over a 122 BPM WebAudio house groove in English, Mexican Spanish, or Polish.
    - Tapping Complete Challenge automatically captures the After photo and submits in one step.
 
-3. TWO-RUNG AI VERIFICATION (ON-DEVICE + META CLOUD &amp; OPEN WEIGHTS):
-   - Rung 1 (On-Device, Zero-Key): MediaPipe EfficientDet-Lite0 station mismatch gate (verifyStationEnvironment) + object clearance matching, 96×72 structural edge correlation, 3×3 luminance zone analyzer, and Pose Landmarker Lite style scoring.
-   - Rung 2 (Meta Model API + Baseten Spark Open): Muse Spark 1.3 (api.meta.ai) and Muse Spark Open (meta-models/muse-spark-open-1026 on Baseten) produce per-surface scorecards with 0.6 confidence gating, SAM 3.1 surface bounding-box overlays, and Muse Voice Transcribe 1.0 spoken-note transcription, logged to an exportable Provider Run Log JSON.
+3. TWO-RUNG AI VERIFICATION (ON-DEVICE + ZERO-KEY SERVERLESS META CLOUD &amp; OPEN WEIGHTS):
+   - Rung 1 (On-Device, Zero Signal): MediaPipe EfficientDet-Lite0 station mismatch gate (verifyStationEnvironment) + object clearance matching, 96×72 structural edge correlation, 3×3 luminance zone analyzer, and Pose Landmarker Lite style scoring.
+   - Rung 2 (Meta Model API + Zero-Key Serverless Muse Spark Open): Muse Spark 1.3 (api.meta.ai) and a token-efficient serverless Muse Spark Open engine (Baseten meta-models/muse-spark-open primary with automatic failover to Fireworks AI accounts/fireworks/models/muse-spark-open) produce per-surface scorecards (512px @ 0.72 JPEG, 0.6 confidence gating), SAM 3.1 / box_2d surface bounding-box overlays, and Muse Voice Transcribe 1.0 spoken-note transcription, logged with exact token telemetry to an exportable Provider Run Log JSON.
 
-4. EXPLAINABLE 50/25/25 SCORECARD, DAILY DECK &amp; DUAL LEADERBOARD:
+4. EXPLAINABLE 50/25/25 SCORECARD, AUTOMATED 2-WEEK SEASON DECK &amp; SUPERVISOR AI BRIEFING:
    - Every run is explained across Visible Cleanliness (50%), Technique (25%), and Benchmark Time (25% with +15s dwell credits), with a 1-tap Dispute button and zero admin score editing.
-   - Includes a 30-card trilingual Daily Swipe Deck and a Dual-Mode Leaderboard (Shift Challenge + Daily Deck) plus supervisor tools (Panes 11–15).</pre>
+   - Features a 30-card trilingual Daily Swipe Deck with zero-touch automated 14-day Bi-Weekly AI Season Packs (two-tier server + localStorage cache for 0-token replays), a Dual-Mode Leaderboard (Shift Challenge + Bi-Weekly Deck Season), and pledge-gated Supervisor Tools (Panes 11–15) with 1-tap AI Shift Briefings.</pre>
     </div>
   </section>
 
