@@ -519,18 +519,17 @@
     <h3>1 · Welcome, Consent &amp; Trilingual Onboarding (MVP Screens 1–4)</h3>
     <div class="tour-grid">
       <div class="shot"><img src="shots/01-welcome.png" alt="Welcome screen" /><div class="desc">
-        <h4>Welcome &amp; Home Hub</h4>
+        <h4>Welcome Hub, Auto-Play Music &amp; Trilingual Voice Intro</h4>
         <ul>
-          <li><strong>Screen contents &amp; controls:</strong>
+          <li><strong>Immediate music &amp; voice intro on load:</strong>
             <ul>
-              <li>Top-level language bar (<code>🌐 ENGLISH</code> / <code>ESPAÑOL</code> / <code>POLSKI</code>) persisted in <code>localStorage</code>.</li>
-              <li>Primary CTA (<code>ACCEPT THE CHALLENGE</code>), <code>DAILY DECK</code> shortcut, and <code>🪪 PASSPORT, CREW &amp; SUPERVISOR</code> hub button.</li>
-              <li>Always-visible status strip (<code>🔥 Streak 0 · Week 1 of 13 · Crew matchup</code>) plus a one-tap link to this Judges' Presentation.</li>
+              <li>Starts the <strong>122 BPM Disclosure-style *Latch* groove</strong> and plays a dedicated trilingual voice introduction (<code>assets/audio/&lt;lang&gt;/welcome-intro.mp3</code> — 24 kHz Kokoro-82M <code>af_heart</code> in EN, Piper in ES/PL) as soon as the app loads.</li>
+              <li>Tapping <code>🌐 ENGLISH</code>, <code>🌐 ESPAÑOL</code>, or <code>🌐 POLSKI</code> immediately switches the UI and triggers the spoken welcome intro in that language.</li>
             </ul>
           </li>
           <li><strong>Non-technical cleaner UX:</strong>
             <ul>
-              <li>Every interactive control is 44px–62px tall for gloved thumbs; plain-language subtitle explains the portable record in one sentence.</li>
+              <li>Animated Lottie crown/sparkle emblem, 44px–56px high-contrast CTAs (<code>ACCEPT THE CHALLENGE</code>, <code>DAILY DECK</code>, <code>🪪 PASSPORT, CREW &amp; SUPERVISOR</code>), and 60fps Canvas pixel-explosion feedback on every button tap.</li>
             </ul>
           </li>
         </ul>
@@ -556,12 +555,12 @@
       </div></div>
 
       <div class="shot"><img src="shots/03-welcome-es.png" alt="Welcome in Spanish" /><div class="desc">
-        <h4>Spanish &amp; Polish Parity</h4>
+        <h4>Spanish &amp; Polish Parity + Spoken Language Switch</h4>
         <ul>
-          <li><strong>Screen contents &amp; controls:</strong>
+          <li><strong>Instant spoken intro on language switch:</strong>
             <ul>
-              <li>All 320+ UI strings, 30 training deck cards, rule summaries, ARIA labels, and voice clips switch immediately on tap.</li>
-              <li>Changing language after consenting re-prompts consent in the newly selected language so workers only sign what they read.</li>
+              <li>All 320+ UI strings, 30 training deck cards, station icons, ARIA labels, and 192+ per-language voice clips switch immediately on tap, playing <code>welcome-intro.mp3</code> in the selected language.</li>
+              <li>Fixed the Spanish batch generator regex so all 192 <code>assets/audio/es/*.mp3</code> clips speak genuine Spanish lines from <code>HOST_LINES.es</code>.</li>
             </ul>
           </li>
           <li><strong>Layout resilience:</strong>
@@ -613,17 +612,17 @@
       </div></div>
 
       <div class="shot"><img src="shots/06-timer.png" alt="Timer screen" /><div class="desc">
-        <h4>Live Run Timer, Mid-Run Frame Capture &amp; Station Pills (Screens 6–7)</h4>
+        <h4>Live Run Timer, 1-Tap Auto-Capture Complete &amp; 45s Halfway Callout (Screens 6–7)</h4>
         <ul>
-          <li><strong>Live 3×3 luma sampling &amp; mid-run snapshot capture:</strong>
+          <li><strong>1-tap auto-capture on Complete &amp; countdown end:</strong>
             <ul>
               <li>Bold icon-assisted station pills (<code>🚰 Sink &amp; counter</code>, <code>🍽️ Tabletop &amp; appliance</code>, <code>🗑️ Trash &amp; floor</code>) replace redundant dropdowns and technical rule math.</li>
-              <li>During the <code>1:30.0</code> countdown, <code>sampleLiveRunActivity()</code> samples a <code>36×27</code> luma grid across 9 surface zones every <code>1.4s</code>, captures up to 6 timestamped <code>320×240</code> mid-run progress frames (<code>state.captures.midRun</code>), updates <code>📸 LIVE · X/9 ZONES · N SNAPS</code>, and triggers reactive host hype when 4+ zones light up.</li>
+              <li>Tapping <code>COMPLETE CHALLENGE</code> (or reaching <code>0:00.0</code> on the clock) <strong>automatically captures the 2nd (<code>AFTER</code>) photo and scores the run in one step</strong> without requiring a second confirmation tap.</li>
             </ul>
           </li>
-          <li><strong>De-robotized voice &amp; background Disclosure groove:</strong>
+          <li><strong>Live 3×3 luma sampling &amp; accurate 45s Halfway voice:</strong>
             <ul>
-              <li>Warm FM broadcast chain (<code>preservesPitch = false</code> analog pitch lift, zero comb-filter slapback) over a subtle <code>0.38x</code> Disclosure-style UKG/Deep-House background groove that sidechain-ducks under host speech.</li>
+              <li><code>sampleLiveRunActivity()</code> samples a <code>36×27</code> luma grid every <code>1.4s</code> and records up to 6 <code>320×240</code> mid-run snapshots (<code>📸 LIVE · X/9 ZONES · N SNAPS</code>); the <em>Halfway</em> host callout fires strictly at <code>45s</code> remaining.</li>
             </ul>
           </li>
         </ul>
@@ -668,21 +667,34 @@
     <h3>3 · Fair Leaderboard, Spectator Board, Supervisor Tools &amp; Daily Deck (MVP Screens 9–15)</h3>
     <div class="tour-grid">
       <div class="shot"><img src="shots/08-leaderboard.png" alt="Leaderboard, fresh install" /><div class="desc">
-        <h4>Crew Matchup, Personal Passport &amp; Fair Leaderboard</h4>
+        <h4>Competitive 3-Pillar Podium, Rival Chase Meter &amp; Beat-Synced Leaderboard</h4>
         <ul>
-          <li><strong>Screen contents &amp; controls:</strong>
+          <li><strong>Sequencer-driven micro-dance &amp; 3-pillar podium:</strong>
             <ul>
-              <li>Weekly crew average matchup + 13-week consistency status at the top.</li>
-              <li>Personal record bar (<code>Personal Best</code>, <code>Runs</code>, <code>Streak</code>, <code>Week 1/13</code>) with 1-tap <code>🪪 SHARE PASSPORT</code> and per-employer opt-in share checkbox.</li>
+              <li>2-column full-canvas desktop layout + mobile <strong>3-Pillar Championship Podium Stage</strong> (<code>🥈 #2</code>, tall center <code>👑 #1</code> Gold pedestal, <code>🥉 #3</code>) and <code>🎵 MUSIC</code> / <code>1/3 ⏭</code> header controls.</li>
+              <li>Rows, medals, and podium pillars micro-dance to the active track's tempo (<code>--beat-ms</code>: <code>492ms</code> / <code>484ms</code> / <code>476ms</code>) gated on <code>body.music-playing</code>, with <code>150ms</code> kick-drum brightness pulses and immediate stop when muted.</li>
             </ul>
           </li>
-          <li><strong>Celebrate-never-shame fairness:</strong>
+          <li><strong>Competitive Rival Chase bar &amp; verified <code>YOU</code> placement:</strong>
             <ul>
-              <li>Capped at Top 10 + the cleaner's own row (never shows last place); practice, demo, and labeled sample rows are excluded from public ranking.</li>
+              <li><code>🔥 NEXT TARGET TO BEAT</code> progress bar calculates the exact <code>%</code> gap to overtake the next rank above you; highlights your own run via <code>viewerOwned</code> / <code>cleanquest.viewerRunId</code> with a glowing <code>YOU</code> badge (or shows <code>UNRANKED</code> separately until an eligible shift run is completed).</li>
             </ul>
           </li>
         </ul>
-        <span class="verdict v-ready">READY · MVP 10</span>
+        <span class="verdict v-ready">READY · MVP 10 + BEAT-SYNCED</span>
+      </div></div>
+
+      <div class="shot"><img src="shots/20-desktop-leaderboard.png" alt="Desktop 2-Column Leaderboard" /><div class="desc">
+        <h4>Desktop 2-Column Esports Leaderboard (1440×900 Full Canvas)</h4>
+        <ul>
+          <li><strong>Left &amp; right column architecture:</strong>
+            <ul>
+              <li><strong>Left column:</strong> Animated Crown Header + <code>🎵 MUSIC</code> / <code>1/3 ⏭</code> controls, Crew Matchup Card, Personal Best / <code>🪪 SHARE PASSPORT</code> Card, and primary <code>PLAY AGAIN</code> / <code>RETURN HOME</code> / <code>VIEW RECORDS</code> CTAs.</li>
+              <li><strong>Right column:</strong> <code>🔥 NEXT TARGET TO BEAT</code> incentive progress bar, 3-Pillar Championship Podium Stage, and full-height ranked rows with Gold/Silver/Bronze medals, glowing <code>YOU</code> row, and beat-synced micro-dance.</li>
+            </ul>
+          </li>
+        </ul>
+        <span class="verdict v-ready">READY · DESKTOP ESPORTS</span>
       </div></div>
 
       <div class="shot"><img src="shots/13-spectator.png" alt="Spectator board" /><div class="desc">
@@ -775,20 +787,20 @@
       </div></div>
 
       <div class="shot"><img src="shots/12-deck.png" alt="Daily deck" /><div class="desc">
-        <h4>AAA Gamified Daily Swipe Deck &amp; Sponsor Logo Banner (Screen 9)</h4>
+        <h4>AAA Gamified Daily Swipe Deck &amp; Pure Sponsor Banner Image (Screen 9)</h4>
         <ul>
-          <li><strong>AAA Widescreen Dioramas, Verdict Stamps &amp; 60fps Pixel/Confetti FX:</strong>
+          <li><strong>AAA Widescreen Dioramas, Verdict Stamps &amp; Right/Wrong Game-Show SFX:</strong>
             <ul>
-              <li>Widescreen 3-panel animated SVG dioramas (pH gauge + spray trigger + bubbling flask + chrome fixture shield) that react dynamically on selection with a slamming <code>✨ NAILED IT! +100 XP</code> or <code>⚠️ TRICK CALL!</code> stamp, 60fps Canvas pixel explosions on button taps, and dual 3D ribbon/bubble confetti cannons!</li>
+              <li>Widescreen 3-panel animated SVG dioramas (pH gauge + spray trigger + bubbling flask + chrome fixture shield) that react dynamically on selection with a slamming <code>✨ NAILED IT! +100 XP</code> or <code>⚠️ TRICK CALL!</code> stamp, game-show Major-9th bell chime vs. descending two-tone error SFX + host voice reaction, and 60fps Canvas confetti/pixel cannons!</li>
             </ul>
           </li>
-          <li><strong>Illustrated 3:1 Sponsor Logo Banner &amp; Learning Rules:</strong>
+          <li><strong>Pure <code>600 × 84</code> SVG Sponsor Banner Image:</strong>
             <ul>
-              <li>Answers are strictly brand-neutral product types; post-answer <code>SPONSORED</code> slot renders an illustrated <strong>3:1 aspect-ratio Sponsor Logo Crest (<code>SPONSOR LOGO · YOUR BRAND</code>)</strong> alongside the generic category suggestion.</li>
+              <li>Answers are strictly brand-neutral product types; post-answer <code>SPONSORED</code> slot renders a clean, full-width <strong><code>600 × 84</code> (7:1 aspect-ratio) SVG Sponsor Banner Image</strong> (<code>SPONSOR BANNER IMAGE · YOUR BRAND LOGO ARTWORK HERE</code>) with zero paragraph clutter.</li>
             </ul>
           </li>
         </ul>
-        <span class="verdict v-ready">READY · AAA DECK + SPONSOR LOGO</span>
+        <span class="verdict v-ready">READY · AAA DECK + BANNER AD</span>
       </div></div>
       <div class="shot full-span"><img src="shots/15-desktop-welcome.png" alt="Desktop welcome" class="wide" /><div class="desc">
         <h4>Desktop &amp; Wide-Screen Responsiveness (1440×900)</h4>
@@ -823,9 +835,9 @@
     <ol>
       <li><strong>0:00–0:20 · The world (Impact):</strong> open on the phone in Spanish, in a real breakroom. Say the pitch line verbatim; tap to English; point at the always-visible streak/week/matchup strip and the consent read-aloud button.</li>
       <li><strong>0:20–0:45 · The 10-second scoring story (Demo):</strong> Instructions → tap <em>Judge Demo</em>; hear the 0% → 75% count-up roll, the <code>✨ A-RANK</code> musical stinger, and the chained spoken summary; point at the three full-width bars (50/25/25) and the <code>🔊 REPLAY SUMMARY</code> waveform pill.</li>
-      <li><strong>0:45–1:45 · Real clean, real models (Tooling):</strong> select the registered site, scan the printed <code>CQ-QR</code> sticker, frame the sink with the guide, tap Start (with Hype set to Full so judges hear the clip chain), wipe the counter, match the angle with the ghost overlay, finish. Show the <strong>Muse Spark</strong> per-surface scorecard + <strong>SAM 3.1</strong> overlays + spoken voice note transcribed + provenance line.</li>
-      <li><strong>1:45–2:25 · Second provider + paperwork that writes itself (Tooling + Impact):</strong> flip Settings to <strong>Baseten Spark Open</strong>, export the provider log JSON; open Records, export the geofenced inspection CSV, switch active squads in Pane 13, assign a 5-day pack in Pane 15.</li>
-      <li><strong>2:25–3:00 · Daily habit + stage close (Impact + Demo):</strong> swipe two cards in the Daily Deck (show the brand-neutral answer, then the labeled <code>SPONSORED</code> suggestion); cut to the <code>?spectator=1</code> board on a monitor; close on the portable Passport copy toast.</li>
+      <li><strong>0:45–1:45 · Real clean, real models (Tooling):</strong> select the registered site, scan the printed <code>CQ-QR</code> sticker, frame the sink with the guide, tap Start (with Hype set to Full so judges hear the clip chain and 45s Halfway callout), wipe the counter, and tap <strong>Complete Challenge</strong> (which automatically snaps the 2nd <code>AFTER</code> photo and submits in 1 step). Show the <strong>Muse Spark</strong> per-surface scorecard + <strong>SAM 3.1</strong> overlays + spoken voice note transcribed + provenance line.</li>
+      <li><strong>1:45–2:25 · Second provider + paperwork that writes itself (Tooling + Impact):</strong> flip Settings to <strong>1-Click OpenRouter OAuth PKCE</strong> or <strong>Baseten Spark Open</strong>, export the provider log JSON; open Records, export the geofenced inspection CSV, switch active squads in Pane 13, assign a 5-day pack in Pane 15.</li>
+      <li><strong>2:25–3:00 · Daily habit + stage close (Impact + Demo):</strong> swipe two cards in the Daily Deck (show the brand-neutral answer, the game-show Ding-Chime/Uh-Oh reaction, and the pure <code>600 × 84</code> <code>SPONSORED</code> banner image); cut to the 2-column Leaderboard and <code>?spectator=1</code> board; close on the portable Passport copy toast.</li>
     </ol>
   </section>
 

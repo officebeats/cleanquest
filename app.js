@@ -2526,7 +2526,11 @@ function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null)
 
     const played = audio.play();
     if (played && typeof played.catch === "function") {
-      played.catch(() => {
+      played.catch((err) => {
+        if (err && err.name === "NotAllowedError") {
+          state.voice.pendingAutoplayAudio = audio;
+          return;
+        }
         speakText(fallbackText, prosody);
         if (typeof onDone === "function") setTimeout(onDone, 900);
       });
@@ -2646,6 +2650,16 @@ function speakHost(beat, overrideText) {
     return;
   }
   deliverHostLine();
+}
+
+function speakWelcomeIntro(language = state.language) {
+  if (!state.voice.available || state.voice.muted || SELFTEST_MODE) return null;
+  stopSpeech();
+  const lang = HOST_LINES[language] ? language : "en";
+  const url = `assets/audio/${lang}/welcome-intro.mp3`;
+  const fallback = t("welcomeBody");
+  state.voice.lastPath = "clip";
+  return playHostClip(url, fallback, { rate: 1.0, pitch: 1.0 }, "welcome-intro");
 }
 
 function speakSample(language) {
@@ -3270,7 +3284,7 @@ function setHypeLevel(level, persist = true) {
   if (state.voice.muted) {
     stopSpeech();
     stopDiscoHouseGroove();
-  } else if (state.voice.discoEnabled !== false && ["deck", "instructions", "camera", "timer", "results", "leaderboard"].includes(state.screen)) {
+  } else if (state.voice.discoEnabled !== false && ["welcome", "deck", "instructions", "camera", "timer", "results", "leaderboard"].includes(state.screen)) {
     startDiscoHouseGroove();
   }
   updateMuteButton();
@@ -3836,7 +3850,7 @@ function navigateTo(screen) {
     }
     renderDeck();
     startDiscoHouseGroove();
-  } else if (screen === "instructions" || screen === "camera" || screen === "timer" || screen === "results" || screen === "leaderboard") {
+  } else if (screen === "welcome" || screen === "instructions" || screen === "camera" || screen === "timer" || screen === "results" || screen === "leaderboard") {
     startDiscoHouseGroove();
   }
   const activeScreenEl = document.getElementById(`${screen}Screen`);
@@ -5084,6 +5098,9 @@ function finishTimerAtLimit() {
 
   playTone(720, 0.12);
   setTimeout(() => playTone(920, 0.16), 130);
+  if (!SELFTEST_MODE && state.screen === "timer") {
+    void completeChallenge();
+  }
 }
 
 function updateTimerUI() {
@@ -5334,27 +5351,6 @@ async function completeChallenge() {
 
 async function handleCompleteButtonTap() {
   if (state.analysis.running) return;
-
-  // Two-step After capture per PDF p. 12:
-  // 1st tap stops clock and activates the Before ghost overlay so the angle matches.
-  // 2nd tap captures the After shot and scores the run.
-  if (state.captures.before && !state.checkin.aligningAfter) {
-    if (state.timer.running) {
-      pauseTimer();
-    }
-    state.checkin.aligningAfter = true;
-    state.checkin.ghostEnabled = true;
-    els.idleNudgeBanner?.classList.add("hidden");
-    updateGhostOverlay();
-    els.afterAlignBanner?.classList.remove("hidden");
-    if (els.completeButton) {
-      els.completeButton.classList.add("align-ready");
-      els.completeButton.textContent = t("captureAfterAndScore");
-    }
-    playTone(760, 0.08);
-    return { step: "aligning_after", ghostActive: true };
-  }
-
   state.checkin.aligningAfter = false;
   els.afterAlignBanner?.classList.add("hidden");
   if (els.completeButton) {
@@ -12432,9 +12428,12 @@ function bindEvents() {
       button.addEventListener(
         "click",
         () => {
-          setLanguage(
-            button.dataset.language
-          );
+          unlockAudio();
+          setLanguage(button.dataset.language);
+          startDiscoHouseGroove();
+          if (!SELFTEST_MODE && !state.voice.muted) {
+            speakWelcomeIntro(button.dataset.language);
+          }
         }
       );
     });
@@ -13303,11 +13302,12 @@ function initializeApp() {
   updateCameraUI();
 
   if (!SELFTEST_MODE && !state.voice.muted) {
+    startDiscoHouseGroove();
     setTimeout(() => {
       if (!state.voice.muted && state.screen === "welcome") {
-        speakHost("start");
+        speakWelcomeIntro(state.language);
       }
-    }, 180);
+    }, 150);
     let initialGestureHandled = false;
     const onFirstGesture = (event) => {
       if (initialGestureHandled) return;
@@ -13316,13 +13316,14 @@ function initializeApp() {
       document.removeEventListener("keydown", onFirstGesture, true);
       unlockAudio();
       if (state.voice.muted || SELFTEST_MODE) return;
+      startDiscoHouseGroove();
       // If the user's first tap is on an interactive button/control, let that button's own handler trigger its voice clip without competing
       if (event?.target?.closest?.("button, a, input, select, label")) return;
       if (!state.voice.currentAudio && activeVoiceAudios.size === 0) {
         if (state.editingFtue && state.cleanerFtueStep === 3 && !hasConsent()) {
           speakConsentAloud();
         } else if (state.screen === "welcome") {
-          speakHost("start");
+          speakWelcomeIntro(state.language);
         }
       }
     };
