@@ -4837,7 +4837,7 @@ select:focus-visible {
     padding-bottom: 4px !important;
   }
   #leaderboardScreen .leaderboard-list {
-    max-height: 190px !important;
+    max-height: 235px !important;
     margin-bottom: 6px !important;
   }
   #leaderboardScreen .sticky-cta,
