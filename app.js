@@ -9092,7 +9092,7 @@ function renderLeaderboard() {
     podiumEl.innerHTML = `${cardHtml(p2, 2, "🥈 #2")}${cardHtml(p1, 1, "👑 #1")}${cardHtml(p3, 3, "🥉 #3")}`;
   }
 
-  if (!visible.length) {
+  if (!rankedPool.length) {
     const empty = document.createElement("p");
     empty.className = "fine-print";
     empty.textContent = t("leaderboardEmpty");
