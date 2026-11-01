@@ -6735,12 +6735,34 @@ body.music-beat-thump #leaderboardScreen #playAgainButton {
 @media (max-width: 899px) {
   #resultsScreen .evidence-grid .evidence-image-wrap,
   #resultsScreen .evidence-grid .evidence-image-wrap > img {
-    height: 62px !important;
-    min-height: 62px !important;
-    max-height: 62px !important;
+    height: 52px !important;
+    min-height: 52px !important;
+    max-height: 52px !important;
+  }
+  #resultsScreen .finding-card,
+  #resultsScreen .results-actions-grid {
+    display: none !important;
+  }
+  #resultsScreen #verifiedScorecard {
+    padding: 5px 10px !important;
+    margin: 0 !important;
+  }
+  #resultsScreen #verifiedScorecard .verified-surfaces {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px 12px !important;
+    margin: 2px 0 !important;
+  }
+  #resultsScreen #verifiedScorecard .verified-surface-row {
+    padding: 2px 0 !important;
+    border: none !important;
+  }
+  #resultsScreen #verifiedScorecard .verified-hype {
+    margin: 2px 0 0 !important;
+    font-size: 12px !important;
   }
   #resultsScreen #scoreBreakdownCard {
-    padding: 6px 10px !important;
+    padding: 5px 10px !important;
   }
   #resultsScreen .score-bar-detail {
     display: none !important;
@@ -6749,12 +6771,12 @@ body.music-beat-thump #leaderboardScreen #playAgainButton {
     padding: 6px 10px !important;
   }
   .pose-emote-card {
-    min-height: 46px;
+    min-height: 44px;
     padding: 3px 2px;
   }
   .pose-silhouette-svg {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
 }
 
