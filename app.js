@@ -2719,40 +2719,62 @@ function speakScoreNumber(value, unit = "percent", onComplete = null) {
   if (canUseClips && parts.length) {
     const urls = parts.map((p) => clipUrlFor(lang, p.beat, p.id));
     const scheduledGeneration = state.voice.speakGeneration || 0;
-    let idx = 0;
-    const next = () => {
-      if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGeneration) return;
-      if (idx >= urls.length) {
-        if (typeof onComplete === "function") onComplete();
-        return;
-      }
-      const url = urls[idx++];
+    // Decode and splice number + unit clips in WebAudio with silence trimming so "75%" plays as one smooth phrase
+    (async () => {
       try {
-        killAllActiveVoiceAudios();
-        const audio = new Audio(url);
-        activeVoiceAudios.add(audio);
-        audio.playbackRate = 1.0;
-        attachBroadcastStudioChain(audio);
-        state.voice.currentAudio = audio;
-        audio.onended = () => {
-          activeVoiceAudios.delete(audio);
-          try { (audio._cqNodes || []).forEach((n) => n.disconnect()); } catch {}
-          if (state.voice.currentAudio === audio) state.voice.currentAudio = null;
-          next();
-        };
-        audio.onerror = () => {
-          speakText(`${Math.round(Number(value) || 0)}%`);
-          if (typeof onComplete === "function") setTimeout(onComplete, 600);
-        };
-        const p = audio.play();
-        if (p && typeof p.catch === "function") p.catch(() => {
-          if (typeof onComplete === "function") onComplete();
+        const ctx = ensureDiscoAudioGraph();
+        if (!ctx) throw new Error("no-ctx");
+        if (ctx.state === "suspended") await ctx.resume().catch(() => {});
+        const decodedList = await Promise.all(
+          urls.map(async (u) => {
+            const r = await fetch(u);
+            const ab = await r.arrayBuffer();
+            return ctx.decodeAudioData(ab);
+          })
+        );
+        if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGeneration) return;
+        const sr = ctx.sampleRate;
+        const trimmedArrays = decodedList.map((buf) => {
+          const data = buf.getChannelData(0);
+          let start = 0;
+          let end = data.length - 1;
+          while (start < end && Math.abs(data[start]) < 0.018) start += 1;
+          while (end > start && Math.abs(data[end]) < 0.018) end -= 1;
+          const pad = Math.floor(buf.sampleRate * 0.015);
+          start = Math.max(0, start - pad);
+          end = Math.min(data.length - 1, end + pad);
+          return { samples: data.subarray(start, end + 1), sampleRate: buf.sampleRate };
         });
+        const overlapSamples = Math.floor(sr * 0.022);
+        const totalLen = trimmedArrays.reduce((sum, item, idx) => sum + item.samples.length - (idx > 0 ? overlapSamples : 0), 0);
+        const outBuf = ctx.createBuffer(1, Math.max(1, totalLen), trimmedArrays[0]?.sampleRate || sr);
+        const outData = outBuf.getChannelData(0);
+        let writePos = 0;
+        trimmedArrays.forEach((item, idx) => {
+          const arr = item.samples;
+          for (let i = 0; i < arr.length; i += 1) {
+            const pos = writePos + i;
+            if (pos >= outData.length) break;
+            if (idx > 0 && i < overlapSamples) {
+              const w = i / overlapSamples;
+              outData[pos] = outData[pos] * (1 - w) + arr[i] * w;
+            } else {
+              outData[pos] = arr[i];
+            }
+          }
+          writePos += Math.max(1, arr.length - overlapSamples);
+        });
+        const src = ctx.createBufferSource();
+        src.buffer = outBuf;
+        src.connect(ctx.destination);
+        src.onended = () => {
+          if (typeof onComplete === "function") onComplete();
+        };
+        src.start();
       } catch {
         if (typeof onComplete === "function") onComplete();
       }
-    };
-    next();
+    })();
     return urls;
   }
   speakText(`${Math.round(Number(value) || 0)}%`);
@@ -3158,14 +3180,8 @@ function announceGameVerdict() {
           setTimeout(() => pill?.classList.remove("is-playing"), 2200);
         }
       };
-
-      if (spokenScore !== null) {
-        speakScoreNumber(spokenScore, "percent", () => {
-          setTimeout(playVerdictAndFinish, 140);
-        });
-      } else {
-        playVerdictAndFinish();
-      }
+      // Play the natural, full-sentence human verdict reaction clip directly
+      playVerdictAndFinish();
     }, 340);
   }, 540);
 }
@@ -8638,6 +8654,61 @@ function swipeDeckCard(direction) {
   return pick;
 }
 
+function playDeckAnswerSfx(hit) {
+  if (state.voice.muted || SELFTEST_MODE) return;
+  try {
+    const ctx = ensureDiscoAudioGraph();
+    if (!ctx) return;
+    if (ctx.state === "suspended") ctx.resume().catch(() => {});
+    const dest = discoMaster || ctx.destination;
+    const now = ctx.currentTime;
+    if (hit) {
+      // Game-show "Ding-Ding-Chime!" Major-9th Bell Arpeggio
+      [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const bell = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(freq, now + i * 0.068);
+        bell.type = "sine";
+        bell.frequency.setValueAtTime(freq * 2.998, now + i * 0.068);
+        g.gain.setValueAtTime(0.0001, now + i * 0.068);
+        g.gain.linearRampToValueAtTime(0.085, now + i * 0.068 + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + i * 0.068 + 0.24);
+        osc.connect(g);
+        bell.connect(g);
+        g.connect(dest);
+        osc.start(now + i * 0.068);
+        bell.start(now + i * 0.068);
+        osc.stop(now + i * 0.068 + 0.25);
+        bell.stop(now + i * 0.068 + 0.25);
+      });
+    } else {
+      // Relatable Game-Show "Uh-Oh / Womp-Womp" Descending Two-Tone Error Sound
+      [
+        { t: 0.0, dur: 0.14, f1: 349.23, f2: 330.0 },
+        { t: 0.15, dur: 0.28, f1: 246.94, f2: 185.0 }
+      ].forEach((n) => {
+        const osc = ctx.createOscillator();
+        const flt = ctx.createBiquadFilter();
+        const g = ctx.createGain();
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(n.f1, now + n.t);
+        osc.frequency.exponentialRampToValueAtTime(n.f2, now + n.t + n.dur);
+        flt.type = "lowpass";
+        flt.frequency.setValueAtTime(980, now + n.t);
+        flt.Q.setValueAtTime(2.8, now + n.t);
+        g.gain.setValueAtTime(0.0001, now + n.t);
+        g.gain.linearRampToValueAtTime(0.095, now + n.t + 0.012);
+        g.gain.exponentialRampToValueAtTime(0.0001, now + n.t + n.dur);
+        osc.connect(flt).connect(g).connect(dest);
+        osc.start(now + n.t);
+        osc.stop(now + n.t + n.dur + 0.01);
+      });
+    }
+  } catch {}
+}
+
 function answerDeck(pick) {
   const deck = state.deck;
   if (!deck || deck.locked || deck.index >= deck.order.length) return;
@@ -8669,10 +8740,11 @@ function answerDeck(pick) {
     vStamp.className = `deck-verdict-stamp ${hit ? "is-hit" : "is-miss"}`;
   }
 
-  playTone(hit ? 880 : 320, 0.07);
-  if (hit) setTimeout(() => playTone(1174, 0.09), 70);
+  playDeckAnswerSfx(hit);
+  if (!SELFTEST_MODE && !state.voice.muted) {
+    speakHost(hit ? "pass" : "retry");
+  }
   triggerDeckParticleBurst(hit);
-
   if (els.deckFeedback) {
     const productType = localizedDeckField(card, "productType");
     const productNote = productType ? ` · ${t("productTypePrefix")} ${productType}.` : "";
@@ -10524,17 +10596,19 @@ function bumpSponsorImpression(kind = "home") {
 }
 
 function buildSponsorLogoSvg() {
-  return `<svg class="sponsor-logo-svg" viewBox="0 0 180 56" role="img" aria-label="Sponsor Logo Placeholder (300x100 aspect ratio)">
+  return `<svg class="sponsor-logo-svg" viewBox="0 0 600 84" role="img" aria-label="Sponsor Banner Image Placeholder (600x84 aspect ratio)">
     <defs>
       <linearGradient id="spGrad" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#113858"/><stop offset="100%" stop-color="#071a2c"/>
+        <stop offset="0%" stop-color="#0f3454"/><stop offset="55%" stop-color="#092138"/><stop offset="100%" stop-color="#143d52"/>
       </linearGradient>
     </defs>
-    <rect x="1.5" y="1.5" width="177" height="53" rx="10" fill="url(#spGrad)" stroke="#ffd35c" stroke-width="1.5" stroke-dasharray="4 2"/>
-    <circle cx="28" cy="28" r="16" fill="rgba(57,245,188,0.18)" stroke="#39f5bc" stroke-width="1.5"/>
-    <path d="M28 16 l3 7 l7 3 l-7 3 l-3 7 l-3-7 l-7-3 l7-3 z" fill="#ffd35c"/>
-    <text x="52" y="25" fill="#ffffff" font-size="11.5" font-weight="900" letter-spacing="0.06em">SPONSOR LOGO</text>
-    <text x="52" y="40" fill="#ffd35c" font-size="9.5" font-weight="800" letter-spacing="0.05em">YOUR BRAND · 3:1 AD</text>
+    <rect x="2" y="2" width="596" height="80" rx="14" fill="url(#spGrad)" stroke="#ffd35c" stroke-width="1.8" stroke-dasharray="6 3"/>
+    <circle cx="52" cy="42" r="26" fill="rgba(57,245,188,0.18)" stroke="#39f5bc" stroke-width="2"/>
+    <path d="M52 22 l5 13 l13 5 l-13 5 l-5 13 l-5-13 l-13-5 l13-5 z" fill="#ffd35c"/>
+    <text x="96" y="39" fill="#ffffff" font-size="18" font-weight="900" letter-spacing="0.06em">SPONSOR BANNER IMAGE</text>
+    <text x="96" y="61" fill="#45eaff" font-size="12.5" font-weight="800" letter-spacing="0.05em">YOUR BRAND LOGO ARTWORK HERE · 600 × 84 AD SLOT</text>
+    <rect x="492" y="14" width="92" height="24" rx="12" fill="rgba(255,211,92,0.18)" stroke="#ffd35c" stroke-width="1.2"/>
+    <text x="538" y="30" text-anchor="middle" fill="#ffd35c" font-size="10.5" font-weight="900" letter-spacing="0.08em">SPONSORED</text>
   </svg>`;
 }
 
