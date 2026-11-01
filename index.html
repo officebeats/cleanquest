@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261101-13" />
+  <link rel="stylesheet" href="styles.css?v=20261101-15" />
 </head>
 
 <body>
@@ -656,16 +656,16 @@
 
           <div id="loadingSponsorCard" class="loading-sponsor-card hologram-card">
             <div class="loading-sponsor-top">
-              <span class="loading-sponsor-badge" id="loadingSponsorBadge">SPONSORED · MOMENT-OF-WORK TRAINING</span>
-              <span class="loading-sponsor-slot-tag">AD SLOT</span>
+              <span class="loading-sponsor-badge" id="loadingSponsorBadge">NEUTRAL AI BENCHMARK · PRO TECHNIQUE TIP</span>
+              <span class="loading-sponsor-slot-tag" id="loadingNeutralTag">50 / 25 / 25</span>
             </div>
             <div class="loading-sponsor-body">
               <svg class="loading-sponsor-crest" viewBox="0 0 48 48" aria-hidden="true">
                 <polygon points="24,3 43,11 39,33 24,45 9,33 5,11" fill="rgba(57,245,188,0.16)" stroke="#39f5bc" stroke-width="2" />
-                <path d="M24 11 l3 7 l7 3 l-7 3 l-3 7 l-3-7 l-7-3 l7-3 z" fill="#ffd35c" />
+                <path d="M24 11 l3 7 l7 3 l-7 3 l-3 7 l-3-7 l-7-3 l7-3 z" fill="#45eaff" />
               </svg>
               <div class="loading-sponsor-copy">
-                <strong id="loadingSponsorTitle">YOUR LOGO HERE · PRO CLEANING SERIES</strong>
+                <strong id="loadingSponsorTitle">SPONSOR-FREE SCORE · SYSTEM VERIFIED</strong>
                 <p id="loadingSponsorTip">Use an 8-fold color-coded microfiber cloth + neutral cleaner for streak-free surfaces.</p>
               </div>
             </div>
@@ -911,7 +911,7 @@
               </small>
             </div>
 
-            <div id="disputePanel" class="dispute-panel hologram-card hidden">
+            <div id="disputePanel" class="dispute-panel hologram-card">
               <div class="dispute-row">
                 <span class="section-label" data-i18n="disputeHeading">FAIR REVIEW</span>
                 <button id="disputeButton" class="secondary-button compact-chip" type="button" data-i18n="disputeAction">
@@ -979,8 +979,11 @@
             <span data-i18n="optInShareLabel">Opt-in: share verified record with current site (portable record owned by you)</span>
           </label>
           <small id="passportShareStatus" class="consent-status-badge hidden"></small>
+          <div id="leaderboardSponsorBanner" class="leaderboard-sponsor-banner">
+            <span class="lb-sponsor-pill" id="lbSponsorTag">SPONSORED CHALLENGE</span>
+            <span class="lb-sponsor-text" id="lbSponsorCopy">YOUR LOGO HERE · Weekly Crew &amp; MVP Prize Pool</span>
+          </div>
         </div>
-
         <div class="leaderboard-right-col">
           <div id="leaderboardPodiumStage" class="leaderboard-podium-stage" aria-label="Top 3 Podium"></div>
           <div class="leaderboard-header">
@@ -1544,7 +1547,7 @@
   <canvas id="arcadeFxCanvas" class="arcade-fx-canvas" aria-hidden="true"></canvas>
   <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
   <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
-  <script src="deck.js?v=20261101-13"></script>
-  <script src="app.js?v=20261101-13"></script>
+  <script src="deck.js?v=20261101-15"></script>
+  <script src="app.js?v=20261101-15"></script>
 </body>
 </html>

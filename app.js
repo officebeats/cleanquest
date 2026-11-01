@@ -5691,17 +5691,17 @@ function syncLoadingSponsorCard() {
   const step3 = document.getElementById("loaderStep3");
   if (badgeEl) {
     badgeEl.textContent = lang === "es"
-      ? "PATROCINADO · ENTRENAMIENTO EN EL TRABAJO"
+      ? "REFERENCIA IA NEUTRAL · CONSEJO DE TÉCNICA"
       : lang === "pl"
-      ? "SPONSOROWANE · SZKOLENIE PRZY PRACY"
-      : "SPONSORED · MOMENT-OF-WORK TRAINING";
+      ? "NEUTRALNY STANDARD AI · WSKAZÓWKA TECHNICZNA"
+      : "NEUTRAL AI BENCHMARK · PRO TECHNIQUE TIP";
   }
   if (titleEl) {
     titleEl.textContent = lang === "es"
-      ? "TU LOGO AQUÍ · SERIE PROFESIONAL DE LIMPIEZA"
+      ? "PUNTUACIÓN SIN PATROCINIO · VERIFICADA POR EL SISTEMA"
       : lang === "pl"
-      ? "TWOJE LOGO TUTAJ · SERIA PROFESJONALNA"
-      : "YOUR LOGO HERE · PRO CLEANING SERIES";
+      ? "WYNIK BEZ SPONSORINGU · ZWERYFIKOWANY SYSTEMOWO"
+      : "SPONSOR-FREE SCORE · SYSTEM VERIFIED";
   }
   const tips = {
     breakroom: {
@@ -5725,6 +5725,19 @@ function syncLoadingSponsorCard() {
   if (step1) step1.textContent = lang === "es" ? "1 · Estación" : lang === "pl" ? "1 · Stacja" : "1 · Station Check";
   if (step2) step2.textContent = lang === "es" ? "2 · Escaneo 9 Zonas" : lang === "pl" ? "2 · Skan 9 Stref" : "2 · 9-Zone Scan";
   if (step3) step3.textContent = "3 · Muse Spark AI";
+
+  const lbTag = document.getElementById("lbSponsorTag");
+  const lbCopy = document.getElementById("lbSponsorCopy");
+  if (lbTag) {
+    lbTag.textContent = lang === "es" ? "RETO PATROCINADO" : lang === "pl" ? "WYZWANIE SPONSOROWANE" : "SPONSORED CHALLENGE";
+  }
+  if (lbCopy) {
+    lbCopy.textContent = lang === "es"
+      ? "TU LOGO AQUÍ · Premio Semanal de Equipo y MVP"
+      : lang === "pl"
+      ? "TWOJE LOGO TUTAJ · Tygodniowa Pula Nagród Zespołu i MVP"
+      : "YOUR LOGO HERE · Weekly Crew & MVP Prize Pool";
+  }
 }
 
 function setAnalysisLoading(loading) {
@@ -7674,12 +7687,14 @@ async function verifyLiveTelemetry() {
       const totalTok = Number(usage.total_tokens) || 0;
       const rawText = item?.data?.choices?.[0]?.message?.content;
       const parsed = sanitizeScorecard(extractScorecardJSON(rawText));
-      if (item?.ok && (parsed || totalTok > 0)) {
-        const scoreVal = parsed?.overall ?? 95;
+      const hasValidScore = Number.isFinite(Number(parsed?.overall));
+      if (item?.ok && (hasValidScore || totalTok > 0)) {
+        const scoreVal = hasValidScore ? Number(parsed.overall) : null;
+        const logStatus = hasValidScore ? "verified" : "telemetry";
         appendProviderLog({
           provider: item.provider,
           model: item.model,
-          status: "verified",
+          status: logStatus,
           overall: scoreVal,
           tokens: totalTok,
           promptTokens: Number(usage.prompt_tokens) || 0,
@@ -7687,7 +7702,8 @@ async function verifyLiveTelemetry() {
           task: "vision-scorecard",
           mock: false
         });
-        results.push(`✓ ${item.provider} (${item.model}): verified (${scoreVal}% · ${totalTok.toLocaleString()} tok)`);
+        const scoreLabel = scoreVal !== null ? `${scoreVal}% · ` : "";
+        results.push(`✓ ${item.provider} (${item.model}): ${logStatus} (${scoreLabel}${totalTok.toLocaleString()} tok)`);
       } else {
         results.push(`⚠ ${item?.provider || "partner"}: http-${item?.status || "error"}`);
       }
