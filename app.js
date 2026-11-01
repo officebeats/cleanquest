@@ -7169,38 +7169,94 @@ function getBiWeeklySeasonMeta() {
   return { seasonNum, daysLeft };
 }
 
+function stripSeasonBracketPrefix(str) {
+  return String(str || "")
+    .replace(/^🗓️\s*\[[ST]\d+\s*·[^\]]+\]\s*/i, "")
+    .replace(/^🗓️\s*(?:Season|Temporada|Sezon)\s*#\d+\s*[:—-]\s*/i, "")
+    .trim();
+}
+
+function normalizeSeasonCard(c, idx, seasonNum, areaKey, theme) {
+  if (!c || typeof c !== "object") return null;
+  const cat = ["surface", "product", "technique"].includes(c.c || c.category)
+    ? (c.c || c.category)
+    : "technique";
+  const ans = (c.a || c.answer) === "miss" ? "miss" : "right";
+  const rawEn = typeof c.en === "string"
+    ? c.en
+    : (typeof c.text === "string" ? c.text : (c.text?.en || ""));
+  const rawEs = typeof c.es === "string"
+    ? c.es
+    : (typeof c.text_es === "string" ? c.text_es : (c.text?.es || rawEn));
+  const rawPl = typeof c.pl === "string"
+    ? c.pl
+    : (typeof c.text_pl === "string" ? c.text_pl : (c.text?.pl || rawEn));
+  const cleanEn = stripSeasonBracketPrefix(rawEn);
+  const cleanEs = stripSeasonBracketPrefix(rawEs || cleanEn);
+  const cleanPl = stripSeasonBracketPrefix(rawPl || cleanEn);
+  if (!cleanEn) return null;
+  const defaultWhyEn = ans === "right"
+    ? `Season #${seasonNum} (${theme}): Proper technique protects surfaces and prevents cross-contamination.`
+    : `Season #${seasonNum} (${theme}): Avoid shortcuts that damage surfaces or spread soil.`;
+  const defaultWhyEs = ans === "right"
+    ? `Temporada #${seasonNum} (${theme}): La técnica correcta protege las superficies y evita la contaminación cruzada.`
+    : `Temporada #${seasonNum} (${theme}): Evita atajos que dañen las superficies o esparzan suciedad.`;
+  const defaultWhyPl = ans === "right"
+    ? `Sezon #${seasonNum} (${theme}): Właściwa technika chroni powierzchnie i zapobiega zanieczyszczeniom krzyżowym.`
+    : `Sezon #${seasonNum} (${theme}): Unikaj dróg na skróty, które niszczą powierzchnie lub roznoszą brud.`;
+  return {
+    id: c.id || `season-${seasonNum}-${areaKey}-${idx + 1}`,
+    category: cat,
+    answer: ans,
+    isSeasonCard: true,
+    seasonNum,
+    text: `🗓️ Season #${seasonNum}: ${cleanEn}`,
+    text_es: `🗓️ Temporada #${seasonNum}: ${cleanEs}`,
+    text_pl: `🗓️ Sezon #${seasonNum}: ${cleanPl}`,
+    productType: c.productType || "Color-coded microfiber cloth + neutral cleaner",
+    productType_es: c.productType_es || "Paño de microfibra por colores + limpiador neutro",
+    productType_pl: c.productType_pl || "Ściereczka z mikrofibry z kodem kolorów + środek neutralny",
+    why: c.why || defaultWhyEn,
+    why_es: c.why_es || defaultWhyEs,
+    why_pl: c.why_pl || defaultWhyPl
+  };
+}
+
 function loadCachedBiWeeklySeason() {
   try {
     const raw = JSON.parse(localStorage.getItem(BIWEEKLY_SEASON_KEY));
     if (!raw || typeof raw !== "object" || !Array.isArray(raw.cards) || !raw.cards.length) return null;
-    return raw;
+    const sNum = Number(raw.seasonNum) || getBiWeeklySeasonMeta().seasonNum;
+    const aKey = raw.areaKey || "breakroom";
+    const thm = raw.theme || "Station Mastery";
+    const normalizedCards = raw.cards
+      .map((c, i) => normalizeSeasonCard(c, i, sNum, aKey, thm))
+      .filter(Boolean);
+    if (!normalizedCards.length) return null;
+    return { ...raw, cards: normalizedCards };
   } catch {
     return null;
   }
 }
 
 function ensureSeasonCardsInSwipeDeck(pack) {
-  if (!pack || !Array.isArray(pack.cards) || !pack.cards.length || typeof SWIPE_DECK === "undefined") return [];
-  const added = [];
-  for (const c of pack.cards) {
-    if (!c || !c.id || !c.text) continue;
-    const existingIdx = SWIPE_DECK.findIndex((existing) => existing.id === c.id);
-    if (existingIdx >= 0) {
-      SWIPE_DECK[existingIdx] = c;
-      added.push(SWIPE_DECK[existingIdx]);
-    } else {
-      SWIPE_DECK.push(c);
-      added.push(c);
-    }
-  }
-  return added;
+  if (!pack || !Array.isArray(pack.cards) || !pack.cards.length) return [];
+  const sNum = Number(pack.seasonNum) || getBiWeeklySeasonMeta().seasonNum;
+  const aKey = pack.areaKey || "breakroom";
+  const thm = pack.theme || "Station Mastery";
+  const normalized = pack.cards
+    .map((c, i) => normalizeSeasonCard(c, i, sNum, aKey, thm))
+    .filter(Boolean);
+  state.seasonCards = normalized;
+  return normalized;
 }
 
 function applyBiWeeklyCardsToDeck(pack) {
   const cards = ensureSeasonCardsInSwipeDeck(pack);
   if (!cards.length) return false;
+  const fullOrder = buildDailyDeck(cards);
   state.deck = {
-    order: cards.slice(),
+    order: fullOrder,
     index: 0,
     correct: 0,
     locked: false,
@@ -7224,27 +7280,9 @@ function parseSeasonPackFromItem(item, seasonNum, daysLeft, areaKey, areaLabel) 
     ? parsed.theme.trim()
     : `${areaLabel} Mastery`;
   const cards = rawCards
-    .filter((c) => c && typeof c.en === "string" && c.en.trim())
-    .slice(0, 5)
-    .map((c, idx) => {
-      const cat = ["surface", "product", "technique"].includes(c.c || c.category)
-        ? (c.c || c.category)
-        : "technique";
-      const ans = (c.a || c.answer) === "miss" ? "miss" : "right";
-      return {
-        id: `season-${seasonNum}-${areaKey}-${idx + 1}`,
-        category: cat,
-        productType: "neutral cleaner",
-        answer: ans,
-        isSeasonCard: true,
-        seasonNum,
-        text: {
-          en: `🗓️ [S${seasonNum} · ${theme}] ${c.en.trim()}`,
-          es: `🗓️ [T${seasonNum} · ${theme}] ${(c.es || c.en).trim()}`,
-          pl: `🗓️ [S${seasonNum} · ${theme}] ${(c.pl || c.en).trim()}`
-        }
-      };
-    });
+    .slice(0, 3)
+    .map((c, idx) => normalizeSeasonCard(c, idx, seasonNum, areaKey, theme))
+    .filter(Boolean);
   if (!cards.length) return null;
   return {
     seasonNum,
@@ -7335,39 +7373,65 @@ async function generateLiveAiBonusCard(forceNetwork = false, silentSync = false)
   }
 }
 
+function cleanBriefingText(raw) {
+  return String(raw || "")
+    .replace(/^⚡\s*Muse Spark Open\s*\([^)]*\)\s*:\s*/i, "")
+    .replace(/\s*\(cached\s*·\s*0\s*tok\)\s*$/i, "")
+    .replace(/^[\s\S]*?(?:Briefing|Resumen|Raport|Podsumowanie)\s*:\s*/i, "")
+    .replace(/^Thinking\s*:[^\n]*\n+/i, "")
+    .trim();
+}
+
 async function generateLiveAiShiftBriefing(forceNetwork = false) {
   const btn = document.getElementById("adminAiBriefingButton");
   const out = document.getElementById("adminAiBriefingOutput");
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
   const logs = loadInspectionLog().slice(-10);
   const avg = logs.length
     ? Math.round(logs.reduce((s, r) => s + (Number(r.cleanliness) || 85), 0) / logs.length)
     : 91;
-  const cacheFingerprint = `${logs.length}:${logs[logs.length - 1]?.id || "seed"}:${avg}`;
+  const cacheFingerprint = `${lang}:${logs.length}:${logs[logs.length - 1]?.id || "seed"}:${avg}`;
+  const prefixLabel = lang === "es"
+    ? "⚡ Resumen de Turno IA"
+    : lang === "pl"
+    ? "⚡ Podsumowanie Zmiany AI"
+    : "⚡ AI Shift Briefing";
   if (!forceNetwork) {
     try {
       const cachedBriefing = JSON.parse(localStorage.getItem(BRIEFING_CACHE_KEY));
       if (cachedBriefing && cachedBriefing.fingerprint === cacheFingerprint && cachedBriefing.text) {
+        const cleanCached = cleanBriefingText(cachedBriefing.text);
+        const displayCached = `${prefixLabel}: ${cleanCached}`;
         if (out) {
           out.classList.remove("hidden");
-          out.textContent = `${cachedBriefing.text} (cached · 0 tok)`;
+          out.textContent = displayCached;
         }
-        return cachedBriefing.text;
+        return displayCached;
       }
     } catch {}
   }
   if (btn) {
     btn.disabled = true;
-    btn.textContent = "⏳ GENERATING MUSE SPARK OPEN BRIEFING…";
+    btn.textContent = lang === "es"
+      ? "⏳ GENERANDO RESUMEN IA…"
+      : lang === "pl"
+      ? "⏳ GENEROWANIE PODSUMOWANIA AI…"
+      : "⏳ GENERATING AI BRIEFING…";
   }
   if (out) {
     out.classList.remove("hidden");
-    out.textContent = "⏳ Querying Muse Spark Open (Primary + Auto-Failover)…";
+    out.textContent = lang === "es"
+      ? "⏳ Analizando registros del turno con Muse Spark Open…"
+      : lang === "pl"
+      ? "⏳ Analizowanie zapisów zmiany przez Muse Spark Open…"
+      : "⏳ Analyzing shift inspection logs with Muse Spark Open…";
   }
   try {
+    const langName = lang === "es" ? "Spanish" : lang === "pl" ? "Polish" : "English";
     const prompt = [
       "You are the CleanQuest AI Operations Briefing assistant (coaching & recognition only — never discipline).",
       `Recent shift runs: ${logs.length || 3}, average cleanliness: ${avg}%.`,
-      "Think briefly (<30 words). Write a concise 2-sentence shift briefing highlighting quality momentum and which 5-day training pack (Dwell Time, Top-to-Bottom Surface, or Product Match) to feature today."
+      `Write ONLY a concise 2-sentence shift briefing in ${langName} highlighting quality momentum and which 5-day training pack (Dwell Time, Top-to-Bottom Surface, or Product Match) to feature today. Do NOT include 'Thinking:' or 'Briefing:' labels.`
     ].join("\n");
     const proxyResp = await callPartnerBackendProxy({
       provider: "auto",
@@ -7376,13 +7440,11 @@ async function generateLiveAiShiftBriefing(forceNetwork = false) {
     });
     let textOut = "";
     let totalTokSum = 0;
-    let usedProvider = "baseten";
     for (const item of proxyResp?.results || []) {
       const usage = item?.data?.usage || {};
       const totalTok = Number(usage.total_tokens) || 0;
       totalTokSum += totalTok;
-      usedProvider = item?.provider || usedProvider;
-      const raw = (item?.data?.choices?.[0]?.message?.content || "").trim();
+      const raw = cleanBriefingText(item?.data?.choices?.[0]?.message?.content || "");
       if (item?.ok && totalTok > 0) {
         appendProviderLog({
           provider: item.provider,
@@ -7398,14 +7460,16 @@ async function generateLiveAiShiftBriefing(forceNetwork = false) {
       }
       if (!textOut && raw) textOut = raw;
     }
-    const formatted = textOut
-      ? `⚡ Muse Spark Open (${totalTokSum.toLocaleString()} tok · ${usedProvider}): ${textOut}`
-      : "⚡ Muse Spark Open briefing logged to Provider Run Log.";
-    if (textOut) {
-      try {
-        localStorage.setItem(BRIEFING_CACHE_KEY, JSON.stringify({ fingerprint: cacheFingerprint, text: formatted }));
-      } catch {}
-    }
+    const fallbackCopy = lang === "es"
+      ? `Excelente ritmo del equipo con un promedio de ${avg}% en las últimas ${logs.length || 3} rondas. Hoy destacamos el paquete de 5 días de Superficie de Arriba a Abajo para mantener la consistencia.`
+      : lang === "pl"
+      ? `Świetne tempo zespołu ze średnią ${avg}% w ostatnich ${logs.length || 3} rundach. Dziś polecamy 5-dniowy pakiet Powierzchnie od Góry do Dołu, aby utrzymać powtarzalność.`
+      : `Strong team momentum with an ${avg}% average across the last ${logs.length || 3} runs. Today we recommend featuring the 5-day Top-to-Bottom Surface pack to reinforce systematic consistency.`;
+    const cleanBody = textOut || fallbackCopy;
+    const formatted = `${prefixLabel}: ${cleanBody}`;
+    try {
+      localStorage.setItem(BRIEFING_CACHE_KEY, JSON.stringify({ fingerprint: cacheFingerprint, text: cleanBody }));
+    } catch {}
     if (out) {
       out.textContent = formatted;
     }
@@ -7413,7 +7477,11 @@ async function generateLiveAiShiftBriefing(forceNetwork = false) {
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.textContent = "✨ AI SHIFT BRIEFING (MUSE SPARK OPEN)";
+      btn.textContent = lang === "es"
+        ? "✨ RESUMEN DE TURNO IA (MUSE SPARK OPEN)"
+        : lang === "pl"
+        ? "✨ PODSUMOWANIE ZMIANY AI (MUSE SPARK OPEN)"
+        : "✨ AI SHIFT BRIEFING (MUSE SPARK OPEN)";
     }
   }
 }
@@ -9288,27 +9356,43 @@ function getShareableDeckSummary() {
 
 function localizedDeckField(card, field) {
   if (!card) return "";
-  const lang = state.language;
-  if (lang === "es" || lang === "pl") {
-    return card[`${field}_${lang}`] || card[field] || "";
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+  const val = card[field];
+  if (val && typeof val === "object") {
+    return String(val[lang] || val.en || Object.values(val)[0] || "");
   }
-  return card[field] || "";
+  if (lang === "es" || lang === "pl") {
+    return String(card[`${field}_${lang}`] || val || "");
+  }
+  return String(val || "");
 }
 
-function buildDailyDeck() {
+function buildDailyDeck(prioritySeasonCards = null) {
   const source = (typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK))
     ? SWIPE_DECK
     : [];
   if (!source.length) return [];
 
   const progress = loadDeckProgress();
-  const byId = new Map(source.map((card) => [card.id, card]));
+  const seasonPool = Array.isArray(prioritySeasonCards)
+    ? prioritySeasonCards
+    : (!SELFTEST_MODE && !VOICE_TEST_MODE && !state.inPersonaSuite
+      ? (state.seasonCards?.length ? state.seasonCards : (loadCachedBiWeeklySeason()?.cards || []))
+      : []);
+  const byId = new Map([...source, ...seasonPool].map((card) => [card.id, card]));
   const order = [];
 
   for (const id of progress.missedIds) {
     if (order.length >= DECK_DAILY_COUNT) break;
     const card = byId.get(id);
-    if (card) order.push(card);
+    if (card && !order.some((c) => c.id === card.id)) order.push(card);
+  }
+
+  for (const sCard of seasonPool) {
+    if (order.length >= DECK_DAILY_COUNT) break;
+    if (sCard && !order.some((c) => c.id === sCard.id)) {
+      order.push(sCard);
+    }
   }
 
   const day = Math.floor(Date.now() / 86400000);
@@ -9868,7 +9952,10 @@ function answerDeck(pick) {
   }
   const vStamp = document.getElementById("deckVerdictStamp");
   if (vStamp) {
-    vStamp.textContent = hit ? "✨ NAILED IT! +100 XP" : "⚠️ TRICK CALL! WATCH THE RULE";
+    const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+    vStamp.textContent = hit
+      ? (lang === "es" ? "✨ ¡ACIERTO! +100 XP" : lang === "pl" ? "✨ TRAFIONE! +100 XP" : "✨ NAILED IT! +100 XP")
+      : (lang === "es" ? "⚠️ ¡REVISA LA REGLA!" : lang === "pl" ? "⚠️ SPRAWDŹ ZASADĘ!" : "⚠️ TRICK CALL! WATCH THE RULE");
     vStamp.className = `deck-verdict-stamp ${hit ? "is-hit" : "is-miss"}`;
   }
 
@@ -10178,11 +10265,12 @@ function renderDeckLeaderboardView() {
   const ranked = entries.map((e, i) => ({ ...e, rank: i + 1, isViewer: Boolean(e.viewerOwned) }));
   const youRanked = ranked.find((e) => e.isViewer) || null;
   const nextRival = youRanked && youRanked.rank > 1 ? ranked[youRanked.rank - 2] : (ranked.length ? ranked[ranked.length - 1] : null);
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
   const headerSpans = document.querySelectorAll("#leaderboardScreen .leaderboard-header span");
   if (headerSpans.length >= 5) {
-    headerSpans[2].textContent = "ACCURACY";
-    headerSpans[3].textContent = "STREAK";
-    headerSpans[4].textContent = "DECK XP";
+    headerSpans[2].textContent = lang === "es" ? "PRECISIÓN" : lang === "pl" ? "DOKŁADNOŚĆ" : "ACCURACY";
+    headerSpans[3].textContent = lang === "es" ? "RACHA" : lang === "pl" ? "SERIA" : "STREAK";
+    headerSpans[4].textContent = lang === "es" ? "XP MAZO" : lang === "pl" ? "XP TALII" : "DECK XP";
   }
 
   const rivalBanner = document.getElementById("leaderboardRivalBanner");
@@ -10204,19 +10292,43 @@ function renderDeckLeaderboardView() {
     if (youRanked && nextRival && youRanked.rank > 1) {
       const gapXp = Math.max(50, nextRival.xp - youRanked.xp + 50);
       const pctFill = Math.max(15, Math.min(96, Math.round((youRanked.xp / Math.max(1, nextRival.xp)) * 100)));
-      tag.textContent = `🃏 DAILY DECK TARGET · RANK #${nextRival.rank}`;
-      pill.textContent = `🔥 +${gapXp} XP TO RANK UP`;
-      copy.textContent = `Only +${gapXp} XP (${Math.ceil(gapXp / 100)} cards) to overtake #${nextRival.rank} ${nextRival.name} (${nextRival.xp} XP)!`;
+      tag.textContent = lang === "es"
+        ? `🃏 OBJETIVO DEL MAZO · PUESTO #${nextRival.rank}`
+        : lang === "pl"
+        ? `🃏 CEL DNIA · MIEJSCE #${nextRival.rank}`
+        : `🃏 DAILY DECK TARGET · RANK #${nextRival.rank}`;
+      pill.textContent = `🔥 +${gapXp} XP`;
+      copy.textContent = lang === "es"
+        ? `¡A solo +${gapXp} XP (${Math.ceil(gapXp / 100)} cartas) de superar a #${nextRival.rank} ${nextRival.name} (${nextRival.xp} XP)!`
+        : lang === "pl"
+        ? `Tylko +${gapXp} XP (${Math.ceil(gapXp / 100)} kart) by wyprzedzić #${nextRival.rank} ${nextRival.name} (${nextRival.xp} XP)!`
+        : `Only +${gapXp} XP (${Math.ceil(gapXp / 100)} cards) to overtake #${nextRival.rank} ${nextRival.name} (${nextRival.xp} XP)!`;
       fill.style.width = `${pctFill}%`;
     } else if (youRanked && youRanked.rank === 1) {
-      tag.textContent = "👑 #1 DAILY DECK CHAMPION";
-      pill.textContent = `🔥 ${youRanked.streak}d STREAK`;
-      copy.textContent = `YOU lead the Daily Deck board with ${youRanked.xp} XP (${youRanked.accuracy}% accuracy)!`;
+      tag.textContent = lang === "es"
+        ? "👑 #1 CAMPEÓN DEL MAZO DIARIO"
+        : lang === "pl"
+        ? "👑 #1 MISTRZ TALII DNIA"
+        : "👑 #1 DAILY DECK CHAMPION";
+      pill.textContent = `🔥 ${youRanked.streak}d`;
+      copy.textContent = lang === "es"
+        ? `¡Lideras la tabla del Mazo Diario con ${youRanked.xp} XP (${youRanked.accuracy}% de precisión)!`
+        : lang === "pl"
+        ? `Prowadzisz w rankingu Talii Dnia z wynikiem ${youRanked.xp} XP (${youRanked.accuracy}% dokładności)!`
+        : `YOU lead the Daily Deck board with ${youRanked.xp} XP (${youRanked.accuracy}% accuracy)!`;
       fill.style.width = "100%";
     } else {
-      tag.textContent = "🃏 DAILY DECK STANDINGS · +100 XP PER CARD";
-      pill.textContent = "🔥 BUILD YOUR STREAK";
-      copy.textContent = "Swipe 5 Daily Deck training cards to earn Deck XP, build your daily streak, and climb the board!";
+      tag.textContent = lang === "es"
+        ? "🃏 CLASIFICACIÓN DEL MAZO · +100 XP POR CARTA"
+        : lang === "pl"
+        ? "🃏 RANKING TALII · +100 XP ZA KARTĘ"
+        : "🃏 DAILY DECK STANDINGS · +100 XP PER CARD";
+      pill.textContent = lang === "es" ? "🔥 RACHA DIARIA" : lang === "pl" ? "🔥 SERIA DNIA" : "🔥 BUILD YOUR STREAK";
+      copy.textContent = lang === "es"
+        ? "¡Desliza 5 cartas de entrenamiento para ganar XP, subir tu racha y escalar en la tabla!"
+        : lang === "pl"
+        ? "Przesuń 5 kart szkoleniowych, aby zdobyć XP, zbudować serię i wspiąć się w rankingu!"
+        : "Swipe 5 Daily Deck training cards to earn Deck XP, build your daily streak, and climb the board!";
       fill.style.width = "28%";
     }
     head.append(tag, pill);
@@ -10227,6 +10339,9 @@ function renderDeckLeaderboardView() {
   const podiumEl = document.getElementById("leaderboardPodiumStage");
   if (podiumEl) {
     podiumEl.innerHTML = "";
+    const openSpotLabel = lang === "es" ? "LIBRE" : lang === "pl" ? "WOLNE" : "OPEN SPOT";
+    const unclaimedLabel = lang === "es" ? "Disponible" : lang === "pl" ? "Do zdobycia" : "Unclaimed";
+    const youLabel = lang === "es" ? "TÚ" : lang === "pl" ? "TY" : "YOU";
     const buildDeckPillar = (entry, place, medal) => {
       const col = document.createElement("div");
       col.className = `podium-pillar podium-${place}${entry?.isViewer ? " is-you-podium" : ""}`;
@@ -10235,11 +10350,11 @@ function renderDeckLeaderboardView() {
       med.textContent = medal;
       const nm = document.createElement("strong");
       nm.className = "podium-name";
-      nm.textContent = entry ? entry.name : "OPEN SPOT";
+      nm.textContent = entry ? entry.name : openSpotLabel;
       if (entry?.isViewer) {
         const youBadge = document.createElement("span");
         youBadge.className = "you-pill";
-        youBadge.textContent = "YOU";
+        youBadge.textContent = youLabel;
         nm.appendChild(youBadge);
       }
       const sc = document.createElement("span");
@@ -10247,7 +10362,7 @@ function renderDeckLeaderboardView() {
       sc.textContent = entry ? `${entry.xp} XP` : "500+ XP";
       const tm = document.createElement("small");
       tm.className = "podium-time";
-      tm.textContent = entry ? `🔥 ${entry.streak}d · ${entry.accuracy}%` : "Unclaimed";
+      tm.textContent = entry ? `🔥 ${entry.streak}d · ${entry.accuracy}%` : unclaimedLabel;
       col.append(med, nm, sc, tm);
       return col;
     };
@@ -12389,19 +12504,28 @@ function renderPersonalRecordUI() {
   const deckBoard = loadDeckLeaderboard();
   const youDeck = deckBoard.find((e) => e.viewerOwned);
   const deckXp = youDeck ? youDeck.xp : masteredCards * 100 + rec.streakDays * 50;
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
   const lbDeckEl = document.getElementById("leaderboardDeckStatus");
   if (lbDeckEl) {
     const { seasonNum, daysLeft } = getBiWeeklySeasonMeta();
     const cachedSeason = loadCachedBiWeeklySeason();
+    const seasonWord = lang === "es" ? "Temporada" : lang === "pl" ? "Sezon" : "Season";
+    const daysWord = lang === "es" ? `${daysLeft}d restantes` : lang === "pl" ? `zostało ${daysLeft}d` : `${daysLeft}d left`;
+    const streakWord = lang === "es" ? "Racha" : lang === "pl" ? "Seria" : "Streak";
+    const masteredWord = lang === "es" ? "Dominadas" : lang === "pl" ? "Opanowane" : "Mastered";
     const seasonTag = cachedSeason?.theme
-      ? `🗓️ Season #${seasonNum} (${cachedSeason.theme} · ${daysLeft}d left)`
-      : `🗓️ Bi-Weekly Season #${seasonNum} (${daysLeft}d left)`;
-    lbDeckEl.textContent = `🃏 ${seasonTag} · 🔥 ${rec.streakDays}d Streak · ${masteredCards}/30 Mastered · ${deckXp} Deck XP`;
+      ? `🗓️ ${seasonWord} #${seasonNum} (${cachedSeason.theme} · ${daysWord})`
+      : `🗓️ ${seasonWord} #${seasonNum} (${daysWord})`;
+    lbDeckEl.textContent = `🃏 ${seasonTag} · 🔥 ${rec.streakDays}d ${streakWord} · ${masteredCards}/30 ${masteredWord} · ${deckXp} XP`;
   }
   const recPassportEl = document.getElementById("recordsPassportSummary");
   if (recPassportEl) {
     const consistency = getConsistencyProgress();
-    recPassportEl.textContent = `🪪 Verified Cleaner Passport · Personal Best: ${rec.personalBest}% · Shift Runs: ${rec.totalRuns} · 🃏 Deck Streak: 🔥 ${rec.streakDays}d (${deckXp} XP) · ${consistency.label}`;
+    recPassportEl.textContent = lang === "es"
+      ? `🪪 Pasaporte Verificado · Mejor Marca: ${rec.personalBest}% · Rondas: ${rec.totalRuns} · 🃏 Racha: 🔥 ${rec.streakDays}d (${deckXp} XP) · ${consistency.label}`
+      : lang === "pl"
+      ? `🪪 Zweryfikowany Paszport · Rekord: ${rec.personalBest}% · Rundy: ${rec.totalRuns} · 🃏 Seria: 🔥 ${rec.streakDays}d (${deckXp} XP) · ${consistency.label}`
+      : `🪪 Verified Cleaner Passport · Personal Best: ${rec.personalBest}% · Shift Runs: ${rec.totalRuns} · 🃏 Deck Streak: 🔥 ${rec.streakDays}d (${deckXp} XP) · ${consistency.label}`;
   }
 }
 
