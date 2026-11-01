@@ -2988,7 +2988,7 @@ function selectVerdictBeat(result = state.result) {
 
 function announceTime(secondsRemaining) {
   const rounded = Math.ceil(secondsRemaining);
-  if (rounded === 75 || rounded === 60 || rounded === 45) {
+  if (rounded === 45) {
     speakHost("mid");
   } else if (rounded === 30 || rounded === 20) {
     speakHost("hurry");
@@ -4987,12 +4987,7 @@ function sampleLiveRunActivity(forceIdleForTest = false) {
       els.liveActivityBadge.classList.remove("idle-warning");
     }
   }
-  if (!isIdle && workedCount >= 4 && !mon.midProgressSpoken && !SELFTEST_MODE) {
-    mon.midProgressSpoken = true;
-    speakHost("mid");
-  }
-
-  if (isIdle && now - mon.lastNudgeAt >= 15000) {
+  if (isIdle && (state.timer.elapsedMs || 0) >= 10000 && now - mon.lastNudgeAt >= 15000) {
     mon.lastNudgeAt = now;
     speakHost("nudge");
   }
