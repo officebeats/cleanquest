@@ -7221,13 +7221,13 @@ async function generateLiveAiBonusCard(forceNetwork = false) {
     // Token-efficient batched prompt: generates a full 3-card Bi-Weekly Season Pack + Theme in 1 single API call (~3x lower prompt overhead per card)
     const prompt = [
       `CleanQuest Bi-Weekly Season #${seasonNum} (${areaLabel} · ${spotLabel}).`,
-      "Generate 1 season theme title + 3 distinct commercial cleaning cards in 1 compact JSON object (no markdown):",
-      '{"theme":"Short theme","cards":[{"c":"surface"|"product"|"technique","a":"right"|"miss","en":"1-sentence EN","es":"1-sentence ES","pl":"1-sentence PL"}]}'
+      "Think briefly (<50 words). Output ONLY valid JSON (no markdown):",
+      '{"theme":"Short theme","cards":[{"c":"surface","a":"right","en":"1 short sentence","es":"1 frase corta","pl":"1 krótkie zdanie"},{"c":"product","a":"miss","en":"1 short sentence","es":"1 frase corta","pl":"1 krótkie zdanie"},{"c":"technique","a":"right","en":"1 short sentence","es":"1 frase corta","pl":"1 krótkie zdanie"}]}'
     ].join("\n");
     const proxyResp = await callPartnerBackendProxy({
       provider: "dual",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 1600
+      max_tokens: 2048
     });
     let chosenPack = null;
     for (const item of proxyResp?.results || []) {
@@ -7326,12 +7326,12 @@ async function generateLiveAiShiftBriefing() {
     const prompt = [
       "You are the CleanQuest AI Operations Briefing assistant (coaching & recognition only — never discipline).",
       `Recent shift runs: ${logs.length || 3}, average cleanliness: ${avg}%.`,
-      "Write a concise 2-sentence shift briefing highlighting quality momentum and which 5-day training pack (Dwell Time, Top-to-Bottom Surface, or Product Match) to feature today."
+      "Think briefly (<40 words). Write a concise 2-sentence shift briefing highlighting quality momentum and which 5-day training pack (Dwell Time, Top-to-Bottom Surface, or Product Match) to feature today."
     ].join("\n");
     const proxyResp = await callPartnerBackendProxy({
       provider: "dual",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 1500
+      max_tokens: 2048
     });
     let textOut = "";
     let totalTokSum = 0;
