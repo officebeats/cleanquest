@@ -9001,139 +9001,162 @@ function renderLeaderboard() {
   els.leaderboardList.innerHTML = "";
   renderCrewAndConsistencyUI();
 
-  // Build competitive board that always includes Top-3 Podium rivals and the user's "YOU" placement
-  const latestWeighted = computeWeightedRunScore();
-  const youScore = Number.isFinite(latestWeighted) ? latestWeighted : 75;
-  const youTimeMs = Number(state.result?.elapsedMs || state.timer?.elapsedMs || 78000) || 78000;
-  const youStyle = Number(state.result?.ai?.styleScore ?? 8.5);
+  const youRanked = visible.find((e) => e.isViewer || (state.latestRunId && e.id === state.latestRunId));
+  const nextRival = youRanked && youRanked.rank > 1 ? visible[youRanked.rank - 2] : (!youRanked && visible.length ? visible[visible.length - 1] : null);
+  const latestPracticeScore = state.result?.ai?.scorable !== false ? computeWeightedRunScore() : null;
 
-  let boardPool = visible.length ? visible.map((e) => ({ ...e })) : [
-    { id: "rival-1", name: "Jordan", cleanliness: 100, weightedScore: 100, timeMs: 68400, styleScore: 9.4 },
-    { id: "rival-2", name: "Alex", cleanliness: 98, weightedScore: 98, timeMs: 71200, styleScore: 9.1 },
-    { id: "rival-3", name: "Sam", cleanliness: 96, weightedScore: 96, timeMs: 74200, styleScore: 8.8 }
-  ];
-
-  let viewerItem = boardPool.find((e) => e.isViewer || (state.latestRunId && e.id === state.latestRunId) || String(e.name || "").toLowerCase() === "player" || String(e.name || "").toLowerCase() === "you");
-  if (!viewerItem) {
-    viewerItem = {
-      id: state.latestRunId || "you-current",
-      name: "YOU",
-      cleanliness: youScore,
-      weightedScore: youScore,
-      timeMs: youTimeMs,
-      styleScore: youStyle,
-      isViewer: true
-    };
-    boardPool.push(viewerItem);
-  } else {
-    viewerItem.isViewer = true;
-  }
-
-  const rankedPool = sortLeaderboard(boardPool).map((entry, idx) => ({
-    ...entry,
-    rank: idx + 1
-  }));
-  const youRanked = rankedPool.find((e) => e.isViewer) || rankedPool[rankedPool.length - 1];
-  const nextRival = youRanked && youRanked.rank > 1 ? rankedPool[youRanked.rank - 2] : null;
-
-  // 1. Render Competitive Rival Chase / Next Rank Incentive Banner
+  // 1. Render Competitive Target / Rival Chase Banner (DOM textContent, zero fabricated XP)
   const rivalBanner = document.getElementById("leaderboardRivalBanner");
   if (rivalBanner) {
-    const curScore = Number.isFinite(youRanked?.weightedScore) ? youRanked.weightedScore : Number(youRanked?.cleanliness || 75);
-    if (nextRival) {
-      const rivScore = Number.isFinite(nextRival.weightedScore) ? nextRival.weightedScore : Number(nextRival.cleanliness || 96);
+    rivalBanner.innerHTML = "";
+    const head = document.createElement("div");
+    head.className = "rival-chase-head";
+    const tag = document.createElement("span");
+    tag.className = "rival-chase-tag";
+    const pill = document.createElement("span");
+    pill.className = "rival-xp-pill";
+    const copy = document.createElement("div");
+    copy.className = "rival-chase-copy";
+    const track = document.createElement("div");
+    track.className = "rival-progress-track";
+    const fill = document.createElement("div");
+    fill.className = "rival-progress-fill";
+
+    if (youRanked && nextRival) {
+      const curScore = Number.isFinite(youRanked.weightedScore) ? youRanked.weightedScore : Number(youRanked.cleanliness || 0);
+      const rivScore = Number.isFinite(nextRival.weightedScore) ? nextRival.weightedScore : Number(nextRival.cleanliness || 0);
       const gap = Math.max(1, rivScore - curScore + 1);
-      const pctFill = Math.max(18, Math.min(96, Math.round((curScore / Math.max(1, rivScore)) * 100)));
-      const cleanRivName = String(nextRival.name || "Rival").replace(/\s*·\s*sample/i, "");
-      rivalBanner.innerHTML = `
-        <div class="rival-chase-head">
-          <span class="rival-chase-tag">🔥 NEXT TARGET TO BEAT · RANK #${nextRival.rank}</span>
-          <span class="rival-xp-pill">⚡ +250 XP BONUS</span>
-        </div>
-        <div class="rival-chase-copy">
-          Only <strong>+${gap}%</strong> to overtake <strong>#${nextRival.rank} ${cleanRivName} (${rivScore}%)</strong>!
-        </div>
-        <div class="rival-progress-track">
-          <div class="rival-progress-fill" style="width:${pctFill}%"></div>
-        </div>
-      `;
+      const pctFill = Math.max(12, Math.min(96, Math.round((curScore / Math.max(1, rivScore)) * 100)));
+      tag.textContent = `🔥 NEXT TARGET TO BEAT · RANK #${nextRival.rank}`;
+      pill.textContent = "🏆 RANK UP TARGET";
+      copy.textContent = `Only +${gap}% to overtake #${nextRival.rank} ${nextRival.name || t("defaultPlayer")} (${rivScore}%)!`;
+      fill.style.width = `${pctFill}%`;
+    } else if (youRanked && youRanked.rank === 1) {
+      const curScore = Number.isFinite(youRanked.weightedScore) ? youRanked.weightedScore : Number(youRanked.cleanliness || 0);
+      tag.textContent = "👑 #1 CURRENT LEADER";
+      pill.textContent = "🏆 TOP SPOT";
+      copy.textContent = `YOU hold the #1 spot at ${curScore}% — beat your time to defend #1!`;
+      fill.style.width = "100%";
     } else {
-      rivalBanner.innerHTML = `
-        <div class="rival-chase-head">
-          <span class="rival-chase-tag">👑 #1 DEFENDING CHAMPION</span>
-          <span class="rival-xp-pill">🏆 +500 XP CROWN</span>
-        </div>
-        <div class="rival-chase-copy">
-          <strong>YOU</strong> hold the #1 spot at <strong>${curScore}%</strong> — beat your time to lock the crown!
-        </div>
-      `;
+      const passMark = CONFIG.verdictTiers?.passMark || 70;
+      const practicePct = Number.isFinite(latestPracticeScore) ? latestPracticeScore : 0;
+      tag.textContent = `🎯 BENCHMARK TARGET · ${passMark}% TO PASS`;
+      pill.textContent = visible.length ? `🏆 CHASE #1 (${Number.isFinite(visible[0].weightedScore) ? visible[0].weightedScore : visible[0].cleanliness}%)` : "🏆 OPEN PODIUM";
+      copy.textContent = Number.isFinite(latestPracticeScore)
+        ? `Latest practice/sample run: ${latestPracticeScore}% — complete a registered-site shift run at ${passMark}%+ to rank!`
+        : `Complete a registered-site shift run at ${passMark}%+ to claim your spot on the Podium!`;
+      fill.style.width = `${Math.max(12, Math.min(100, practicePct))}%`;
     }
+    head.append(tag, pill);
+    track.appendChild(fill);
+    rivalBanner.append(head, copy, track);
   }
 
-  // 2. Render 3-Pillar Championship Podium Stage (Silver #2 | Gold #1 | Bronze #3)
+  // 2. Render 3-Pillar Championship Podium Stage (DOM textContent, open pedestals when unclaimed)
   const podiumEl = document.getElementById("leaderboardPodiumStage");
   if (podiumEl) {
-    const p1 = rankedPool[0];
-    const p2 = rankedPool[1];
-    const p3 = rankedPool[2];
-    const cardHtml = (p, place, medal) => {
-      if (!p) return "";
-      const sc = Number.isFinite(p.weightedScore) ? p.weightedScore : p.cleanliness;
-      const nm = p.isViewer ? "YOU" : String(p.name || "Player").replace(/\s*·\s*sample/i, "");
-      return `
-        <div class="podium-pillar podium-${place}${p.isViewer ? " is-you-podium" : ""}">
-          <div class="podium-medal">${medal}</div>
-          <strong class="podium-name">${nm}${p.isViewer ? ' <span class="you-pill">YOU</span>' : ""}</strong>
-          <span class="podium-score">${sc}%</span>
-          <small class="podium-time">${formatTimer(Number(p.timeMs || 0))}</small>
-        </div>
-      `;
+    podiumEl.innerHTML = "";
+    const buildPillar = (entry, place, medal, targetHint) => {
+      const col = document.createElement("div");
+      col.className = `podium-pillar podium-${place}${entry?.isViewer ? " is-you-podium" : ""}`;
+      const med = document.createElement("div");
+      med.className = "podium-medal";
+      med.textContent = medal;
+      const nm = document.createElement("strong");
+      nm.className = "podium-name";
+      const sc = document.createElement("span");
+      sc.className = "podium-score";
+      const tm = document.createElement("small");
+      tm.className = "podium-time";
+      if (entry) {
+        const scoreVal = Number.isFinite(entry.weightedScore) ? entry.weightedScore : entry.cleanliness;
+        nm.textContent = entry.name || t("defaultPlayer");
+        if (entry.isViewer) {
+          const youBadge = document.createElement("span");
+          youBadge.className = "you-pill";
+          youBadge.textContent = "YOU";
+          nm.appendChild(youBadge);
+        }
+        sc.textContent = Number.isFinite(scoreVal) ? `${scoreVal}%` : "—";
+        tm.textContent = formatTimer(Number(entry.timeMs || 0));
+      } else {
+        nm.textContent = "OPEN SPOT";
+        sc.textContent = targetHint;
+        tm.textContent = "Unclaimed";
+      }
+      col.append(med, nm, sc, tm);
+      return col;
     };
-    podiumEl.innerHTML = `${cardHtml(p2, 2, "🥈 #2")}${cardHtml(p1, 1, "👑 #1")}${cardHtml(p3, 3, "🥉 #3")}`;
+    podiumEl.append(
+      buildPillar(visible[1] || null, 2, "🥈 #2", "80%+"),
+      buildPillar(visible[0] || null, 1, "👑 #1", "90%+"),
+      buildPillar(visible[2] || null, 3, "🥉 #3", "70%+")
+    );
   }
 
-  if (!rankedPool.length) {
+  if (!visible.length) {
     const empty = document.createElement("p");
     empty.className = "fine-print";
     empty.textContent = t("leaderboardEmpty");
     els.leaderboardList.appendChild(empty);
   }
 
-  rankedPool.forEach((entry) => {
+  const appendRowDom = (entry, isUnrankedViewer = false) => {
     const row = document.createElement("div");
     row.className = "leaderboard-row";
-    if (entry.rank >= 1 && entry.rank <= 3) {
+    if (!isUnrankedViewer && entry.rank >= 1 && entry.rank <= 3) {
       row.classList.add(`rank-${entry.rank}`);
     }
-    if (entry.isViewer) {
+    if (entry.isViewer || isUnrankedViewer) {
       row.classList.add("latest", "is-you-row");
     }
 
     const rank = document.createElement("span");
     rank.className = "rank";
-    rank.textContent = entry.rank === 1
-      ? "🥇 1"
-      : entry.rank === 2
-        ? "🥈 2"
-        : entry.rank === 3
-          ? "🥉 3"
-          : `#${entry.rank}`;
+    rank.textContent = isUnrankedViewer
+      ? "—"
+      : entry.rank === 1
+        ? "🥇 1"
+        : entry.rank === 2
+          ? "🥈 2"
+          : entry.rank === 3
+            ? "🥉 3"
+            : `#${entry.rank}`;
 
     const displayScore = Number.isFinite(entry.weightedScore) ? entry.weightedScore : entry.cleanliness;
-    const cleanName = String(entry.name || t("defaultPlayer")).replace(/\s*·\s*sample/i, "");
-    const name = document.createElement("span");
-    name.className = "player-name";
-    const gapTag = entry.isViewer && nextRival
-      ? `<em class="you-gap-tag">▲ +${Math.max(1, (Number.isFinite(nextRival.weightedScore) ? nextRival.weightedScore : nextRival.cleanliness) - displayScore + 1)}% TO #${nextRival.rank}</em>`
-      : "";
-    name.innerHTML = `
-      <span class="lb-name-line">
-        <strong>${entry.isViewer ? (cleanName.toUpperCase() === "YOU" ? "Player" : cleanName) : cleanName}</strong>
-        ${entry.isViewer ? '<span class="you-pill">YOU</span>' : ""}
-        ${gapTag}
-      </span>
-      <span class="lb-mini-bar"><i style="width:${Math.max(12, Math.min(100, Number(displayScore) || 50))}%"></i></span>
-    `;
+    const nameWrap = document.createElement("span");
+    nameWrap.className = "player-name";
+    const nameLine = document.createElement("span");
+    nameLine.className = "lb-name-line";
+    const nameStrong = document.createElement("strong");
+    nameStrong.textContent = entry.name || t("defaultPlayer");
+    nameLine.appendChild(nameStrong);
+
+    if (entry.isViewer || isUnrankedViewer) {
+      const youBadge = document.createElement("span");
+      youBadge.className = "you-pill";
+      youBadge.textContent = "YOU";
+      nameLine.appendChild(youBadge);
+    }
+    if (isUnrankedViewer) {
+      const unrankedTag = document.createElement("em");
+      unrankedTag.className = "you-gap-tag";
+      unrankedTag.textContent = Number.isFinite(displayScore) ? "UNRANKED (PRACTICE)" : "UNRANKED";
+      nameLine.appendChild(unrankedTag);
+    } else if (entry.isViewer && nextRival && Number.isFinite(displayScore)) {
+      const rivScore = Number.isFinite(nextRival.weightedScore) ? nextRival.weightedScore : nextRival.cleanliness;
+      const gapTag = document.createElement("em");
+      gapTag.className = "you-gap-tag";
+      gapTag.textContent = `▲ +${Math.max(1, rivScore - displayScore + 1)}% TO #${nextRival.rank}`;
+      nameLine.appendChild(gapTag);
+    }
+
+    const miniBar = document.createElement("span");
+    miniBar.className = "lb-mini-bar";
+    const miniFill = document.createElement("i");
+    miniFill.style.width = `${Math.max(8, Math.min(100, Number(displayScore) || 0))}%`;
+    miniBar.appendChild(miniFill);
+    nameWrap.append(nameLine, miniBar);
 
     const quality = document.createElement("span");
     quality.className = "quality";
@@ -9141,15 +9164,28 @@ function renderLeaderboard() {
 
     const time = document.createElement("span");
     time.className = "time";
-    time.textContent = formatTimer(Number(entry.timeMs || 0));
+    time.textContent = entry.timeMs ? formatTimer(Number(entry.timeMs)) : "—";
 
     const style = document.createElement("span");
     style.className = "style";
-    style.textContent = Number(entry.styleScore ?? 7.5).toFixed(1);
+    style.textContent = Number.isFinite(Number(entry.styleScore)) ? Number(entry.styleScore).toFixed(1) : "—";
 
-    row.append(rank, name, quality, time, style);
+    row.append(rank, nameWrap, quality, time, style);
     els.leaderboardList.appendChild(row);
-  });
+  };
+
+  visible.forEach((entry) => appendRowDom(entry, false));
+
+  if (!youRanked) {
+    appendRowDom({
+      name: els.playerName?.value?.trim() || t("defaultPlayer"),
+      weightedScore: latestPracticeScore,
+      cleanliness: latestPracticeScore,
+      timeMs: state.result?.elapsedMs || null,
+      styleScore: state.result?.ai?.styleScore ?? null,
+      isViewer: true
+    }, true);
+  }
 }
 
 function renderSpectatorLeaderboard() {
