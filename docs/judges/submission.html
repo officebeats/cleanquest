@@ -3,21 +3,20 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CleanQuest — Step-by-Step Hackathon Submission Playbook · Meta Global AI Developer Hackathon</title>
+<title>CleanQuest — Hackathon Submission Playbook · Meta Global AI Developer Hackathon</title>
 <style>
   :root {
-    --ink: #f4fbff;
-    --muted: #9bc2e2;
-    --line: rgba(98, 218, 255, 0.24);
-    --line-bright: rgba(69, 234, 255, 0.45);
+    --ink: #f8fcff;
+    --muted: #b4d4ee;
+    --line: rgba(98, 218, 255, 0.26);
+    --line-bright: rgba(69, 234, 255, 0.52);
     --bg: #030711;
-    --card: rgba(10, 27, 43, 0.86);
-    --card-deep: rgba(6, 17, 30, 0.92);
+    --card: rgba(10, 27, 44, 0.9);
+    --card-deep: rgba(5, 15, 28, 0.95);
     --cyan: #45eaff;
     --mint: #39f5bc;
     --gold: #ffd35c;
     --crimson: #ff5b76;
-    --violet: #c084fc;
   }
   * { box-sizing: border-box; }
   body {
@@ -27,48 +26,114 @@
       radial-gradient(circle at 18% 0%, rgba(69, 234, 255, 0.14), transparent 36%),
       radial-gradient(circle at 86% 12%, rgba(57, 245, 188, 0.1), transparent 38%),
       linear-gradient(180deg, #061326 0%, #030711 100%);
-    font: 15px/1.6 "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font: 16.5px/1.68 "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   }
-  a { color: var(--cyan); text-decoration: none; }
+  a { color: var(--cyan); text-decoration: none; font-weight: 700; }
   a:hover { text-decoration: underline; }
 
   header.hero {
-    padding: 36px 24px 28px;
+    padding: 32px 24px 26px;
     border-bottom: 1px solid var(--line);
-    background: linear-gradient(180deg, rgba(10, 32, 54, 0.72), rgba(4, 12, 24, 0.88));
+    background: linear-gradient(180deg, rgba(10, 32, 54, 0.8), rgba(4, 12, 24, 0.92));
   }
-  .hero-inner { max-width: 1120px; margin: 0 auto; }
+  .hero-inner { max-width: 1080px; margin: 0 auto; }
   .eyebrow {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 5px 12px;
+    padding: 5px 13px;
     border-radius: 999px;
-    background: rgba(57, 245, 188, 0.14);
-    border: 1px solid rgba(57, 245, 188, 0.4);
+    background: rgba(57, 245, 188, 0.15);
+    border: 1px solid rgba(57, 245, 188, 0.45);
+    color: var(--mint);
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  h1 {
+    margin: 12px 0 6px;
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    margin: 0 0 16px;
+    color: var(--muted);
+    font-size: 17px;
+    max-width: 820px;
+  }
+
+  /* LIVE COUNTDOWN CLOCK */
+  .countdown-card {
+    margin: 18px 0 18px;
+    padding: 18px 20px;
+    border-radius: 16px;
+    background: linear-gradient(145deg, rgba(14, 42, 68, 0.92), rgba(7, 20, 36, 0.95));
+    border: 1.5px solid var(--line-bright);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35), 0 0 24px rgba(69, 234, 255, 0.14);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .countdown-meta small {
+    display: block;
     color: var(--mint);
     font-size: 12px;
     font-weight: 800;
     letter-spacing: 0.08em;
     text-transform: uppercase;
   }
-  h1 {
-    margin: 12px 0 8px;
-    font-size: clamp(26px, 4vw, 40px);
-    line-height: 1.15;
-    letter-spacing: -0.02em;
+  .countdown-meta strong {
+    display: block;
+    font-size: 20px;
+    color: #ffffff;
+    margin-top: 2px;
   }
-  .subtitle {
-    margin: 0 0 18px;
+  .countdown-meta span {
+    display: block;
+    font-size: 14px;
+    color: var(--gold);
+    font-weight: 700;
+    margin-top: 2px;
+  }
+  .countdown-grid {
+    display: flex;
+    gap: 10px;
+  }
+  .cd-unit {
+    min-width: 78px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--card-deep);
+    border: 1px solid var(--line-bright);
+    text-align: center;
+  }
+  .cd-num {
+    display: block;
+    font-size: 30px;
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--cyan);
+    font-variant-numeric: tabular-nums;
+  }
+  .cd-lbl {
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
     color: var(--muted);
-    font-size: 16px;
-    max-width: 820px;
+    text-transform: uppercase;
   }
+
   .links {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    margin-top: 16px;
+    margin-top: 14px;
   }
   .btn-link {
     display: inline-flex;
@@ -77,20 +142,20 @@
     padding: 10px 16px;
     border-radius: 999px;
     font-weight: 800;
-    font-size: 13.5px;
+    font-size: 14px;
     background: linear-gradient(135deg, var(--cyan), #2bb8ff);
     color: #021320;
     text-decoration: none !important;
     box-shadow: 0 6px 20px rgba(69, 234, 255, 0.25);
   }
   .btn-link.alt {
-    background: rgba(12, 34, 56, 0.85);
+    background: rgba(12, 34, 56, 0.9);
     color: var(--ink);
     border: 1px solid var(--line-bright);
     box-shadow: none;
   }
 
-  main { max-width: 1120px; margin: 0 auto; padding: 24px 20px 64px; }
+  main { max-width: 1080px; margin: 0 auto; padding: 24px 20px 64px; }
 
   .deadline-banner {
     display: grid;
@@ -107,21 +172,21 @@
   .stat-pill small {
     display: block;
     color: var(--muted);
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 800;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
   .stat-pill strong {
     display: block;
     margin-top: 4px;
-    font-size: 17px;
+    font-size: 18px;
     color: var(--gold);
   }
   .stat-pill span {
     display: block;
     margin-top: 2px;
-    font-size: 12.5px;
+    font-size: 13.5px;
     color: var(--ink);
   }
 
@@ -129,71 +194,94 @@
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 18px;
-    padding: 22px 24px;
-    margin-bottom: 20px;
+    padding: 24px 26px;
+    margin-bottom: 22px;
     box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
   }
   section.card.critical-card {
-    border-color: rgba(255, 211, 92, 0.55);
-    background: linear-gradient(160deg, rgba(38, 28, 12, 0.72), rgba(10, 24, 40, 0.92));
+    border-color: rgba(255, 211, 92, 0.58);
+    background: linear-gradient(160deg, rgba(38, 28, 12, 0.78), rgba(10, 24, 40, 0.94));
+  }
+  section.card.telemetry-card {
+    border-color: rgba(57, 245, 188, 0.58);
+    background: linear-gradient(160deg, rgba(10, 38, 34, 0.84), rgba(8, 22, 38, 0.95));
   }
   .step-badge {
     display: inline-block;
-    padding: 3px 10px;
+    padding: 4px 11px;
     border-radius: 999px;
     background: rgba(69, 234, 255, 0.16);
     border: 1px solid var(--line-bright);
     color: var(--cyan);
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 800;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     margin-bottom: 6px;
   }
   h2 {
-    margin: 4px 0 12px;
-    font-size: 21px;
+    margin: 4px 0 14px;
+    font-size: 22px;
     letter-spacing: -0.01em;
   }
   h3 {
-    margin: 18px 0 8px;
-    font-size: 16px;
+    margin: 18px 0 10px;
+    font-size: 17px;
     color: var(--cyan);
   }
   p { margin: 8px 0; }
-  ul, ol { margin: 8px 0; padding-left: 22px; }
-  li { margin: 6px 0; }
-  code {
-    padding: 2px 6px;
-    border-radius: 6px;
-    background: rgba(6, 18, 32, 0.9);
-    border: 1px solid rgba(69, 234, 255, 0.22);
+  ol.numbered-steps {
+    margin: 10px 0;
+    padding-left: 0;
+    list-style: none;
+    counter-reset: step-counter;
+  }
+  ol.numbered-steps > li {
+    counter-increment: step-counter;
+    position: relative;
+    padding: 12px 14px 12px 50px;
+    border-radius: 12px;
+    background: rgba(6, 18, 32, 0.72);
+    border: 1px solid rgba(69, 234, 255, 0.18);
+    margin-bottom: 10px;
+    font-size: 16px;
+    line-height: 1.55;
+  }
+  ol.numbered-steps > li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: rgba(69, 234, 255, 0.18);
+    border: 1.5px solid var(--cyan);
     color: var(--cyan);
-    font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-    font-size: 13px;
+    font-weight: 900;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  ol.numbered-steps ul {
+    margin: 6px 0 0;
+    padding-left: 20px;
+  }
+  ol.numbered-steps ul li {
+    margin: 4px 0;
+    font-size: 15.5px;
+    color: #d9eeff;
   }
 
-  .Checklist {
-    list-style: none;
-    padding-left: 0;
-  }
-  .Checklist li {
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    padding: 9px 12px;
-    border-radius: 10px;
-    background: rgba(6, 18, 32, 0.65);
-    border: 1px solid rgba(69, 234, 255, 0.16);
-    margin-bottom: 8px;
-  }
-  .Checklist input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    margin-top: 3px;
-    accent-color: var(--mint);
-    flex-shrink: 0;
-    cursor: pointer;
+  code {
+    padding: 2px 7px;
+    border-radius: 6px;
+    background: rgba(6, 18, 32, 0.95);
+    border: 1px solid rgba(69, 234, 255, 0.28);
+    color: var(--cyan);
+    font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+    font-size: 14px;
   }
 
   .copy-box {
@@ -212,18 +300,18 @@
     margin-bottom: 8px;
   }
   .copy-box-head strong {
-    font-size: 12.5px;
+    font-size: 13px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--gold);
   }
   .copy-btn {
-    padding: 5px 12px;
+    padding: 6px 14px;
     border-radius: 999px;
     border: 1px solid var(--line-bright);
-    background: rgba(69, 234, 255, 0.14);
+    background: rgba(69, 234, 255, 0.16);
     color: var(--cyan);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 800;
     cursor: pointer;
   }
@@ -236,9 +324,9 @@
     white-space: pre-wrap;
     word-break: break-word;
     font-family: "SFMono-Regular", Consolas, Menlo, monospace;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.55;
-    color: #e6f6ff;
+    color: #eaf7ff;
   }
 
   .table-scroll { overflow-x: auto; margin: 12px 0; }
@@ -249,17 +337,17 @@
   }
   th, td {
     text-align: left;
-    padding: 11px 13px;
+    padding: 12px 14px;
     border-bottom: 1px solid var(--line);
     vertical-align: top;
-    font-size: 14px;
+    font-size: 15px;
   }
   th {
     color: var(--cyan);
-    font-size: 12px;
+    font-size: 12.5px;
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    background: rgba(6, 20, 36, 0.75);
+    background: rgba(6, 20, 36, 0.82);
   }
 
   .two-col {
@@ -271,12 +359,14 @@
     .two-col { grid-template-columns: 1fr; }
     header.hero { padding: 24px 16px; }
     main { padding: 16px 12px 48px; }
-    section.card { padding: 16px; }
+    section.card { padding: 18px; }
+    .cd-unit { min-width: 64px; padding: 8px; }
+    .cd-num { font-size: 24px; }
   }
   footer {
     text-align: center;
     color: var(--muted);
-    font-size: 13px;
+    font-size: 14px;
     margin-top: 32px;
     padding-top: 18px;
     border-top: 1px solid var(--line);
@@ -289,12 +379,28 @@
   <div class="hero-inner">
     <span class="eyebrow">🚀 Submission Playbook · Meta Global AI Developer Hackathon</span>
     <h1>CleanQuest — Step-by-Step Submission Guide</h1>
-    <p class="subtitle">Revised master checklist, copy-paste Cerebral Valley submission fields, 3-minute video script with mandatory disclosures, bonus prize verification steps, and live-finals playbook.</p>
+    <p class="subtitle">High-legibility, numbered checklist to claim credits, log live Meta &amp; Baseten telemetry, record the 3:00 video, and submit on Cerebral Valley.</p>
+
+    <!-- LIVE COUNTDOWN TIMER -->
+    <div class="countdown-card" aria-live="polite">
+      <div class="countdown-meta">
+        <small>⏱ Live Countdown to Hard Submission Deadline</small>
+        <strong>Wednesday, Nov 4, 2026 · 9:00 PM ET (8:00 PM CT)</strong>
+        <span id="countdownSubnote">Target early submission: Wed Nov 4 by 7:00 PM ET (6:00 PM CT)</span>
+      </div>
+      <div class="countdown-grid">
+        <div class="cd-unit"><span id="cdDays" class="cd-num">--</span><span class="cd-lbl">Days</span></div>
+        <div class="cd-unit"><span id="cdHours" class="cd-num">--</span><span class="cd-lbl">Hours</span></div>
+        <div class="cd-unit"><span id="cdMins" class="cd-num">--</span><span class="cd-lbl">Mins</span></div>
+        <div class="cd-unit"><span id="cdSecs" class="cd-num">--</span><span class="cd-lbl">Secs</span></div>
+      </div>
+    </div>
+
     <div class="links">
       <a class="btn-link" href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit" target="_blank" rel="noopener">1. Direct Submit Portal (/hackathon/submit) ↗</a>
       <a class="btn-link alt" href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/details" target="_blank" rel="noopener">2. Event Details Page ↗</a>
       <a class="btn-link alt" href="https://dev.meta.ai/billing?team_id=2181437619392922&amp;project_id=2030324597684216" target="_blank" rel="noopener">3. Meta API Billing &amp; Credits ↗</a>
-      <a class="btn-link alt" href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/waiver" target="_blank" rel="noopener">4. Official Rules &amp; Waiver ↗</a>
+      <a class="btn-link alt" href="https://app.baseten.co/settings/api_keys" target="_blank" rel="noopener">4. Baseten API Keys ↗</a>
       <a class="btn-link alt" href="../../index.html">5. Launch Live App</a>
       <a class="btn-link alt" href="report.html">6. Judges' Presentation Report</a>
     </div>
@@ -306,172 +412,139 @@
   <div class="deadline-banner">
     <div class="stat-pill">
       <small>Submission Deadline</small>
-      <strong>Wed, Nov 4, 2026 · 9:00 PM ET</strong>
-      <span>8:00 PM CT (Chicago) · Submit at least 2 hours early</span>
+      <strong>Wed, Nov 4 · 9:00 PM ET</strong>
+      <span>8:00 PM CT (Chicago)</span>
     </div>
     <div class="stat-pill">
-      <small>Track &amp; Theme ($1M Total Pool)</small>
+      <small>Track &amp; Theme ($1M Total)</small>
       <strong>Indie Track · $400K Pool</strong>
-      <span>$150K 1st · $100K 2nd · $75K 3rd · $50K 4th · $25K 5th</span>
+      <span>$150K 1st · $100K 2nd · $75K 3rd</span>
     </div>
     <div class="stat-pill">
       <small>Bonus Prizes ($50K Pool)</small>
       <strong>Open Weights ($10K) + Viral ($20K)</strong>
-      <span>+ Community Vote ($10K, opens Nov 9)</span>
+      <span>+ Community Vote ($10K)</span>
     </div>
     <div class="stat-pill">
-      <small>Judging, Finals &amp; Community Vote</small>
-      <strong>Nov 5–8 · Finals Mon Nov 9 (12 PM ET)</strong>
-      <span>Top 5/track live finals Nov 9 · Community winner Nov 16</span>
+      <small>Judging &amp; Finals</small>
+      <strong>Nov 5–8 · Finals Nov 9</strong>
+      <span>Top 5/track live at 12 PM ET</span>
     </div>
   </div>
 
-  <!-- CRITICAL RULES -->
+  <!-- STEP 1: CREDITS & LIVE PARTNER TELEMETRY -->
+  <section class="card telemetry-card">
+    <span class="step-badge">Step 1 · Credits &amp; Live Partner Telemetry (Do This First)</span>
+    <h2>How to Claim Credits &amp; Log Live Telemetry in 4 Minutes</h2>
+    <ol class="numbered-steps">
+      <li>
+        <strong>Claim your $150 Meta Model API credits:</strong>
+        <ul>
+          <li>Open <a href="https://dev.meta.ai/billing?team_id=2181437619392922&amp;project_id=2030324597684216" target="_blank" rel="noopener">Meta Developer Billing ↗</a>.</li>
+          <li>Confirm your $150 credit is active and a payment card is attached (required by Meta to unlock API calls).</li>
+          <li>Set a <strong>$150 Spend Limit</strong> on the Billing page.</li>
+          <li>Each teammate (<strong>Ernesto</strong>, <strong>Bill</strong>, <strong>Dom</strong>) must claim their own credit individually before <strong>Wed Nov 4, 9:00 PM ET</strong>.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Copy your Meta API Key and Baseten API Key:</strong>
+        <ul>
+          <li>Get your Meta key from <a href="https://dev.meta.ai/" target="_blank" rel="noopener">dev.meta.ai ↗</a> (powers <code>muse-spark-1.3</code>, <code>sam-3.1</code>, and <code>muse-voice-transcribe-1.0</code>).</li>
+          <li>Get your Baseten key from <a href="https://app.baseten.co/settings/api_keys" target="_blank" rel="noopener">app.baseten.co/settings/api_keys ↗</a> (powers <code>meta-models/muse-spark-open-1026</code> for the <strong>$10K Open Weights Bonus Prize</strong>).</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Paste both keys into CleanQuest Settings:</strong>
+        <ul>
+          <li>Open the <a href="../../index.html" target="_blank" rel="noopener">Live CleanQuest App ↗</a> and tap the <code>⚙</code> gear icon in the top-right corner.</li>
+          <li>Paste your <strong>Meta Model API Key</strong> into the first box.</li>
+          <li>Paste your <strong>Baseten Key</strong> into the second box.</li>
+          <li>Tap <strong>SAVE KEYS</strong> (keys stay in your browser's <code>localStorage</code> only — never in Git).</li>
+        </ul>
+      </li>
+      <li>
+        <strong>Click the new <code>⚡ TEST &amp; LOG TELEMETRY</code> button in Settings:</strong>
+        <ul>
+          <li>Scroll down to the <strong>PROVIDER RUN LOG</strong> card in <code>⚙ Settings</code>.</li>
+          <li>Tap <strong><code>⚡ TEST &amp; LOG TELEMETRY</code></strong>.</li>
+          <li>This automatically sends a real Before/After test pair to <strong>Meta (<code>muse-spark-1.3</code> + <code>sam-3.1</code>)</strong> and <strong>Baseten (<code>meta-models/muse-spark-open-1026</code>)</strong>.</li>
+          <li>Verify two non-mock entries appear in <strong>PROVIDER RUN LOG</strong>, then tap <strong><code>EXPORT LOG (JSON)</code></strong> to save your proof file.</li>
+        </ul>
+      </li>
+    </ol>
+  </section>
+
+  <!-- CRITICAL GUARDRAILS -->
   <section class="card critical-card">
-    <span class="step-badge">⚠️ Read First · Disqualification &amp; Pass/Fail Guardrails</span>
-    <h2>Seven Non-Negotiable Submission Rules</h2>
-    <ul class="Checklist">
-      <li>
-        <input type="checkbox" checked />
-        <div><strong>1. Mandatory First Sentence in the 3-Minute Video (Pre-Existing vs. Event-Built Work):</strong> Per the hackathon Context Briefing &amp; participant guide, open the demo video with one clear line separating pre-existing work from what was built during the event, and showcase only event-built work: <em>"The base CleanQuest game prototype was pre-existing; everything we are showing today — the 15-screen trilingual MVP, MECE JanSan taxonomy, Muse Spark 1.3 verified scorecards, SAM 3.1 segmentation overlays, Muse voice-note transcription, Baseten Spark Open provider + audit log, 650+ neural voice clips, 122 BPM WebAudio synth, AAA Daily Swipe Deck, and Dual-Mode Esports Leaderboard — was built during this hackathon."</em></div>
-      </li>
-      <li>
-        <input type="checkbox" checked />
-        <div><strong>2. Never Frame CleanQuest as a "Simple Image Analyzer":</strong> "Simple image analyzers" are on the organizers' pass/fail anti-pattern list. Always present CleanQuest as a <strong>closed-loop gamified work-verification platform, daily trilingual training deck, and portable cleaner-owned career passport + geofenced inspection record</strong>.</div>
-      </li>
-      <li>
-        <input type="checkbox" checked />
-        <div><strong>3. Strict Product Language Rules:</strong> (a) The game-show host voice <strong>hypes and celebrates only</strong> — it never instructs or coaches technique during a run; (b) CleanQuest scores <strong>visible cleanliness and technique only</strong> — never claim sanitation or disinfection verification; (c) A benchmark time is <strong>never a certification</strong>; (d) Never name external trade associations in the repo or UI (use generic "standards body").</div>
-      </li>
-      <li>
-        <input type="checkbox" checked />
-        <div><strong>4. Exact README Phrase Rule:</strong> The phrase <code>powered by Muse at scale</code> must appear <strong>exactly once</strong> in <code>README.md</code> (in the intro) and nowhere else in the repository. (Already verified: count = 1).</div>
-      </li>
-      <li>
-        <input type="checkbox" checked />
-        <div><strong>5. Zero Secrets in Git:</strong> API keys (Meta Model API, Baseten, OpenRouter, Gemini, OpenAI, Anthropic, Groq) are entered only in the browser's <code>Settings ⚙</code> screen (stored in <code>localStorage</code>) and never committed to the repository.</div>
-      </li>
-      <li>
-        <input type="checkbox" checked />
-        <div><strong>6. One Submission by Appointed Representative (Max 4 Teammates, 1 Track Only):</strong> A project may be entered in <strong>one track only</strong> (Indie Developer Track). One designated Representative (<strong>Ernesto Rodriguez</strong>) submits the project at <a href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit" target="_blank" rel="noopener">/hackathon/submit</a> and <strong>must list every other team member</strong> (<strong>Bill Basil</strong> and <strong>Dom</strong>) on the submission form.</div>
-      </li>
-      <li>
-        <input type="checkbox" checked />
-        <div><strong>7. Baseten Model ID (<code>meta-models/muse-spark-open-1026</code> · Context Briefing / Participant Wiki):</strong> Note that <a href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/details" target="_blank" rel="noopener">/details</a> is login-gated (renders a sign-in wall when accessed without an authenticated session). Per the hackathon Context Briefing &amp; participant wiki transcription, Baseten Spark Open uses <code>meta-models/muse-spark-open-1026</code> (already configured in <code>cleanquest/app.js</code>) — confirm in your logged-in <code>/details</code> view before submitting.</div>
-      </li>
-    </ul>
+    <span class="step-badge">Step 2 · Mandatory Guardrails</span>
+    <h2>7 Non-Negotiable Rules to Pass Stage 1 Gate</h2>
+    <ol class="numbered-steps">
+      <li><strong>Open the video with the Pre-Existing vs. Event-Built line:</strong> State clearly that the base game prototype was pre-existing, and everything shown in the demo (15-screen MVP, MECE JanSan taxonomy, Muse Spark 1.3 scorecards, SAM 3.1 overlays, voice transcription, Baseten Spark Open log, 650+ neural voice clips, 122 BPM synth, Daily Deck, and Dual Leaderboard) was built during the hackathon.</li>
+      <li><strong>Never call CleanQuest a "simple image analyzer":</strong> Always frame it as a <strong>closed-loop work-verification game, daily training deck, and cleaner-owned career passport + geofenced inspection log</strong>.</li>
+      <li><strong>Keep host voice &amp; scoring claims compliant:</strong> Host voice hypes only (never coaches technique); scores measure <strong>visible cleanliness and technique only</strong> (never sanitation); benchmark time is <strong>never a certification</strong>.</li>
+      <li><strong>Keep <code>powered by Muse at scale</code> count at 1:</strong> Appears once in <code>README.md</code> and nowhere else (already verified).</li>
+      <li><strong>Never commit API keys to Git:</strong> Enter keys only in browser <code>⚙ Settings</code>.</li>
+      <li><strong>Submit once as Appointed Representative:</strong> <strong>Ernesto Rodriguez</strong> submits in the <strong>Indie Developer Track</strong> and lists <strong>Bill Basil</strong> and <strong>Dom</strong> on the form.</li>
+      <li><strong>Confirm Baseten model ID in your logged-in portal:</strong> Note that <code>/details</code> is login-gated; per our Context Briefing &amp; participant wiki transcription, Baseten Spark Open uses <code>meta-models/muse-spark-open-1026</code> (already configured in <code>app.js</code>).</li>
+    </ol>
   </section>
 
-  <!-- STEP 1 -->
-  <section class="card">
-    <span class="step-badge">Step 1 · Credits &amp; Live Partner Telemetry</span>
-    <h2>Claim Credits &amp; Record 2 Live Cloud Runs (Meta API + Baseten Spark Open)</h2>
-    <p>To qualify for Stage 1 Pass/Fail (genuine use of Meta AI models) AND the <strong>$10,000 Best Build on Meta Open Weights</strong> bonus prize (where the infrastructure partner verifies real traffic on <code>meta-models/muse-spark-open-1026</code>), complete these checks before recording your video:</p>
-    <ul class="Checklist">
-      <li>
-        <input type="checkbox" />
-        <div><strong>1A. Claim $150 Meta Model API Credits (Before Wed Nov 4, 9:00 PM ET):</strong> Every team member (Ernesto Rodriguez, Bill Basil, Dom) must claim their $150 credit individually via the Cerebral Valley form. Verify the credit appears on the <a href="https://dev.meta.ai/billing?team_id=2181437619392922&amp;project_id=2030324597684216" target="_blank" rel="noopener">Meta Developer Billing page</a>, add a payment method to activate API calls, and set a <strong>$150 Spend Limit notification</strong>.</div>
-      </li>
-      <li>
-        <input type="checkbox" />
-        <div><strong>1B. Enter Keys in CleanQuest Settings (<code>⚙</code> in Top-Right):</strong> Open <a href="https://officebeats.github.io/cleanquest/" target="_blank" rel="noopener">officebeats.github.io/cleanquest</a>, tap <code>⚙</code>, paste your <strong>Meta Model API Key</strong> and your <strong>Baseten API Key</strong>, and tap <strong>SAVE KEYS</strong>.</div>
-      </li>
-      <li>
-        <input type="checkbox" />
-        <div><strong>1C. Run 1 Live Round on Meta Model API (<code>muse-spark-1.3</code> + <code>sam-3.1</code> + <code>muse-voice-transcribe-1.0</code>):</strong> Set Provider to <strong>Meta Model API</strong>, complete a real Before/After run on a sink or desk, record a 3-second spoken voice note on the Results screen, and verify the per-surface scorecard, dashed SAM 3.1 bounding boxes, transcribed note, and <code>Verified by Meta Model API · muse-spark-1.3 + SAM 3.1</code> provenance line appear.</div>
-      </li>
-      <li>
-        <input type="checkbox" />
-        <div><strong>1D. Run 1 Live Round on Baseten Spark Open (<code>meta-models/muse-spark-open-1026</code>):</strong> Open <code>⚙ Settings</code>, switch Provider to <strong>Baseten Spark Open</strong>, complete a second Before/After run so live inference traffic registers on Baseten's servers and appends a verified entry to the in-app <strong>Provider Run Log</strong>. Tap <strong>EXPORT LOG</strong> to save the JSON audit trail.</div>
-      </li>
-    </ul>
-  </section>
-
-  <!-- STEP 2 -->
-  <section class="card">
-    <span class="step-badge">Step 2 · Pre-Flight Technical Audit &amp; Schedule</span>
-    <h2>Verify Repository, Live Links &amp; Official Event Schedule</h2>
-    <p>All automated checks are currently green on <code>main</code>. Run this one-liner in your terminal anytime before submitting to re-confirm syntax, banned-token cleanliness, and GitHub Pages status:</p>
-    <div class="copy-box">
-      <div class="copy-box-head">
-        <strong>Terminal Pre-Flight Verification Command</strong>
-        <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy Command</button>
-      </div>
-      <pre class="copy-content">cd /Users/ernestorodriguez/orca/projects/clean-quest/cleanquest &amp;&amp; node --check app.js &amp;&amp; node --check deck.js &amp;&amp; grep -c "powered by Muse at scale" README.md &amp;&amp; gh repo view officebeats/cleanquest --json visibility,isFork,url &amp;&amp; gh api repos/officebeats/cleanquest/pages --jq '.status + " -> " + .html_url'</pre>
-    </div>
-
-    <div class="table-scroll">
-      <table>
-        <tr><th>Live Deliverable</th><th>Public URL (Verify HTTP 200 Before Submitting)</th><th>Status</th></tr>
-        <tr><td><strong>1. Live CleanQuest Web App</strong></td><td><a href="https://officebeats.github.io/cleanquest/" target="_blank" rel="noopener">https://officebeats.github.io/cleanquest/</a></td><td><code>LIVE · BUILT</code></td></tr>
-        <tr><td><strong>2. Public GitHub Repository</strong></td><td><a href="https://github.com/officebeats/cleanquest" target="_blank" rel="noopener">https://github.com/officebeats/cleanquest</a></td><td><code>PUBLIC · NOT A FORK</code></td></tr>
-        <tr><td><strong>3. Judges' Presentation Report (HTML)</strong></td><td><a href="https://officebeats.github.io/cleanquest/docs/judges/report.html" target="_blank" rel="noopener">https://officebeats.github.io/cleanquest/docs/judges/report.html</a></td><td><code>LIVE · 18 SHOTS</code></td></tr>
-        <tr><td><strong>4. Judges' Presentation Report (PDF)</strong></td><td><a href="https://officebeats.github.io/cleanquest/docs/judges/report.pdf" target="_blank" rel="noopener">https://officebeats.github.io/cleanquest/docs/judges/report.pdf</a></td><td><code>LIVE · PDF</code></td></tr>
-        <tr><td><strong>5. Live Breakroom Spectator Board</strong></td><td><a href="https://officebeats.github.io/cleanquest/?spectator=1" target="_blank" rel="noopener">https://officebeats.github.io/cleanquest/?spectator=1</a></td><td><code>LIVE · 15S REFRESH</code></td></tr>
-        <tr><td><strong>6. This Submission Playbook (HTML)</strong></td><td><a href="https://officebeats.github.io/cleanquest/docs/judges/submission.html" target="_blank" rel="noopener">https://officebeats.github.io/cleanquest/docs/judges/submission.html</a></td><td><code>LIVE · HTML PLAYBOOK</code></td></tr>
-      </table>
-    </div>
-
-    <h3>Schedule &amp; Prize Breakdown (Official Waiver + Participant Wiki / Context Briefing)</h3>
-    <div class="table-scroll">
-      <table>
-        <tr><th>Date / Time (ET)</th><th>Milestone / Prize Category</th><th>Action Required for CleanQuest</th></tr>
-        <tr><td><strong>Wed, Nov 4 · 9:00 PM ET</strong><br/><small>(8:00 PM CT / Nov 5 02:00 UTC)</small></td><td><strong>Hard Submission Deadline &amp; Credit Claim Cutoff</strong></td><td>Submit via <a href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit" target="_blank" rel="noopener">/hackathon/submit</a> before 7:00 PM ET (2 hours early). Ensure Ernesto, Bill, and Dom have each claimed their individual $150 Meta API credits.</td></tr>
-        <tr><td><strong>Thu, Nov 5 – Sun, Nov 8</strong></td><td><strong>Stage 1 (Pass/Fail) &amp; Stage 2 (0–10 Weighted Rubric) Judging</strong></td><td>Keep GitHub Pages live, repo public, and Meta/Baseten endpoints healthy. Drive engagement on your X (Twitter) demo post through <strong>Sun, Nov 8 EOD</strong> for the <strong>$20K Most Viral Project</strong> award.</td></tr>
-        <tr><td><strong>Mon, Nov 9 · 12:00 PM ET</strong></td><td><strong>Closing Ceremony · Top 10 Announced (5 Indie + 5 Startup) · Live Finals</strong></td><td>If selected in the Top 5 Indie finalists, run the <strong>3-Minute Live Finals Stage Playbook</strong> (Step 6 below). Public gallery <strong>Community Vote ($10K)</strong> also opens on Nov 9.</td></tr>
-        <tr><td><strong>Mon, Nov 16</strong></td><td><strong>Community Vote Winner Announced ($10,000)</strong></td><td>Share the public gallery voting link with cleaning crews, operators, and community from Nov 9 to Nov 16.</td></tr>
-      </table>
-    </div>
-  </section>
-
-  <!-- STEP 3 -->
+  <!-- STEP 3: 3-MINUTE VIDEO SCRIPT -->
   <section class="card">
     <span class="step-badge">Step 3 · Recording the 3-Minute Demo Video</span>
-    <h2>Shot-by-Shot 3:00 Demo Video Script (Optimized for the 4 Rubric Weights)</h2>
-    <p>Judges score <strong>Impact (30%)</strong>, <strong>Use of Meta AI Tooling (25%)</strong>, <strong>Demo (25%)</strong>, and <strong>Technical Depth (20%)</strong>. Keep total runtime strictly <strong>≤ 3:00</strong> (aim for <code>2:45–2:55</code>) and upload to YouTube (Unlisted or Public), Loom, or direct MP4 as required by the Cerebral Valley form.</p>
-
-    <div class="table-scroll">
-      <table>
-        <tr><th>Timecode</th><th>On Screen</th><th>What to Say / Demonstrate (Rubric Target)</th></tr>
-        <tr>
-          <td><strong>0:00–0:22</strong><br/><small>Mandatory Disclosure + Impact (30%)</small></td>
-          <td>Open on Welcome screen with 122 BPM house groove playing. Tap <code>🌐 ESPAÑOL</code> (hears Mexican Spanish intro), then tap <code>🌐 ENGLISH</code>.</td>
-          <td><strong>Say the mandatory separation line first:</strong> <em>"The base CleanQuest game prototype was pre-existing; everything you see today — the 15-screen trilingual MVP, MECE JanSan taxonomy, Muse Spark 1.3 scorecards, SAM 3.1 overlays, voice transcription, Baseten Spark Open log, 650+ neural voice clips, and Daily Deck — was built during this hackathon. CleanQuest makes the invisible 2 a.m. cleaning shift visible: cleaners prove their work with two photos and own a portable verified record."</em></td>
-        </tr>
-        <tr>
-          <td><strong>0:22–0:50</strong><br/><small>Consent + 10s Judge Demo (Demo 25%)</small></td>
-          <td>Tap <code>ACCEPT THE CHALLENGE</code> → Consent Gate read-aloud + 44px Glove PIN Numpad → Instructions → tap <code>JUDGE DEMO · SAMPLE SCORE</code>.</td>
-          <td>Show the plain-language consent gate (<em>"faces are never identified; data is for training and recognition, never discipline"</em>). Tap <strong>Judge Demo</strong>: let judges hear the <code>0% → 75%</code> F-Dorian count-up roll, the <code>✨ A-RANK</code> musical stinger, and the natural <strong>Kokoro-82M</strong> spoken score + verdict reaction. Point out the 3 weighted bars (<strong>Clean 50% · Technique 25% · Time 25%</strong>) and <code>🔊 REPLAY SUMMARY</code>.</td>
-        </tr>
-        <tr>
-          <td><strong>0:50–1:50</strong><br/><small>Live Clean + Meta AI Stack (Tooling 25%)</small></td>
-          <td>Camera Check-In: show the <strong>10 MECE JanSan Building Sectors, 13 Areas &amp; 28 Spots</strong> + single-QR scanner. Frame a real sink/desk → tap <code>START</code> → wipe surface → tap <code>COMPLETE CHALLENGE</code> (1-tap auto-captures After photo).</td>
-          <td>Highlight: (1) <strong>Locked running counter</strong> (cannot be paused/stopped mid-run), (2) <strong>Host voice inspiring every 6–8 seconds</strong> while <code>sampleLiveRunActivity()</code> samples 9 surface zones live, (3) <strong>1-tap Complete</strong> auto-capturing the 2nd photo, (4) On-device <code>verifyStationEnvironment</code> mismatch gate, and (5) Cloud <strong>Muse Spark 1.3</strong> per-surface scorecard + <strong>SAM 3.1</strong> bounding boxes + spoken voice note transcribed via <strong>Muse Voice Transcribe 1.0</strong>.</td>
-        </tr>
-        <tr>
-          <td><strong>1:50–2:25</strong><br/><small>Baseten Spark Open + Supervisor Tools (Tech Depth 20%)</small></td>
-          <td>Open <code>⚙ Settings</code> → show <strong>1-Click OpenRouter SSO</strong> + <strong>Baseten Spark Open (<code>meta-models/muse-spark-open-1026</code>)</strong> toggle + Provider Run Log export. Then tap <code>🪪 PASSPORT, CREW &amp; SUPERVISOR</code>.</td>
-          <td>Show the <strong>Baseten Spark Open</strong> provider log (evidence for the <em>$10K Best Build on Meta Open Weights</em> prize). On the Supervisor screen, show the geofenced Inspection Log CSV/JSON export, printable V2 QR stickers (Pane 12), 1-tap Squad Switcher (Pane 13), and 5-day Training Pack assignment (Pane 15) — noting that <strong>no admin can ever edit a score</strong>.</td>
-        </tr>
-        <tr>
-          <td><strong>2:25–3:00</strong><br/><small>AAA Daily Deck + Dual Leaderboard Close (Impact + Viral)</small></td>
-          <td>Open <code>DAILY DECK</code> (hears <code>deck-intro.mp3</code>) → swipe 1 card right (<code>✨ NAILED IT! +100 XP</code> + Ding-Chime + subtle <code>YOUR LOGO HERE</code> sponsor crest) → tap <code>🏆</code> to open the <strong>Dual-Mode Leaderboard</strong> (<code>⚡ SHIFT CHALLENGE</code> / <code>🃏 DAILY DECK</code>) + <code>?spectator=1</code>.</td>
-          <td>Show the widescreen animated SVG diorama, brand-neutral learning rule with labeled post-answer sponsor logo slot, and the beat-synced <strong>3-Pillar Championship Podium Stage</strong> + <strong>Daily Deck Leaderboard</strong> + 1-tap <code>🪪 SHARE PASSPORT</code>. Close with: <em>"The system scores, nobody edits — every run builds a verified career record the cleaner owns."</em></td>
-        </tr>
-      </table>
-    </div>
+    <h2>5-Part Video Script (2:50 Total · Mapped to Rubric Weights)</h2>
+    <ol class="numbered-steps">
+      <li>
+        <strong>0:00–0:22 · Mandatory Disclosure + Trilingual Welcome (Impact 30%):</strong>
+        <ul>
+          <li>Start on Welcome screen with the 122 BPM house groove playing.</li>
+          <li>Tap <code>🌐 ESPAÑOL</code> (hears Mexican Spanish intro), then tap <code>🌐 ENGLISH</code>.</li>
+          <li>Say: <em>"The base CleanQuest game prototype was pre-existing; everything you see today — our 15-screen trilingual MVP, MECE JanSan taxonomy, Muse Spark 1.3 scorecards, SAM 3.1 overlays, voice transcription, Baseten Spark Open log, 650+ neural voice clips, and Daily Deck — was built during this hackathon. CleanQuest makes the invisible 2 a.m. cleaning shift visible."</em></li>
+        </ul>
+      </li>
+      <li>
+        <strong>0:22–0:50 · Consent Gate + 10-Second Judge Demo (Demo 25%):</strong>
+        <ul>
+          <li>Tap <code>ACCEPT THE CHALLENGE</code> → show Consent Gate read-aloud + 44px Glove PIN Numpad.</li>
+          <li>On Instructions, tap <code>JUDGE DEMO · SAMPLE SCORE</code>.</li>
+          <li>Let judges hear the <code>0% → 75%</code> count-up roll, <code>✨ A-RANK</code> stinger, and spoken verdict summary.</li>
+          <li>Point out the 3 weighted bars: <strong>Clean 50% · Technique 25% · Time 25%</strong>.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>0:50–1:50 · Live Clean + Meta AI Stack (Meta AI Tooling 25%):</strong>
+        <ul>
+          <li>On Camera Check-In, show the <strong>10 JanSan Building Sectors, 13 Areas &amp; 28 Spots</strong> + single-QR scanner.</li>
+          <li>Tap <code>START</code> on Timer: highlight the <strong>locked counter</strong>, <strong>host voice inspiring every 6–8 seconds</strong>, and live 9-zone luma sampling.</li>
+          <li>Tap <code>COMPLETE CHALLENGE</code>: auto-captures the 2nd photo in 1 step and reveals the <strong>Muse Spark 1.3</strong> per-surface scorecard + <strong>SAM 3.1</strong> bounding boxes + transcribed voice note.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>1:50–2:25 · Baseten Spark Open + Supervisor Tools (Technical Depth 20%):</strong>
+        <ul>
+          <li>Open <code>⚙ Settings</code>: show <strong>Baseten Spark Open (<code>meta-models/muse-spark-open-1026</code>)</strong> and the verified <strong>Provider Run Log</strong>.</li>
+          <li>Open <code>🪪 PASSPORT, CREW &amp; SUPERVISOR</code>: show the geofenced CSV/JSON export, printable V2 QR stickers, Squad Switcher, and 5-day Training Packs.</li>
+        </ul>
+      </li>
+      <li>
+        <strong>2:25–3:00 · Daily Swipe Deck + Dual Leaderboard Close (Impact + Viral):</strong>
+        <ul>
+          <li>Open <code>DAILY DECK</code> (hears <code>deck-intro.mp3</code>) and swipe 1 card right (<code>✨ NAILED IT! +100 XP</code> + subtle <code>YOUR LOGO HERE</code> sponsor crest).</li>
+          <li>Tap <code>🏆</code> to show the <strong>Shift Challenge + Daily Deck Leaderboard</strong> and <code>?spectator=1</code> board.</li>
+        </ul>
+      </li>
+    </ol>
   </section>
 
-  <!-- STEP 4 -->
+  <!-- STEP 4: COPY-PASTE FORM FIELDS -->
   <section class="card">
-    <span class="step-badge">Step 4 · Copy-Paste Cerebral Valley Submission Form</span>
-    <h2>Exact Copy-Paste Fields for the Submission Portal</h2>
-    <p>Open <a href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit" target="_blank" rel="noopener">cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit</a> (or click <strong>Submit Project</strong> on the <a href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/details" target="_blank" rel="noopener">Event Details page</a>), and paste these exact blocks:</p>
+    <span class="step-badge">Step 4 · Copy-Paste Cerebral Valley Submission Fields</span>
+    <h2>1-Click Copy Blocks for <code>/hackathon/submit</code></h2>
 
     <div class="two-col">
       <div class="copy-box">
         <div class="copy-box-head">
-          <strong>Project Name</strong>
+          <strong>1. Project Name</strong>
           <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy</button>
         </div>
         <pre class="copy-content">CleanQuest</pre>
@@ -479,7 +552,7 @@
 
       <div class="copy-box">
         <div class="copy-box-head">
-          <strong>Track, Theme &amp; Bonus Categories</strong>
+          <strong>2. Track, Theme &amp; Bonus Categories</strong>
           <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy</button>
         </div>
         <pre class="copy-content">Track: Indie Developer Track
@@ -493,7 +566,7 @@ Bonus Prizes:
 
     <div class="copy-box">
       <div class="copy-box-head">
-        <strong>Team Members (Submitted by Appointed Representative Ernesto Rodriguez)</strong>
+        <strong>3. Team Members (List All 3 Teammates)</strong>
         <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy</button>
       </div>
       <pre class="copy-content">1. Ernesto Rodriguez (Appointed Representative · Lead Developer &amp; Architect — Oak Park, IL · Aladdin Studio LLC)
@@ -503,7 +576,7 @@ Bonus Prizes:
 
     <div class="copy-box">
       <div class="copy-box-head">
-        <strong>One-Sentence Pitch / Tagline</strong>
+        <strong>4. One-Sentence Pitch</strong>
         <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy</button>
       </div>
       <pre class="copy-content">CleanQuest turns the invisible 2 a.m. commercial cleaning shift into a trilingual AI-verified game, daily micro-training deck, geofenced inspection log, and portable career passport owned by the cleaner.</pre>
@@ -511,7 +584,7 @@ Bonus Prizes:
 
     <div class="copy-box">
       <div class="copy-box-head">
-        <strong>Project Links (Live App, GitHub Repo, Judges' Report &amp; Spectator Board)</strong>
+        <strong>5. Live Project Links</strong>
         <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy</button>
       </div>
       <pre class="copy-content">Live Application (Mobile &amp; Desktop): https://officebeats.github.io/cleanquest/
@@ -523,60 +596,61 @@ Live Breakroom Spectator Board: https://officebeats.github.io/cleanquest/?specta
 
     <div class="copy-box">
       <div class="copy-box-head">
-        <strong>Full Project Description &amp; Architecture (Copy-Paste into Description Field)</strong>
+        <strong>6. Full Project Description (Numbered Summary)</strong>
         <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy</button>
       </div>
-      <pre class="copy-content">PROBLEM &amp; WORLD (BUILD FOR YOUR WORLD)
-Commercial night cleaners do essential, physically demanding work at 2 a.m. that nobody sees — receiving zero recognition, no portable proof of skill when changing jobs, and paper binders of training that nobody opens. Meanwhile, building service contractors (BSCs) lose contracts over "they didn't clean" disputes and spend hours driving between sites for re-checks.
+      <pre class="copy-content">1. PROBLEM &amp; WORLD (BUILD FOR YOUR WORLD):
+   - Night-shift commercial cleaners do essential work at 2 a.m. with zero visibility, no portable proof of skill, and paper training binders nobody opens.
+   - Building service contractors (BSCs) lose contracts over "they didn't clean" disputes and spend hours driving between sites for re-checks.
 
-WHAT CLEANQUEST DOES
-CleanQuest is a closed-loop gamified work-verification platform, daily trilingual training deck (English, Mexican Spanish, and Polish), and portable cleaner-owned career record:
-1. Check-In &amp; MECE JanSan Station Assignment: Cleaners check in via a registered site picker and Version-2 QR sticker scanner across a MECE JanSan taxonomy of 10 commercial building sectors, 13 facility areas, and 28 cleaning spots.
-2. Timed Run &amp; Live 9-Zone Vision Telemetry: A cleaner snaps an in-app Before photo and cleans against a locked 1:30 benchmark clock while an energetic game-show host hypes them every 6–8 seconds over a 122 BPM WebAudio house groove. During the run, on-device vision samples a 36×27 luma grid across 9 surface zones and captures mid-run progress snapshots. Tapping Complete Challenge automatically captures the After photo and submits in one step.
-3. Two-Rung AI Verification Ladder (On-Device + Meta Cloud &amp; Open Weights):
-   - Rung 1 (On-Device, Zero-Key, Private by Construction): MediaPipe EfficientDet-Lite0 runs an Environment &amp; Station Mismatch Gate (verifyStationEnvironment) plus bounding-box object clearance matching, paired with a 96×72 structural edge correlation check, a 3×3 luminance gradient analyzer, and MediaPipe Pose Landmarker Lite for victory-pose style scoring.
-   - Rung 2 (Meta Model API &amp; Baseten Spark Open): Downscaled 768px Before/After JPEG pairs are graded by Muse Spark 1.3 (api.meta.ai) or Muse Spark Open (meta-models/muse-spark-open-1026 on Baseten) into structured per-surface scorecards with 0.6 confidence gating, grounded in pixels by SAM 3.1 surface bounding-box overlays, with spoken notes transcribed via Muse Voice Transcribe 1.0 (muse-voice-transcribe-1.0). Every Baseten/cloud run is recorded in an exportable Provider Run Log JSON.
-4. Explainable 50/25/25 Scorecard &amp; 1-Tap Appeals: Every score is explained across three bars — Visible Cleanliness (50%), Technique (25%), and Benchmark Time (25%, with +15s chemical dwell credits never penalizing speed) — accompanied by a 5-Tier musical stinger, gapless Kokoro-82M spoken percentage readout, and a 1-tap Dispute button. No admin, supervisor, or sponsor can ever edit a score.
-5. AAA Daily Swipe Deck &amp; Dual-Mode Esports Leaderboard: Cleaners swipe 5 brand-neutral training cards per day (with widescreen SVG dioramas, missed-card repeat, and post-answer labeled sponsor slots) and compete on both the Shift Challenge Leaderboard and the Daily Deck Leaderboard, while supervisors manage sites, QR stickers, 5-seat squads, and 5-day training packs.</pre>
+2. MECE JANSAN CHECK-IN &amp; LOCKED TIMED RUN:
+   - Cleaners check in via a registered site picker and Version-2 QR sticker scanner across 10 building sectors, 13 facility areas, and 28 cleaning spots.
+   - After snapping an in-app Before photo, a locked 1:30 countdown runs while a neural host voice hypes the cleaner every 6–8 seconds over a 122 BPM WebAudio house groove in English, Mexican Spanish, or Polish.
+   - Tapping Complete Challenge automatically captures the After photo and submits in one step.
+
+3. TWO-RUNG AI VERIFICATION (ON-DEVICE + META CLOUD &amp; OPEN WEIGHTS):
+   - Rung 1 (On-Device, Zero-Key): MediaPipe EfficientDet-Lite0 station mismatch gate (verifyStationEnvironment) + object clearance matching, 96×72 structural edge correlation, 3×3 luminance zone analyzer, and Pose Landmarker Lite style scoring.
+   - Rung 2 (Meta Model API + Baseten Spark Open): Muse Spark 1.3 (api.meta.ai) and Muse Spark Open (meta-models/muse-spark-open-1026 on Baseten) produce per-surface scorecards with 0.6 confidence gating, SAM 3.1 surface bounding-box overlays, and Muse Voice Transcribe 1.0 spoken-note transcription, logged to an exportable Provider Run Log JSON.
+
+4. EXPLAINABLE 50/25/25 SCORECARD, DAILY DECK &amp; DUAL LEADERBOARD:
+   - Every run is explained across Visible Cleanliness (50%), Technique (25%), and Benchmark Time (25% with +15s dwell credits), with a 1-tap Dispute button and zero admin score editing.
+   - Includes a 30-card trilingual Daily Swipe Deck and a Dual-Mode Leaderboard (Shift Challenge + Daily Deck) plus supervisor tools (Panes 11–15).</pre>
     </div>
   </section>
 
-  <!-- STEP 5 -->
+  <!-- STEP 5: X POST & SCHEDULE -->
   <section class="card">
-    <span class="step-badge">Step 5 · $20,000 Most Viral Prize Playbook</span>
-    <h2>Post the Demo Video on X (Twitter) &amp; Submit the Post Link on the Portal</h2>
-    <p>The <strong>Most Viral ($20,000)</strong> bonus prize goes to the demo video posted on X (Twitter) with the highest engagement through <strong>Sunday, November 8, 2026 EOD</strong>. Remember to <strong>paste your X post link into the Cerebral Valley submission form</strong> as well!</p>
+    <span class="step-badge">Step 5 · $20K Viral Post &amp; Final Schedule</span>
+    <h2>Post on X (Twitter) &amp; Track Key Dates</h2>
     <div class="copy-box">
       <div class="copy-box-head">
-        <strong>X (Twitter) Launch Post Template</strong>
+        <strong>X (Twitter) Launch Post Template (Link Post in Submission Form)</strong>
         <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy Post</button>
       </div>
       <pre class="copy-content">We built CleanQuest for the @MetaforDevs &amp; @cerebral_valley Global AI Developer Hackathon! 🧹✨
 
-Night-shift cleaners do invisible work at 2 a.m. CleanQuest turns commercial cleaning into a trilingual (EN / ES-MX / PL) game-show challenge verified by Muse Spark 1.3, SAM 3.1 &amp; Baseten Spark Open:
-📸 Snap Before &amp; After (1-tap auto-capture)
-🎙️ Neural host hypes you every 6–8s over a 122 BPM house groove
-🧠 50/25/25 AI scorecard + SAM 3.1 surface overlays
-🃏 Daily Swipe Deck + Dual Esports Leaderboard
+CleanQuest turns commercial night cleaning into a trilingual (EN / ES-MX / PL) AI-verified game powered by Muse Spark 1.3, SAM 3.1 &amp; Baseten Spark Open:
+1. 📸 1-tap Before/After capture + QR check-in
+2. 🎙️ Neural host hypes you every 6–8s over a 122 BPM house groove
+3. 🧠 50/25/25 scorecard + SAM 3.1 surface overlays
+4. 🃏 Daily Swipe Deck + Dual Esports Leaderboard
 
-Try it live (no login needed): https://officebeats.github.io/cleanquest/
+Try it live: https://officebeats.github.io/cleanquest/
 Judges' Report: https://officebeats.github.io/cleanquest/docs/judges/report.html</pre>
+    </div>
+
+    <div class="table-scroll">
+      <table>
+        <tr><th>Date &amp; Time (ET)</th><th>Event Milestone</th><th>Your Action</th></tr>
+        <tr><td><strong>Wed, Nov 4 · 9:00 PM ET</strong></td><td><strong>Submission &amp; Credit Claim Deadline</strong></td><td>1. Claim $150 Meta credits.<br/>2. Run <code>⚡ TEST &amp; LOG TELEMETRY</code>.<br/>3. Submit at <a href="https://cerebralvalley.ai/e/meta-ai-developer-hackathon/hackathon/submit" target="_blank" rel="noopener">/hackathon/submit</a> by 7:00 PM ET.</td></tr>
+        <tr><td><strong>Thu, Nov 5 – Sun, Nov 8</strong></td><td><strong>Judging &amp; $20K Viral Window</strong></td><td>1. Keep GitHub Pages live.<br/>2. Drive engagement on X post through Nov 8 EOD.</td></tr>
+        <tr><td><strong>Mon, Nov 9 · 12:00 PM ET</strong></td><td><strong>Closing Ceremony &amp; Live Finals</strong></td><td>1. Top 5 per track present live.<br/>2. Community Vote ($10K) opens (winner Nov 16).</td></tr>
+      </table>
     </div>
   </section>
 
-  <!-- STEP 6 -->
-  <section class="card">
-    <span class="step-badge">Step 6 · Live Finals Playbook (Monday, Nov 9, 2026 · 12:00 PM ET)</span>
-    <h2>How to Run the Live Finals Stage Demo if Selected in Top 5</h2>
-    <ol>
-      <li><strong>15 Minutes Before Going Live:</strong> Open <a href="https://officebeats.github.io/cleanquest/" target="_blank" rel="noopener">officebeats.github.io/cleanquest</a> on your phone/laptop, open <code>⚙ Settings</code>, confirm your <strong>Meta Model API</strong> and <strong>Baseten</strong> keys are saved, run 1 warmup round so MediaPipe TFLite weights are cached in the browser, and open <a href="https://officebeats.github.io/cleanquest/?spectator=1" target="_blank" rel="noopener">?spectator=1</a> on a second tab/monitor.</li>
-      <li><strong>First 20 Seconds on Stage:</strong> Let judges hear 5 seconds of the 122 BPM house groove + Welcome intro, tap <code>🌐 ESPAÑOL</code> to demonstrate instant Mexican Spanish parity, then tap <code>JUDGE DEMO · SAMPLE SCORE</code> on Instructions for an instant 10-second <code>75% ✨ A-RANK</code> reveal.</li>
-      <li><strong>Live 60-Second Room Run:</strong> Scan the printed <code>CQ-QR-OFFICE-BREAKROOM-SINK</code> sticker, tap <code>START</code>, wipe the prop surface while the host calls the action every 6–8 seconds, and tap <code>COMPLETE CHALLENGE</code> to auto-capture the After shot and reveal the live <strong>Muse Spark 1.3 + SAM 3.1</strong> scorecard.</li>
-    </ol>
-  </section>
-
   <footer>
-    CleanQuest Submission Playbook · Meta Global AI Developer Hackathon (Oct 26 – Nov 4, 2026) · <a href="report.html">Judges' Presentation Report</a> · <a href="../../index.html">Launch App</a>
+    CleanQuest Submission Playbook (HTML Only) · Meta Global AI Developer Hackathon · <a href="report.html">Judges' Presentation Report</a> · <a href="../../index.html">Launch App</a>
   </footer>
 </main>
 
@@ -590,6 +664,39 @@ function copyBlock(btn) {
     setTimeout(function() { btn.textContent = orig; }, 1600);
   });
 }
+
+(function startDeadlineCountdown() {
+  // Wed, Nov 4, 2026 9:00 PM EST = 2026-11-05T02:00:00Z
+  var targetMs = Date.parse('2026-11-05T02:00:00Z');
+  var dEl = document.getElementById('cdDays');
+  var hEl = document.getElementById('cdHours');
+  var mEl = document.getElementById('cdMins');
+  var sEl = document.getElementById('cdSecs');
+  var subEl = document.getElementById('countdownSubnote');
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tick() {
+    var diff = targetMs - Date.now();
+    if (diff <= 0) {
+      if (dEl) dEl.textContent = '00';
+      if (hEl) hEl.textContent = '00';
+      if (mEl) mEl.textContent = '00';
+      if (sEl) sEl.textContent = '00';
+      if (subEl) subEl.textContent = 'Submission window closed (Nov 4, 9:00 PM ET)';
+      return;
+    }
+    var totalSecs = Math.floor(diff / 1000);
+    var days = Math.floor(totalSecs / 86400);
+    var hours = Math.floor((totalSecs % 86400) / 3600);
+    var mins = Math.floor((totalSecs % 3600) / 60);
+    var secs = totalSecs % 60;
+    if (dEl) dEl.textContent = pad(days);
+    if (hEl) hEl.textContent = pad(hours);
+    if (mEl) mEl.textContent = pad(mins);
+    if (sEl) sEl.textContent = pad(secs);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
 </script>
 </body>
 </html>

@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031-29" />
+  <link rel="stylesheet" href="styles.css?v=20261031-30" />
 </head>
 
 <body>
@@ -1211,6 +1211,13 @@
           <small id="providerLogEmpty" data-i18n="emptyLog">No runs logged yet.</small>
           <div class="settings-row">
             <button
+              id="verifyLiveTelemetryButton"
+              class="primary-button"
+              type="button"
+            >
+              ⚡ TEST &amp; LOG TELEMETRY
+            </button>
+            <button
               id="providerLogExport"
               class="secondary-button"
               type="button"
@@ -1219,6 +1226,7 @@
               EXPORT LOG (JSON)
             </button>
           </div>
+          <small id="telemetryVerifyStatus" class="fine-print hidden"></small>
         </div>
 
         <div class="sticky-cta">
@@ -1437,7 +1445,7 @@
   <canvas id="arcadeFxCanvas" class="arcade-fx-canvas" aria-hidden="true"></canvas>
   <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
   <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
-  <script src="deck.js?v=20261031-29"></script>
-  <script src="app.js?v=20261031-29"></script>
+  <script src="deck.js?v=20261031-30"></script>
+  <script src="app.js?v=20261031-30"></script>
 </body>
 </html>

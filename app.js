@@ -7129,6 +7129,59 @@ function exportProviderLog() {
   setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
+async function verifyLiveTelemetry() {
+  const statusEl = document.getElementById("telemetryVerifyStatus");
+  const btn = document.getElementById("verifyLiveTelemetryButton");
+  saveSettingsKeys();
+  const saved = loadCloudSettings();
+  if (statusEl) {
+    statusEl.classList.remove("hidden");
+    statusEl.textContent = "⏳ Sending live telemetry probe to configured provider(s)…";
+  }
+  if (btn) btn.disabled = true;
+  const prevDemo = state.demoMode;
+  const prevJudge = state.judgeDemo;
+  try {
+    state.demoMode = false;
+    state.judgeDemo = false;
+    const before = { ...createDemoCapture("before"), placeholder: false };
+    const after = { ...createDemoCapture("after"), placeholder: false };
+    const results = [];
+
+    if (saved.metaKey) {
+      localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify({ ...saved, provider: "meta" }));
+      const rMeta = await getVerifiedScore({}, before, after);
+      if (rMeta?.status === "verified") {
+        await getSamOverlays({ verified: rMeta }, before, after);
+      }
+      results.push(`Primary (${rMeta?.provider || "meta"} · ${rMeta?.model || CONFIG.cloud.model}): ${rMeta?.status || "done"}`);
+    }
+
+    if (saved.basetenKey || (!saved.metaKey && saved.provider === "baseten")) {
+      localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify({ ...saved, provider: "baseten" }));
+      const rBase = await getVerifiedScore({}, before, after);
+      results.push(`Baseten (${CONFIG.cloud.baseten.model}): ${rBase?.status || "done"}`);
+    }
+
+    if (!saved.metaKey && !saved.basetenKey) {
+      const rFallback = await getVerifiedScore({}, before, after);
+      results.push(`No API key entered (${rFallback?.status || "offline/mock"} logged — paste Meta or Baseten key above first)`);
+    }
+
+    localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(saved));
+    refreshSettingsInputs();
+    renderProviderLog();
+    if (statusEl) {
+      statusEl.textContent = `✓ ${results.join(" · ")}`;
+    }
+    return results;
+  } finally {
+    state.demoMode = prevDemo;
+    state.judgeDemo = prevJudge;
+    if (btn) btn.disabled = false;
+  }
+}
+
 function detectProviderFromKey(rawKey) {
   const k = String(rawKey || "").trim();
   if (!k) return "meta";
@@ -13569,6 +13622,12 @@ function bindEvents() {
 
   if (els.providerLogExport) {
     els.providerLogExport.addEventListener("click", exportProviderLog);
+  }
+  const verifyTelemBtn = document.getElementById("verifyLiveTelemetryButton");
+  if (verifyTelemBtn) {
+    verifyTelemBtn.addEventListener("click", () => {
+      void verifyLiveTelemetry();
+    });
   }
 
   if (els.voiceRecordButton) {
