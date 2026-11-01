@@ -355,6 +355,34 @@
     grid-template-columns: 1fr 1fr;
     gap: 18px;
   }
+  .script-shots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .script-shot-card {
+    margin: 0;
+    padding: 8px;
+    border-radius: 12px;
+    background: rgba(4, 14, 26, 0.9);
+    border: 1px solid rgba(69, 234, 255, 0.28);
+    text-align: center;
+  }
+  .script-shot-card img {
+    width: 100%;
+    max-height: 280px;
+    object-fit: contain;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto 6px;
+  }
+  .script-shot-card figcaption {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--cyan);
+    line-height: 1.3;
+  }
   @media (max-width: 820px) {
     .two-col { grid-template-columns: 1fr; }
     header.hero { padding: 24px 16px; }
@@ -437,33 +465,20 @@
     <span class="step-badge">Step 1 · Credits &amp; Live Partner Telemetry Status</span>
     <h2>What Is Completed vs. What Is Left</h2>
 
-    <h3>✅ Completed (Already Done in Your Orca Browser)</h3>
+    <h3>✅ Completed (All Keys Created, Saved &amp; Verified in Your Orca Browser)</h3>
     <ol class="numbered-steps">
-      <li><strong>Created &amp; Saved Your Meta Model API Key:</strong> Minted the <code>CleanQuest</code> API key on <a href="https://dev.meta.ai/api-keys" target="_blank" rel="noopener">dev.meta.ai/api-keys ↗</a> and saved it directly into CleanQuest <code>⚙ Settings</code> in your Orca browser.</li>
-      <li><strong>Added 1-Tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in Settings:</strong> Verifies live <code>muse-spark-1.3</code> and <code>meta-models/muse-spark-open-1026</code> responses with <code>✓ verified</code> / <code>⚠ error</code> badges.</li>
+      <li><strong>Meta Model API Key Created &amp; Saved:</strong> Minted the <code>CleanQuest</code> API key on <a href="https://dev.meta.ai/api-keys" target="_blank" rel="noopener">dev.meta.ai/api-keys ↗</a> and saved it in CleanQuest <code>⚙ Settings</code> in your Orca browser (all $150 hackathon credits already redeemed and used — no payment needed).</li>
+      <li><strong>Baseten Signed In via Google SSO &amp; Key Saved:</strong> Signed in to <a href="https://app.baseten.co/settings/api_keys" target="_blank" rel="noopener">app.baseten.co/settings/api_keys ↗</a> via Google SSO, created workspace <code>CleanQuest</code>, minted key <code>cleanquest-key</code>, saved it in CleanQuest <code>⚙ Settings</code>, and verified live multimodal JSON scorecard inference (<code>HTTP 200</code>) on Baseten <strong>Muse Spark Open</strong>.</li>
+      <li><strong>Added 1-Tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in Settings:</strong> Verifies live provider responses with <code>✓ verified</code> / <code>⚠ error</code> badges.</li>
     </ol>
 
-    <h3>⏳ Left for You to Do (3 Quick Actions)</h3>
+    <h3>⏳ Left for You to Do (1 Optional Action When Recording Your Video)</h3>
     <ol class="numbered-steps">
       <li>
-        <strong>Sign in to Baseten &amp; Paste Your Baseten Key (Orca Tab 2):</strong>
+        <strong>Record 1 Live Camera Round for Your 3-Minute Video &amp; Export JSON:</strong>
         <ul>
-          <li>Sign in at <a href="https://app.baseten.co/settings/api_keys" target="_blank" rel="noopener">app.baseten.co/settings/api_keys ↗</a> and copy your Baseten API key.</li>
-          <li>In CleanQuest <code>⚙ Settings</code> (already open in Orca Tab 2 with your Meta key pre-filled), paste your Baseten key into <strong>Baseten / Secondary Key</strong> and tap <strong><code>SAVE KEYS</code></strong>.</li>
-        </ul>
-      </li>
-      <li>
-        <strong>Tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in CleanQuest Settings:</strong>
-        <ul>
-          <li>Scroll to the <strong>PROVIDER RUN LOG</strong> card in <code>⚙ Settings</code> and tap <strong><code>⚡ TEST &amp; LOG TELEMETRY</code></strong>.</li>
-          <li>Confirm the status line shows <code>✓ Primary (meta · muse-spark-1.3): verified · ✓ Baseten (meta-models/muse-spark-open-1026): verified</code>.</li>
-        </ul>
-      </li>
-      <li>
-        <strong>Complete 1 Real Camera Run per Provider &amp; Export JSON:</strong>
-        <ul>
-          <li>Run <strong>1 real Before/After camera round</strong> + spoken voice note on <strong>Meta Model API</strong> (<code>muse-spark-1.3</code> + <code>sam-3.1</code> + <code>muse-voice-transcribe-1.0</code>).</li>
-          <li>Switch Provider in <code>⚙ Settings</code> to <strong>Baseten (Spark Open)</strong>, run <strong>1 real Before/After camera round</strong> on <code>meta-models/muse-spark-open-1026</code>, and tap <strong><code>EXPORT LOG (JSON)</code></strong>.</li>
+          <li>In CleanQuest (already configured with both keys in Orca Tab 2), run <strong>1 real Before/After camera round</strong> during your video recording.</li>
+          <li>Open <code>⚙ Settings</code> and tap <strong><code>EXPORT LOG (JSON)</code></strong> to show the live provider audit trail on screen.</li>
         </ul>
       </li>
     </ol>
@@ -495,6 +510,11 @@
           <li>Tap <code>🌐 ESPAÑOL</code> (hears Mexican Spanish intro), then tap <code>🌐 ENGLISH</code>.</li>
           <li>Say: <em>"The base CleanQuest game prototype was pre-existing; everything you see today — our 15-screen trilingual MVP, commercial cleaning station taxonomy, Muse Spark 1.3 scorecards, SAM 3.1 overlays, voice transcription, Baseten Spark Open log, 650+ neural voice clips, and Daily Deck — was built during this hackathon. CleanQuest makes the invisible 2 a.m. cleaning shift visible."</em></li>
         </ul>
+        <div class="script-shots">
+          <figure class="script-shot-card"><img src="shots/01-welcome.png" alt="Welcome screen in English" /><figcaption>1A. Welcome Hub (EN + 122 BPM Groove)</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/03-welcome-es.png" alt="Welcome screen in Mexican Spanish" /><figcaption>1B. Instant Mexican Spanish Switch</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/15-desktop-welcome.png" alt="Desktop Welcome view" /><figcaption>1C. Desktop Full-Canvas View</figcaption></figure>
+        </div>
       </li>
       <li>
         <strong>0:22–0:50 · Consent Gate + 10-Second Judge Demo (Demo 25%):</strong>
@@ -504,21 +524,37 @@
           <li>Let judges hear the <code>0% → 75%</code> count-up roll, <code>✨ A-RANK</code> stinger, and spoken verdict summary.</li>
           <li>Point out the 3 weighted bars: <strong>Clean 50% · Technique 25% · Time 25%</strong>.</li>
         </ul>
+        <div class="script-shots">
+          <figure class="script-shot-card"><img src="shots/02-consent.png" alt="Consent Gate and Glove PIN Numpad" /><figcaption>2A. Consent Read-Aloud &amp; Glove PIN Pad</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/04-instructions.png" alt="Instructions with 1-Tap Judge Demo" /><figcaption>2B. Instructions &amp; 1-Tap Judge Demo</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/07-results.png" alt="Results 75% A-Rank Scorecard" /><figcaption>2C. 75% A-Rank Scorecard &amp; 3 Bars</figcaption></figure>
+        </div>
       </li>
       <li>
         <strong>0:50–1:50 · Live Clean + Meta AI Stack (Meta AI Tooling 25%):</strong>
         <ul>
-          <li>On Camera Check-In, show the <strong>10 JanSan Building Sectors, 13 Areas &amp; 28 Spots</strong> + single-QR scanner.</li>
+          <li>On Camera Check-In, show the <strong>10 Building Sectors, 13 Areas &amp; 28 Spots</strong> + single-QR scanner.</li>
           <li>Tap <code>START</code> on Timer: highlight the <strong>locked counter</strong>, <strong>host voice inspiring every 6–8 seconds</strong>, and live 9-zone luma sampling.</li>
-          <li>Tap <code>COMPLETE CHALLENGE</code>: auto-captures the 2nd photo in 1 step and reveals the <strong>Muse Spark 1.3</strong> per-surface scorecard + <strong>SAM 3.1</strong> bounding boxes + transcribed voice note.</li>
+          <li>Tap <code>COMPLETE CHALLENGE</code>: auto-captures the 2nd photo in 1 step and reveals the per-surface scorecard + <strong>SAM 3.1</strong> bounding boxes + transcribed voice note.</li>
         </ul>
+        <div class="script-shots">
+          <figure class="script-shot-card"><img src="shots/05-camera.png" alt="Camera Check-In with 10 Building Sectors" /><figcaption>3A. Station Check-In &amp; QR Scanner</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/06-timer.png" alt="Locked 1:30 Countdown Timer" /><figcaption>3B. Locked Timer &amp; 1-Tap Complete</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/19-desktop-results.png" alt="Desktop 2-Column Results Scorecard" /><figcaption>3C. Full-Canvas Before/After Scorecard</figcaption></figure>
+        </div>
       </li>
       <li>
         <strong>1:50–2:25 · Baseten Spark Open + Supervisor Tools (Technical Depth 20%):</strong>
         <ul>
-          <li>Open <code>⚙ Settings</code>: show <strong>Baseten Spark Open (<code>meta-models/muse-spark-open-1026</code>)</strong> and the verified <strong>Provider Run Log</strong>.</li>
+          <li>Open <code>⚙ Settings</code>: show <strong>Baseten Spark Open</strong> and the verified <strong>Provider Run Log</strong>.</li>
           <li>Open <code>🪪 PASSPORT, CREW &amp; SUPERVISOR</code>: show the geofenced CSV/JSON export, printable V2 QR stickers, Squad Switcher, and 5-day Training Packs.</li>
         </ul>
+        <div class="script-shots">
+          <figure class="script-shot-card"><img src="shots/11-settings.png" alt="Settings with Baseten Spark Open and Provider Run Log" /><figcaption>4A. Settings, 1-Click SSO &amp; Provider Log</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/09-records.png" alt="Passport, Inspection Log and Supervisor Pledge" /><figcaption>4B. Passport &amp; Geofenced Inspection Log</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/10-records-sites.png" alt="Site Registration and Printable QR Stickers" /><figcaption>4C. Site Registry &amp; Printable V2 QR</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/16-squads.png" alt="Crew Invite and 1-Tap Squad Switcher" /><figcaption>4D. Crew Invite &amp; Squad Switcher</figcaption></figure>
+        </div>
       </li>
       <li>
         <strong>2:25–3:00 · Daily Swipe Deck + Dual Leaderboard Close (Impact + Viral):</strong>
@@ -526,6 +562,12 @@
           <li>Open <code>DAILY DECK</code> (hears <code>deck-intro.mp3</code>) and swipe 1 card right (<code>✨ NAILED IT! +100 XP</code> + subtle <code>YOUR LOGO HERE</code> sponsor crest).</li>
           <li>Tap <code>🏆</code> to show the <strong>Shift Challenge + Daily Deck Leaderboard</strong> and <code>?spectator=1</code> board.</li>
         </ul>
+        <div class="script-shots">
+          <figure class="script-shot-card"><img src="shots/12-deck.png" alt="Daily Swipe Deck with Nailed It stamp and Sponsor Logo" /><figcaption>5A. Daily Deck + Subtle Sponsor Logo</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/08-leaderboard.png" alt="Mobile Dual-Mode Leaderboard with 3-Pillar Podium" /><figcaption>5B. Mobile Podium &amp; Dual Leaderboard</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/20-desktop-leaderboard.png" alt="Desktop 2-Column Esports Leaderboard" /><figcaption>5C. Desktop 2-Column Esports Board</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/13-spectator.png" alt="Live Breakroom Spectator Board" /><figcaption>5D. Live Spectator Board (?spectator=1)</figcaption></figure>
+        </div>
       </li>
     </ol>
   </section>

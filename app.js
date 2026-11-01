@@ -7417,29 +7417,39 @@ async function getVerifiedScore(aiResult, before, after) {
         const extraHeaders = target.provider === "openrouter"
           ? { "HTTP-Referer": window.location.origin, "X-Title": "CleanQuest" }
           : {};
+        const buildOaiBody = (modelId) => JSON.stringify({
+          model: modelId,
+          messages: [
+            { role: target.role, content: CLOUD_SCORING_PROMPT },
+            {
+              role: "user",
+              content: [
+                { type: "text", text: "BEFORE photo first, AFTER photo second. Score the visible change." },
+                { type: "image_url", image_url: { url: smallBefore } },
+                { type: "image_url", image_url: { url: smallAfter } }
+              ]
+            }
+          ]
+        });
+        const reqHeaders = {
+          Authorization: `Bearer ${target.key}`,
+          "Content-Type": "application/json",
+          ...extraHeaders
+        };
         response = await fetch(target.url, {
           method: "POST",
-          headers: {
-            Authorization: `Bearer ${target.key}`,
-            "Content-Type": "application/json",
-            ...extraHeaders
-          },
-          body: JSON.stringify({
-            model: target.model,
-            messages: [
-              { role: target.role, content: CLOUD_SCORING_PROMPT },
-              {
-                role: "user",
-                content: [
-                  { type: "text", text: "BEFORE photo first, AFTER photo second. Score the visible change." },
-                  { type: "image_url", image_url: { url: smallBefore } },
-                  { type: "image_url", image_url: { url: smallAfter } }
-                ]
-              }
-            ]
-          }),
+          headers: reqHeaders,
+          body: buildOaiBody(target.model),
           signal: controller.signal
         });
+        if (target.provider === "baseten" && response.status === 404 && target.model !== "meta-models/muse-spark-open") {
+          response = await fetch(target.url, {
+            method: "POST",
+            headers: reqHeaders,
+            body: buildOaiBody("meta-models/muse-spark-open"),
+            signal: controller.signal
+          });
+        }
       }
     } finally {
       clearTimeout(timeout);
