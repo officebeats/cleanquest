@@ -3050,7 +3050,7 @@ function speakWelcomeIntro(language = state.language) {
   if (state.voice.muted || SELFTEST_MODE) return null;
   stopSpeech();
   const lang = HOST_LINES[language] ? language : "en";
-  const url = `assets/audio/${lang}/welcome-intro.mp3?v=20261031-27`;
+  const url = `assets/audio/${lang}/welcome-intro.mp3?v=20261031-28`;
   const fallback = t("welcomeBody");
   state.voice.lastPath = "clip";
   return playHostClip(url, fallback, { rate: 1.0, pitch: 1.0 }, "welcome-intro");
