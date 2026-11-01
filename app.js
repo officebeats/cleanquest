@@ -7021,6 +7021,19 @@ function saveSettingsKeys() {
   if (els.basetenApiKey) els.basetenApiKey.value = next.basetenKey;
   els.settingsSavedNote?.classList.remove("hidden");
 }
+function saveRoutingSelection() {
+  try {
+    const modelSel = document.getElementById("openRouterModelSelect");
+    if (!modelSel) return;
+    const current = loadCloudSettings();
+    const next = {
+      ...current,
+      openRouterModel: modelSel.value || "auto"
+    };
+    localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(next));
+    modelSel.value = next.openRouterModel;
+  } catch {}
+}
 
 function clearSettingsKeys() {
   try {
@@ -14476,6 +14489,10 @@ function bindEvents() {
 
   if (els.settingsDone) {
     els.settingsDone.addEventListener("click", closeSettings);
+  }
+  const routingSel = document.getElementById("openRouterModelSelect");
+  if (routingSel) {
+    routingSel.addEventListener("change", saveRoutingSelection);
   }
 
   if (els.providerLogExport) {
