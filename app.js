@@ -51,7 +51,7 @@ const CONFIG = {
     asrModel: "muse-voice-transcribe-1.0",
     baseten: {
       endpoint: "https://inference.baseten.co/v1/chat/completions",
-      model: "meta-models/muse-spark-open"
+      model: "meta-models/muse-spark-open-1026"
     },
     fireworks: {
       endpoint: "https://api.fireworks.ai/inference/v1/chat/completions",
