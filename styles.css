@@ -6830,8 +6830,15 @@ body.music-beat-thump #leaderboardScreen #playAgainButton {
   gap: 16px !important;
 }
 
-#resultsScreen #analysisLoading.hidden {
+#resultsScreen #analysisLoading.hidden,
+#resultsScreen #resultsBody.hidden {
   display: none !important;
+}
+
+#leaderboardScreen .you-gap-pill {
+  white-space: nowrap !important;
+  overflow: visible !important;
+  max-width: none !important;
 }
 
 .cleaning-loader-stage {

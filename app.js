@@ -8752,7 +8752,7 @@ function selectPoseEmote(poseId) {
 
 function evaluatePoseEmoteMatch(landmarks, poseId = getSelectedPoseId()) {
   if (!Array.isArray(landmarks) || landmarks.length < 17) {
-    return { styleScore: 7.5, accuracyPct: 75, bonusPts: 3 };
+    return { valid: false, styleScore: 7.5, accuracyPct: 0, bonusPts: 0 };
   }
   const leftShoulder = landmarks[11];
   const rightShoulder = landmarks[12];
@@ -8762,7 +8762,7 @@ function evaluatePoseEmoteMatch(landmarks, poseId = getSelectedPoseId()) {
   const rightWrist = landmarks[16];
   const required = [leftShoulder, rightShoulder, leftElbow, rightElbow, leftWrist, rightWrist];
   if (required.some((point) => !point || landmarkVisibility(point) < 0.35)) {
-    return { styleScore: 7.5, accuracyPct: 75, bonusPts: 3 };
+    return { valid: false, styleScore: 7.5, accuracyPct: 0, bonusPts: 0 };
   }
 
   const shoulderWidth = Math.abs(rightShoulder.x - leftShoulder.x) || 0.15;
@@ -8775,7 +8775,7 @@ function evaluatePoseEmoteMatch(landmarks, poseId = getSelectedPoseId()) {
   const symmetryScore = 1 - clamp(Math.abs((leftShoulder.y - leftWrist.y) - (rightShoulder.y - rightWrist.y)) / 0.28);
   const elbowSymmetry = 1 - clamp(Math.abs((leftShoulder.y - leftElbow.y) - (rightShoulder.y - rightElbow.y)) / 0.28);
 
-  let matchRatio = 0.75;
+  let matchRatio = 0;
   if (poseId === "flex") {
     const elbowLevel = 1 - clamp((Math.abs(leftElbow.y - leftShoulder.y) + Math.abs(rightElbow.y - rightShoulder.y)) / 0.32);
     const wideElbows = clamp(elbowSpan / (shoulderWidth * 1.85));
@@ -8794,9 +8794,9 @@ function evaluatePoseEmoteMatch(landmarks, poseId = getSelectedPoseId()) {
   }
 
   const style = Math.round(clamp(4 + matchRatio * 6, 4, 10) * 10) / 10;
-  const accuracyPct = Math.round(clamp(50 + matchRatio * 49, 52, 99));
-  const bonusPts = accuracyPct >= 85 ? 5 : accuracyPct >= 70 ? 3 : accuracyPct >= 55 ? 2 : 1;
-  return { styleScore: style, accuracyPct, bonusPts };
+  const accuracyPct = Math.round(clamp(matchRatio * 100, 0, 100));
+  const bonusPts = accuracyPct >= 85 ? 5 : accuracyPct >= 75 ? 3 : accuracyPct >= 65 ? 2 : 0;
+  return { valid: true, styleScore: style, accuracyPct, bonusPts };
 }
 
 function computeStyleScore(landmarks, poseId = getSelectedPoseId()) {
@@ -8887,9 +8887,10 @@ async function runVictoryPose() {
   els.poseButton.disabled = true;
   els.poseStatus.textContent = t("poseAnalyzing");
 
-  let styleScore = 9.2;
-  let accuracyPct = 92;
-  let bonusPts = 5;
+  let styleScore = 7.5;
+  let accuracyPct = 0;
+  let bonusPts = 0;
+  let validMatch = false;
   let detectedLandmarks = null;
   let rawCaptureUrl = "";
 
@@ -8897,52 +8898,59 @@ async function runVictoryPose() {
     const capture = await captureFrame("pose");
     rawCaptureUrl = capture?.dataUrl || "";
 
-    if (!state.demoMode && !state.judgeDemo && rawCaptureUrl) {
+    if (state.demoMode || !rawCaptureUrl) {
+      els.poseStatus.textContent = t("poseUnavailable");
+    } else {
       const image = await loadImageFromDataURL(rawCaptureUrl);
       const landmarker = await loadPoseLandmarker();
-      if (landmarker) {
+      if (!landmarker) {
+        els.poseStatus.textContent = t("poseUnavailable");
+      } else {
         const result = landmarker.detect(image);
         const landmarks = result?.landmarks?.[0];
-        if (landmarks?.length) {
+        if (!landmarks?.length) {
+          els.poseStatus.textContent = t("poseNoPerson");
+        } else {
           detectedLandmarks = landmarks;
           const evalRes = evaluatePoseEmoteMatch(landmarks, poseId);
           styleScore = evalRes.styleScore;
           accuracyPct = evalRes.accuracyPct;
           bonusPts = evalRes.bonusPts;
+          validMatch = Boolean(evalRes.valid);
+          if (!validMatch) {
+            els.poseStatus.textContent = t("poseNoPerson");
+          }
         }
       }
-    } else {
-      const demoScores = {
-        "v-raise": { styleScore: 9.5, accuracyPct: 95, bonusPts: 5 },
-        flex: { styleScore: 9.3, accuracyPct: 93, bonusPts: 5 },
-        power: { styleScore: 9.1, accuracyPct: 91, bonusPts: 5 },
-        star: { styleScore: 9.6, accuracyPct: 96, bonusPts: 5 }
-      };
-      const pick = demoScores[poseId] || demoScores["v-raise"];
-      styleScore = pick.styleScore;
-      accuracyPct = pick.accuracyPct;
-      bonusPts = pick.bonusPts;
     }
 
-    const annotatedUrl = await renderPoseSkeletonThumbnail(rawCaptureUrl, detectedLandmarks, poseId, accuracyPct);
-    if (els.poseThumbnail && annotatedUrl) {
-      els.poseThumbnail.src = annotatedUrl;
-      els.posePreviewWrap?.classList.remove("hidden");
+    if (validMatch && rawCaptureUrl) {
+      const annotatedUrl = await renderPoseSkeletonThumbnail(rawCaptureUrl, detectedLandmarks, poseId, accuracyPct);
+      if (els.poseThumbnail && annotatedUrl) {
+        els.poseThumbnail.src = annotatedUrl;
+        els.posePreviewWrap?.classList.remove("hidden");
+      }
+      const matchBadge = document.getElementById("poseMatchBadge");
+      const bonusSuffix = bonusPts > 0
+        ? (lang === "es" ? ` · +${bonusPts}% BONO` : ` · +${bonusPts}% BONUS`)
+        : "";
+      const matchText = lang === "es"
+        ? `🎯 ${emoteName} · ${accuracyPct}% PRECISIÓN${bonusSuffix}`
+        : lang === "pl"
+        ? `🎯 ${emoteName} · ${accuracyPct}% DOKŁADNOŚCI${bonusSuffix}`
+        : `🎯 ${emoteName} · ${accuracyPct}% MATCH${bonusSuffix}`;
+      if (matchBadge) matchBadge.textContent = matchText;
+      els.poseStatus.textContent = matchText;
+      state.pose.lastMatchPct = accuracyPct;
+    } else {
+      state.pose.lastMatchPct = null;
     }
-    const matchBadge = document.getElementById("poseMatchBadge");
-    const matchText = lang === "es"
-      ? `🎯 ${emoteName} · ${accuracyPct}% PRECISIÓN · +${bonusPts}% BONO`
-      : lang === "pl"
-      ? `🎯 ${emoteName} · ${accuracyPct}% DOKŁADNOŚCI · +${bonusPts}% BONUS`
-      : `🎯 ${emoteName} · ${accuracyPct}% MATCH · +${bonusPts}% BONUS`;
-    if (matchBadge) matchBadge.textContent = matchText;
-    els.poseStatus.textContent = matchText;
-    state.pose.lastMatchPct = accuracyPct;
   } catch {
-    styleScore = 8.5;
-    accuracyPct = 85;
-    bonusPts = 3;
-    els.poseStatus.textContent = t("poseCaptured");
+    styleScore = 7.5;
+    accuracyPct = 0;
+    bonusPts = 0;
+    validMatch = false;
+    els.poseStatus.textContent = t("poseUnavailable");
   } finally {
     if (state.latestScore) {
       state.latestScore.styleScore = styleScore;
@@ -8954,7 +8962,9 @@ async function runVictoryPose() {
       state.result.ai.poseBonus = bonusPts;
       state.result.ai.poseEmote = poseId;
     }
-    els.styleScoreDisplay.textContent = `${styleScore.toFixed(1)}/10 (+${bonusPts}%)`;
+    els.styleScoreDisplay.textContent = bonusPts > 0
+      ? `${styleScore.toFixed(1)}/10 (+${bonusPts}%)`
+      : `${styleScore.toFixed(1)} / 10`;
     if (state.result?.ai?.scorable !== false && els.cleanlinessScore) {
       const baseWeighted = computeWeightedRunScore();
       if (Number.isFinite(baseWeighted)) {
@@ -8962,7 +8972,9 @@ async function runVictoryPose() {
         els.cleanlinessScore.textContent = `${boosted}%`;
       }
     }
-    playDeckAnswerSfx(true);
+    if (validMatch && bonusPts > 0) {
+      playDeckAnswerSfx(true);
+    }
     updateSavedRunStyleScore(styleScore, bonusPts);
 
     state.pose.running = false;
@@ -10294,7 +10306,7 @@ function saveCompletedRun() {
       generateRunId();
   }
 
-  const weightedScore = Number.isFinite(state.latestScore.cleanliness) ? computeWeightedRunScore({
+  const baseWeightedScore = Number.isFinite(state.latestScore.cleanliness) ? computeWeightedRunScore({
     cleanliness: state.latestScore.cleanliness,
     scorable: state.latestScore.scorable,
     techniqueScore: state.latestScore.techniqueScore,
@@ -10302,6 +10314,10 @@ function saveCompletedRun() {
     elapsedMs: state.timer.elapsedMs,
     dwellCreditSeconds: state.checkin?.dwellCreditSeconds || 0
   }) : null;
+  const poseBonus = Math.max(0, Number(state.latestScore.poseBonus) || 0);
+  const weightedScore = Number.isFinite(baseWeightedScore)
+    ? Math.min(100, baseWeightedScore + poseBonus)
+    : null;
 
   const isDemoRun = state.demoMode || state.latestScore?.simulated ||
     state.captures.before?.placeholder || state.captures.after?.placeholder;
@@ -10315,6 +10331,8 @@ function saveCompletedRun() {
     name,
     cleanliness:
       Number.isFinite(state.latestScore.cleanliness) ? state.latestScore.cleanliness : null,
+    baseWeightedScore,
+    poseBonus,
     weightedScore,
     // Manual spot picks and any demo/simulated/placeholder runs are practice:
     // visible locally, never prize/crew credit.
@@ -10380,12 +10398,15 @@ function updateSavedRunStyleScore(styleScore, poseBonus = 0) {
 
   if (index < 0) return;
 
-  entries[index].styleScore = styleScore;
-  if (Number(poseBonus) > 0) {
-    entries[index].poseBonus = Number(poseBonus);
-    if (Number.isFinite(entries[index].weightedScore)) {
-      entries[index].weightedScore = Math.min(100, entries[index].weightedScore + Number(poseBonus));
-    }
+  const existing = entries[index];
+  const base = Number.isFinite(existing.baseWeightedScore)
+    ? existing.baseWeightedScore
+    : existing.weightedScore;
+  existing.baseWeightedScore = base;
+  existing.styleScore = styleScore;
+  existing.poseBonus = Math.max(0, Number(poseBonus) || 0);
+  if (Number.isFinite(base)) {
+    existing.weightedScore = Math.min(100, base + existing.poseBonus);
   }
 
   saveLeaderboard(entries);
