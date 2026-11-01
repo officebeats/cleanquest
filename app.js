@@ -9678,23 +9678,20 @@ function populateLeaderboardFloaters() {
 const DECK_LEADERBOARD_KEY = "cleanquest.deckLeaderboard.v1";
 
 function loadDeckLeaderboard() {
-  const defaults = [
-    { id: "deck-rival-1", name: "Elena", accuracy: 100, streak: 14, xp: 1400 },
-    { id: "deck-rival-2", name: "Mateo", accuracy: 96, streak: 11, xp: 1150 },
-    { id: "deck-rival-3", name: "Kasia", accuracy: 92, streak: 9, xp: 950 }
-  ];
   try {
     const raw = JSON.parse(localStorage.getItem(DECK_LEADERBOARD_KEY));
-    if (Array.isArray(raw) && raw.length) return raw;
+    if (Array.isArray(raw)) {
+      return raw.filter((e) => e && typeof e === "object" && !e.sample && !e.isSample);
+    }
   } catch {}
-  return defaults;
+  return [];
 }
 
 function recordDeckSessionToLeaderboard(correct = 0, total = 5, streakCount = 1) {
   try {
     const board = loadDeckLeaderboard().filter((e) => !e.viewerOwned);
     const acc = total > 0 ? Math.round((correct / total) * 100) : 0;
-    const xp = Math.max(100, correct * 100 + Math.max(0, streakCount) * 50);
+    const xp = Math.max(0, correct * 100 + Math.max(0, streakCount) * 50);
     const playerName = els.playerName?.value?.trim() || t("defaultPlayer");
     board.push({
       id: "deck-you",
@@ -9726,28 +9723,11 @@ function setLeaderboardMode(mode = "shift") {
 function renderDeckLeaderboardView() {
   const raw = loadDeckLeaderboard();
   const streakObj = loadStreak();
-  const progress = loadDeckProgress();
-  let hasViewer = raw.some((e) => e.viewerOwned);
   const entries = raw.slice();
-  if (!hasViewer && (streakObj.count > 0 || (progress.completedDates && progress.completedDates.length > 0) || (state.deck && state.deck.index > 0))) {
-    const correct = state.deck?.correct || 4;
-    const total = state.deck?.order?.length || 5;
-    const acc = Math.round((correct / Math.max(1, total)) * 100);
-    const xp = correct * 100 + Math.max(1, streakObj.count) * 50;
-    entries.push({
-      id: "deck-you",
-      name: els.playerName?.value?.trim() || t("defaultPlayer"),
-      accuracy: acc,
-      streak: Math.max(1, streakObj.count),
-      xp,
-      viewerOwned: true
-    });
-  }
   entries.sort((a, b) => (b.xp - a.xp) || (b.accuracy - a.accuracy) || (b.streak - a.streak));
   const ranked = entries.map((e, i) => ({ ...e, rank: i + 1, isViewer: Boolean(e.viewerOwned) }));
   const youRanked = ranked.find((e) => e.isViewer) || null;
-  const nextRival = youRanked && youRanked.rank > 1 ? ranked[youRanked.rank - 2] : ranked[ranked.length - 1];
-
+  const nextRival = youRanked && youRanked.rank > 1 ? ranked[youRanked.rank - 2] : (ranked.length ? ranked[ranked.length - 1] : null);
   const headerSpans = document.querySelectorAll("#leaderboardScreen .leaderboard-header span");
   if (headerSpans.length >= 5) {
     headerSpans[2].textContent = "ACCURACY";
@@ -9868,13 +9848,23 @@ function renderDeckLeaderboardView() {
     row.append(rank, nameWrap, quality, time, style);
     els.leaderboardList.appendChild(row);
   };
+  if (!ranked.length) {
+    const empty = document.createElement("p");
+    empty.className = "fine-print";
+    empty.textContent = t("leaderboardEmpty");
+    els.leaderboardList.appendChild(empty);
+  }
   ranked.forEach((e) => appendDeckRow(e, false));
   if (!youRanked) {
+    const inProgAcc = state.deck && state.deck.index > 0
+      ? Math.round((Number(state.deck.correct || 0) / state.deck.index) * 100)
+      : null;
+    const inProgXp = (Number(state.deck?.correct || 0) * 100) + ((streakObj.count || 0) * 50);
     appendDeckRow({
       name: els.playerName?.value?.trim() || t("defaultPlayer"),
-      accuracy: null,
+      accuracy: inProgAcc,
       streak: streakObj.count || 0,
-      xp: (streakObj.count || 0) * 50,
+      xp: inProgXp,
       isViewer: true
     }, true);
   }
