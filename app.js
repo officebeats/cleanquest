@@ -3368,6 +3368,8 @@ const DISCLOSURE_TRACKS = [
   }
 ];
 
+let beatThumpTimerId = null;
+
 function updateDiscoTrackUI() {
   const trk = DISCLOSURE_TRACKS[discoTrackIndex] || DISCLOSURE_TRACKS[0];
   const txt = `${discoTrackIndex + 1}/${DISCLOSURE_TRACKS.length}`;
@@ -3379,6 +3381,8 @@ function updateDiscoTrackUI() {
   if (settingsBtn) {
     settingsBtn.textContent = `🎵 Track ${txt} · ${trk.name} ⏭`;
   }
+  document.body?.style?.setProperty("--beat-ms", `${trk.stepMs * 4}ms`);
+  document.body?.style?.setProperty("--bar-ms", `${trk.stepMs * 8}ms`);
 }
 
 function cycleDiscoTrack() {
@@ -3463,6 +3467,7 @@ function startDiscoHouseGroove() {
     b?.classList.add("active");
     b?.setAttribute("aria-pressed", "true");
   });
+  document.body?.classList?.add("music-playing");
   updateDiscoTrackUI();
   if (discoTimerId) return;
   try {
@@ -3526,9 +3531,14 @@ function startDiscoHouseGroove() {
         triggerNoiseBurst(discoCtx, dest, now, 0.014, "bandpass", 2500, 1.8, kVel * 0.36);
 
         if (step % 4 === 0) {
+          document.body.classList.add("music-playing");
           document.body.classList.remove("music-beat-thump");
           void document.body.offsetWidth;
           document.body.classList.add("music-beat-thump");
+          clearTimeout(beatThumpTimerId);
+          beatThumpTimerId = setTimeout(() => {
+            document.body?.classList?.remove("music-beat-thump");
+          }, 150);
           if (state.screen === "deck" && els.deckCard && !els.deckCard.classList.contains("swiping")) {
             els.deckCard.classList.remove("beat-thump");
             void els.deckCard.offsetWidth;
@@ -3717,10 +3727,11 @@ function startDiscoHouseGroove() {
 }
 
 function stopDiscoHouseGroove() {
-  if (discoTimerId) {
-    clearInterval(discoTimerId);
-    discoTimerId = null;
-  }
+  clearInterval(discoTimerId);
+  discoTimerId = null;
+  clearTimeout(beatThumpTimerId);
+  beatThumpTimerId = null;
+  document.body?.classList?.remove("music-playing", "music-beat-thump");
 }
 function toggleDiscoGroove() {
   state.voice.discoEnabled = state.voice.discoEnabled === false;
@@ -8878,8 +8889,12 @@ function saveCompletedRun() {
     timeMs: state.timer.elapsedMs,
     styleScore:
       state.latestScore.styleScore ?? 7.5,
+    viewerOwned: true,
     timestamp: new Date().toISOString()
   };
+  try {
+    localStorage.setItem("cleanquest.viewerRunId", String(state.latestRunId || ""));
+  } catch {}
 
   const existingIndex =
     entries.findIndex(
@@ -8894,7 +8909,6 @@ function saveCompletedRun() {
   }
 
   saveLeaderboard(entries);
-  // Idempotent per run id: crew + inspection side-effects only on first save.
   if (existingIndex < 0) {
     if (Number.isFinite(entry.cleanliness) && entry.prizeEligible) {
       try {
@@ -9028,17 +9042,19 @@ function populateLeaderboardFloaters() {
 function renderLeaderboard() {
   populateLeaderboardFloaters();
   const rawBoard = loadLeaderboard();
-  const visible = visibleLeaderboard(rawBoard, state.latestRunId);
+  let savedViewerRunId = state.latestRunId;
+  if (!savedViewerRunId) {
+    try {
+      savedViewerRunId = localStorage.getItem("cleanquest.viewerRunId") || null;
+    } catch {}
+  }
+  const visible = visibleLeaderboard(rawBoard, savedViewerRunId);
 
   els.leaderboardList.innerHTML = "";
   renderCrewAndConsistencyUI();
 
-  const currentPlayerName = (els.playerName?.value?.trim() || t("defaultPlayer") || "Player").toLowerCase();
-  let youRanked = visible.find((e) => e.isViewer || (state.latestRunId && e.id === state.latestRunId));
-  if (!youRanked) {
-    youRanked = visible.find((e) => String(e.name || "").trim().toLowerCase() === currentPlayerName || String(e.name || "").trim().toLowerCase() === "player");
-    if (youRanked) youRanked.isViewer = true;
-  }
+  let youRanked = visible.find((e) => e.isViewer || e.viewerOwned === true || (savedViewerRunId && (e.id === savedViewerRunId || e.runId === savedViewerRunId)));
+  if (youRanked) youRanked.isViewer = true;
   const nextRival = youRanked && youRanked.rank > 1 ? visible[youRanked.rank - 2] : (!youRanked && visible.length ? visible[visible.length - 1] : null);
   const latestPracticeScore = state.result?.ai?.scorable !== false ? computeWeightedRunScore() : null;
 
