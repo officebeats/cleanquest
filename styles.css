@@ -5639,19 +5639,46 @@ button.btn-pop-active::before {
 }
 
 /* Timer & Results High-Legibility Enhancements Across All Viewports */
+#timerScreen #timerSpotBar {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 6px 10px !important;
+  max-height: 52px !important;
+  overflow: hidden !important;
+}
+
 #timerScreen .timer-spot-pills {
   display: flex !important;
   flex: 1 1 auto !important;
-  flex-wrap: wrap !important;
+  flex-wrap: nowrap !important;
   gap: 6px !important;
+  min-width: 0 !important;
+  overflow-x: auto !important;
+  scrollbar-width: none !important;
+}
+
+#timerScreen .timer-spot-pills::-webkit-scrollbar {
+  display: none !important;
 }
 
 #timerScreen .spot-pill-chip {
-  min-height: 40px !important;
-  padding: 5px 12px !important;
-  font-size: 13.5px !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  min-height: 38px !important;
+  padding: 4px 10px !important;
+  font-size: 13px !important;
   font-weight: 850 !important;
   border-radius: 999px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+#timerScreen .timer-actions {
+  grid-template-columns: 1fr !important;
 }
 
 #timerScreen #liveActivityBadge {
@@ -5781,13 +5808,13 @@ button.btn-pop-active::before {
   /* Timer Screen Desktop: Bounded Camera on Left, Bold Timer + Controls on Right */
   #timerScreen .timer-content {
     grid-template-columns: 1.35fr 1fr !important;
-    gap: 10px 22px !important;
+    gap: 8px 22px !important;
     max-height: calc(100dvh - 76px) !important;
   }
   #timerScreen .timer-camera-frame {
-    height: calc(100dvh - 205px) !important;
-    max-height: 520px !important;
-    min-height: 280px !important;
+    height: calc(100dvh - 210px) !important;
+    max-height: 440px !important;
+    min-height: 220px !important;
     aspect-ratio: auto !important;
   }
   /* Leaderboard 2-Column Full-Canvas Esports Dashboard + Deck/Records/Settings Desktop */
@@ -6482,6 +6509,30 @@ body.music-beat-thump #leaderboardScreen #playAgainButton {
   #leaderboardScreen .leaderboard-row {
     padding: 8px 12px !important;
   }
+}
+
+.deck-floater {
+  filter: none !important;
+  will-change: transform;
+}
+
+.leaderboard-deck-status {
+  margin: 4px 0;
+  padding: 5px 10px;
+  border-radius: 8px;
+  background: rgba(69, 234, 255, 0.1);
+  border: 1px solid rgba(69, 234, 255, 0.3);
+  color: #dff8ff;
+  font-size: 12.5px;
+  font-weight: 800;
+}
+
+#recordsPassportSummary {
+  margin-bottom: 8px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #e6f7ff;
 }
 
 @media (max-height: 660px) {

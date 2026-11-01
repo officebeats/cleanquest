@@ -643,6 +643,8 @@ const translations = {
     areaRetailfloor: "🛒 Sales Floor & Checkout",
     lbTabShift: "⚡ SHIFT CHALLENGE",
     lbTabDeck: "🃏 DAILY DECK",
+    lbOpenDeckAction: "🃏 DAILY DECK",
+    playDailyDeck: "🃏 PLAY DAILY DECK",
     deckLeaderboardAction: "🏆 DECK LEADERBOARD",
     gradeClean: "CLEAN",
     gradePartly: "PARTLY CLEAN",
@@ -1029,6 +1031,8 @@ const translations = {
     areaRetailfloor: "🛒 Piso de Venta y Cajas",
     lbTabShift: "⚡ RETO DE TURNO",
     lbTabDeck: "🃏 MAZO DIARIO",
+    lbOpenDeckAction: "🃏 MAZO DIARIO",
+    playDailyDeck: "🃏 JUGAR MAZO DIARIO",
     deckLeaderboardAction: "🏆 TABLA DEL MAZO",
     gradeClean: "LIMPIO",
     gradePartly: "PARCIAL",
@@ -1415,6 +1419,8 @@ const translations = {
     areaRetailfloor: "🛒 Sala Sprzedaży i Strefa Kas",
     lbTabShift: "⚡ WYZWANIE ZMIANY",
     lbTabDeck: "🃏 TALIA DNIA",
+    lbOpenDeckAction: "🃏 TALIA DNIA",
+    playDailyDeck: "🃏 ZAGRAJ W TALIĘ DNIA",
     deckLeaderboardAction: "🏆 RANKING TALII",
     gradeClean: "CZYSTO",
     gradePartly: "CZĘŚCIOWO",
@@ -3050,10 +3056,20 @@ function speakWelcomeIntro(language = state.language) {
   if (state.voice.muted || SELFTEST_MODE) return null;
   stopSpeech();
   const lang = HOST_LINES[language] ? language : "en";
-  const url = `assets/audio/${lang}/welcome-intro.mp3?v=20261031-28`;
+  const url = `assets/audio/${lang}/welcome-intro.mp3?v=20261031-29`;
   const fallback = t("welcomeBody");
   state.voice.lastPath = "clip";
   return playHostClip(url, fallback, { rate: 1.0, pitch: 1.0 }, "welcome-intro");
+}
+
+function speakDeckIntro(language = state.language) {
+  if (state.voice.muted || SELFTEST_MODE) return null;
+  stopSpeech();
+  const lang = HOST_LINES[language] ? language : "en";
+  const url = `assets/audio/${lang}/deck-intro.mp3?v=20261031-29`;
+  const fallback = t("deckSubtitle");
+  state.voice.lastPath = "clip";
+  return playHostClip(url, fallback, { rate: 1.0, pitch: 1.0 }, "deck-intro");
 }
 
 function speakSample(language) {
@@ -3853,6 +3869,16 @@ function ensureDiscoAudioGraph() {
   return discoCtx;
 }
 
+function autoDisconnectNodes(sourceNode, ...nodes) {
+  if (!sourceNode) return;
+  sourceNode.onended = () => {
+    for (let i = 0; i < nodes.length; i += 1) {
+      try { nodes[i]?.disconnect?.(); } catch {}
+    }
+    try { sourceNode.disconnect?.(); } catch {}
+  };
+}
+
 function triggerNoiseBurst(ctx, dest, time, duration, filterType, freq, q, peakGain) {
   if (!discoNoiseBuf) return;
   const src = ctx.createBufferSource();
@@ -3867,6 +3893,7 @@ function triggerNoiseBurst(ctx, dest, time, duration, filterType, freq, q, peakG
   src.connect(flt);
   flt.connect(g);
   g.connect(dest);
+  autoDisconnectNodes(src, flt, g);
   src.start(time);
   src.stop(time + duration + 0.01);
 }
@@ -3925,6 +3952,7 @@ function startDiscoHouseGroove() {
         kickSubGain.gain.setValueAtTime(kVel, now);
         kickSubGain.gain.exponentialRampToValueAtTime(0.001, now + 0.21);
         kickSub.connect(kickSubGain).connect(dest);
+        autoDisconnectNodes(kickSub, kickSubGain);
         kickSub.start(now);
         kickSub.stop(now + 0.22);
 
@@ -3936,28 +3964,22 @@ function startDiscoHouseGroove() {
         kickPunchGain.gain.setValueAtTime(kVel * 0.54, now);
         kickPunchGain.gain.exponentialRampToValueAtTime(0.001, now + 0.055);
         kickPunch.connect(kickPunchGain).connect(dest);
+        autoDisconnectNodes(kickPunch, kickPunchGain);
         kickPunch.start(now);
         kickPunch.stop(now + 0.06);
 
         triggerNoiseBurst(discoCtx, dest, now, 0.014, "bandpass", 2500, 1.8, kVel * 0.36);
 
         if (step % 4 === 0) {
-          document.body.classList.add("music-playing");
-          document.body.classList.remove("music-beat-thump");
-          void document.body.offsetWidth;
-          document.body.classList.add("music-beat-thump");
+          document.body.classList.add("music-playing", "music-beat-thump");
+          if (state.screen === "deck" && els.deckCard && !els.deckCard.classList.contains("swiping")) {
+            els.deckCard.classList.add("beat-thump");
+          }
           clearTimeout(beatThumpTimerId);
           beatThumpTimerId = setTimeout(() => {
             document.body?.classList?.remove("music-beat-thump");
+            els.deckCard?.classList?.remove("beat-thump");
           }, 150);
-          if (state.screen === "deck" && els.deckCard && !els.deckCard.classList.contains("swiping")) {
-            els.deckCard.classList.remove("beat-thump");
-            void els.deckCard.offsetWidth;
-            els.deckCard.classList.add("beat-thump");
-          }
-          if (state.screen === "leaderboard" && step === 0) {
-            triggerArcadeFx("bubbles", { x: (window.innerWidth || 390) * (0.25 + Math.random() * 0.5), y: (window.innerHeight || 844) * 0.38 });
-          }
         }
       }
       if (isTurnaroundBar && step >= 12) {
@@ -3970,6 +3992,7 @@ function startDiscoHouseGroove() {
         tomGain.gain.setValueAtTime(0.28 * duck, now);
         tomGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
         tomOsc.connect(tomGain).connect(dest);
+        autoDisconnectNodes(tomOsc, tomGain);
         tomOsc.start(now);
         tomOsc.stop(now + 0.11);
       }
@@ -3987,6 +4010,7 @@ function startDiscoHouseGroove() {
         snGain.gain.setValueAtTime(0.25 * duck, now);
         snGain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
         snOsc.connect(snGain).connect(dest);
+        autoDisconnectNodes(snOsc, snGain);
         snOsc.start(now);
         snOsc.stop(now + 0.08);
       }
@@ -4005,6 +4029,7 @@ function startDiscoHouseGroove() {
         rimGain.gain.setValueAtTime(0.20 * duck, now);
         rimGain.gain.exponentialRampToValueAtTime(0.001, now + 0.032);
         rimOsc.connect(rimFlt).connect(rimGain).connect(dest);
+        autoDisconnectNodes(rimOsc, rimFlt, rimGain);
         rimOsc.start(now);
         rimOsc.stop(now + 0.035);
       }
@@ -4014,7 +4039,7 @@ function startDiscoHouseGroove() {
         triggerNoiseBurst(discoCtx, dest, now, 0.034, "highpass", 8600, 0.8, 0.11 * duck);
       }
 
-      // 4. TRACK-DISTINCT BASS ENGINE (Latch Sub/Juno vs White Noise M1/Acid vs Omen Slap-Octave)
+      // 4. TRACK-DISTINCT BASS ENGINE
       const bassFreq = trk.bassPattern[step64];
       if (bassFreq > 0) {
         const bGainAmt = 0.44 * duck * sidechain;
@@ -4025,6 +4050,7 @@ function startDiscoHouseGroove() {
         subGain.gain.setValueAtTime(bGainAmt, now);
         subGain.gain.exponentialRampToValueAtTime(0.002, now + 0.135);
         subOsc.connect(subGain).connect(dest);
+        autoDisconnectNodes(subOsc, subGain);
         subOsc.start(now);
         subOsc.stop(now + 0.14);
 
@@ -4035,6 +4061,7 @@ function startDiscoHouseGroove() {
         m1Gain.gain.setValueAtTime(bGainAmt * (trk.id === "whitenoise" ? 0.56 : 0.42), now);
         m1Gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
         m1Osc.connect(m1Gain).connect(dest);
+        autoDisconnectNodes(m1Osc, m1Gain);
         m1Osc.start(now);
         m1Osc.stop(now + 0.075);
 
@@ -4051,6 +4078,7 @@ function startDiscoHouseGroove() {
         sawGain.gain.setValueAtTime(bGainAmt * 0.62, now);
         sawGain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
         sawOsc.connect(sawFlt).connect(sawGain).connect(dest);
+        autoDisconnectNodes(sawOsc, sawFlt, sawGain);
         sawOsc.start(now);
         sawOsc.stop(now + 0.125);
       }
@@ -4075,11 +4103,15 @@ function startDiscoHouseGroove() {
           cOsc.frequency.setValueAtTime(freq, now);
           cOsc.detune.setValueAtTime((idx - 2) * 7, now);
           cOsc.connect(chordFlt);
+          if (idx === chord.length - 1) {
+            autoDisconnectNodes(cOsc, chordFlt, chordGain);
+          } else {
+            autoDisconnectNodes(cOsc);
+          }
           cOsc.start(now);
           cOsc.stop(now + stabDur + 0.01);
         });
         if (trk.id === "latch") {
-          // Signature Latch high bell pluck on top note of each 6/8 chord stutter
           const topFreq = chord[chord.length - 1] * 2;
           const pOsc = discoCtx.createOscillator();
           const pGain = discoCtx.createGain();
@@ -4088,12 +4120,13 @@ function startDiscoHouseGroove() {
           pGain.gain.setValueAtTime(0.042 * duck * sidechain, now);
           pGain.gain.exponentialRampToValueAtTime(0.0008, now + 0.11);
           pOsc.connect(pGain).connect(dest);
+          autoDisconnectNodes(pOsc, pGain);
           pOsc.start(now);
           pOsc.stop(now + 0.12);
         }
       }
 
-      // 6. DISCLOSURE PITCH-GLIDING VOCAL-CHOP / SYNTH LEAD HOOK & STRINGS (Section B swells in bars 4..7)
+      // 6. DISCLOSURE PITCH-GLIDING VOCAL-CHOP / SYNTH LEAD HOOK & STRINGS
       const leadFreq = trk.leadHook[step64];
       if (leadFreq > 0 && (bar8 >= 1 || step % 3 === 0)) {
         const lOsc = discoCtx.createOscillator();
@@ -4108,6 +4141,7 @@ function startDiscoHouseGroove() {
         lGain.gain.setValueAtTime(0.078 * duck * sidechain, now);
         lGain.gain.exponentialRampToValueAtTime(0.001, now + 0.15);
         lOsc.connect(lFlt).connect(lGain).connect(dest);
+        autoDisconnectNodes(lOsc, lFlt, lGain);
         lOsc.start(now);
         lOsc.stop(now + 0.16);
       }
@@ -4128,6 +4162,7 @@ function startDiscoHouseGroove() {
         sGain.gain.linearRampToValueAtTime(0.036 * duck, now + 0.05);
         sGain.gain.exponentialRampToValueAtTime(0.0008, now + 0.36);
         sOsc.connect(sFlt).connect(sGain).connect(dest);
+        autoDisconnectNodes(sOsc, sFlt, sGain);
         sOsc.start(now);
         sOsc.stop(now + 0.37);
       }
@@ -4251,6 +4286,9 @@ function navigateTo(screen) {
     }
     renderDeck();
     startDiscoHouseGroove();
+    if (!SELFTEST_MODE && !state.voice.muted && state.deck.index === 0 && !state.deck.locked) {
+      speakDeckIntro(state.language);
+    }
   } else if (screen === "welcome" || screen === "instructions" || screen === "camera" || screen === "timer" || screen === "results" || screen === "leaderboard") {
     startDiscoHouseGroove();
   }
@@ -8888,38 +8926,15 @@ function populateDeckAmbientFloaters() {
   });
 }
 
+let lastDragConfettiAt = 0;
 function spawnDragShakeConfetti(dx, velocity = 12) {
-  const host = document.getElementById("deckParticleBurst");
-  if (!host) return;
-  if (host.childElementCount > 42) return;
-  const shapes = [
-    // Iridescent soap bubble
-    `<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7.5" fill="rgba(69,234,255,0.28)" stroke="#45eaff" stroke-width="1.8"/><circle cx="7.5" cy="7.5" r="2" fill="#fff"/></svg>`,
-    // Golden 4-point sparkle
-    `<svg viewBox="0 0 20 20"><path d="M10 1 l2.4 6.6 l6.6 2.4 l-6.6 2.4 l-2.4 6.6 l-2.4-6.6 l-6.6-2.4 l6.6-2.4 z" fill="#ffd35c"/></svg>`,
-    // Emerald droplet
-    `<svg viewBox="0 0 20 20"><path d="M10 2 C10 2 5 8.5 5 12.5 a5 5 0 0 0 10 0 C15 8.5 10 2 10 2z" fill="#39f5bc"/></svg>`,
-    // Foam suds cluster
-    `<svg viewBox="0 0 20 20"><circle cx="7" cy="11" r="4.5" fill="#e0faff"/><circle cx="13" cy="10" r="3.8" fill="#aef4ff"/><circle cx="10" cy="6.5" r="3.2" fill="#fff"/></svg>`
-  ];
-  const count = Math.min(3, 1 + Math.floor(Math.abs(velocity) / 14));
-  for (let i = 0; i < count; i += 1) {
-    const p = document.createElement("span");
-    p.className = "deck-particle is-confetti";
-    const sideX = 50 + (Math.random() * 56 - 28) + Math.max(-25, Math.min(25, dx * 0.15));
-    const sideY = 26 + Math.random() * 44;
-    p.style.left = `${sideX}%`;
-    p.style.top = `${sideY}%`;
-    const spreadX = (dx >= 0 ? 1 : -1) * (24 + Math.random() * 58) + (Math.random() * 40 - 20);
-    const spreadY = -28 - Math.random() * 54;
-    const rot = Math.round((Math.random() - 0.5) * 260);
-    p.style.setProperty("--dx", `${Math.round(spreadX)}px`);
-    p.style.setProperty("--dy", `${Math.round(spreadY)}px`);
-    p.style.setProperty("--rot", `${rot}deg`);
-    p.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
-    host.appendChild(p);
-    setTimeout(() => p.remove(), 680);
-  }
+  const now = performance.now();
+  if (now - lastDragConfettiAt < 180) return;
+  lastDragConfettiAt = now;
+  triggerArcadeFx("bubbles", {
+    x: (window.innerWidth || 390) * 0.5 + Math.max(-80, Math.min(80, dx * 0.4)),
+    y: (window.innerHeight || 844) * 0.42
+  });
 }
 
 let arcadeFxParticles = [];
@@ -8938,72 +8953,72 @@ function triggerArcadeFx(mode = "pixels", opts = {}) {
   const cx = Number.isFinite(opts.x) ? opts.x : w * 0.5;
   const cy = Number.isFinite(opts.y) ? opts.y : h * 0.45;
   const palette = opts.palette || ["#45eaff", "#39f5bc", "#ffd35c", "#c084fc", "#ff5b76", "#ffffff"];
-  if (arcadeFxParticles.length > 160) arcadeFxParticles.splice(0, 60);
+  if (arcadeFxParticles.length > 48) arcadeFxParticles.splice(0, arcadeFxParticles.length - 32);
 
   if (mode === "pixels") {
     arcadeFxParticles.push({
-      kind: "ring", x: cx, y: cy, r: 6, maxR: 58, alpha: 0.9, color: palette[0]
+      kind: "ring", x: cx, y: cy, r: 6, maxR: 54, alpha: 0.85, color: palette[0]
     });
-    for (let i = 0; i < 18; i += 1) {
-      const ang = (Math.PI * 2 * i) / 18 + (Math.random() * 0.35 - 0.17);
-      const spd = 2.4 + Math.random() * 5.6;
+    for (let i = 0; i < 12; i += 1) {
+      const ang = (Math.PI * 2 * i) / 12 + (Math.random() * 0.3 - 0.15);
+      const spd = 2.4 + Math.random() * 4.8;
       arcadeFxParticles.push({
         kind: i % 4 === 0 ? "star" : "pixel",
         x: cx, y: cy,
         vx: Math.cos(ang) * spd,
-        vy: Math.sin(ang) * spd - 1.4,
+        vy: Math.sin(ang) * spd - 1.2,
         g: 0.18,
         size: i % 3 === 0 ? 7 : 5,
         rot: Math.random() * Math.PI * 2,
-        vrot: (Math.random() - 0.5) * 0.25,
+        vrot: (Math.random() - 0.5) * 0.22,
         alpha: 1,
-        decay: 0.026 + Math.random() * 0.015,
+        decay: 0.036 + Math.random() * 0.015,
         color: palette[i % palette.length]
       });
     }
   } else if (mode === "confetti") {
-    for (let i = 0; i < 42; i += 1) {
+    for (let i = 0; i < 24; i += 1) {
       const fromLeft = i % 2 === 0;
       const startX = fromLeft ? w * 0.15 : w * 0.85;
       const startY = h * 0.58;
-      const vx = (fromLeft ? 1 : -1) * (2.5 + Math.random() * 6.5) + (Math.random() - 0.5) * 2;
-      const vy = -6.5 - Math.random() * 6.5;
+      const vx = (fromLeft ? 1 : -1) * (2.5 + Math.random() * 5.8) + (Math.random() - 0.5) * 2;
+      const vy = -6.0 - Math.random() * 5.8;
       const kinds = ["ribbon", "star", "bubble", "pixel"];
       arcadeFxParticles.push({
         kind: kinds[i % kinds.length],
         x: startX, y: startY,
         vx, vy,
-        g: 0.19,
-        size: 7 + (i % 4) * 2,
+        g: 0.2,
+        size: 7 + (i % 3) * 2,
         rot: Math.random() * Math.PI * 2,
-        vrot: (Math.random() - 0.5) * 0.22,
+        vrot: (Math.random() - 0.5) * 0.2,
         alpha: 1,
-        decay: 0.014 + Math.random() * 0.01,
+        decay: 0.022 + Math.random() * 0.01,
         color: palette[i % palette.length]
       });
     }
   } else if (mode === "bubbles") {
-    for (let i = 0; i < 16; i += 1) {
-      const ang = (Math.PI * 2 * i) / 16 + (Math.random() * 0.3 - 0.15);
-      const spd = 1.8 + Math.random() * 4.2;
+    for (let i = 0; i < 8; i += 1) {
+      const ang = (Math.PI * 2 * i) / 8 + (Math.random() * 0.3 - 0.15);
+      const spd = 1.6 + Math.random() * 3.6;
       arcadeFxParticles.push({
         kind: i % 3 === 0 ? "star" : "bubble",
-        x: cx + (Math.random() * 40 - 20),
-        y: cy + (Math.random() * 24 - 12),
+        x: cx + (Math.random() * 30 - 15),
+        y: cy + (Math.random() * 20 - 10),
         vx: Math.cos(ang) * spd,
-        vy: Math.sin(ang) * spd - 2.2,
+        vy: Math.sin(ang) * spd - 2.0,
         g: -0.04,
-        size: 6 + (i % 4) * 2.5,
+        size: 6 + (i % 3) * 2,
         rot: 0, vrot: 0.08,
-        alpha: 0.95,
-        decay: 0.022,
+        alpha: 0.9,
+        decay: 0.032,
         color: palette[i % palette.length]
       });
     }
   } else if (mode === "portal") {
-    for (let i = 0; i < 22; i += 1) {
-      const ang = (Math.PI * 2 * i) / 22;
-      const spd = 4.5 + (i % 3) * 2.8;
+    for (let i = 0; i < 14; i += 1) {
+      const ang = (Math.PI * 2 * i) / 14;
+      const spd = 4.5 + (i % 3) * 2.5;
       arcadeFxParticles.push({
         kind: i % 2 === 0 ? "star" : "pixel",
         x: w * 0.5, y: h * 0.42,
@@ -9012,8 +9027,8 @@ function triggerArcadeFx(mode = "pixels", opts = {}) {
         g: 0,
         size: 6,
         rot: ang, vrot: 0.15,
-        alpha: 0.92,
-        decay: 0.032,
+        alpha: 0.9,
+        decay: 0.04,
         color: palette[i % palette.length]
       });
     }
@@ -9027,8 +9042,8 @@ function triggerArcadeFx(mode = "pixels", opts = {}) {
       for (let i = arcadeFxParticles.length - 1; i >= 0; i -= 1) {
         const p = arcadeFxParticles[i];
         if (p.kind === "ring") {
-          p.r += (p.maxR - p.r) * 0.22;
-          p.alpha -= 0.06;
+          p.r += (p.maxR - p.r) * 0.24;
+          p.alpha -= 0.07;
           if (p.alpha <= 0.02) { arcadeFxParticles.splice(i, 1); continue; }
           ctx.save();
           ctx.globalAlpha = Math.max(0, p.alpha);
@@ -9054,19 +9069,15 @@ function triggerArcadeFx(mode = "pixels", opts = {}) {
         if (p.kind === "bubble") {
           ctx.strokeStyle = p.color;
           ctx.fillStyle = "rgba(69, 234, 255, 0.18)";
-          ctx.lineWidth = 1.8;
+          ctx.lineWidth = 1.6;
           ctx.beginPath();
           ctx.arc(0, 0, p.size, 0, Math.PI * 2);
           ctx.fill();
           ctx.stroke();
-          ctx.fillStyle = "#ffffff";
-          ctx.beginPath();
-          ctx.arc(-p.size * 0.32, -p.size * 0.32, p.size * 0.24, 0, Math.PI * 2);
-          ctx.fill();
         } else if (p.kind === "star") {
           ctx.fillStyle = p.color;
           ctx.beginPath();
-          const s = p.size * 1.25;
+          const s = p.size * 1.2;
           ctx.moveTo(0, -s);
           ctx.lineTo(s * 0.32, -s * 0.32);
           ctx.lineTo(s, 0);
@@ -9083,8 +9094,6 @@ function triggerArcadeFx(mode = "pixels", opts = {}) {
           ctx.fillRect(-p.size * 0.7, -flutter * 0.5, p.size * 1.4, Math.max(3, Math.abs(flutter)));
         } else {
           ctx.fillStyle = p.color;
-          ctx.shadowColor = p.color;
-          ctx.shadowBlur = 6;
           ctx.fillRect(-p.size * 0.5, -p.size * 0.5, p.size, p.size);
         }
         ctx.restore();
@@ -9191,35 +9200,6 @@ function triggerDeckParticleBurst(isCorrect = true) {
       ? ["#39f5bc", "#45eaff", "#ffd35c", "#c084fc", "#ffffff"]
       : ["#ff5b76", "#ffd35c", "#ff9f5a"]
   });
-  const host = document.getElementById("deckParticleBurst");
-  if (!host) return;
-  host.innerHTML = "";
-  const shapes = isCorrect
-    ? [
-        `<svg viewBox="0 0 22 22"><circle cx="11" cy="11" r="8" fill="rgba(69,234,255,0.32)" stroke="#45eaff" stroke-width="2"/><circle cx="8" cy="8" r="2.2" fill="#fff"/></svg>`,
-        `<svg viewBox="0 0 22 22"><path d="M11 1 l2.8 7.2 l7.2 2.8 l-7.2 2.8 l-2.8 7.2 l-2.8-7.2 l-7.2-2.8 l7.2-2.8 z" fill="#ffd35c"/></svg>`,
-        `<svg viewBox="0 0 22 22"><path d="M11 2 C11 2 5 9.5 5 14 a6 6 0 0 0 12 0 C17 9.5 11 2 11 2z" fill="#39f5bc"/></svg>`,
-        `<svg viewBox="0 0 22 22"><rect x="3" y="6" width="16" height="10" rx="4" fill="#ffd35c" stroke="#39f5bc" stroke-width="2"/></svg>`
-      ]
-    : [
-        `<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="6" fill="#ff5b76"/></svg>`,
-        `<svg viewBox="0 0 20 20"><path d="M10 2 l8 15 h-16 z" fill="#ffd35c"/></svg>`
-      ];
-  const count = isCorrect ? 28 : 14;
-  for (let i = 0; i < count; i += 1) {
-    const dot = document.createElement("span");
-    dot.className = "deck-particle is-confetti";
-    const angle = (Math.PI * 2 * i) / count + (Math.random() * 0.25 - 0.12);
-    const dist = 74 + (i % 4) * 34;
-    const rot = Math.round((Math.random() - 0.5) * 320);
-    dot.style.left = "50%";
-    dot.style.top = "45%";
-    dot.style.setProperty("--dx", `${Math.round(Math.cos(angle) * dist)}px`);
-    dot.style.setProperty("--dy", `${Math.round(Math.sin(angle) * dist - 18)}px`);
-    dot.style.setProperty("--rot", `${rot}deg`);
-    dot.innerHTML = shapes[i % shapes.length];
-    host.appendChild(dot);
-  }
 }
 function renderDeck() {
   const streak = loadStreak();
@@ -9464,6 +9444,8 @@ function openRecords() {
   }
 
   pruneExpiredRecords(CONFIG.retentionDays);
+  renderCrewAndConsistencyUI();
+  renderPersonalRecordUI();
   renderInspectionLog();
   renderOfflineQueue();
   renderAdminDashboard();
@@ -9724,6 +9706,9 @@ function setLeaderboardMode(mode = "shift") {
   shiftBtn?.setAttribute("aria-selected", String(state.leaderboardMode === "shift"));
   deckBtn?.classList.toggle("active", state.leaderboardMode === "deck");
   deckBtn?.setAttribute("aria-selected", String(state.leaderboardMode === "deck"));
+  if (els.playAgainButton) {
+    els.playAgainButton.textContent = state.leaderboardMode === "deck" ? t("playDailyDeck") : t("playAgain");
+  }
   renderLeaderboard();
 }
 
@@ -9879,6 +9864,10 @@ function renderDeckLeaderboardView() {
 
 function renderLeaderboard() {
   populateLeaderboardFloaters();
+  renderPersonalRecordUI();
+  if (els.playAgainButton) {
+    els.playAgainButton.textContent = state.leaderboardMode === "deck" ? t("playDailyDeck") : t("playAgain");
+  }
   if (state.leaderboardMode === "deck") {
     renderDeckLeaderboardView();
     return;
@@ -10243,25 +10232,13 @@ function syncFtueCollapseUI() {
 }
 
 function openPassportAndSupervisorHub() {
-  state.showPassportHub = !state.showPassportHub;
+  state.editingFtue = false;
+  state.showPassportHub = true;
   syncFtueCollapseUI();
-  if (state.showPassportHub) {
-    renderCrewAndConsistencyUI();
-    renderPersonalRecordUI();
-    if (els.homePassportPanel && !document.getElementById("hubOpenSupervisorButton")) {
-      const supBtn = document.createElement("button");
-      supBtn.id = "hubOpenSupervisorButton";
-      supBtn.type = "button";
-      supBtn.className = "secondary-button compact-chip";
-      supBtn.style.marginTop = "8px";
-      supBtn.style.width = "100%";
-      supBtn.dataset.i18n = "openSupervisorTools";
-      supBtn.textContent = t("openSupervisorTools");
-      supBtn.addEventListener("click", () => openRecords());
-      els.homePassportPanel.appendChild(supBtn);
-    }
-  }
-  return state.showPassportHub;
+  renderCrewAndConsistencyUI();
+  renderPersonalRecordUI();
+  openRecords();
+  return true;
 }
 
 function syncConsentUI() {
@@ -10728,7 +10705,8 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
   });
   if (els.timerSpotPills) {
     els.timerSpotPills.innerHTML = "";
-    area.spots.forEach((sp) => {
+    const pillSpots = Array.from(new Set([chosenSpot, ...area.spots])).slice(0, 3);
+    pillSpots.forEach((sp) => {
       const btn = document.createElement("button");
       btn.type = "button";
       btn.className = `mvp-tab-chip spot-pill-chip${sp === chosenSpot ? " active" : ""}`;
@@ -11941,11 +11919,26 @@ function syncCleanerPinUI() {
 }
 
 function renderPersonalRecordUI() {
-  if (!els.personalRecordSummary) return;
   const rec = getPersonalRecord();
-  els.personalRecordSummary.textContent = t("personalRecordSummary", { best: rec.personalBest, runs: rec.totalRuns, streak: rec.streakDays, week: rec.consistencyWeek });
+  if (els.personalRecordSummary) {
+    els.personalRecordSummary.textContent = t("personalRecordSummary", { best: rec.personalBest, runs: rec.totalRuns, streak: rec.streakDays, week: rec.consistencyWeek });
+  }
   if (els.optInShareCheckbox) {
     els.optInShareCheckbox.checked = rec.optInEmployerShare;
+  }
+  const deckProgress = loadDeckProgress();
+  const masteredCards = Array.isArray(deckProgress.masteredIds) ? deckProgress.masteredIds.length : 0;
+  const deckBoard = loadDeckLeaderboard();
+  const youDeck = deckBoard.find((e) => e.viewerOwned);
+  const deckXp = youDeck ? youDeck.xp : masteredCards * 100 + rec.streakDays * 50;
+  const lbDeckEl = document.getElementById("leaderboardDeckStatus");
+  if (lbDeckEl) {
+    lbDeckEl.textContent = `🃏 Daily Deck: 🔥 ${rec.streakDays}d Streak · ${masteredCards}/30 Cards Mastered · ${deckXp} Deck XP (+100 XP/Card)`;
+  }
+  const recPassportEl = document.getElementById("recordsPassportSummary");
+  if (recPassportEl) {
+    const consistency = getConsistencyProgress();
+    recPassportEl.textContent = `🪪 Verified Cleaner Passport · Personal Best: ${rec.personalBest}% · Shift Runs: ${rec.totalRuns} · 🃏 Deck Streak: 🔥 ${rec.streakDays}d (${deckXp} XP) · ${consistency.label}`;
   }
 }
 
@@ -13522,6 +13515,10 @@ function bindEvents() {
     "click",
     async () => {
       stopSpeech();
+      if (state.leaderboardMode === "deck") {
+        openDeck();
+        return;
+      }
 
       const keepDemoMode =
         state.demoMode;
@@ -13631,27 +13628,29 @@ function bindEvents() {
     });
 
     let lastDragX = 0;
+    let dragRafId = null;
     els.deckCard.addEventListener("pointermove", (event) => {
       if (dragStartX === null || event.pointerId !== dragPointerId) return;
       if (!state.deck || state.deck.locked) return;
-      const dx = event.clientX - dragStartX;
-      const vel = Math.abs(dx - lastDragX);
-      lastDragX = dx;
-      const rot = Math.max(-14, Math.min(14, dx * 0.065));
-      const tiltY = Math.max(-16, Math.min(16, dx * 0.08));
-      els.deckCard.style.transform = `perspective(800px) translate3d(${dx}px, 0, 0) rotateZ(${rot}deg) rotateY(${tiltY}deg)`;
-      const ratio = Math.min(1, Math.abs(dx) / 60);
-      if (els.deckStampLeft) els.deckStampLeft.style.opacity = dx < -12 ? String(ratio) : "0";
-      if (els.deckStampRight) els.deckStampRight.style.opacity = dx > 12 ? String(ratio) : "0";
-      if (Math.abs(dx) > 8 && vel > 2) {
-        spawnDragShakeConfetti(dx, vel);
-      }
-      const floaters = document.getElementById("deckAmbientFloaters");
-      if (floaters) {
-        floaters.style.transform = `translate3d(${Math.round(dx * -0.12)}px, ${Math.round(Math.sin(dx * 0.15) * 6)}px, 0)`;
-      }
+      const clientX = event.clientX;
+      if (dragRafId) return;
+      dragRafId = requestAnimationFrame(() => {
+        dragRafId = null;
+        if (dragStartX === null || !state.deck || state.deck.locked) return;
+        const dx = clientX - dragStartX;
+        const vel = Math.abs(dx - lastDragX);
+        lastDragX = dx;
+        const rot = Math.max(-14, Math.min(14, dx * 0.065));
+        const tiltY = Math.max(-16, Math.min(16, dx * 0.08));
+        els.deckCard.style.transform = `perspective(800px) translate3d(${dx}px, 0, 0) rotateZ(${rot}deg) rotateY(${tiltY}deg)`;
+        const ratio = Math.min(1, Math.abs(dx) / 60);
+        if (els.deckStampLeft) els.deckStampLeft.style.opacity = dx < -12 ? String(ratio) : "0";
+        if (els.deckStampRight) els.deckStampRight.style.opacity = dx > 12 ? String(ratio) : "0";
+        if (Math.abs(dx) > 14 && vel > 6) {
+          spawnDragShakeConfetti(dx, vel);
+        }
+      });
     });
-
     const finishPointerSwipe = (event) => {
       if (dragStartX === null) return;
       const dx = (event.clientX ?? dragStartX) - dragStartX;
@@ -14172,8 +14171,10 @@ function bindEvents() {
   }, { passive: true });
   const lbTabShift = document.getElementById("lbTabShift");
   const lbTabDeck = document.getElementById("lbTabDeck");
+  const lbOpenDeckBtn = document.getElementById("leaderboardOpenDeckButton");
   if (lbTabShift) lbTabShift.addEventListener("click", () => setLeaderboardMode("shift"));
   if (lbTabDeck) lbTabDeck.addEventListener("click", () => setLeaderboardMode("deck"));
+  if (lbOpenDeckBtn) lbOpenDeckBtn.addEventListener("click", () => openDeck());
   [document.getElementById("deckLeaderboardButton"), document.getElementById("deckTopLeaderboardPill")].forEach((b) => {
     if (b) {
       b.addEventListener("click", () => {

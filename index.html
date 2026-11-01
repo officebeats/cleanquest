@@ -9,7 +9,7 @@
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261031-27" />
+  <link rel="stylesheet" href="styles.css?v=20261031-29" />
 </head>
 
 <body>
@@ -885,6 +885,7 @@
               🪪 SHARE PASSPORT
             </button>
           </div>
+          <div id="leaderboardDeckStatus" class="leaderboard-deck-status"></div>
           <label class="consent-check-label" for="optInShareCheckbox">
             <input id="optInShareCheckbox" type="checkbox" />
             <span data-i18n="optInShareLabel">Opt-in: share verified record with current site (portable record owned by you)</span>
@@ -924,6 +925,15 @@
             </button>
 
             <button
+              id="leaderboardOpenDeckButton"
+              class="secondary-button"
+              type="button"
+              data-i18n="lbOpenDeckAction"
+            >
+              🃏 DAILY DECK
+            </button>
+
+            <button
               id="viewRecordsButton"
               class="secondary-button"
               type="button"
@@ -944,8 +954,9 @@
             <rect x="8" y="6" width="20" height="24" rx="4" fill="rgba(69,234,255,0.16)" stroke="#45eaff" stroke-width="2"/>
             <path class="lottie-pulse" d="M13 18 l3.5 3.5 l7-7" fill="none" stroke="#39f5bc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <h2 data-i18n="recordsTitle">INSPECTION LOG</h2>
+          <h2 data-i18n="recordsTitle">PASSPORT, RECORDS &amp; SUPERVISOR</h2>
         </div>
+        <div id="recordsPassportSummary" class="crew-summary-bar hologram-card"></div>
         <div id="offlineQueueSection" class="offline-queue-section hologram-card hidden">
           <div class="section-label" data-i18n="offlineQueueTitle">OFFLINE RUN QUEUE (AWAITING SCORE)</div>
           <div id="offlineQueueList" class="provider-log"></div>
@@ -1426,7 +1437,7 @@
   <canvas id="arcadeFxCanvas" class="arcade-fx-canvas" aria-hidden="true"></canvas>
   <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
   <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
-  <script src="deck.js?v=20261031-27"></script>
-  <script src="app.js?v=20261031-27"></script>
+  <script src="deck.js?v=20261031-29"></script>
+  <script src="app.js?v=20261031-29"></script>
 </body>
 </html>
