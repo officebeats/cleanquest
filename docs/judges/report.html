@@ -330,6 +330,7 @@
       <a class="alt" href="report.pdf">Download PDF</a>
       <a class="alt" href="submission.html">Submission Playbook</a>
     </div>
+  </div>
 </header>
 <main>
   <div class="meta">
@@ -437,10 +438,10 @@
         </svg>
       </div>
       <ol>
-        <li><strong>Run 1 — Judge Demo (10 seconds).</strong> Instructions screen → <em>Judge Demo</em>. Narrate: <em>"This is a synthetic dirty/clean pair so you can see the scoring story without us mopping the judging room — same on-device pipeline, watch the 3 bars."</em></li>
-        <li><strong>Run 2 — live loop.</strong> Check in, shoot a real before/after in the room, finish, show the scored card with its provenance line ("Verified by …" with cloud keys pre-entered, or the on-device line without).</li>
-        <li><strong>Throughout:</strong> spectator board (<code>?spectator=1</code>) projected; host voice explicitly enabled for run 2 (it defaults to Off — say why: occupied buildings). Keep a 30-second backup recording ready.</li>
-        <li><strong>Before stage:</strong> pre-enter cloud keys in the demo browser, pre-warm MediaPipe on venue wifi (models cache after one load), print area QR stickers, clear localStorage so no prior runs pollute the board.</li>
+        <li><strong>1. Judge Demo (10s):</strong> Open Instructions → tap <em>Judge Demo</em> to show the <code>0% → 75%</code> count-up roll, <code>✨ A-RANK</code> musical stinger, and 3 weighted bars (Clean 50% · Technique 25% · Time 25%).</li>
+        <li><strong>2. Live Room Run (60s):</strong> Pick the registered site + station, tap <em>Start</em> (locked clock + host voice every 6–8s), wipe the surface, and tap <em>Complete Challenge</em> (1-tap auto-captures After photo and scores).</li>
+        <li><strong>3. Spectator &amp; Dual Leaderboard:</strong> Project <code>?spectator=1</code> on a second screen and toggle between the <code>⚡ SHIFT CHALLENGE</code> and <code>🃏 DAILY DECK</code> leaderboards.</li>
+        <li><strong>4. Pre-Stage Setup:</strong> Save Meta + Baseten keys in <code>⚙ Settings</code>, run <code>⚡ TEST &amp; LOG TELEMETRY</code> once, and warm up MediaPipe weights on venue Wi-Fi.</li>
       </ol>
     </section>
   </div>
@@ -823,11 +824,11 @@
 
     <h3>The 3-minute submission video — shot-by-shot</h3>
     <ol>
-      <li><strong>0:00–0:20 · The world (Impact):</strong> open on the phone in Spanish, in a real breakroom. Say the pitch line verbatim; tap to English; point at the always-visible streak/week/matchup strip and the consent read-aloud button.</li>
-      <li><strong>0:20–0:45 · The 10-second scoring story (Demo):</strong> Instructions → tap <em>Judge Demo</em>; hear the 0% → 75% count-up roll, the <code>✨ A-RANK</code> musical stinger, and the chained spoken summary; point at the three full-width bars (50/25/25) and the <code>🔊 REPLAY SUMMARY</code> waveform pill.</li>
-      <li><strong>0:45–1:45 · Real clean, real models (Tooling):</strong> select the registered site, scan the printed <code>CQ-QR</code> sticker, frame the sink with the guide, tap Start (with Hype set to Full so judges hear the clip chain and 45s Halfway callout), wipe the counter, and tap <strong>Complete Challenge</strong> (which automatically snaps the 2nd <code>AFTER</code> photo and submits in 1 step). Show the <strong>Muse Spark</strong> per-surface scorecard + <strong>SAM 3.1</strong> overlays + spoken voice note transcribed + provenance line.</li>
-      <li><strong>1:45–2:25 · Second provider + paperwork that writes itself (Tooling + Impact):</strong> flip Settings to <strong>1-Click OpenRouter OAuth PKCE</strong> or <strong>Baseten Spark Open</strong>, export the provider log JSON; open Records, export the geofenced inspection CSV, switch active squads in Pane 13, assign a 5-day pack in Pane 15.</li>
-      <li><strong>2:25–3:00 · Daily habit + stage close (Impact + Demo):</strong> swipe two cards in the Daily Deck (show the brand-neutral answer, the game-show Ding-Chime/Uh-Oh reaction, and the pure <code>600 × 84</code> <code>SPONSORED</code> banner image); cut to the 2-column Leaderboard and <code>?spectator=1</code> board; close on the portable Passport copy toast.</li>
+      <li><strong>0:00–0:22 · Mandatory Disclosure + Trilingual Welcome (Impact 30%):</strong> State the pre-existing prototype vs. hackathon-built scope; tap <code>🌐 ESPAÑOL</code> (Mexican Spanish intro) → <code>🌐 ENGLISH</code> over the 122 BPM house groove.</li>
+      <li><strong>0:22–0:50 · Consent Gate + 10s Judge Demo (Demo 25%):</strong> Show the Consent Gate read-aloud + 44px Glove PIN Numpad → Instructions → tap <em>Judge Demo</em> for the <code>0% → 75%</code> count-up roll, <code>✨ A-RANK</code> stinger, and 50/25/25 bars.</li>
+      <li><strong>0:50–1:50 · Live Clean + Meta AI Stack (Tooling 25%):</strong> Pick the station (10 Building Sectors · 13 Areas · 28 Spots), tap <em>Start</em> (locked clock + 6–8s host hype + 9-zone luma sampling), and tap <em>Complete Challenge</em> (1-tap After auto-capture) to reveal <strong>Muse Spark 1.3</strong> + <strong>SAM 3.1</strong> + <strong>Muse Voice Transcribe 1.0</strong>.</li>
+      <li><strong>1:50–2:25 · Baseten Spark Open + Supervisor Tools (Tech Depth 20%):</strong> Show <code>⚙ Settings</code> with <strong>Baseten Spark Open (<code>meta-models/muse-spark-open-1026</code>)</strong> + Provider Run Log JSON export, then open <code>🪪 PASSPORT, CREW &amp; SUPERVISOR</code> (CSV/JSON export, V2 QR stickers, Squad Switcher, 5-day packs).</li>
+      <li><strong>2:25–3:00 · Daily Swipe Deck + Dual Leaderboard Close (Impact + Viral):</strong> Swipe 1 card in the Daily Deck (<code>✨ NAILED IT! +100 XP</code> + subtle <code>YOUR LOGO HERE</code> crest), then open the <strong>Shift Challenge + Daily Deck Leaderboard</strong> and <code>?spectator=1</code> board.</li>
     </ol>
   </section>
 
