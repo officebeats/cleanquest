@@ -7157,71 +7157,148 @@ async function callPartnerBackendProxy({ provider = "dual", messages = [], max_t
     clearTimeout(timeout);
   }
 }
+const BIWEEKLY_SEASON_KEY = "cleanquest.biweeklySeason.v1";
 
-async function generateLiveAiBonusCard() {
+function getBiWeeklySeasonMeta() {
+  const windowMs = 14 * 86400000;
+  const now = Date.now();
+  const seasonNum = Math.max(1, Math.floor(now / windowMs) - 1400);
+  const daysLeft = Math.max(1, 14 - Math.floor((now % windowMs) / 86400000));
+  return { seasonNum, daysLeft };
+}
+
+function loadCachedBiWeeklySeason() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(BIWEEKLY_SEASON_KEY));
+    if (!raw || typeof raw !== "object" || !Array.isArray(raw.cards) || !raw.cards.length) return null;
+    return raw;
+  } catch {
+    return null;
+  }
+}
+
+function applyBiWeeklyCardsToDeck(pack) {
+  if (!pack || !Array.isArray(pack.cards) || !pack.cards.length || typeof SWIPE_DECK === "undefined") return false;
+  const newIndices = [];
+  for (const c of pack.cards) {
+    let idx = SWIPE_DECK.findIndex((existing) => existing.id === c.id);
+    if (idx < 0) {
+      SWIPE_DECK.push(c);
+      idx = SWIPE_DECK.length - 1;
+    }
+    newIndices.push(idx);
+  }
+  state.deck = {
+    order: newIndices,
+    index: 0,
+    correct: 0,
+    locked: false,
+    isBiWeeklySeason: true,
+    seasonNum: pack.seasonNum,
+    seasonTheme: pack.theme
+  };
+  renderDeck();
+  return true;
+}
+
+async function generateLiveAiBonusCard(forceNetwork = false) {
   const btn = document.getElementById("deckAiBonusButton");
+  const { seasonNum, daysLeft } = getBiWeeklySeasonMeta();
+  const areaKey = state.checkin?.areaKey || "breakroom";
+  const cached = loadCachedBiWeeklySeason();
+  // If cached for this 14-day bi-weekly season & station and not already viewing it, serve from 0-token cache
+  if (!forceNetwork && cached && cached.seasonNum === seasonNum && cached.areaKey === areaKey && !state.deck?.isBiWeeklySeason) {
+    applyBiWeeklyCardsToDeck(cached);
+    return cached;
+  }
   if (btn) {
     btn.disabled = true;
     btn.textContent = "⏳ AI…";
   }
   try {
-    const areaLabel = CONFIG.areaTemplates[state.checkin?.areaKey]?.label || "Breakroom & Pantry";
+    const areaLabel = CONFIG.areaTemplates[areaKey]?.label || "Breakroom & Pantry";
     const spotLabel = state.checkin?.assignedSpot || "Sink & counter";
+    // Token-efficient batched prompt: generates a full 3-card Bi-Weekly Season Pack + Theme in 1 single API call (~3x lower prompt overhead per card)
     const prompt = [
-      "You are the CleanQuest commercial cleaning training deck designer.",
-      `Create 1 realistic commercial cleaning scenario card for Area: "${areaLabel}", Spot: "${spotLabel}".`,
-      "Return JSON ONLY with no markdown fences:",
-      '{"category":"surface"|"product"|"technique","answer":"right"|"miss","en":"English 1-sentence scenario","es":"Spanish 1-sentence scenario","pl":"Polish 1-sentence scenario"}'
+      `CleanQuest Bi-Weekly Season #${seasonNum} (${areaLabel} · ${spotLabel}).`,
+      "Generate 1 season theme title + 3 distinct commercial cleaning cards in 1 compact JSON object (no markdown):",
+      '{"theme":"Short theme","cards":[{"c":"surface"|"product"|"technique","a":"right"|"miss","en":"1-sentence EN","es":"1-sentence ES","pl":"1-sentence PL"}]}'
     ].join("\n");
     const proxyResp = await callPartnerBackendProxy({
       provider: "dual",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 1500
+      max_tokens: 1600
     });
-    let chosenCard = null;
+    let chosenPack = null;
     for (const item of proxyResp?.results || []) {
       const usage = item?.data?.usage || {};
       const totalTok = Number(usage.total_tokens) || 0;
       const raw = item?.data?.choices?.[0]?.message?.content || "";
       const parsed = extractScorecardJSON(raw);
+      const rawCards = Array.isArray(parsed?.cards)
+        ? parsed.cards
+        : (parsed && typeof parsed.en === "string" ? [parsed] : []);
       if (item?.ok && totalTok > 0) {
+        const cardCount = Math.max(1, rawCards.length || 3);
         appendProviderLog({
           provider: item.provider,
           model: item.model,
           status: "verified",
           overall: null,
           tokens: totalTok,
+          tokensPerCard: Math.round(totalTok / cardCount),
           promptTokens: Number(usage.prompt_tokens) || 0,
           completionTokens: Number(usage.completion_tokens) || 0,
-          task: "deck-card",
+          task: `biweekly-season-${seasonNum}-pack`,
           mock: false
         });
       }
-      if (!chosenCard && parsed && typeof parsed.en === "string" && parsed.en.trim()) {
-        chosenCard = {
-          id: `deck-ai-${Date.now()}`,
-          category: ["surface", "product", "technique"].includes(parsed.category) ? parsed.category : "technique",
-          productType: "neutral cleaner",
-          answer: parsed.answer === "miss" ? "miss" : "right",
-          text: {
-            en: `✨ [AI LIVE] ${parsed.en.trim()}`,
-            es: `✨ [IA EN VIVO] ${(parsed.es || parsed.en).trim()}`,
-            pl: `✨ [AI NA ŻYWO] ${(parsed.pl || parsed.en).trim()}`
-          }
-        };
+      if (!chosenPack && rawCards.length > 0) {
+        const theme = typeof parsed?.theme === "string" && parsed.theme.trim()
+          ? parsed.theme.trim()
+          : `${areaLabel} Mastery`;
+        const cards = rawCards
+          .filter((c) => c && typeof c.en === "string" && c.en.trim())
+          .slice(0, 5)
+          .map((c, idx) => {
+            const cat = ["surface", "product", "technique"].includes(c.c || c.category)
+              ? (c.c || c.category)
+              : "technique";
+            const ans = (c.a || c.answer) === "miss" ? "miss" : "right";
+            return {
+              id: `season-${seasonNum}-${areaKey}-${idx + 1}`,
+              category: cat,
+              productType: "neutral cleaner",
+              answer: ans,
+              isSeasonCard: true,
+              seasonNum,
+              text: {
+                en: `🗓️ [S${seasonNum} · ${theme}] ${c.en.trim()}`,
+                es: `🗓️ [T${seasonNum} · ${theme}] ${(c.es || c.en).trim()}`,
+                pl: `🗓️ [S${seasonNum} · ${theme}] ${(c.pl || c.en).trim()}`
+              }
+            };
+          });
+        if (cards.length > 0) {
+          chosenPack = {
+            seasonNum,
+            daysLeft,
+            areaKey,
+            theme,
+            cards,
+            generatedAt: new Date().toISOString()
+          };
+        }
       }
     }
-    if (chosenCard && typeof SWIPE_DECK !== "undefined" && Array.isArray(SWIPE_DECK)) {
-      SWIPE_DECK.push(chosenCard);
-      const newIdx = SWIPE_DECK.length - 1;
-      if (!state.deck) {
-        state.deck = { order: [newIdx], index: 0, correct: 0, locked: false };
-      } else {
-        state.deck.order.splice(state.deck.index, 0, newIdx);
-        state.deck.locked = false;
-      }
-      renderDeck();
+    if (chosenPack) {
+      try {
+        localStorage.setItem(BIWEEKLY_SEASON_KEY, JSON.stringify(chosenPack));
+      } catch {}
+      applyBiWeeklyCardsToDeck(chosenPack);
+      renderPersonalRecordUI();
     }
+    return chosenPack;
   } finally {
     if (btn) {
       btn.disabled = false;
@@ -12250,7 +12327,12 @@ function renderPersonalRecordUI() {
   const deckXp = youDeck ? youDeck.xp : masteredCards * 100 + rec.streakDays * 50;
   const lbDeckEl = document.getElementById("leaderboardDeckStatus");
   if (lbDeckEl) {
-    lbDeckEl.textContent = `🃏 Daily Deck: 🔥 ${rec.streakDays}d Streak · ${masteredCards}/30 Cards Mastered · ${deckXp} Deck XP (+100 XP/Card)`;
+    const { seasonNum, daysLeft } = getBiWeeklySeasonMeta();
+    const cachedSeason = loadCachedBiWeeklySeason();
+    const seasonTag = cachedSeason?.theme
+      ? `🗓️ Season #${seasonNum} (${cachedSeason.theme} · ${daysLeft}d left)`
+      : `🗓️ Bi-Weekly Season #${seasonNum} (${daysLeft}d left)`;
+    lbDeckEl.textContent = `🃏 ${seasonTag} · 🔥 ${rec.streakDays}d Streak · ${masteredCards}/30 Mastered · ${deckXp} Deck XP`;
   }
   const recPassportEl = document.getElementById("recordsPassportSummary");
   if (recPassportEl) {
