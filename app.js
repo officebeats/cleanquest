@@ -10905,13 +10905,13 @@ function renderLeaderboard() {
     if (isUnrankedViewer) {
       const unrankedTag = document.createElement("em");
       unrankedTag.className = "you-gap-tag";
-      unrankedTag.textContent = Number.isFinite(displayScore) ? "UNRANKED (PRACTICE)" : "UNRANKED";
+      unrankedTag.textContent = Number.isFinite(displayScore) ? "PRACTICE" : "—";
       nameLine.appendChild(unrankedTag);
     } else if (entry.isViewer && nextRival && Number.isFinite(displayScore)) {
       const rivScore = Number.isFinite(nextRival.weightedScore) ? nextRival.weightedScore : nextRival.cleanliness;
       const gapTag = document.createElement("em");
       gapTag.className = "you-gap-tag";
-      gapTag.textContent = `▲ +${Math.max(1, rivScore - displayScore + 1)}% TO #${nextRival.rank}`;
+      gapTag.textContent = `▲ +${Math.max(1, rivScore - displayScore + 1)}%`;
       nameLine.appendChild(gapTag);
     }
 
