@@ -1186,6 +1186,30 @@ h3 {
   letter-spacing: 0.13em;
   text-align: center;
 }
+
+/* Evidence hierarchy: AFTER is the star (maximized above the fold),
+   BEFORE is a small reference thumbnail that still expands on tap. */
+#resultsScreen .evidence-grid {
+  grid-template-columns: 1fr !important;
+}
+#resultsScreen #afterEvidenceCard {
+  order: -1 !important;
+}
+#resultsScreen #afterEvidenceCard .evidence-image-wrap {
+  aspect-ratio: 4 / 3 !important;
+  max-height: 46dvh !important;
+}
+#resultsScreen #beforeEvidenceCard {
+  display: grid !important;
+  grid-template-columns: 132px 1fr !important;
+  align-items: center !important;
+}
+#resultsScreen #beforeEvidenceCard .evidence-image-wrap {
+  aspect-ratio: 1 / 1 !important;
+}
+#resultsScreen #beforeEvidenceCard figcaption {
+  text-align: left !important;
+}
  
 
 .finding-card {
