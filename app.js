@@ -350,15 +350,18 @@ const translations = {
     objectsRemaining: "OBJECTS REMAIN",
     evidenceHigh: "HIGH CONFIDENCE",
     evidenceMedium: "MEDIUM CONFIDENCE",
-    evidenceRescan: "RESCAN · HOLD STEADY AND REDO",
-    rescanDark: "Too dark to see the surface — turn on a light and redo.",
-    rescanBright: "Too much glare on the surface — angle the camera and redo.",
-    rescanGeneric: "Camera moved between Before and After — hold steady and redo.",
-    rescanEmpty: "Couldn't see the cleaning surface — point the camera closer and redo.",
-    badgeRescan: "RESCAN",
-    evidenceNoChange: "NO CHANGE — CLEAN AND TRY AGAIN",
-    ctaClean: "CLEAN",
-    ctaRetake: "REDO",
+    notScoredLabel: "NOT SCORED",
+    evidenceRescan: "Take new Before & After photos to get your score",
+    rescanDark: "The photo is too dark to see the surface — turn on a light and take a new photo.",
+    rescanBright: "Light is reflecting off the surface — tilt the camera slightly to reduce glare and take a new photo.",
+    rescanGeneric: "The Before and After photos don't line up because the camera moved — take both photos from the same spot.",
+    rescanEmpty: "The surface is too far away to see clearly — step closer so it fills the screen and take a new photo.",
+    rescanWrongArea: "You picked \"{spot}\", but the photo shows {seen} — point the camera at {spot} and take a new photo.",
+    rescanPerson: "The camera is pointed at a person instead of \"{spot}\" — point it at the surface and take a new photo.",
+    badgeRescan: "NOT SCORED",
+    evidenceNoChange: "Wipe the surface and take a new After photo",
+    ctaClean: "CLEAN & TAKE NEW PHOTO",
+    ctaRetake: "TAKE NEW PHOTOS",
     ctaWipe: "WIPE",
     evidenceDemo: "DEMO · NOT AI VERIFIED",
     yourTime: "YOUR TIME",
@@ -417,17 +420,17 @@ const translations = {
     autoRefresh: "AUTO REFRESH · 15S",
 
     findingAllCleared: "Detected countable objects were cleared.",
-    findingFraming: "The camera moved too much between Before and After — keep the phone in the same spot and redo.",
+    findingFraming: "The Before and After photos don't line up because the camera moved — take both photos from the same spot.",
     findingZones: "{improved} of 9 zones visibly improved · {residual} remaining.",
     findingZonesOne: "{improved} of 9 zones visibly improved · 1 zone needs another pass.",
     findingUntouched: "Looks untouched: {areas}. Go wipe {them}.",
-    findingNoChange: "No change detected — the surface looks the same. Clean it and try again.",
+    findingNoChange: "The Before and After photos look the same — wipe the surface first, then take a new After photo.",
     findingDemoStation: "Demo station: 3 of 3 surface items (cup, bottle, bowl) cleared; counter and sink basin visibly improved.",
     findingNoObjects: "Couldn't see enough — clean and try again.",
     findingRemaining: "{objects} still detected after the challenge.",
     findingNew: "{objects} appeared in the after image.",
     findingDemo: "Demo score uses placeholder images; no camera judgment was made.",
-    findingModelFailed: "Couldn't read the surface from this angle — point the camera straight at the spot and redo.",
+    findingModelFailed: "The surface is too far away to see clearly — step closer so it fills the screen and take a new photo.",
 
     voiceWelcome: "Welcome, challengers! Tonight, cleaning meets glory!",
     voiceInstructionsIntro: "Three steps stand between you and victory!",
@@ -776,15 +779,18 @@ const translations = {
     objectsRemaining: "OBJETOS RESTANTES",
     evidenceHigh: "ALTA CONFIANZA",
     evidenceMedium: "CONFIANZA MEDIA",
-    evidenceRescan: "REPETIR · SOSTÉN EL MÓVIL Y REPITE",
-    rescanDark: "Muy oscuro para ver la superficie — enciende la luz y repite.",
-    rescanBright: "Demasiado reflejo en la superficie — cambia el ángulo y repite.",
-    rescanGeneric: "La cámara se movió entre Antes y Después — sostén firme y repite.",
-    rescanEmpty: "No se ve la superficie a limpiar — acerca la cámara y repite.",
-    badgeRescan: "REPETIR",
-    evidenceNoChange: "SIN CAMBIOS — LIMPIA Y VUELVE A INTENTARLO",
-    ctaClean: "LIMPIA",
-    ctaRetake: "REPITE",
+    notScoredLabel: "SIN PUNTUACIÓN",
+    evidenceRescan: "Toma nuevas fotos de Antes y Después",
+    rescanDark: "La foto está muy oscura para ver la superficie — enciende una luz y toma una nueva foto.",
+    rescanBright: "La luz se refleja en la superficie — inclina un poco la cámara para quitar el reflejo y toma una nueva foto.",
+    rescanGeneric: "Las fotos de Antes y Después no coinciden porque la cámara se movió — toma ambas fotos desde el mismo lugar.",
+    rescanEmpty: "La superficie está muy lejos para verse bien — acércate para que llene la pantalla y toma una nueva foto.",
+    rescanWrongArea: "Elegiste \"{spot}\", pero la foto muestra {seen} — apunta la cámara a {spot} y toma una nueva foto.",
+    rescanPerson: "La cámara apunta a una persona en lugar de \"{spot}\" — apúntala a la superficie y toma una nueva foto.",
+    badgeRescan: "SIN PUNTUACIÓN",
+    evidenceNoChange: "Limpia la superficie y toma una nueva foto",
+    ctaClean: "LIMPIAR Y TOMAR FOTO",
+    ctaRetake: "TOMAR NUEVAS FOTOS",
     ctaWipe: "FROTA",
     evidenceDemo: "DEMO · NO VERIFICADO POR IA",
     yourTime: "TU TIEMPO",
@@ -843,17 +849,17 @@ const translations = {
     autoRefresh: "ACTUALIZA · 15S",
 
     findingAllCleared: "Los objetos detectables fueron retirados.",
-    findingFraming: "La cámara se movió demasiado entre Antes y Después — mantén el teléfono fijo y repite.",
+    findingFraming: "Las fotos de Antes y Después no coinciden porque la cámara se movió — toma ambas fotos desde el mismo lugar.",
     findingZones: "{improved} de 9 zonas mejoraron visiblemente · {residual} pendientes.",
     findingZonesOne: "{improved} de 9 zonas mejoraron visiblemente · 1 zona necesita otra pasada.",
     findingUntouched: "Sin limpiar: {areas}. Pásale un paño.",
-    findingNoChange: "Sin cambios — la superficie se ve igual. Límpiala e inténtalo de nuevo.",
+    findingNoChange: "Las fotos de Antes y Después se ven iguales — limpia primero la superficie y toma una nueva foto.",
     findingDemoStation: "Estación demo: 3 de 3 objetos de la superficie (taza, botella, tazón) retirados; la encimera y el lavabo mejoraron visiblemente.",
     findingNoObjects: "No se ven suficientes — limpia e inténtalo de nuevo.",
     findingRemaining: "{objects} siguen detectados después del reto.",
     findingNew: "{objects} aparecieron en la imagen final.",
     findingDemo: "La puntuación demo usa imágenes de muestra; la cámara no emitió ningún juicio.",
-    findingModelFailed: "No se pudo leer la superficie desde este ángulo — apunta la cámara directo al área y repite.",
+    findingModelFailed: "La superficie está muy lejos para verse bien — acércate para que llene la pantalla y toma una nueva foto.",
 
     voiceWelcome: "¡Bienvenidos, campeones! ¡Hoy la limpieza busca la gloria!",
     voiceInstructionsIntro: "¡Tres pasos te separan de la victoria!",
@@ -1202,15 +1208,18 @@ const translations = {
     objectsRemaining: "POZOSTAŁE OBIEKTY",
     evidenceHigh: "WYSOKA PEWNOŚĆ",
     evidenceMedium: "ŚREDNIA PEWNOŚĆ",
-    evidenceRescan: "POWTÓRZ · TRZYMAJ STABILNIE I POWTÓRZ",
-    rescanDark: "Za ciemno, by widzieć powierzchnię — włącz światło i powtórz.",
-    rescanBright: "Zbyt duży odblask na powierzchni — zmień kąt i powtórz.",
-    rescanGeneric: "Kamera poruszyła się między Przed i Po — trzymaj stabilnie i powtórz.",
-    rescanEmpty: "Nie widać powierzchni do sprzątania — przybliż kamerę i powtórz.",
-    badgeRescan: "POWTÓRZ",
-    evidenceNoChange: "BRAK ZMIAN — WYCZYŚĆ I SPRÓBUJ PONOWNIE",
-    ctaClean: "CZYŚĆ",
-    ctaRetake: "POWTÓRZ",
+    notScoredLabel: "BEZ WYNIKU",
+    evidenceRescan: "Zrób nowe zdjęcia Przed i Po, aby otrzymać wynik",
+    rescanDark: "Zdjęcie jest za ciemne, by widzieć powierzchnię — włącz światło i zrób nowe zdjęcie.",
+    rescanBright: "Światło odbija się od powierzchni — przechyl lekko kamerę, by zmniejszyć odblask, i zrób nowe zdjęcie.",
+    rescanGeneric: "Zdjęcia Przed i Po nie pasują do siebie, bo kamera się poruszyła — zrób oba zdjęcia z tego samego miejsca.",
+    rescanEmpty: "Powierzchnia jest za daleko, by było ją wyraźnie widać — podejdź bliżej i zrób nowe zdjęcie.",
+    rescanWrongArea: "Wybrano \"{spot}\", ale na zdjęciu widać {seen} — skieruj kamerę na {spot} i zrób nowe zdjęcie.",
+    rescanPerson: "Kamera jest skierowana na osobę zamiast na \"{spot}\" — skieruj ją na powierzchnię i zrób nowe zdjęcie.",
+    badgeRescan: "BEZ WYNIKU",
+    evidenceNoChange: "Wyczyść powierzchnię i zrób nowe zdjęcie",
+    ctaClean: "WYCZYŚĆ I ZRÓB ZDJĘCIE",
+    ctaRetake: "ZRÓB NOWE ZDJĘCIA",
     ctaWipe: "PRZETRZYJ",
     evidenceDemo: "DEMO · NIEZWERYFIKOWANE PRZEZ AI",
     yourTime: "TWÓJ CZAS",
@@ -1269,17 +1278,17 @@ const translations = {
     autoRefresh: "ODŚWIEŻANIE · 15S",
 
     findingAllCleared: "Wykryte obiekty zostały usunięte.",
-    findingFraming: "Kamera poruszyła się za bardzo między Przed i Po — trzymaj telefon nieruchomo i powtórz.",
+    findingFraming: "Zdjęcia Przed i Po nie pasują do siebie, bo kamera się poruszyła — zrób oba zdjęcia z tego samego miejsca.",
     findingZones: "{improved} z 9 stref wyraźnie lepsze · {residual} do poprawy.",
     findingZonesOne: "{improved} z 9 stref wyraźnie lepsze · 1 strefa wymaga poprawki.",
     findingUntouched: "Nieruszone: {areas}. Wytrzyj {them}.",
-    findingNoChange: "Brak zmian — powierzchnia wygląda tak samo. Wyczyść ją i spróbuj ponownie.",
+    findingNoChange: "Zdjęcia Przed i Po wyglądają tak samo — najpierw wyczyść powierzchnię i zrób nowe zdjęcie.",
     findingDemoStation: "Stacja demo: 3 z 3 przedmiotów (kubek, butelka, miska) usunięte; blat i umywalka wyraźnie lepsze.",
     findingNoObjects: "Widać za mało — wyczyść i spróbuj ponownie.",
     findingRemaining: "{objects} nadal wykryto po zakończeniu wyzwania.",
     findingNew: "{objects} pojawiły się na zdjęciu po sprzątaniu.",
     findingDemo: "Wynik demo korzysta z obrazów zastępczych; kamera nie dokonała oceny.",
-    findingModelFailed: "Nie udało się odczytać powierzchni pod tym kątem — skieruj kamerę prosto na miejsce i powtórz.",
+    findingModelFailed: "Powierzchnia jest za daleko, by było ją wyraźnie widać — podejdź bliżej i zrób nowe zdjęcie.",
 
     voiceWelcome: "Witajcie, mistrzowie! Dziś sprzątanie walczy o chwałę!",
     voiceInstructionsIntro: "Trzy kroki dzielą cię od zwycięstwa!",
@@ -3140,7 +3149,7 @@ function speakHost(beat, overrideText) {
  * 44.1kHz), then bump version below to bust cache. No code changes needed.
  * Spec lives in docs/AUDIO-PLAN.md ("Billy swap"). */
 const FEATURE_MUSIC = {
-  version: "20261103-30",
+  version: "20261103-32",
   acceptChallenge: {
     en: "assets/audio/en/welcome-intro.mp3",
     es: "assets/audio/es/welcome-intro.mp3",
@@ -3652,7 +3661,10 @@ function announceGameVerdict() {
   const hushed = Boolean(noChg || directive || !scorableRun);
   const pickedVerdict = pickHostLine(beat, state.language);
   const pickedFinish = beat.startsWith("pass") ? pickHostLine("finish", state.language) : null;
-  if (badge) badge.textContent = !hushed ? tierRankLabel(beat, spokenScore) : (scorableRun ? `${Math.round(spokenScore)}%` : (ai?.scoreCta || t("ctaRetake")));
+  if (badge) {
+    badge.classList.toggle("hidden", !scorableRun);
+    badge.textContent = !hushed ? tierRankLabel(beat, spokenScore) : (scorableRun ? `${Math.round(spokenScore)}%` : "");
+  }
   const summaryCaption = !scorableRun
     ? (noChg ? t("findingNoChange") : (directiveText(state.result?.ai) || t("evidenceRescan")))
     : (noChg || directive)
@@ -5055,7 +5067,7 @@ function showCameraExplainer() {
   // Neural voiceover only: pre-rendered camera-explain.mp3 per language.
   if (!state.voice.muted && !SELFTEST_MODE) {
     const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
-    playHostClip(`assets/audio/${lang}/camera-explain.mp3`, t("cameraExplainBody"), { rate: 1.0, pitch: 1.0 }, "camera-explain");
+    playHostClip(`assets/audio/${lang}/camera-explain.mp3?v=${FEATURE_MUSIC.version}`, t("cameraExplainBody"), { rate: 1.0, pitch: 1.0 }, "camera-explain");
   }
 }
 const CAMERA_EXPLAIN_SEEN_KEY = "cleanquest.cameraExplainSeen.v1";
@@ -6883,9 +6895,15 @@ function verifyStationEnvironment(
   const labels = combined.map((o) => String(o?.label || "").toLowerCase()).filter(Boolean);
 
   // 1. Check if camera is pointed at a person / webcam selfie (>= 32% of frame)
-  const bigPerson = (Array.isArray(rawDetections) ? rawDetections : []).find(
-    (d) => d.label === "person" && Number(d.areaRatio || 0) >= 0.32
-  );
+  const bigPerson = combined.find((d) => {
+    if (String(d?.label || "").toLowerCase() !== "person") return false;
+    if (Number(d?.areaRatio || 0) >= 0.25) return true;
+    const b = d?.boundingBox || d?.box;
+    const iw = Number(d?.imageWidth || 0);
+    const ih = Number(d?.imageHeight || 0);
+    if (b && iw > 0 && ih > 0 && (Number(b.width || 0) * Number(b.height || 0)) / (iw * ih) >= 0.25) return true;
+    return labels.every((l) => l === "person");
+  });
 
   const isWetOrFloorSpot =
     spotLower.includes("sink") ||
@@ -6924,7 +6942,9 @@ function verifyStationEnvironment(
         claimedStation: `${areaKey} · ${assignedSpot}`,
         detectedSummary: uniq,
         inferredStation: inferred,
-        message: `Wrong spot: you picked "${assignedSpot}", but the camera sees ${uniq}. Point at ${assignedSpot} and redo.`
+        directiveKey: "rescanWrongArea",
+        directiveParams: { spot: assignedSpot, seen: uniq },
+        message: t("rescanWrongArea", { spot: assignedSpot, seen: uniq })
       };
     }
     if (bigPerson && anchorHits.length === 0) {
@@ -6934,7 +6954,9 @@ function verifyStationEnvironment(
         claimedStation: `${areaKey} · ${assignedSpot}`,
         detectedSummary: "person / selfie view",
         inferredStation: "Webcam selfie",
-        message: `Camera is pointed at a person instead of "${assignedSpot}". Point at the surface and redo.`
+        directiveKey: "rescanPerson",
+        directiveParams: { spot: assignedSpot },
+        message: t("rescanPerson", { spot: assignedSpot })
       };
     }
   }
@@ -6949,7 +6971,9 @@ function verifyStationEnvironment(
         claimedStation: `${areaKey} · ${assignedSpot}`,
         detectedSummary: Array.from(new Set(bathroomHits)).join(", "),
         inferredStation: "Restroom / Sink & counter",
-        message: `Wrong spot: you picked "${assignedSpot}", but the camera sees ${bathroomHits[0]}. Point at ${assignedSpot} and redo.`
+        directiveKey: "rescanWrongArea",
+        directiveParams: { spot: assignedSpot, seen: bathroomHits[0] },
+        message: t("rescanWrongArea", { spot: assignedSpot, seen: bathroomHits[0] })
       };
     }
   }
@@ -7021,7 +7045,8 @@ function calculateLocalScore(
   // shift still counts: same scene, same dirt. Never award a score when
   // nothing changed; show the CLEAN CTA and hide the score bars.
   const noVisibleChange = sceneValid && clearedCount === 0 && newCount === 0 && (Number(change.changedPixelPercent || 0) < 4 || (Number(surface?.improvedZones || 0) === 0 && Number(change.changedPixelPercent || 0) < 12));
-  const enoughEvidence = sceneValid && !noVisibleChange && (beforeCount >= 1 || surfaceClearSignal >= 0.12 || sceneMatch >= 0.5);
+  const lumCheck = Number(change.avgLuminance ?? 128);
+  const enoughEvidence = sceneValid && !noVisibleChange && lumCheck >= 50 && lumCheck <= 210 && (beforeCount >= 1 || surfaceImprovement >= 0.12 || sceneMatch >= 0.5);
 
   // Compute top-to-bottom technique order from 3x3 surface zones
   const zones = surface?.zones || [];
@@ -7058,7 +7083,16 @@ function calculateLocalScore(
   const findings = [];
   if (!envCheck.matched && envCheck.message) {
     findings.push(envCheck.message);
-    scoreDirective = envCheck.message;
+    if (envCheck.directiveKey) setDirective(envCheck.directiveKey, envCheck.directiveParams);
+    else scoreDirective = envCheck.message;
+    scoreCta = t("ctaRetake");
+  } else if (lumCheck < 50) {
+    findings.push(t("rescanDark"));
+    setDirective("rescanDark");
+    scoreCta = t("ctaRetake");
+  } else if (lumCheck > 210) {
+    findings.push(t("rescanBright"));
+    setDirective("rescanBright");
     scoreCta = t("ctaRetake");
   } else if (!sceneValid) {
     findings.push(t("findingFraming"));
@@ -8848,11 +8882,37 @@ function renderResults() {
   const scorable = score.scorable !== false && !score.noVisibleChange && Number.isFinite(score.cleanliness);
 
   const weightedHero = scorable ? computeWeightedRunScore() : null;
+  const scoreHero = els.cleanlinessScore.closest(".score-hero");
+  const heroLabelEl = scoreHero?.querySelector('[data-i18n="visibleCleanliness"]');
+  if (heroLabelEl) {
+    heroLabelEl.textContent = scorable ? t("visibleCleanliness") : t("notScoredLabel");
+  }
+  const unscorableReason = () => {
+    const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+    if (score.noVisibleChange || score.scoreDirectiveKey === "findingNoChange") {
+      return lang === "es" ? "SIN CAMBIOS" : lang === "pl" ? "BRAK ZMIAN" : "NO CHANGE";
+    }
+    if (score.environmentMismatch?.reason === "person_occluded" || score.scoreDirectiveKey === "rescanPerson") {
+      return lang === "es" ? "PERSONA EN FOTO" : lang === "pl" ? "OSOBA W KADRZE" : "PERSON IN PHOTO";
+    }
+    if (score.environmentMismatch || score.scoreDirectiveKey === "rescanWrongArea") {
+      return lang === "es" ? "ÁREA INCORRECTA" : lang === "pl" ? "ZŁE MIEJSCE" : "WRONG AREA";
+    }
+    if (score.scoreDirectiveKey === "rescanDark") {
+      return lang === "es" ? "MUY OSCURO" : lang === "pl" ? "ZA CIEMNO" : "TOO DARK";
+    }
+    if (score.scoreDirectiveKey === "rescanBright") {
+      return lang === "es" ? "MUCHO REFLEJO" : lang === "pl" ? "ZA DUŻO ODBLASKU" : "TOO MUCH GLARE";
+    }
+    if (score.scoreDirectiveKey === "rescanEmpty" || score.scoreDirectiveKey === "findingNoObjects" || score.scoreDirectiveKey === "findingModelFailed") {
+      return lang === "es" ? "MUY LEJOS" : lang === "pl" ? "ZA DALEKO" : "TOO FAR AWAY";
+    }
+    return lang === "es" ? "CÁMARA MOVIDA" : lang === "pl" ? "PORUSZONY KADR" : "CAMERA MOVED";
+  };
   els.cleanlinessScore.textContent = scorable
     ? `${weightedHero ?? score.cleanliness}%`
-    : score.simulated ? "DEMO" : (score.scoreCta || t("ctaRetake"));
+    : score.simulated ? "DEMO" : unscorableReason();
 
-  const scoreHero = els.cleanlinessScore.closest(".score-hero");
   const verdictBeat = selectVerdictBeat();
   const isLowOrRescan = !scorable || verdictBeat === "retry" || verdictBeat === "retry-far" || (Number.isFinite(weightedHero ?? score.cleanliness) && (weightedHero ?? score.cleanliness) < (CONFIG.verdictTiers?.passMark || 70));
   scoreHero?.classList.toggle("insufficient", !scorable);
@@ -8867,21 +8927,13 @@ function renderResults() {
         ? t("evidenceDemo")
         : score.noVisibleChange
           ? t("evidenceNoChange")
-          : score.environmentMismatch
-            ? "WRONG SPOT — REDO"
-            : score.scoreDirectiveKey === "rescanDark"
-              ? "TOO DARK — REDO"
-              : score.scoreDirectiveKey === "rescanBright"
-                ? "TOO MUCH GLARE — REDO"
-                : score.scoreDirectiveKey === "rescanEmpty"
-                  ? "NO SURFACE IN VIEW — REDO"
-                  : !scorable
-                    ? "CAMERA MOVED — REDO"
-                    : score.confidenceBand === "high"
-                      ? t("evidenceHigh")
-                      : score.confidenceBand === "medium"
-                        ? t("evidenceMedium")
-                        : t("evidenceRescan");
+          : !scorable
+            ? t("evidenceRescan")
+            : score.confidenceBand === "high"
+              ? t("evidenceHigh")
+              : score.confidenceBand === "medium"
+                ? t("evidenceMedium")
+                : t("evidenceRescan");
     els.scoreEvidenceState.textContent = `${formatElapsedLong(elapsed)} · ${stateLabel}`;
   }
   els.resultTime.textContent = formatTimer(elapsed);
@@ -10772,7 +10824,7 @@ function answerDeck(pick) {
     const deckLang = state.language === "es" || state.language === "pl" ? state.language : "en";
     const agreed = pick !== "miss";
     const deckFallback = deckLang === "es" ? (agreed ? "De acuerdo." : "En desacuerdo.") : deckLang === "pl" ? (agreed ? "Zgadzam się." : "Nie zgadzam się.") : (agreed ? "Agreed." : "Disagreed.");
-    playHostClip(`assets/audio/${deckLang}/deck-${agreed ? "agree" : "disagree"}.mp3`, deckFallback, { rate: 1.0, pitch: 1.0 }, "deck-verdict");
+    playHostClip(`assets/audio/${deckLang}/deck-${agreed ? "agree" : "disagree"}.mp3?v=${FEATURE_MUSIC.version}`, deckFallback, { rate: 1.0, pitch: 1.0 }, "deck-verdict");
   }
   triggerDeckParticleBurst(hit);
   if (els.deckFeedback) {

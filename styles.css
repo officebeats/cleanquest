@@ -7554,3 +7554,12 @@ body #resultsScreen #beforeEvidenceCard .detection-overlay {
 body #resultsScreen #beforeEvidenceCard figcaption {
   text-align: left !important;
 }
+body #resultsScreen .score-hero.insufficient > strong {
+  font-size: clamp(18px, 4.8vw, 24px) !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.15 !important;
+  text-align: right !important;
+}
+body #resultsScreen #verdictSummaryBadge.hidden {
+  display: none !important;
+}

@@ -16,7 +16,7 @@
   }
   var screenEl = document.querySelector(".screen.active");
   var screen = screenEl && screenEl.id ? screenEl.id : "unknown";
-  var isResults = screen === "resultsScreen" || has("TOTAL SCORE");
+  var isResults = screen === "resultsScreen" || has("TOTAL SCORE") || has("NOT SCORED") || has("SIN PUNTUACIÓN") || has("BEZ WYNIKU");
   var isDeck = screen === "deckScreen" || (has("DAILY DECK") && has("Card 1 of"));
 
   // 1. No dead findings box anywhere.
@@ -36,14 +36,18 @@
   // 3. Unscorable runs: no rank, no praise, state the reason.
   var evState = txt("scoreEvidenceState");
   var badge = txt("verdictSummaryBadge");
-  var unscorableWords = ["RESCAN", "REDO", "REPITE", "POWTÓRZ", "HOLD STEADY", "SOSTÉN", "TRZYMAJ", "NO CHANGE", "SIN CAMBIOS", "BRAK ZMIAN"];
+  var heroTxt = txt("cleanlinessScore");
+  var unscorableWords = ["RESCAN", "REDO", "REPITE", "POWTÓRZ", "HOLD STEADY", "SOSTÉN", "TRZYMAJ", "NO CHANGE", "SIN CAMBIOS", "BRAK ZMIAN", "WRONG AREA", "ÁREA INCORRECTA", "ZŁE MIEJSCE", "PERSON IN PHOTO", "PERSONA EN FOTO", "OSOBA W KADRZE", "TOO DARK", "MUY OSCURO", "ZA CIEMNO", "TOO MUCH GLARE", "MUCHO REFLEJO", "ZA DUŻO ODBLASKU", "TOO FAR AWAY", "MUY LEJOS", "ZA DALEKO", "CAMERA MOVED", "CÁMARA MOVIDA", "PORUSZONY KADR"];
   var isUnscorable = false;
   for (var i = 0; i < unscorableWords.length; i++) {
-    if ((badge + " " + evState).indexOf(unscorableWords[i]) !== -1) isUnscorable = true;
+    if ((badge + " " + evState + " " + heroTxt).indexOf(unscorableWords[i]) !== -1) isUnscorable = true;
   }
   if (/RANK/i.test(badge) && isUnscorable) failures.push("rank-on-rescan: badge shows \"" + badge.slice(0, 40) + "\"");
-  if (isUnscorable && /%/.test(badge) && !/RESCAN|REDO|REPITE|POWTÓRZ|CLEAN|LIMPIA|CZYŚĆ/i.test(badge)) {
+  if (isUnscorable && /%/.test(badge) && !/RESCAN|REDO|REPITE|POWTÓRZ|CLEAN|LIMPIA|CZYŚĆ|NOT SCORED|SIN PUNTUACIÓN|BEZ WYNIKU/i.test(badge)) {
     failures.push("score-on-rescan: badge shows \"" + badge.slice(0, 40) + "\"");
+  }
+  if (isUnscorable && /^(REDO|RESCAN|REPITE|REPETIR|POWTÓRZ)$/i.test(heroTxt.replace(/^\s+|\s+$/g, ""))) {
+    failures.push("vague-hero-on-unscorable: hero says bare \"" + heroTxt + "\" without layman reason");
   }
   if (isUnscorable && (shown("scoreBreakdownBars") || shown("scoreBreakdownCard") || shown("disputePanel"))) {
     failures.push("sections-on-unscorable: breakdown or dispute visible when run has nothing to submit");
@@ -65,7 +69,7 @@
     if (chips > 0) failures.push("contested-grades: " + chips + " surface chip(s) beside directive");
   }
   if (directive) {
-    var zoneWords = ["top", "middle", "bottom", "wipe", "clean", "retake", "redo", "limpia", "frota", "repite", "wyczy", "powt", "przetrzyj", "zona", "stref", "góra", "dół", "środek", "lewa", "prawa", "toda", "wszystkie", "whole", "sin ", "brak", "frame", "encuadre", "kadr", "spot", "surface", "camera", "light", "glare", "steady"];
+    var zoneWords = ["top", "middle", "bottom", "wipe", "clean", "retake", "redo", "take", "photo", "limpia", "frota", "repite", "toma", "foto", "wyczy", "powt", "przetrzyj", "zdj", "zona", "stref", "góra", "dół", "środek", "lewa", "prawa", "toda", "wszystkie", "whole", "sin ", "brak", "frame", "encuadre", "kadr", "spot", "surface", "camera", "light", "glare", "steady"];
     var hasZone = false;
     var lower = directive.toLowerCase();
     for (var k = 0; k < zoneWords.length; k++) { if (lower.indexOf(zoneWords[k]) !== -1) hasZone = true; }
@@ -76,11 +80,11 @@
   var ctaEl = el("plainCta");
   var cta = ctaEl ? (ctaEl.textContent || "").replace(/^\s+|\s+$/g, "") : "";
   if (directive && !cta) failures.push("missing-cta: directive shown without a one-word CTA");
-  if (/NO CHANGE|SIN CAMBIOS|BRAK ZMIAN/i.test(directive + " " + evState) && cta && !/CLEAN|LIMPIA|CZYŚĆ/i.test(cta)) {
+  if (/NO CHANGE|SIN CAMBIOS|BRAK ZMIAN|look the same|se ven iguales|wyglądają tak samo/i.test(directive + " " + evState + " " + heroTxt) && cta && !/CLEAN|LIMPIA|CZYŚĆ|WYCZYŚĆ/i.test(cta)) {
     failures.push("cta-mismatch: no-change expects CLEAN, got \"" + cta + "\"");
   }
-  if (isUnscorable && /RES?CAN|REDO|REPITE|POWTÓRZ|HOLD STEADY|SOSTÉN|TRZYMAJ/i.test(evState + " " + directive) && cta && !/REDO|REPITE|POWTÓRZ|RETAKE/i.test(cta)) {
-    failures.push("cta-mismatch: rescan expects a REDO CTA, got \"" + cta + "\"");
+  if (isUnscorable && !/NO CHANGE|SIN CAMBIOS|BRAK ZMIAN/i.test(heroTxt) && cta && !/REDO|REPITE|POWTÓRZ|RETAKE|TAKE NEW|TOMAR NUEVAS|ZRÓB NOWE/i.test(cta)) {
+    failures.push("cta-mismatch: unscorable expects TAKE NEW PHOTOS CTA, got \"" + cta + "\"");
   }
   // 4b. Badge must never praise beside a directive (any language).
   var badgeEl = document.getElementById("verdictSummaryBadge");
