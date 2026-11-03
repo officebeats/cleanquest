@@ -299,7 +299,7 @@ const translations = {
     cameraUnavailable: "CAMERA UNAVAILABLE",
     retryCamera: "RETRY CAMERA",
     cameraExplainTitle: "HOW THE CHALLENGE WORKS",
-    cameraExplainBody: "Snap a BEFORE photo, tap Start and clean against the clock, then snap AFTER. The game compares the two photos and scores visible cleanliness. The camera is how the game sees your work.",
+    cameraExplainBody: "Snap a BEFORE photo, tap Start and clean against the clock, then snap AFTER. The game compares the two photos and scores visible cleanliness. The camera is how the game sees your work. The AI spots objects and outlines surfaces like glass and fixtures, to verify each one.",
     cameraExplainAllow: "📷 ALLOW CAMERA & START",
     continueWithoutCamera: "CONTINUE WITHOUT CAMERA",
     demoMode: "DEMO MODE",
@@ -350,7 +350,12 @@ const translations = {
     objectsRemaining: "OBJECTS REMAIN",
     evidenceHigh: "HIGH CONFIDENCE",
     evidenceMedium: "MEDIUM CONFIDENCE",
-    evidenceRescan: "RESCAN · INSUFFICIENT EVIDENCE",
+    evidenceRescan: "RESCAN · PHOTOS UNCLEAR",
+    badgeRescan: "RESCAN",
+    evidenceNoChange: "NO CHANGE — CLEAN AND TRY AGAIN",
+    ctaClean: "CLEAN",
+    ctaRetake: "RETAKE",
+    ctaWipe: "WIPE",
     evidenceDemo: "DEMO · NOT AI VERIFIED",
     yourTime: "YOUR TIME",
     target: "TARGET",
@@ -450,10 +455,10 @@ const translations = {
     deckCatSurface: "SURFACE",
     deckCatProduct: "PRODUCT",
     deckCatTechnique: "TECHNIQUE",
-    deckRight: "✔ RIGHT ⟶",
-    deckMiss: "⟵ ✘ WRONG",
-    deckCorrect: "✔ Right.",
-    deckWrong: "✘ Wrong.",
+    deckRight: "✔ AGREE ⟶",
+    deckMiss: "⟵ ✘ DISAGREE",
+    deckCorrect: "✔ Agree.",
+    deckWrong: "✘ Disagree.",
     deckComplete: "Deck complete for today.",
     deckStreak: "Day streak: {n}",
     deckCardOf: "Card {i} of {n}",
@@ -523,7 +528,7 @@ const translations = {
     scoreBreakdownTitle: "SCORE EXPLANATION (CLEAN · TECHNIQUE · TIME)",
     barClean: "Clean",
     barDetailClean: "Visible cleanliness, before vs after.",
-    barDetailCleanNone: "Not measured this run.",
+    barDetailCleanNone: "Couldn't measure — retake both photos.",
     gapHow: "Dwell-time compliance, top-to-bottom order, product-to-surface match",
     gapWhenPattern: "{bucket} shift pattern ({count} of {total} logged runs)",
     gapWhenNone: "No timed runs logged yet",
@@ -537,18 +542,22 @@ const translations = {
     srcTopToBottomOrder: "top-to-bottom order",
     srcSurfaceOrder: "surface order",
     srcTechniqueScore: "technique score",
-    barDetailTechniqueNone: "No technique evidence this run.",
+    barDetailTechniqueNone: "No technique reading — retake both photos.",
     barDetailTechnique: "From measured evidence ({sources}).",
     barDetailNoTime: "No time recorded.",
     barDetailTimeReview: "Much faster than benchmark — held for human review.",
     barDetailTimeOk: "Within benchmark — full time points.",
     barTechnique: "Technique",
     barTime: "Time vs. benchmark",
-    notMeasured: "not measured",
+    notMeasured: "no reading",
     reviewFlag: "review",
     disputeHeading: "FAIR REVIEW",
     disputeAction: "DISPUTE SCORE",
     disputeOpenedButton: "APPEAL OPEN",
+    disputeNotePlaceholder: "Optional — explain in your own words…",
+    disputeSubmit: "SUBMIT APPEAL",
+    disputeCancel: "CANCEL",
+    disputeVoiceReady: "Voice note attached.",
     disputeHint: "One-tap appeal — reviewed within 5 business days. Scores are never edited manually.",
     disputeOpenStatus: "Appeal open ({id}) — review within 5 business days. Read-only: no person can edit a score.",
     offlineQueueTitle: "OFFLINE RUN QUEUE (AWAITING SCORE)",
@@ -619,7 +628,7 @@ const translations = {
     zonesActive: "📸 LIVE · {n}/9 ZONES · {s} SNAPS",
     sharePassportAction: "🪪 SHARE PASSPORT",
     passportCopiedNote: "✓ Verified Benchmark Passport copied to share!",
-    deckSwipeHint: "Read the card — is it RIGHT or WRONG? Drag far left / right, or tap a button.",
+    deckSwipeHint: "Read the card — do you AGREE or DISAGREE? Drag far left / right, or tap a button.",
     deckNextCard: "NEXT CARD ⟶",
     deckPracticeAgain: "🔄 PRACTICE ANOTHER 10 CARDS",
     openPassportHub: "🪪 PASSPORT, CREW & SUPERVISOR",
@@ -632,8 +641,8 @@ const translations = {
     qrApply: "APPLY QR CODE",
     maximizeBadge: "⤢",
     lightboxGhostOpacity: "BEFORE SHADOW OVERLAY OPACITY",
-    deckStampLeft: "⟵ ✘ WRONG",
-    deckStampRight: "✔ RIGHT ⟶",
+    deckStampLeft: "⟵ ✘ DISAGREE",
+    deckStampRight: "✔ AGREE ⟶",
     openSupervisorTools: "📋 OPEN INSPECTION LOG & SUPERVISOR TOOLS (11–15) →",
     leagueOffice: "🏢 Office & Corporate",
     leagueEducation: "🏫 Education & Campus",
@@ -670,6 +679,7 @@ const translations = {
     playDailyDeck: "🃏 PLAY DAILY DECK",
     deckLeaderboardAction: "🏆 DECK LEADERBOARD",
     gradeClean: "CLEAN",
+    surfaceOutlineNote: "AI outlined the glass & fixtures to verify each surface.",
     gradePartly: "PARTLY CLEAN",
     gradeMissed: "MISSED",
   },
@@ -703,7 +713,7 @@ const translations = {
     cameraUnavailable: "CÁMARA NO DISPONIBLE",
     retryCamera: "REINTENTAR CÁMARA",
     cameraExplainTitle: "CÓMO FUNCIONA EL RETO",
-    cameraExplainBody: "Toma una foto de ANTES, toca Iniciar y limpia contra el reloj, luego toma la de DESPUÉS. El juego compara las dos fotos y califica la limpieza visible. La cámara es como el juego ve tu trabajo.",
+    cameraExplainBody: "Toma una foto de ANTES, toca Iniciar y limpia contra el reloj, luego toma la de DESPUÉS. El juego compara las dos fotos y califica la limpieza visible. La cámara es como el juego ve tu trabajo. La IA detecta objetos y delinea superficies como vidrios y accesorios, para verificar cada una.",
     cameraExplainAllow: "📷 PERMITIR CÁMARA Y EMPEZAR",
     continueWithoutCamera: "CONTINUAR SIN CÁMARA",
     demoMode: "MODO DEMO",
@@ -754,7 +764,12 @@ const translations = {
     objectsRemaining: "OBJETOS RESTANTES",
     evidenceHigh: "ALTA CONFIANZA",
     evidenceMedium: "CONFIANZA MEDIA",
-    evidenceRescan: "REPETIR · EVIDENCIA INSUFICIENTE",
+    evidenceRescan: "REPETIR · FOTOS POCO CLARAS",
+    badgeRescan: "REPETIR",
+    evidenceNoChange: "SIN CAMBIOS — LIMPIA Y VUELVE A INTENTARLO",
+    ctaClean: "LIMPIA",
+    ctaRetake: "REPITE",
+    ctaWipe: "FROTA",
     evidenceDemo: "DEMO · NO VERIFICADO POR IA",
     yourTime: "TU TIEMPO",
     target: "META",
@@ -854,10 +869,10 @@ const translations = {
     deckCatSurface: "SUPERFICIE",
     deckCatProduct: "PRODUCTO",
     deckCatTechnique: "TÉCNICA",
-    deckRight: "✔ CORRECTO ⟶",
-    deckMiss: "⟵ ✘ INCORRECTO",
-    deckCorrect: "✔ Correcta.",
-    deckWrong: "✘ Incorrecta.",
+    deckRight: "✔ DE ACUERDO ⟶",
+    deckMiss: "⟵ ✘ EN DESACUERDO",
+    deckCorrect: "✔ De acuerdo.",
+    deckWrong: "✘ En desacuerdo.",
     deckComplete: "Mazo completo por hoy.",
     deckStreak: "Racha: {n} días",
     deckCardOf: "Tarjeta {i} de {n}",
@@ -927,7 +942,7 @@ const translations = {
     scoreBreakdownTitle: "EXPLICACIÓN DE PUNTUACIÓN (LIMPIEZA · TÉCNICA · TIEMPO)",
     barClean: "Limpieza",
     barDetailClean: "Limpieza visible, antes vs después.",
-    barDetailCleanNone: "No medida en esta ronda.",
+    barDetailCleanNone: "No se pudo medir — repite ambas fotos.",
     gapHow: "Cumplimiento del tiempo de contacto, orden de arriba abajo y de limpio a sucio, producto según superficie",
     gapWhenPattern: "Patrón de turno {bucket} ({count} de {total} rondas registradas)",
     gapWhenNone: "Aún no hay rondas con hora registrada",
@@ -941,18 +956,22 @@ const translations = {
     srcTopToBottomOrder: "orden de arriba abajo",
     srcSurfaceOrder: "orden de superficies",
     srcTechniqueScore: "puntuación de técnica",
-    barDetailTechniqueNone: "Sin evidencia de técnica.",
+    barDetailTechniqueNone: "Sin lectura de técnica — repite ambas fotos.",
     barDetailTechnique: "De evidencia medida ({sources}).",
     barDetailNoTime: "Sin tiempo registrado.",
     barDetailTimeReview: "Muy por debajo del estándar — revisión humana.",
     barDetailTimeOk: "Dentro del estándar — puntos completos.",
     barTechnique: "Técnica",
     barTime: "Tiempo vs. referencia",
-    notMeasured: "no medido",
+    notMeasured: "sin lectura",
     reviewFlag: "revisión",
     disputeHeading: "REVISIÓN JUSTA",
     disputeAction: "APELAR PUNTUACIÓN",
     disputeOpenedButton: "APELACIÓN ABIERTA",
+    disputeNotePlaceholder: "Opcional — explica con tus palabras…",
+    disputeSubmit: "ENVIAR APELACIÓN",
+    disputeCancel: "CANCELAR",
+    disputeVoiceReady: "Nota de voz adjunta.",
     disputeHint: "Apelación en un toque — respuesta en 5 días hábiles. Nadie edita puntuaciones.",
     disputeOpenStatus: "Apelación abierta ({id}) — revisión en 5 días hábiles. Nadie puede editar una puntuación.",
     offlineQueueTitle: "COLA SIN CONEXIÓN (ESPERANDO PUNTUACIÓN)",
@@ -1023,7 +1042,7 @@ const translations = {
     zonesActive: "📸 EN VIVO · {n}/9 ZONAS · {s} CAPTURAS",
     sharePassportAction: "🪪 COMPARTIR PASAPORTE",
     passportCopiedNote: "✓ ¡Pasaporte de referencia copiado para compartir!",
-    deckSwipeHint: "Lee la tarjeta — ¿es CORRECTO o INCORRECTO? Desliza o toca un botón.",
+    deckSwipeHint: "Lee la tarjeta — ¿estás DE ACUERDO o EN DESACUERDO? Desliza o toca un botón.",
     deckNextCard: "SIGUIENTE TARJETA ⟶",
     deckPracticeAgain: "🔄 PRACTICAR OTRAS 10 TARJETAS",
     openPassportHub: "🪪 PASAPORTE, EQUIPO Y SUPERVISOR",
@@ -1036,8 +1055,8 @@ const translations = {
     qrApply: "APLICAR CÓDIGO QR",
     maximizeBadge: "⤢",
     lightboxGhostOpacity: "OPACIDAD DE LA SOMBRA DEL ANTES",
-    deckStampLeft: "⟵ ✘ INCORRECTO",
-    deckStampRight: "✔ CORRECTO ⟶",
+    deckStampLeft: "⟵ ✘ EN DESACUERDO",
+    deckStampRight: "✔ DE ACUERDO ⟶",
     openSupervisorTools: "📋 ABRIR REGISTRO Y HERRAMIENTAS DE SUPERVISIÓN (11–15) →",
     leagueOffice: "🏢 Corporativo y Oficinas",
     leagueEducation: "🏫 Escuela y Campus",
@@ -1074,6 +1093,7 @@ const translations = {
     playDailyDeck: "🃏 JUGAR MAZO DIARIO",
     deckLeaderboardAction: "🏆 TABLA DEL MAZO",
     gradeClean: "LIMPIO",
+    surfaceOutlineNote: "La IA delineó vidrios y accesorios para verificar cada superficie.",
     gradePartly: "PARCIAL",
     gradeMissed: "OMITIDO",
   },
@@ -1107,7 +1127,7 @@ const translations = {
     cameraUnavailable: "KAMERA NIEDOSTĘPNA",
     retryCamera: "SPRÓBUJ PONOWNIE",
     cameraExplainTitle: "JAK DZIAŁA WYZWANIE",
-    cameraExplainBody: "Zrób zdjęcie PRZED, dotknij Start i sprzątaj na czas, potem zrób zdjęcie PO. Gra porównuje oba zdjęcia i ocenia widoczną czystość. Kamera to oczy gry — tak widzi Twoją pracę.",
+    cameraExplainBody: "Zrób zdjęcie PRZED, dotknij Start i sprzątaj na czas, potem zrób zdjęcie PO. Gra porównuje oba zdjęcia i ocenia widoczną czystość. Kamera to oczy gry — tak widzi Twoją pracę. AI rozpoznaje obiekty i obrysowuje powierzchnie, takie jak szkło i armatura, aby zweryfikować każdą z nich.",
     cameraExplainAllow: "📷 ZEZWÓL NA KAMERĘ I START",
     continueWithoutCamera: "GRAJ BEZ KAMERY",
     demoMode: "TRYB DEMO",
@@ -1158,7 +1178,12 @@ const translations = {
     objectsRemaining: "POZOSTAŁE OBIEKTY",
     evidenceHigh: "WYSOKA PEWNOŚĆ",
     evidenceMedium: "ŚREDNIA PEWNOŚĆ",
-    evidenceRescan: "POWTÓRZ · ZA MAŁO DOWODÓW",
+    evidenceRescan: "POWTÓRZ · ZDJĘCIA NIEWYRAŹNE",
+    badgeRescan: "POWTÓRZ",
+    evidenceNoChange: "BRAK ZMIAN — WYCZYŚĆ I SPRÓBUJ PONOWNIE",
+    ctaClean: "CZYŚĆ",
+    ctaRetake: "POWTÓRZ",
+    ctaWipe: "PRZETRZYJ",
     evidenceDemo: "DEMO · NIEZWERYFIKOWANE PRZEZ AI",
     yourTime: "TWÓJ CZAS",
     target: "CEL",
@@ -1258,10 +1283,10 @@ const translations = {
     deckCatSurface: "POWIERZCHNIA",
     deckCatProduct: "PRODUKT",
     deckCatTechnique: "TECHNIKA",
-    deckRight: "✔ DOBRZE ⟶",
-    deckMiss: "⟵ ✘ ŹLE",
-    deckCorrect: "✔ Dobrze.",
-    deckWrong: "✘ Źle.",
+    deckRight: "✔ TAK ⟶",
+    deckMiss: "⟵ ✘ NIE",
+    deckCorrect: "✔ Tak.",
+    deckWrong: "✘ Nie.",
     deckComplete: "Talia na dziś ukończona.",
     deckStreak: "Seria: {n} dni",
     deckCardOf: "Karta {i} z {n}",
@@ -1331,7 +1356,7 @@ const translations = {
     scoreBreakdownTitle: "WYJAŚNIENIE WYNIKU (CZYSTOŚĆ · TECHNIKA · CZAS)",
     barClean: "Czystość",
     barDetailClean: "Czystość widoczna, przed vs po.",
-    barDetailCleanNone: "Nie zmierzono w tym biegu.",
+    barDetailCleanNone: "Nie udało się zmierzyć — zrób oba zdjęcia jeszcze raz.",
     gapHow: "Zgodność czasu kontaktu, kolejność od góry do dołu i od czystego do brudnego, produkt do powierzchni",
     gapWhenPattern: "Wzorzec zmiany {bucket} ({count} z {total} zapisanych biegów)",
     gapWhenNone: "Brak biegów z zapisaną godziną",
@@ -1345,18 +1370,22 @@ const translations = {
     srcTopToBottomOrder: "kolejność od góry do dołu",
     srcSurfaceOrder: "kolejność powierzchni",
     srcTechniqueScore: "wynik techniki",
-    barDetailTechniqueNone: "Brak dowodów techniki.",
+    barDetailTechniqueNone: "Brak odczytu techniki — zrób oba zdjęcia jeszcze raz.",
     barDetailTechnique: "Ze zmierzonych dowodów ({sources}).",
     barDetailNoTime: "Brak zapisanego czasu.",
     barDetailTimeReview: "Znacznie poniżej normy — przegląd człowieka.",
     barDetailTimeOk: "W normie — pełne punkty.",
     barTechnique: "Technika",
     barTime: "Czas vs. wzorzec",
-    notMeasured: "nie zmierzono",
+    notMeasured: "brak odczytu",
     reviewFlag: "weryfikacja",
     disputeHeading: "UCZCIWA WERYFIKACJA",
     disputeAction: "ODWOŁAJ SIĘ",
     disputeOpenedButton: "ODWOŁANIE OTWARTE",
+    disputeNotePlaceholder: "Opcjonalnie — opisz własnymi słowami…",
+    disputeSubmit: "WYŚLIJ SPRZECIW",
+    disputeCancel: "ANULUJ",
+    disputeVoiceReady: "Notatka głosowa dołączona.",
     disputeHint: "Odwołanie jednym dotknięciem — decyzja w 5 dni roboczych. Nikt ręcznie nie zmienia wyników.",
     disputeOpenStatus: "Odwołanie otwarte ({id}) — decyzja w 5 dni roboczych. Nikt nie może edytować wyniku.",
     offlineQueueTitle: "KOLEJKA OFFLINE (OCZEKUJE NA WYNIK)",
@@ -1427,7 +1456,7 @@ const translations = {
     zonesActive: "📸 NA ŻYWO · {n}/9 STREF · {s} KLATEK",
     sharePassportAction: "🪪 UDOSTĘPNIJ PASZPORT",
     passportCopiedNote: "✓ Zweryfikowany paszport skopiowany!",
-    deckSwipeHint: "Przeczytaj kartę — DOBRZE czy ŹLE? Przesuń daleko lub dotknij przycisk.",
+    deckSwipeHint: "Przeczytaj kartę — ZGADZASZ SIĘ czy NIE? Przesuń daleko lub dotknij przycisk.",
     deckNextCard: "NASTĘPNA KARTA ⟶",
     deckPracticeAgain: "🔄 ĆWICZ KOLEJNE 10 KART",
     openPassportHub: "🪪 PASZPORT, EKIPA I NADZÓR",
@@ -1440,8 +1469,8 @@ const translations = {
     qrApply: "ZASTOSUJ KOD QR",
     maximizeBadge: "⤢",
     lightboxGhostOpacity: "PRZEZROCZYSTOŚĆ CIENIA PRZED",
-    deckStampLeft: "⟵ ✘ ŹLE",
-    deckStampRight: "✔ DOBRZE ⟶",
+    deckStampLeft: "⟵ ✘ NIE",
+    deckStampRight: "✔ TAK ⟶",
     openSupervisorTools: "📋 OTWÓRZ DZIENNIK I NARZĘDZIA NADZORU (11–15) →",
     leagueOffice: "🏢 Biurowiec i Korporacja",
     leagueEducation: "🏫 Edukacja i Kampus",
@@ -1478,6 +1507,7 @@ const translations = {
     playDailyDeck: "🃏 ZAGRAJ W TALIĘ DNIA",
     deckLeaderboardAction: "🏆 RANKING TALII",
     gradeClean: "CZYSTO",
+    surfaceOutlineNote: "AI obrysowała szkło i armaturę, aby zweryfikować każdą powierzchnię.",
     gradePartly: "CZĘŚCIOWO",
     gradeMissed: "POMINIĘTO",
   }
@@ -1751,6 +1781,14 @@ const els = {
   disputePanel: document.getElementById("disputePanel"),
   disputeButton: document.getElementById("disputeButton"),
   disputeStatus: document.getElementById("disputeStatus"),
+  disputeForm: document.getElementById("disputeForm"),
+  disputeNoteText: document.getElementById("disputeNoteText"),
+  disputeVoiceRecord: document.getElementById("disputeVoiceRecord"),
+  disputeVoiceStop: document.getElementById("disputeVoiceStop"),
+  disputeVoiceAudio: document.getElementById("disputeVoiceAudio"),
+  disputeVoiceStatus: document.getElementById("disputeVoiceStatus"),
+  disputeSubmitButton: document.getElementById("disputeSubmitButton"),
+  disputeCancelButton: document.getElementById("disputeCancelButton"),
   crewLeaderboardSummary: document.getElementById("crewLeaderboardSummary"),
   offlineQueueSection: document.getElementById("offlineQueueSection"),
   offlineQueueList: document.getElementById("offlineQueueList"),
@@ -3550,7 +3588,7 @@ function announceGameVerdict() {
   const ai = state.result.ai;
   const beat = selectVerdictBeat(state.result);
   const isVerified = ai?.verified?.status === "verified";
-  const customHype = isVerified && ai?.verified?.hypeLine ? String(ai.verified.hypeLine) : "";
+ 
   const weighted = computeWeightedRunScore();
   const spokenScore = Number.isFinite(weighted)
     ? weighted
@@ -3563,16 +3601,22 @@ function announceGameVerdict() {
   const badge = document.getElementById("verdictSummaryBadge");
   const transcriptEl = document.getElementById("verdictTranscriptLine");
   if (pill) pill.dataset.tier = beat;
-  if (badge) badge.textContent = tierRankLabel(beat, spokenScore);
+  const scorableRun = ai?.scorable !== false && spokenScore !== null;
+  const passMark = Number(CONFIG.verdictTiers?.passMark || 70);
+  const customHypeRaw = isVerified && ai?.verified?.hypeLine ? String(ai.verified.hypeLine) : "";
+  const customHype = scorableRun && spokenScore !== null && spokenScore >= passMark ? customHypeRaw : "";
+  if (badge) badge.textContent = scorableRun ? tierRankLabel(beat, spokenScore) : t("badgeRescan");
 
   const pickedVerdict = pickHostLine(beat, state.language);
   const pickedFinish = beat.startsWith("pass") ? pickHostLine("finish", state.language) : null;
   const noChg = Boolean(state.result?.ai?.noVisibleChange || state.result?.noVisibleChange);
   const directive = !noChg ? state.result?.ai?.scoreDirective : null;
-  const summaryCaption = spokenScore !== null && (noChg || directive)
+  const summaryCaption = !scorableRun
+    ? t("evidenceRescan")
+    : spokenScore !== null && (noChg || directive)
     ? `${Math.round(spokenScore)}% — ${noChg ? t("findingNoChange") : directive}`
     : [
-      spokenScore !== null ? `${Math.round(spokenScore)}%` : null,
+      `${Math.round(spokenScore)}%`,
       customHype || pickedVerdict?.text || "",
       pickedFinish?.text || ""
     ].filter(Boolean).join(" — ");
@@ -6902,7 +6946,12 @@ function calculateLocalScore(
 
   const envCheck = verifyStationEnvironment(beforeObjects, afterObjects);
   const sceneValid = sceneMatch >= 0.35 && envCheck.matched;
-  const enoughEvidence = sceneValid && (beforeCount >= 1 || surfaceClearSignal >= 0.12 || sceneMatch >= 0.5);
+  // Nothing actually cleaned: the two frames are nearly identical and no
+  // counted objects moved — or no zone improved at all. A slight camera
+  // shift still counts: same scene, same dirt. This is evidence, so the
+  // run stays scorable and gets capped instead of a RESCAN.
+  const noVisibleChange = sceneValid && clearedCount === 0 && newCount === 0 && (Number(change.changedPixelPercent || 0) < 4 || (Number(surface?.improvedZones || 0) === 0 && Number(change.changedPixelPercent || 0) < 12));
+  const enoughEvidence = (sceneValid && (beforeCount >= 1 || surfaceClearSignal >= 0.12 || sceneMatch >= 0.5)) || noVisibleChange;
 
   // Compute top-to-bottom technique order from 3x3 surface zones
   const zones = surface?.zones || [];
@@ -6929,18 +6978,20 @@ function calculateLocalScore(
   // Nothing actually cleaned: the two frames are nearly identical and no
   // counted objects moved. Cap the score and say so directly instead of
   // praising an unchanged surface.
-  const noVisibleChange = envCheck.matched && clearedCount === 0 && newCount === 0 && Number(change.changedPixelPercent || 0) < 4;
   const cleanliness = noVisibleChange && rawCleanliness != null ? Math.min(rawCleanliness, 20) : rawCleanliness;
   const confidenceBand = !enoughEvidence
     ? "rescan"
     : evidenceConfidence >= 0.68 ? "high" : "medium";
 
   let scoreDirective = null;
+  let scoreCta = null;
   const findings = [];
   if (!envCheck.matched && envCheck.message) {
     findings.push(envCheck.message);
   } else if (!sceneValid) {
     findings.push(t("findingFraming"));
+    scoreDirective = t("findingFraming");
+    scoreCta = t("ctaRetake");
   } else if (beforeCount > 0 && clearedCount === beforeCount && newCount === 0) {
     findings.push(t("findingAllCleared"));
   }
@@ -6948,13 +6999,14 @@ function calculateLocalScore(
     if (noVisibleChange) {
       findings.push(t("findingNoChange"));
       scoreDirective = t("findingNoChange");
+      scoreCta = t("ctaClean");
     } else {
       const untouched = describeUntouchedZones(surface.zones);
       const allObjectsCleared = beforeCount > 0 && clearedCount === beforeCount && newCount === 0;
-      if (untouched && !allObjectsCleared && (cleanliness == null || cleanliness < 90)) { findings.push(t("findingUntouched", untouched)); scoreDirective = t("findingUntouched", untouched); }
+      if (untouched && !allObjectsCleared && (cleanliness == null || cleanliness < 90)) { findings.push(t("findingUntouched", untouched)); scoreDirective = t("findingUntouched", untouched); scoreCta = t("ctaWipe"); }
     }
   }
-  if (envCheck.matched && remainingCount > 0) findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }));
+  if (envCheck.matched && remainingCount > 0) { findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) })); if (!scoreDirective) { scoreDirective = t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }); scoreCta = t("ctaClean"); } }
   if (envCheck.matched && newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
   if (!findings.length) {
     findings.push(profile[`focusNote_${state.language}`] || profile.focusNote);
@@ -6976,6 +7028,7 @@ function calculateLocalScore(
     findings,
     noVisibleChange,
     scoreDirective,
+    scoreCta,
     source: "local",
     simulated: false,
     changeMagnitude: change.changedPixelPercent,
@@ -8227,7 +8280,7 @@ function renderVerifiedScorecard() {
   // Local evidence contradicts the cloud card (untouched zone or no visible
   // change): don't display contested grades. The local surface chips and
   // the plain directive line carry the verdict instead.
-  if (state.result?.ai?.scoreDirective || state.result?.ai?.noVisibleChange) {
+  if (state.result?.ai?.scoreDirective || state.result?.ai?.noVisibleChange || state.result?.ai?.scorable === false) {
     return;
   }
 
@@ -8608,6 +8661,7 @@ async function scoreChallenge(
         if (localScore.noVisibleChange) {
           fallback.noVisibleChange = true;
           fallback.scoreDirective = t("findingNoChange");
+          fallback.scoreCta = t("ctaClean");
           if (Number.isFinite(Number(fallback.cleanliness))) fallback.cleanliness = Math.min(Number(fallback.cleanliness), 20);
           if (Array.isArray(fallback.findings)) fallback.findings.unshift(t("findingNoChange"));
         }
@@ -8711,11 +8765,13 @@ function renderResults() {
       ? "SAMPLE RUN"
       : score.simulated
         ? t("evidenceDemo")
-        : score.confidenceBand === "high"
-          ? t("evidenceHigh")
-          : score.confidenceBand === "medium"
-            ? t("evidenceMedium")
-            : t("evidenceRescan");
+        : score.noVisibleChange
+          ? t("evidenceNoChange")
+          : score.confidenceBand === "high"
+            ? t("evidenceHigh")
+            : score.confidenceBand === "medium"
+              ? t("evidenceMedium")
+              : t("evidenceRescan");
     els.scoreEvidenceState.textContent = `${formatElapsedLong(elapsed)} · ${stateLabel}`;
   }
   els.resultTime.textContent = formatTimer(elapsed);
@@ -8733,6 +8789,11 @@ function renderResults() {
   if (plainEl) {
     plainEl.textContent = score.scoreDirective || "";
     plainEl.classList.toggle("hidden", !plainEl.textContent);
+  }
+  const plainCta = document.getElementById("plainCta");
+  if (plainCta) {
+    plainCta.textContent = score.scoreCta || "";
+    plainCta.classList.toggle("hidden", !score.scoreCta);
   }
   els.analysisMethod.textContent = score.source === "local"
     ? t("localAI")
@@ -9121,9 +9182,12 @@ function buildPoseGateGrid() {
   });
 }
 
+// Pose feature hidden until the capture flow is fixed: always skip.
+const POSE_GATE_ENABLED = false;
 function runPoseGate() {
+  state.poseSkipped = true;
+  if (!POSE_GATE_ENABLED) return Promise.resolve("skipped");
   if (SELFTEST_MODE || state.demoMode || state.inPersonaSuite) {
-    state.poseSkipped = true;
     return Promise.resolve("skipped");
   }
   const gate = document.getElementById("poseGate");
@@ -10560,14 +10624,18 @@ function answerDeck(pick) {
   if (vStamp) {
     const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
     vStamp.textContent = hit
-      ? (lang === "es" ? "✔ CORRECTO +100 XP" : lang === "pl" ? "✔ DOBRZE +100 XP" : "✔ RIGHT +100 XP")
-      : (lang === "es" ? "✘ INCORRECTO — mira por qué" : lang === "pl" ? "✘ ŹLE — zobacz dlaczego" : "✘ WRONG — here is why");
+      ? (lang === "es" ? "✔ DE ACUERDO +100 XP" : lang === "pl" ? "✔ TAK +100 XP" : "✔ AGREE +100 XP")
+      : (lang === "es" ? "✘ EN DESACUERDO — mira por qué" : lang === "pl" ? "✘ NIE — zobacz dlaczego" : "✘ DISAGREE — here is why");
     vStamp.className = `deck-verdict-stamp ${hit ? "is-hit" : "is-miss"}`;
   }
 
   playDeckAnswerSfx(hit);
+  // Voice the player's actual choice (agree/disagree), not generic hype.
   if (!SELFTEST_MODE && !state.voice.muted) {
-    speakHost(hit ? "pass" : "retry");
+    const deckLang = state.language === "es" || state.language === "pl" ? state.language : "en";
+    const agreed = pick !== "miss";
+    const deckFallback = deckLang === "es" ? (agreed ? "De acuerdo." : "En desacuerdo.") : deckLang === "pl" ? (agreed ? "Zgadzam się." : "Nie zgadzam się.") : (agreed ? "Agreed." : "Disagreed.");
+    playHostClip(`assets/audio/${deckLang}/deck-${agreed ? "agree" : "disagree"}.mp3`, deckFallback, { rate: 1.0, pitch: 1.0 }, "deck-verdict");
   }
   triggerDeckParticleBurst(hit);
   if (els.deckFeedback) {
@@ -11658,7 +11726,7 @@ function computeWeightedRunScore(runInput) {
 function gradeRunSurfaces(runInput) {
   const ai = runInput || state.result?.ai;
   if (!ai) return [];
-  if (ai.verified?.status === "verified" && Array.isArray(ai.verified.surfaces)) {
+  if (ai.verified?.status === "verified" && Array.isArray(ai.verified.surfaces) && !ai.scoreDirective && !ai.noVisibleChange) {
     return ai.verified.surfaces.map((s) => ({
       name: s.name,
       score: s.score,
@@ -11668,7 +11736,7 @@ function gradeRunSurfaces(runInput) {
   const spotName = state.checkin?.assignedSpot || "Work surface";
   const c = Number.isFinite(Number(ai.cleanliness)) && ai.scorable !== false ? Number(ai.cleanliness) : null;
   if (c === null) {
-    return [{ name: spotName, score: null, grade: "partly" }];
+    return [];
   }
   // Only the measured spot is graded; per-zone grades are never fabricated.
   return [
@@ -11737,6 +11805,12 @@ function renderScoreBreakdown(runInput) {
         chip.textContent = `${localizedSpotName(s.name)}: ${gradeLabel}`;
         els.surfaceGradeMap.appendChild(chip);
       });
+      if (surfaces.length) {
+        const note = document.createElement("p");
+        note.className = "surface-outline-note";
+        note.textContent = t("surfaceOutlineNote");
+        els.surfaceGradeMap.appendChild(note);
+      }
     }
   }
   return Object.freeze(bars);
@@ -11891,7 +11965,7 @@ function findOpenAppeal(runId) {
   return readAppeals().find((a) => a && a.runId === String(runId) && a.status === "open") || null;
 }
 
-function openAppeal(runId = state.latestRunId) {
+function openAppeal(runId = state.latestRunId, extras = null) {
   const targetId = String(runId || state.latestRunId || `run-${Date.now()}`);
   if (!state.latestRunId) state.latestRunId = targetId;
   const existing = findOpenAppeal(targetId);
@@ -11905,6 +11979,10 @@ function openAppeal(runId = state.latestRunId) {
     status: "open",
     responseWindowBusinessDays: 5
   };
+  if (extras && typeof extras === "object") {
+    if (typeof extras.note === "string" && extras.note.trim()) record.note = extras.note.trim().slice(0, 280);
+    if (typeof extras.voiceDataUrl === "string" && extras.voiceDataUrl.startsWith("data:audio")) record.voiceDataUrl = extras.voiceDataUrl;
+  }
   const appeals = readAppeals();
   appeals.push(record);
   try {
@@ -11925,6 +12003,107 @@ function renderDisputeUI(runId = state.latestRunId) {
     els.disputeButton.disabled = false;
     els.disputeButton.textContent = t("disputeAction");
     els.disputeStatus.textContent = t("disputeHint");
+  }
+}
+
+function showDisputeForm() {
+  if (findOpenAppeal(state.latestRunId)) {
+    renderDisputeUI(state.latestRunId);
+    return;
+  }
+  els.disputeForm?.classList.remove("hidden");
+  try { els.disputeNoteText?.focus?.({ preventScroll: true }); } catch {}
+}
+
+function hideDisputeForm() {
+  els.disputeForm?.classList.add("hidden");
+  stopDisputeVoice();
+}
+
+function submitDisputeAppeal() {
+  const note = String(els.disputeNoteText?.value || "");
+  openAppeal(state.latestRunId, { note, voiceDataUrl: state.disputeVoiceDataUrl || "" });
+  if (els.disputeNoteText) els.disputeNoteText.value = "";
+  state.disputeVoiceDataUrl = null;
+  if (els.disputeVoiceAudio) {
+    els.disputeVoiceAudio.removeAttribute("src");
+    els.disputeVoiceAudio.classList.add("hidden");
+  }
+  hideDisputeForm();
+}
+
+async function startDisputeVoice() {
+  if (state.disputeRecorder && state.disputeRecorder.state !== "inactive") return;
+  if (!navigator.mediaDevices?.getUserMedia) {
+    if (els.disputeVoiceStatus) {
+      els.disputeVoiceStatus.textContent = t("voiceRecordFailed");
+      els.disputeVoiceStatus.classList.remove("hidden");
+    }
+    return;
+  }
+  try {
+    const stream = await Promise.race([
+      navigator.mediaDevices.getUserMedia({ audio: true }),
+      new Promise((_, reject) => setTimeout(() => reject(new Error("mic-timeout")), 10000))
+    ]);
+    const recorder = new MediaRecorder(stream);
+    state.disputeRecordChunks = [];
+    recorder.ondataavailable = (event) => {
+      if (event.data?.size) state.disputeRecordChunks.push(event.data);
+    };
+    recorder.onstop = () => {
+      stream.getTracks().forEach((track) => track.stop());
+      void finishDisputeVoice();
+    };
+    state.disputeRecorder = recorder;
+    recorder.start();
+    els.disputeVoiceRecord?.classList.add("hidden");
+    els.disputeVoiceStop?.classList.remove("hidden");
+  } catch {
+    if (els.disputeVoiceStatus) {
+      els.disputeVoiceStatus.textContent = t("voiceRecordFailed");
+      els.disputeVoiceStatus.classList.remove("hidden");
+    }
+  }
+}
+
+function stopDisputeVoice() {
+  try {
+    state.disputeRecorder?.stop();
+  } catch {}
+  els.disputeVoiceStop?.classList.add("hidden");
+}
+
+async function finishDisputeVoice() {
+  els.disputeVoiceRecord?.classList.remove("hidden");
+  els.disputeVoiceStop?.classList.add("hidden");
+  try {
+    const blob = new Blob(state.disputeRecordChunks || [], { type: "audio/webm" });
+    if (!blob.size) return;
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ""));
+      reader.onerror = () => reject(new Error("read-failed"));
+      reader.readAsDataURL(blob);
+    });
+    if (!dataUrl.startsWith("data:audio")) return;
+    state.disputeVoiceDataUrl = dataUrl;
+    if (els.disputeVoiceAudio) {
+      els.disputeVoiceAudio.src = dataUrl;
+      els.disputeVoiceAudio.classList.remove("hidden");
+    }
+    if (els.disputeVoiceStatus) {
+      els.disputeVoiceStatus.textContent = t("disputeVoiceReady");
+      els.disputeVoiceStatus.classList.remove("hidden");
+    }
+  } catch {
+    if (els.disputeVoiceStatus) {
+      els.disputeVoiceStatus.textContent = t("voiceRecordFailed");
+      els.disputeVoiceStatus.classList.remove("hidden");
+    }
+  } finally {
+    state.disputeRecorder = null;
+    state.disputeRecordChunks = [];
   }
 }
 
@@ -13024,7 +13203,7 @@ function bumpSponsorImpression(kind = "home") {
 }
 
 function buildSponsorLogoSvg() {
-  return `<svg class="sponsor-logo-svg" viewBox="0 0 600 84" role="img" aria-label="Sponsor Brand Logo">
+  return `<svg class="sponsor-logo-svg" viewBox="0 0 320 100" role="img" aria-label="Sponsor Brand Logo">
     <defs>
       <linearGradient id="spGrad" x1="0" y1="0" x2="1" y2="1">
         <stop offset="0%" stop-color="#0a233c"/><stop offset="50%" stop-color="#07182b"/><stop offset="100%" stop-color="#0d2b45"/>
@@ -13033,16 +13212,14 @@ function buildSponsorLogoSvg() {
         <stop offset="0%" stop-color="#39f5bc"/><stop offset="100%" stop-color="#45eaff"/>
       </linearGradient>
     </defs>
-    <rect x="2" y="2" width="596" height="80" rx="14" fill="url(#spGrad)" stroke="rgba(69,234,255,0.38)" stroke-width="1.5"/>
-    <g transform="translate(172, 14)">
+    <rect x="2" y="2" width="316" height="96" rx="16" fill="url(#spGrad)" stroke="rgba(69,234,255,0.38)" stroke-width="1.5"/>
+    <g transform="translate(26, 22)">
       <path d="M28 4 L48 12 L48 30 C48 43 39 51 28 55 C17 51 8 43 8 30 L8 12 Z" fill="rgba(57,245,188,0.14)" stroke="url(#crestGrad)" stroke-width="2.2"/>
       <path d="M28 15 l3.8 9.2 l9.2 3.8 l-9.2 3.8 l-3.8 9.2 l-3.8-9.2 l-9.2-3.8 l9.2-3.8 z" fill="#ffd35c"/>
       <circle cx="39" cy="17" r="2.2" fill="#39f5bc"/>
-      <text x="64" y="33" fill="#f4f8ff" font-family="Plus Jakarta Sans, sans-serif" font-size="19" font-weight="900" letter-spacing="0.08em">YOUR LOGO HERE</text>
-      <text x="65" y="49" fill="rgba(165,216,255,0.72)" font-family="Plus Jakarta Sans, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.34em">PRO SERIES</text>
+      <text x="64" y="30" fill="#f4f8ff" font-family="Plus Jakarta Sans, sans-serif" font-size="24" font-weight="900" letter-spacing="0.06em">YOUR LOGO</text>
+      <text x="65" y="48" fill="rgba(165,216,255,0.72)" font-family="Plus Jakarta Sans, sans-serif" font-size="12" font-weight="800" letter-spacing="0.30em">HERE · PRO SERIES</text>
     </g>
-    <rect x="500" y="12" width="84" height="20" rx="10" fill="rgba(255,211,92,0.12)" stroke="rgba(255,211,92,0.45)" stroke-width="1"/>
-    <text x="542" y="25.5" text-anchor="middle" fill="rgba(255,211,92,0.85)" font-size="9" font-weight="800" letter-spacing="0.1em">SPONSORED</text>
   </svg>`;
 }
 
@@ -15196,8 +15373,21 @@ function bindEvents() {
     els.dwellCreditButton.addEventListener("click", () => addDwellCredit(15));
   }
 
+  document.getElementById("plainCta")?.addEventListener("click", () => navigateTo("camera"));
   if (els.disputeButton) {
-    els.disputeButton.addEventListener("click", () => openAppeal(state.latestRunId));
+    els.disputeButton.addEventListener("click", () => showDisputeForm());
+  }
+  if (els.disputeSubmitButton) {
+    els.disputeSubmitButton.addEventListener("click", () => submitDisputeAppeal());
+  }
+  if (els.disputeCancelButton) {
+    els.disputeCancelButton.addEventListener("click", () => hideDisputeForm());
+  }
+  if (els.disputeVoiceRecord) {
+    els.disputeVoiceRecord.addEventListener("click", () => startDisputeVoice());
+  }
+  if (els.disputeVoiceStop) {
+    els.disputeVoiceStop.addEventListener("click", () => stopDisputeVoice());
   }
 
   if (els.retryOfflineQueueButton) {

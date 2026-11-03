@@ -748,8 +748,8 @@
           <section id="scoreBreakdownCard" class="score-breakdown-card hologram-card" aria-label="Three-bar score explanation">
             <div class="section-label" data-i18n="scoreBreakdownTitle">SCORE EXPLANATION (CLEAN 50% · TECHNIQUE 25% · TIME 25%)</div>
             <div id="scoreBreakdownBars" class="score-breakdown-bars"></div>
-            <div id="surfaceGradeMap" class="surface-grade-map"></div>
             <p id="plainFinding" class="plain-finding"></p>
+            <button id="plainCta" class="secondary-button compact-chip hidden" type="button"></button>
           </section>
 
           <div class="evidence-section">
@@ -782,8 +782,14 @@
                   </div>
                 </div>
                 <figcaption data-i18n="after">AFTER (TAP TO ZOOM)</figcaption>
+            <div id="surfaceGradeMap" class="surface-grade-map"></div>
               </figure>
             </div>
+          </div>
+          <div id="verifiedScorecard" class="verified-card hologram-card hidden">
+            <div class="section-label" data-i18n="verifiedScorecard">SURFACE SCORES</div>
+            <div id="verifiedBody"></div>
+            <p id="verifiedHype" class="verified-hype"></p>
           </div>
 
  
@@ -814,11 +820,6 @@
             </div>
         </div>
 
-          <div id="verifiedScorecard" class="verified-card hologram-card hidden">
-            <div class="section-label" data-i18n="verifiedScorecard">SURFACE SCORES</div>
-            <div id="verifiedBody"></div>
-            <p id="verifiedHype" class="verified-hype"></p>
-          </div>
 
           <p id="offlineScoreNote" class="fine-print hidden" data-i18n="offlineScoreNote">
             Offline score · showing the on-device score.
@@ -881,7 +882,7 @@
           </div>
 
           <div class="results-actions-grid">
-            <div class="identity-panel hologram-card">
+            <div class="identity-panel hologram-card hidden" aria-hidden="true">
               <div class="dispute-row">
                 <span class="section-label" data-i18n="voiceNoteTitle">VOICE NOTE</span>
                 <button
@@ -917,6 +918,19 @@
               <small id="disputeStatus" class="fine-print" data-i18n="disputeHint">
                 1-tap appeal (5 business days). Read-only scores.
               </small>
+            </div>
+            <div id="disputeForm" class="hidden">
+              <textarea id="disputeNoteText" rows="2" maxlength="280" data-i18n-placeholder="disputeNotePlaceholder" placeholder="Optional — explain in your own words…"></textarea>
+              <div class="settings-row">
+                <button id="disputeVoiceRecord" class="secondary-button compact-chip" type="button" data-i18n="voiceRecord">🎙 RECORD NOTE</button>
+                <button id="disputeVoiceStop" class="secondary-button compact-chip hidden" type="button" data-i18n="voiceStop">■ STOP</button>
+              </div>
+              <audio id="disputeVoiceAudio" class="voice-audio hidden" controls></audio>
+              <small id="disputeVoiceStatus" class="fine-print hidden" role="status"></small>
+              <div class="settings-row">
+                <button id="disputeSubmitButton" class="primary-button" type="button" data-i18n="disputeSubmit">SUBMIT APPEAL</button>
+                <button id="disputeCancelButton" class="secondary-button" type="button" data-i18n="disputeCancel">CANCEL</button>
+              </div>
             </div>
           </div>
 
@@ -1291,7 +1305,7 @@
         </div>
 
         <div id="deckSwipeHint" class="deck-swipe-hint hidden" data-i18n="deckSwipeHint">
-          ⟵ DRAG / SWIPE LEFT = MISS &nbsp;·&nbsp; DRAG / SWIPE RIGHT = RIGHT CALL ⟶
+          ⟵ DRAG / SWIPE LEFT = DISAGREE &nbsp;·&nbsp; DRAG / SWIPE RIGHT = AGREE ⟶
         </div>
 
         <div id="deckStage" class="deck-stage">
@@ -1299,8 +1313,8 @@
           <div id="deckParticleBurst" class="deck-particle-burst" aria-hidden="true"></div>
           <div id="deckCard" class="deck-card hologram-card" aria-describedby="deckSwipeHint">
             <div class="deck-stamp-row" aria-hidden="true">
-              <span id="deckStampLeft" class="deck-stamp deck-stamp-left" data-i18n="deckStampLeft">⟵ ✘ WRONG</span>
-              <span id="deckStampRight" class="deck-stamp deck-stamp-right" data-i18n="deckStampRight">✔ RIGHT ⟶</span>
+              <span id="deckStampLeft" class="deck-stamp deck-stamp-left" data-i18n="deckStampLeft">⟵ ✘ DISAGREE</span>
+              <span id="deckStampRight" class="deck-stamp deck-stamp-right" data-i18n="deckStampRight">✔ AGREE ⟶</span>
             </div>
             <div class="deck-card-head">
               <div class="section-label deck-cat-badge" id="deckCategory">SURFACE</div>
@@ -1321,7 +1335,7 @@
             type="button"
             data-i18n="deckMiss"
           >
-            ⟵ SWIPE LEFT (MISS)
+            ⟵ ✘ DISAGREE
           </button>
           <button
             id="deckRight"
@@ -1329,7 +1343,7 @@
             type="button"
             data-i18n="deckRight"
           >
-            SWIPE RIGHT (RIGHT CALL) ⟶
+            ✔ AGREE ⟶
           </button>
         </div>
 

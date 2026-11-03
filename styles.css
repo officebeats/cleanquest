@@ -2241,7 +2241,17 @@ h3 {
 }
 
 .detection-box.sam-box {
-  border-style: dashed;
+  border-style: solid;
+  border-width: 3px;
+  box-shadow: 0 0 0 1px rgba(2, 8, 17, 0.85), 0 0 14px rgba(69, 234, 255, 0.55);
+}
+.detection-box.sam-box > span {
+  display: inline-block;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  background: rgba(2, 8, 17, 0.88);
+  padding: 1px 7px;
+  border-radius: 999px;
 }
 .provider-option {
   display: flex;
@@ -2650,6 +2660,16 @@ h3 {
 .surface-grade-chip.missed {
   border-color: rgba(255, 91, 118, 0.45);
   color: var(--red);
+}
+
+.surface-outline-note {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  color: var(--muted-bright);
+}
+
+#plainCta {
+  margin-top: 8px;
 }
 
 .personal-record-summary {
@@ -6217,8 +6237,9 @@ button.btn-pop-active::before {
 
 .sponsor-logo-svg {
   width: 100% !important;
+  max-width: 300px !important;
   height: auto !important;
-  max-height: 76px !important;
+  margin: 0 auto !important;
   display: block !important;
 }
 

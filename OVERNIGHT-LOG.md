@@ -576,3 +576,13 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Sponsors are logo-only (YOUR LOGO HERE crest mark, no surrounding copy) on deck/home/leaderboard; post-score pose UI removed (pre-submit gate is the only path); skipped runs hide the pose panel with an explicit no-bonus note.
 - Evidence: node --check clean; 390px demo screenshot (directive + local chips, no card/panel/praise); live deploy verified serving prior batch.
 - Blockers: none.
+
+## 2026-11-02 (evening) — Agree/disagree, pose hide, rescan honesty — DONE
+- Deck is now AGREE / DISAGREE (buttons, stamps, hint, verdict, feedback ×3 locales) with matching neural voice lines (deck-agree/deck-disagree.mp3 × EN/ES/PL, repo Piper pipeline); replaces generic pass/retry hype on answers.
+- Pose gate disabled (capture flow broken); results pose panel auto-hides without a pre-submit strike. Record-note panel hidden. Dispute now takes optional typed note + voice note before submit.
+- Rescan honesty: no rank badge on unscorable runs (badge shows RESCAN), transcript states the reason, verified card hidden, surface chips suppressed when unscored. 0% can no longer pair with praise (customHype gated on pass mark).
+- MECE outcome model: every AI finding renders one plain directive + one-word CTA (CLEAN/WIPE/RETAKE, ×3 locales); no-change evidence label explains why ("NO CHANGE — CLEAN AND TRY AGAIN").
+- Surface scores moved into the AFTER photo tile + prominent glowing SAM outlines; explainer video + copy now cover AI object/surface recognition.
+- QA: new tools/qa-consistency.js probe (rank-on-rescan, praise-beside-warning, contested grades, stale wording) passes on deck + results.
+- Evidence: node --check clean; 390px screenshots; probe 0 failures.
+- Blockers: none.

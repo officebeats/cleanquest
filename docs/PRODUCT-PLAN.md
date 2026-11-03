@@ -35,7 +35,7 @@ approval, offline/demo always works.
 | Check-in | Free framing | Area template pick + system-assigned high-impact spot + frame guide; in-app capture only (already true — assert it) |
 | After photo | Plain capture | Ghost overlay of the before shot to match angle |
 | Offline | Offline score note | Run queue: completed runs saved locally, marked "awaiting score", scored when back online |
-| Swipe deck | 22 cards, once/day | 10-card daily session, missed topics repeat until correct, private mistakes; plain ✔ RIGHT / ✘ WRONG verdicts, generic labeled sponsor slot after answer only (operator-filled, never hardcoded) |
+| Swipe deck | 22 cards, once/day | 10-card daily session, missed topics repeat until correct, private mistakes; plain ✔ AGREE / ✘ DISAGREE verdicts with matching voice lines, logo-only sponsor mark after answer |
 | Crews (code-kept, UI hidden for hackathon) | None | Local crews (3–8) + virtual squad for solo workers; weekly matchup from local runs; crew MVP = top run, system-chosen — code kept post-hackathon, not demoed or judged |
 | Progress | None | 13-week benchmark-consistency meter ("Week N of 13, on track") — never called a certification |
 
