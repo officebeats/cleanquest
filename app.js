@@ -28,6 +28,8 @@ const CONFIG = {
       "https://storage.googleapis.com/mediapipe-models/object_detector/efficientdet_lite0/int8/1/efficientdet_lite0.tflite",
     poseModelURL:
       "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+    gestureModelURL:
+      "https://storage.googleapis.com/mediapipe-models/gesture_recognizer/gesture_recognizer/float16/1/gesture_recognizer.task",
     scoreThreshold: 0.35,
     maxResults: 30,
     minObjectsForConfidence: 2,
@@ -372,7 +374,8 @@ const translations = {
     poseGateNote: "Hit a pose now for up to +5% style bonus. Skip = no bonus, lower score.",
     poseGateStrike: "✋ STRIKE POSE",
     poseGateSkip: "SKIP",
-    poseReady: "Celebrate your finish with a style score.",
+    poseReady: "Style is scored from your pre-submit pose.",
+    poseSkippedNote: "Pose skipped — no style bonus.",
     poseAnalyzing: "Reading that championship pose…",
     poseCaptured: "Victory pose scored!",
     poseUnavailable: "Pose AI unavailable — neutral style score applied.",
@@ -775,7 +778,8 @@ const translations = {
     poseGateNote: "Haz una pose ahora para hasta +5% de bono de estilo. Omitir = sin bono, menos puntos.",
     poseGateStrike: "✋ HACER POSE",
     poseGateSkip: "OMITIR",
-    poseReady: "Celebra tu final con una puntuación de estilo.",
+    poseReady: "El estilo se puntúa con tu pose previa al envío.",
+    poseSkippedNote: "Pose omitida — sin bono de estilo.",
     poseAnalyzing: "Analizando esa pose de campeón…",
     poseCaptured: "¡Pose de victoria puntuada!",
     poseUnavailable: "IA de pose no disponible; se aplicó puntuación neutral.",
@@ -1178,7 +1182,8 @@ const translations = {
     poseGateNote: "Zrób pozę teraz i zgarnij do +5% bonusu stylu. Pomiń = brak bonusu, niższy wynik.",
     poseGateStrike: "✋ ZRÓB POZĘ",
     poseGateSkip: "POMIŃ",
-    poseReady: "Świętuj finisz i zdobądź punkty za styl.",
+    poseReady: "Styl oceniamy na podstawie pozy sprzed wysłania.",
+    poseSkippedNote: "Poza pominięta — brak bonusu stylu.",
     poseAnalyzing: "Oceniamy tę mistrzowską pozę…",
     poseCaptured: "Poza zwycięzcy oceniona!",
     poseUnavailable: "AI pozy jest niedostępne — przyznano neutralny wynik.",
@@ -1852,6 +1857,8 @@ let detectorPromise = null;
 let detectorInstance = null;
 let poseLandmarkerPromise = null;
 let poseLandmarkerInstance = null;
+let gestureRecognizerPromise = null;
+let gestureRecognizerInstance = null;
 let spectatorRefreshId = null;
 
 function t(key, replacements = {}) {
@@ -3561,8 +3568,9 @@ function announceGameVerdict() {
   const pickedVerdict = pickHostLine(beat, state.language);
   const pickedFinish = beat.startsWith("pass") ? pickHostLine("finish", state.language) : null;
   const noChg = Boolean(state.result?.ai?.noVisibleChange || state.result?.noVisibleChange);
-  const summaryCaption = noChg && spokenScore !== null
-    ? `${Math.round(spokenScore)}% — ${t("findingNoChange")}`
+  const directive = !noChg ? state.result?.ai?.scoreDirective : null;
+  const summaryCaption = spokenScore !== null && (noChg || directive)
+    ? `${Math.round(spokenScore)}% — ${noChg ? t("findingNoChange") : directive}`
     : [
       spokenScore !== null ? `${Math.round(spokenScore)}%` : null,
       customHype || pickedVerdict?.text || "",
@@ -5781,16 +5789,8 @@ function syncLoadingSponsorCard() {
 
   const lbTag = document.getElementById("lbSponsorTag");
   const lbCopy = document.getElementById("lbSponsorCopy");
-  if (lbTag) {
-    lbTag.textContent = lang === "es" ? "RETO PATROCINADO" : lang === "pl" ? "WYZWANIE SPONSOROWANE" : "SPONSORED CHALLENGE";
-  }
-  if (lbCopy) {
-    lbCopy.textContent = lang === "es"
-      ? "✦ NOVACLEAN · Premio Semanal de Equipo y MVP"
-      : lang === "pl"
-      ? "✦ NOVACLEAN · Tygodniowa Pula Nagród Zespołu i MVP"
-      : "✦ NOVACLEAN · Weekly Crew & MVP Prize Pool";
-  }
+  if (lbTag) lbTag.classList.add("hidden");
+  if (lbCopy) lbCopy.innerHTML = buildSponsorLogoSvg();
 }
 
 function setAnalysisLoading(loading) {
@@ -8224,6 +8224,13 @@ function renderVerifiedScorecard() {
     return;
   }
 
+  // Local evidence contradicts the cloud card (untouched zone or no visible
+  // change): don't display contested grades. The local surface chips and
+  // the plain directive line carry the verdict instead.
+  if (state.result?.ai?.scoreDirective || state.result?.ai?.noVisibleChange) {
+    return;
+  }
+
   if (verified.status !== "verified") {
     els.scorecardErrorNote?.classList.remove("hidden");
     return;
@@ -8242,8 +8249,9 @@ function renderVerifiedScorecard() {
   overall.textContent = `${verified.overall}%`;
 
   const verdict = document.createElement("span");
-  verdict.className = `verified-verdict ${verified.verdict}`;
-  verdict.textContent = verified.verdict.toUpperCase();
+  const flagged = Boolean(state.result?.ai?.scoreDirective || state.result?.ai?.noVisibleChange);
+  verdict.className = `verified-verdict ${flagged ? "review" : verified.verdict}`;
+  verdict.textContent = flagged ? t("reviewFlag").toUpperCase() : verified.verdict.toUpperCase();
 
   head.append(overall, verdict);
   body.append(head);
@@ -8279,13 +8287,14 @@ function renderVerifiedScorecard() {
   });
 
   if (els.verifiedHype) {
-    els.verifiedHype.textContent = verified.hypeLine || "";
+    const hasDirective = Boolean(state.result?.ai?.scoreDirective || state.result?.ai?.noVisibleChange);
+    els.verifiedHype.textContent = hasDirective ? "" : verified.hypeLine || "";
     // One voice, one line: the verdict pill already speaks/shows this hype.
     // Hide the card copy when it repeats the transcript.
     const norm = (s) => String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
     const hype = norm(verified.hypeLine);
     const spoken = norm(document.getElementById("verdictTranscriptLine")?.textContent);
-    const dup = hype.length > 12 && spoken.includes(hype);
+    const dup = hasDirective || (hype.length > 12 && spoken.includes(hype));
     els.verifiedHype.classList.toggle("hidden", dup);
   }
 
@@ -8740,6 +8749,10 @@ function renderResults() {
   els.styleScoreDisplay.textContent = bonusVal > 0
     ? `${Number(score.styleScore ?? 7.5).toFixed(1)}/10 (+${bonusVal}%)`
     : `${Number(score.styleScore ?? 7.5).toFixed(1)} / 10`;
+  if (els.poseStatus && state.posePreScore?.valid !== true) {
+    els.poseStatus.textContent = t("poseSkippedNote");
+  }
+  document.getElementById("posePanelCard")?.classList.toggle("hidden", state.posePreScore?.valid !== true);
 
   if (els.sceneMatchValue) els.sceneMatchValue.textContent = score.simulated ? "—" : `${Math.round(Number(score.sceneMatch || 0) * 100)}%`;
   if (els.objectsClearedValue) els.objectsClearedValue.textContent = String(score.detection?.clearedCount ?? 0);
@@ -8814,6 +8827,36 @@ async function loadPoseLandmarker() {
       });
 
   return poseLandmarkerPromise;
+}
+
+async function createGestureRecognizer() {
+  const packageURL = mediapipePackageURL();
+  const module = await import(`${packageURL}/+esm`);
+  const vision = module.FilesetResolver ? module : module.default;
+  const fileset = await vision.FilesetResolver.forVisionTasks(`${packageURL}/wasm`);
+  return vision.GestureRecognizer.createFromOptions(fileset, {
+    baseOptions: {
+      modelAssetPath: CONFIG.detection.gestureModelURL,
+      delegate: "CPU"
+    },
+    runningMode: "IMAGE",
+    numHands: 2
+  });
+}
+
+async function loadGestureRecognizer() {
+  if (gestureRecognizerInstance) return gestureRecognizerInstance;
+  if (gestureRecognizerPromise) return gestureRecognizerPromise;
+  gestureRecognizerPromise = createGestureRecognizer()
+    .then((recognizer) => {
+      gestureRecognizerInstance = recognizer;
+      return recognizer;
+    })
+    .catch(() => {
+      gestureRecognizerPromise = null;
+      return null;
+    });
+  return gestureRecognizerPromise;
 }
 
 function landmarkVisibility(landmark) {
@@ -8950,6 +8993,9 @@ function evaluatePoseEmoteMatch(landmarks, poseId = getSelectedPoseId()) {
     const wristsLow = (clamp((leftWrist.y - leftElbow.y + 0.04) / 0.22) + clamp((rightWrist.y - rightElbow.y + 0.04) / 0.22)) / 2;
     const diamondElbows = clamp((elbowSpan - wristSpan + 0.08) / (shoulderWidth * 1.1));
     matchRatio = wristsLow * 0.45 + diamondElbows * 0.35 + elbowSymmetry * 0.20;
+  // Body-pose landmarks cannot see fingers: PEACE and THUMBS UP match on
+  // arm geometry only (one arm up, other down; narrow span for the fist).
+  // Prompts describe arms, never finger shapes.
   } else if (poseId === "peace") {
     const up = Math.max(leftRaise, rightRaise);
     const down = Math.min(leftRaise, rightRaise);
@@ -9121,7 +9167,7 @@ async function runVictoryPose() {
   const emoteName = POSE_EMOTES[poseId]?.name?.[lang] || POSE_EMOTES[poseId]?.name?.en || "CHAMP V";
 
   state.pose.running = true;
-  els.poseButton.disabled = true;
+  if (els.poseButton) els.poseButton.disabled = true;
   els.poseStatus.textContent = t("poseAnalyzing");
 
   let styleScore = 7.5;
@@ -9154,6 +9200,34 @@ async function runVictoryPose() {
           accuracyPct = evalRes.accuracyPct;
           bonusPts = evalRes.bonusPts;
           validMatch = Boolean(evalRes.valid);
+          // Hand-gesture poses need a real hand signal: verify with
+          // GestureRecognizer (Victory / Thumb_Up). If the recognizer
+          // cannot load (offline), fall back to arm geometry.
+          if (validMatch && (poseId === "peace" || poseId === "thumbsup")) {
+            const want = poseId === "peace" ? "Victory" : "Thumb_Up";
+            let gestureOk = true;
+            let recognizer = null;
+            try {
+              recognizer = await loadGestureRecognizer();
+            } catch {
+              recognizer = null;
+            }
+            if (recognizer) {
+              gestureOk = false;
+              try {
+                const gestureResult = recognizer.recognize(image);
+                const hands = gestureResult?.gestures || [];
+                gestureOk = hands.some((hand) => (hand || []).some((g) => g?.categoryName === want && Number(g?.score || 0) >= 0.5));
+              } catch {
+                gestureOk = true;
+              }
+            }
+            if (!gestureOk) {
+              styleScore = Math.min(styleScore, 6.5);
+              accuracyPct = Math.min(accuracyPct, 60);
+              bonusPts = 0;
+            }
+          }
           if (!validMatch) {
             els.poseStatus.textContent = t("poseNoPerson");
           }
@@ -9221,7 +9295,7 @@ async function runVictoryPose() {
       updateSavedRunStyleScore(styleScore, bonusPts);
     }
 
-    els.poseButton.disabled = false;
+    if (els.poseButton) els.poseButton.disabled = false;
     return { styleScore, accuracyPct, bonusPts, emote: poseId, valid: validMatch };
   }
 }
@@ -12963,7 +13037,7 @@ function buildSponsorLogoSvg() {
       <path d="M28 4 L48 12 L48 30 C48 43 39 51 28 55 C17 51 8 43 8 30 L8 12 Z" fill="rgba(57,245,188,0.14)" stroke="url(#crestGrad)" stroke-width="2.2"/>
       <path d="M28 15 l3.8 9.2 l9.2 3.8 l-9.2 3.8 l-3.8 9.2 l-3.8-9.2 l-9.2-3.8 l9.2-3.8 z" fill="#ffd35c"/>
       <circle cx="39" cy="17" r="2.2" fill="#39f5bc"/>
-      <text x="64" y="33" fill="#f4f8ff" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="900" letter-spacing="0.14em">NOVACLEAN</text>
+      <text x="64" y="33" fill="#f4f8ff" font-family="Plus Jakarta Sans, sans-serif" font-size="19" font-weight="900" letter-spacing="0.08em">YOUR LOGO HERE</text>
       <text x="65" y="49" fill="rgba(165,216,255,0.72)" font-family="Plus Jakarta Sans, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.34em">PRO SERIES</text>
     </g>
     <rect x="500" y="12" width="84" height="20" rx="10" fill="rgba(255,211,92,0.12)" stroke="rgba(255,211,92,0.45)" stroke-width="1"/>
@@ -12983,15 +13057,7 @@ function renderHomeSponsorSlot() {
   const logoWrap = document.createElement("div");
   logoWrap.className = "sponsor-logo-wrap";
   logoWrap.innerHTML = buildSponsorLogoSvg();
-  const badge = document.createElement("span");
-  badge.className = "sponsor-badge";
-  badge.textContent = t("sponsoredBadge");
-  const text = document.createElement("span");
-  text.className = "sponsor-copy-text";
-  text.textContent = slot.isDefault
-    ? `${t("sponsorHomeTitle")} — ${t("sponsorHomeDetail")}`
-    : `${slot.title}${slot.detail ? ` — ${slot.detail}` : ""}`;
-  els.homeSponsorSlot.append(logoWrap, badge, text);
+  els.homeSponsorSlot.append(logoWrap);
   els.homeSponsorSlot.classList.remove("hidden");
 }
 
@@ -13008,16 +13074,7 @@ function renderDeckSponsorSlot(showAfterAnswer, card) {
   const logoWrap = document.createElement("div");
   logoWrap.className = "sponsor-logo-wrap";
   logoWrap.innerHTML = buildSponsorLogoSvg();
-  const badge = document.createElement("span");
-  badge.className = "sponsor-badge";
-  badge.textContent = t("sponsoredBadge");
-  const text = document.createElement("span");
-  text.className = "sponsor-copy-text";
-  const catNote = card?.productType ? ` (${localizedDeckField(card, "productType")})` : card?.category ? ` (${card.category})` : "";
-  text.textContent = slot.isDefault
-    ? `${t("sponsorDeckTitle")}${catNote} — ${t("sponsorDeckDetail")}`
-    : `${slot.title}${catNote}${slot.detail ? ` — ${slot.detail}` : ""}`;
-  els.deckSponsorSlot.append(logoWrap, badge, text);
+  els.deckSponsorSlot.append(logoWrap);
   els.deckSponsorSlot.classList.remove("hidden");
 }
 
@@ -14719,7 +14776,7 @@ function bindEvents() {
     handleCompleteButtonTap
   );
 
-  els.poseButton.addEventListener(
+  els.poseButton?.addEventListener(
     "click",
     runVictoryPose
   );
