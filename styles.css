@@ -2092,6 +2092,21 @@ h3 {
     gap: 4px;
     margin: 8px 0;
   }
+
+  /* Readability for non-technical readers: larger, brighter step copy. */
+  #instructionsScreen .instruction-card {
+    grid-template-columns: 44px 1fr !important;
+    gap: 10px !important;
+    padding: 14px !important;
+  }
+  #instructionsScreen .instruction-card p {
+    font-size: 15px !important;
+    line-height: 1.55 !important;
+    color: #d7e6f5 !important;
+  }
+  #instructionsScreen .instruction-card h3 {
+    font-size: 16.5px !important;
+  }
   #cameraScreen .camera-content > .camera-frame {
     grid-column: 1;
     grid-row: 1;
@@ -4336,6 +4351,9 @@ body.lightbox-open {
   #cameraScreen #checkinBar .checkin-area-label {
     min-width: 0 !important;
   }
+  #cameraScreen #checkinBar label.checkin-area-label {
+    grid-column: 1 / -1 !important;
+  }
   #cameraScreen #checkinBar .area-select {
     min-width: 0 !important;
     width: 100% !important;
@@ -5127,6 +5145,9 @@ select:focus-visible {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  row-gap: 6px;
 }
 
 .deck-streak-pill {
@@ -5988,6 +6009,8 @@ button.btn-pop-active::before {
   align-items: center;
   gap: 4px;
   min-height: 36px;
+  flex-shrink: 0;
+  white-space: nowrap;
   padding: 5px 10px;
   border-radius: 999px;
   border: 1px solid rgba(69, 234, 255, 0.42);
@@ -7340,4 +7363,11 @@ body #resultsScreen .results-cta-bar {
 }
 .leaderboard-size-bar {
   margin: 8px 0 2px;
+}
+
+/* Deck readability: no perpetual motion on the card while reading. */
+#deckScreen .deck-illustration .bubble-rise,
+#deckScreen .deck-illustration .lottie-bubble,
+#deckScreen .deck-floater {
+  animation: none !important;
 }

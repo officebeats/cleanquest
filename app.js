@@ -91,7 +91,7 @@ const CONFIG = {
     participationThreshold: 0.8
   },
   deck: {
-    dailyCount: 5,
+    dailyCount: 10,
     totalCards: 30
   },
   retentionDays: 90,
@@ -404,6 +404,7 @@ const translations = {
     findingFraming: "Before/after framing changed too much. Keep the camera fixed and rescan.",
     findingZones: "{improved} of 9 zones visibly improved · {residual} remaining.",
     findingZonesOne: "{improved} of 9 zones visibly improved · 1 zone needs another pass.",
+    findingUntouched: "Looks untouched: {areas}. Go wipe {them}.",
     findingDemoStation: "Demo station: 3 of 3 surface items (cup, bottle, bowl) cleared; counter and sink basin visibly improved.",
     findingNoObjects: "Not enough countable objects were detected for strong verification.",
     findingRemaining: "{objects} still detected after the challenge.",
@@ -441,10 +442,10 @@ const translations = {
     deckCatSurface: "SURFACE",
     deckCatProduct: "PRODUCT",
     deckCatTechnique: "TECHNIQUE",
-    deckRight: "SWIPE RIGHT (RIGHT CALL) ⟶",
-    deckMiss: "⟵ SWIPE LEFT (MISS)",
-    deckCorrect: "Correct call.",
-    deckWrong: "That's the miss.",
+    deckRight: "✔ RIGHT ⟶",
+    deckMiss: "⟵ ✘ WRONG",
+    deckCorrect: "✔ Right.",
+    deckWrong: "✘ Wrong.",
     deckComplete: "Deck complete for today.",
     deckStreak: "Day streak: {n}",
     deckCardOf: "Card {i} of {n}",
@@ -585,7 +586,7 @@ const translations = {
     pledgeWarning: "⚠ Accept the supervisor pledge on tab 11 first — data is for training & recognition only, never discipline.",
     siteRegistered: "✓ Registered site: {site} (QR sticker ready).",
     membersInvited: "✓ Invited & approved {count} member(s) ({total} approved).",
-    packAssigned: "✓ Assigned {pack} ({cards} cards queued for next 5-card session).",
+    packAssigned: "✓ Assigned {pack} ({cards} cards queued for next 10-card session).",
     ftueActiveLabel: "✓ Consent & Pass active",
     offlineScored: "SCORED {score}%",
     offlineAwaiting: "AWAITING SCORE",
@@ -610,9 +611,9 @@ const translations = {
     zonesActive: "📸 LIVE · {n}/9 ZONES · {s} SNAPS",
     sharePassportAction: "🪪 SHARE PASSPORT",
     passportCopiedNote: "✓ Verified Benchmark Passport copied to share!",
-    deckSwipeHint: "⟵ DRAG / SWIPE LEFT = MISS  ·  DRAG / SWIPE RIGHT = RIGHT CALL ⟶",
+    deckSwipeHint: "Read the card — is it RIGHT or WRONG? Drag far left / right, or tap a button.",
     deckNextCard: "NEXT CARD ⟶",
-    deckPracticeAgain: "🔄 PRACTICE ANOTHER 5 CARDS",
+    deckPracticeAgain: "🔄 PRACTICE ANOTHER 10 CARDS",
     openPassportHub: "🪪 PASSPORT, CREW & SUPERVISOR",
     qrModalTitle: "⌗ SCAN STATION QR STICKER",
     lightboxTitle: "BEFORE & AFTER COMPARISON",
@@ -623,8 +624,8 @@ const translations = {
     qrApply: "APPLY QR CODE",
     maximizeBadge: "⤢",
     lightboxGhostOpacity: "BEFORE SHADOW OVERLAY OPACITY",
-    deckStampLeft: "⟵ MISS",
-    deckStampRight: "RIGHT CALL ⟶",
+    deckStampLeft: "⟵ ✘ WRONG",
+    deckStampRight: "✔ RIGHT ⟶",
     openSupervisorTools: "📋 OPEN INSPECTION LOG & SUPERVISOR TOOLS (11–15) →",
     leagueOffice: "🏢 Office & Corporate",
     leagueEducation: "🏫 Education & Campus",
@@ -799,6 +800,7 @@ const translations = {
     findingFraming: "El encuadre antes/después cambió demasiado. Mantén la cámara fija y repite.",
     findingZones: "{improved} de 9 zonas mejoraron visiblemente · {residual} pendientes.",
     findingZonesOne: "{improved} de 9 zonas mejoraron visiblemente · 1 zona necesita otra pasada.",
+    findingUntouched: "Sin limpiar: {areas}. Pásale un paño.",
     findingDemoStation: "Estación demo: 3 de 3 objetos de la superficie (taza, botella, tazón) retirados; la encimera y el lavabo mejoraron visiblemente.",
     findingNoObjects: "No se detectaron suficientes objetos para una verificación sólida.",
     findingRemaining: "{objects} siguen detectados después del reto.",
@@ -836,10 +838,10 @@ const translations = {
     deckCatSurface: "SUPERFICIE",
     deckCatProduct: "PRODUCTO",
     deckCatTechnique: "TÉCNICA",
-    deckRight: "DESLIZA DERECHA (ACIERTA) ⟶",
-    deckMiss: "⟵ DESLIZA IZQUIERDA (FALLO)",
-    deckCorrect: "Buena decisión.",
-    deckWrong: "Ese es el fallo.",
+    deckRight: "✔ CORRECTO ⟶",
+    deckMiss: "⟵ ✘ INCORRECTO",
+    deckCorrect: "✔ Correcta.",
+    deckWrong: "✘ Incorrecta.",
     deckComplete: "Mazo completo por hoy.",
     deckStreak: "Racha: {n} días",
     deckCardOf: "Tarjeta {i} de {n}",
@@ -980,7 +982,7 @@ const translations = {
     pledgeWarning: "⚠ Acepta primero el compromiso de supervisión en la pestaña 11: los datos son solo para formación y reconocimiento, nunca disciplina.",
     siteRegistered: "✓ Sitio registrado: {site} (etiqueta QR lista).",
     membersInvited: "✓ Invitados y aprobados {count} miembro(s) ({total} aprobados).",
-    packAssigned: "✓ Asignado {pack} ({cards} tarjetas en cola para la próxima sesión de 5).",
+    packAssigned: "✓ Asignado {pack} ({cards} tarjetas en cola para la próxima sesión de 10).",
     ftueActiveLabel: "✓ Consentimiento y Pase activos",
     offlineScored: "PUNTUADO {score}%",
     offlineAwaiting: "ESPERANDO PUNTUACIÓN",
@@ -1005,9 +1007,9 @@ const translations = {
     zonesActive: "📸 EN VIVO · {n}/9 ZONAS · {s} CAPTURAS",
     sharePassportAction: "🪪 COMPARTIR PASAPORTE",
     passportCopiedNote: "✓ ¡Pasaporte de referencia copiado para compartir!",
-    deckSwipeHint: "⟵ DESLIZA IZQUIERDA = FALLO  ·  DESLIZA DERECHA = ACIERTA ⟶",
+    deckSwipeHint: "Lee la tarjeta — ¿es CORRECTO o INCORRECTO? Desliza o toca un botón.",
     deckNextCard: "SIGUIENTE TARJETA ⟶",
-    deckPracticeAgain: "🔄 PRACTICAR OTRAS 5 TARJETAS",
+    deckPracticeAgain: "🔄 PRACTICAR OTRAS 10 TARJETAS",
     openPassportHub: "🪪 PASAPORTE, EQUIPO Y SUPERVISOR",
     qrModalTitle: "⌗ ESCANEAR QR DE ESTACIÓN",
     lightboxTitle: "COMPARACIÓN ANTES Y DESPUÉS",
@@ -1018,8 +1020,8 @@ const translations = {
     qrApply: "APLICAR CÓDIGO QR",
     maximizeBadge: "⤢",
     lightboxGhostOpacity: "OPACIDAD DE LA SOMBRA DEL ANTES",
-    deckStampLeft: "⟵ FALLO",
-    deckStampRight: "ACIERTA ⟶",
+    deckStampLeft: "⟵ ✘ INCORRECTO",
+    deckStampRight: "✔ CORRECTO ⟶",
     openSupervisorTools: "📋 ABRIR REGISTRO Y HERRAMIENTAS DE SUPERVISIÓN (11–15) →",
     leagueOffice: "🏢 Corporativo y Oficinas",
     leagueEducation: "🏫 Escuela y Campus",
@@ -1194,6 +1196,7 @@ const translations = {
     findingFraming: "Kadr przed/po zmienił się zbyt mocno. Trzymaj kamerę nieruchomo i zeskanuj ponownie.",
     findingZones: "{improved} z 9 stref wyraźnie lepsze · {residual} do poprawy.",
     findingZonesOne: "{improved} z 9 stref wyraźnie lepsze · 1 strefa wymaga poprawki.",
+    findingUntouched: "Nieruszone: {areas}. Wytrzyj {them}.",
     findingDemoStation: "Stacja demo: 3 z 3 przedmiotów (kubek, butelka, miska) usunięte; blat i umywalka wyraźnie lepsze.",
     findingNoObjects: "Wykryto zbyt mało obiektów, aby mocno potwierdzić wynik.",
     findingRemaining: "{objects} nadal wykryto po zakończeniu wyzwania.",
@@ -1231,10 +1234,10 @@ const translations = {
     deckCatSurface: "POWIERZCHNIA",
     deckCatProduct: "PRODUKT",
     deckCatTechnique: "TECHNIKA",
-    deckRight: "PRZESUŃ W PRAWO (DOBRZE) ⟶",
-    deckMiss: "⟵ PRZESUŃ W LEWO (BŁĄD)",
-    deckCorrect: "Dobra decyzja.",
-    deckWrong: "To jest błąd.",
+    deckRight: "✔ DOBRZE ⟶",
+    deckMiss: "⟵ ✘ ŹLE",
+    deckCorrect: "✔ Dobrze.",
+    deckWrong: "✘ Źle.",
     deckComplete: "Talia na dziś ukończona.",
     deckStreak: "Seria: {n} dni",
     deckCardOf: "Karta {i} z {n}",
@@ -1375,7 +1378,7 @@ const translations = {
     pledgeWarning: "⚠ Najpierw zaakceptuj zobowiązanie nadzoru na karcie 11 — dane służą tylko szkoleniu i uznaniu, nigdy dyscyplinie.",
     siteRegistered: "✓ Zapisano obiekt: {site} (naklejka QR gotowa).",
     membersInvited: "✓ Zaproszono i zatwierdzono {count} członków ({total} zatwierdzonych).",
-    packAssigned: "✓ Przypisano {pack} ({cards} kart w kolejce na następną sesję 5 kart).",
+    packAssigned: "✓ Przypisano {pack} ({cards} kart w kolejce na następną sesję 10 kart).",
     ftueActiveLabel: "✓ Zgoda i Karta aktywne",
     offlineScored: "OCENIONO {score}%",
     offlineAwaiting: "OCZEKUJE NA WYNIK",
@@ -1400,9 +1403,9 @@ const translations = {
     zonesActive: "📸 NA ŻYWO · {n}/9 STREF · {s} KLATEK",
     sharePassportAction: "🪪 UDOSTĘPNIJ PASZPORT",
     passportCopiedNote: "✓ Zweryfikowany paszport skopiowany!",
-    deckSwipeHint: "⟵ PRZESUŃ W LEWO = BŁĄD  ·  PRZESUŃ W PRAWO = DOBRZE ⟶",
+    deckSwipeHint: "Przeczytaj kartę — DOBRZE czy ŹLE? Przesuń daleko lub dotknij przycisk.",
     deckNextCard: "NASTĘPNA KARTA ⟶",
-    deckPracticeAgain: "🔄 ĆWICZ KOLEJNE 5 KART",
+    deckPracticeAgain: "🔄 ĆWICZ KOLEJNE 10 KART",
     openPassportHub: "🪪 PASZPORT, EKIPA I NADZÓR",
     qrModalTitle: "⌗ SKANUJ KOD QR STACJI",
     lightboxTitle: "PORÓWNANIE PRZED I PO",
@@ -1413,8 +1416,8 @@ const translations = {
     qrApply: "ZASTOSUJ KOD QR",
     maximizeBadge: "⤢",
     lightboxGhostOpacity: "PRZEZROCZYSTOŚĆ CIENIA PRZED",
-    deckStampLeft: "⟵ BŁĄD",
-    deckStampRight: "DOBRZE ⟶",
+    deckStampLeft: "⟵ ✘ ŹLE",
+    deckStampRight: "✔ DOBRZE ⟶",
     openSupervisorTools: "📋 OTWÓRZ DZIENNIK I NARZĘDZIA NADZORU (11–15) →",
     leagueOffice: "🏢 Biurowiec i Korporacja",
     leagueEducation: "🏫 Edukacja i Kampus",
@@ -2124,66 +2127,11 @@ function killAllActiveVoiceAudios() {
 }
 
 function speakText(text, options = {}) {
-  const force = Boolean(options.force);
-  if (!state.voice.available || (!force && state.voice.muted) || !text) return;
-  killAllActiveVoiceAudios();
-  const requestId = ++announcerRequestId;
-  const synth = window.speechSynthesis;
-  let started = false;
-  let attemptedFallback = false;
-  let watchdog;
-
-  const attempt = (useDefault) => {
-    if (requestId !== announcerRequestId || (!force && state.voice.muted)) return;
-    try {
-      synth.cancel();
-      const utterance = useDefault
-        ? new SpeechSynthesisUtterance(String(text))
-        : createUtterance(text, options);
-      if (useDefault) {
-        utterance.lang = getSpeechLanguage();
-        utterance.rate = 1;
-        utterance.pitch = 1;
-        utterance.volume = 1;
-      }
-      utterance.onstart = () => {
-        if (requestId !== announcerRequestId) return;
-        started = true;
-        clearTimeout(watchdog);
-        showAnnouncerStatus("");
-      };
-      utterance.onerror = () => {
-        if (requestId !== announcerRequestId) return;
-        clearTimeout(watchdog);
-        if (!attemptedFallback) {
-          attemptedFallback = true;
-          attempt(true);
-        } else {
-          showAnnouncerStatus("Voice unavailable in this browser. Check your speech settings.");
-        }
-      };
-      synth.speak(utterance);
-      if (synth.paused) synth.resume();
-      watchdog = setTimeout(() => {
-        if (requestId !== announcerRequestId || started) return;
-        if (!attemptedFallback) {
-          attemptedFallback = true;
-          attempt(true);
-        } else {
-          showAnnouncerStatus("Voice did not start. Check your text-to-speech settings.");
-        }
-      }, 2200);
-    } catch {
-      if (!attemptedFallback) {
-        attemptedFallback = true;
-        attempt(true);
-      } else {
-        showAnnouncerStatus("Speech is unavailable in this browser.");
-      }
-    }
-  };
-
-  attempt(false);
+  // Neural-voice-only policy: pre-rendered Kokoro/Piper clips (playHostClip)
+  // are the only voice allowed. The browser speechSynthesis fallback sounded
+  // robotic, so it is permanently disabled — silence instead of synth.
+  // Callers that need a line must add a neural clip; this stays a no-op.
+  return;
 }
 
 const HOST_LINES = {
@@ -4017,13 +3965,11 @@ function startDiscoHouseGroove() {
 
         if (step % 4 === 0) {
           document.body.classList.add("music-playing", "music-beat-thump");
-          if (state.screen === "deck" && els.deckCard && !els.deckCard.classList.contains("swiping")) {
-            els.deckCard.classList.add("beat-thump");
-          }
+          // Deck card stays still: the beat pulse shook the card and its text
+          // unreadably while music played. Verdict animations are one-shot.
           clearTimeout(beatThumpTimerId);
           beatThumpTimerId = setTimeout(() => {
             document.body?.classList?.remove("music-beat-thump");
-            els.deckCard?.classList?.remove("beat-thump");
           }, 150);
         }
       }
@@ -6398,6 +6344,26 @@ function analyzeSurfaceZones(beforeImage, afterImage, columns = 3, rows = 3) {
   return { zones, improvedZones, residualZones, averageImprovement, residualClutter };
 }
 
+// Plain-language untouched-area callout: zones with almost no before/after
+// change read as "not cleaned". Names use simple position words so the
+// verdict stays direct and ESL-friendly in all three languages.
+const UNTOUCHED_ZONE_WORDS = {
+  en: { rows: ["top", "middle", "bottom"], cols: ["left", "center", "right"], all: "the whole area", themOne: "it", themMany: "them" },
+  es: { rows: ["arriba", "en medio", "abajo"], cols: ["izquierda", "centro", "derecha"], all: "toda la zona", themOne: "it", themMany: "them" },
+  pl: { rows: ["góra", "środek", "dół"], cols: ["lewa", "środek", "prawa"], all: "wszystkie strefy", themOne: "to", themMany: "je" }
+};
+
+function describeUntouchedZones(zones) {
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+  const words = UNTOUCHED_ZONE_WORDS[lang];
+  const untouched = (zones || []).filter((z) => (z.improvement ?? 0) < 0.05 && (z.residual ?? 0) >= 0.3);
+  if (!untouched.length) return null;
+  if (untouched.length >= zones.length) return { areas: words.all, them: lang === "en" ? words.themOne : words.themMany };
+  const names = untouched.slice(0, 5).map((z) => `${words.rows[z.row] ?? ""} ${words.cols[z.col] ?? ""}`.trim());
+  if (untouched.length > 5) names.push(lang === "es" ? `y ${untouched.length - 5} más` : lang === "pl" ? `i ${untouched.length - 5} więcej` : `and ${untouched.length - 5} more`);
+  return { areas: names.join(", "), them: untouched.length === 1 ? words.themOne : words.themMany };
+}
+
 const SPOT_LOGIC_PROFILES = {
   "Sink & counter": {
     surfaceWeight: 0.55,
@@ -6910,6 +6876,8 @@ function calculateLocalScore(
   if (envCheck.matched && surface) {
     const zoneKey = Number(surface.residualZones) === 1 ? "findingZonesOne" : "findingZones";
     findings.push(t(zoneKey, { improved: surface.improvedZones, residual: surface.residualZones }));
+    const untouched = describeUntouchedZones(surface.zones);
+    if (untouched) findings.push(t("findingUntouched", untouched));
   }
   if (envCheck.matched && remainingCount > 0) findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }));
   if (envCheck.matched && newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
@@ -10136,7 +10104,7 @@ function renderDeck() {
   }
 
   els.deckCard?.classList.toggle("hidden", finished);
-  els.deckSwipeHint?.classList.add("hidden");
+  els.deckSwipeHint?.classList.toggle("hidden", finished);
   els.deckLeft?.classList.toggle("hidden", finished);
   els.deckRight?.classList.toggle("hidden", finished);
   els.deckNextButton?.classList.add("hidden");
@@ -10239,8 +10207,8 @@ function swipeDeckCard(direction) {
     if (els.deckStampLeft) els.deckStampLeft.style.opacity = isLeft ? "1" : "0";
     if (els.deckStampRight) els.deckStampRight.style.opacity = isLeft ? "0" : "1";
     els.deckCard.style.transform = isLeft
-      ? "translate3d(-28px, 0, 0) rotate(-4deg)"
-      : "translate3d(28px, 0, 0) rotate(4deg)";
+      ? "translate3d(-130px, 0, 0) rotate(-8deg)"
+      : "translate3d(130px, 0, 0) rotate(8deg)";
   }
   answerDeck(pick);
   return pick;
@@ -10317,6 +10285,7 @@ function answerDeck(pick) {
   if (els.deckStampLeft) els.deckStampLeft.style.opacity = pick === "miss" ? "1" : "0";
   if (els.deckStampRight) els.deckStampRight.style.opacity = pick === "right" ? "1" : "0";
   els.deckLeft?.classList.add("hidden");
+  els.deckSwipeHint?.classList.add("hidden");
   els.deckRight?.classList.add("hidden");
   els.deckNextButton?.classList.remove("hidden");
   const catRaw = String(card?.category || "").toLowerCase();
@@ -10330,8 +10299,8 @@ function answerDeck(pick) {
   if (vStamp) {
     const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
     vStamp.textContent = hit
-      ? (lang === "es" ? "✨ ¡ACIERTO! +100 XP" : lang === "pl" ? "✨ TRAFIONE! +100 XP" : "✨ NAILED IT! +100 XP")
-      : (lang === "es" ? "⚠️ ¡REVISA LA REGLA!" : lang === "pl" ? "⚠️ SPRAWDŹ ZASADĘ!" : "⚠️ TRICK CALL! WATCH THE RULE");
+      ? (lang === "es" ? "✔ CORRECTO +100 XP" : lang === "pl" ? "✔ DOBRZE +100 XP" : "✔ RIGHT +100 XP")
+      : (lang === "es" ? "✘ INCORRECTO — mira por qué" : lang === "pl" ? "✘ ŹLE — zobacz dlaczego" : "✘ WRONG — here is why");
     vStamp.className = `deck-verdict-stamp ${hit ? "is-hit" : "is-miss"}`;
   }
 
@@ -10343,7 +10312,7 @@ function answerDeck(pick) {
   if (els.deckFeedback) {
     const productType = localizedDeckField(card, "productType");
     const productNote = productType ? ` · ${t("productTypePrefix")} ${productType}.` : "";
-    els.deckFeedback.textContent = `${hit ? "✨ " + t("deckCorrect") : "💡 " + t("deckWrong")} ${localizedDeckField(card, "why")}${productNote}`;
+    els.deckFeedback.textContent = `${hit ? t("deckCorrect") : t("deckWrong")} ${localizedDeckField(card, "why")}${productNote}`;
     els.deckFeedback.className = `deck-feedback ${hit ? "is-correct" : "is-wrong"}`;
   }
 
@@ -14726,9 +14695,9 @@ function bindEvents() {
         const rot = Math.max(-14, Math.min(14, dx * 0.065));
         const tiltY = Math.max(-16, Math.min(16, dx * 0.08));
         els.deckCard.style.transform = `perspective(800px) translate3d(${dx}px, 0, 0) rotateZ(${rot}deg) rotateY(${tiltY}deg)`;
-        const ratio = Math.min(1, Math.abs(dx) / 60);
-        if (els.deckStampLeft) els.deckStampLeft.style.opacity = dx < -12 ? String(ratio) : "0";
-        if (els.deckStampRight) els.deckStampRight.style.opacity = dx > 12 ? String(ratio) : "0";
+        const ratio = Math.min(1, Math.abs(dx) / 110);
+        if (els.deckStampLeft) els.deckStampLeft.style.opacity = dx < -20 ? String(ratio) : "0";
+        if (els.deckStampRight) els.deckStampRight.style.opacity = dx > 20 ? String(ratio) : "0";
         if (Math.abs(dx) > 14 && vel > 6) {
           spawnDragShakeConfetti(dx, vel);
         }
@@ -14740,7 +14709,7 @@ function bindEvents() {
       dragStartX = null;
       dragPointerId = null;
       els.deckCard.classList.remove("swiping");
-      if (Math.abs(dx) >= 60 && state.deck && !state.deck.locked) {
+      if (Math.abs(dx) >= 110 && state.deck && !state.deck.locked) {
         suppressNextClick = true;
         swipeDeckCard(dx < 0 ? "left" : "right");
       } else if (!state.deck?.locked) {
@@ -14765,8 +14734,8 @@ function bindEvents() {
         const touch = event.changedTouches?.[0];
         const delta = touch ? touch.clientX - deckTouchX : 0;
         deckTouchX = null;
-        if (delta <= -60) swipeDeckCard("left");
-        else if (delta >= 60) swipeDeckCard("right");
+        if (delta <= -110) swipeDeckCard("left");
+        else if (delta >= 110) swipeDeckCard("right");
       });
     }
     els.deckCard.addEventListener("click", (event) => {
@@ -15374,7 +15343,7 @@ function initializeApp() {
       if (state.voice.pendingAutoplayIntro || (!state.voice.currentAudio && activeVoiceAudios.size === 0)) {
         if (state.editingFtue && state.cleanerFtueStep === 3 && !hasConsent()) {
           speakConsentAloud();
-        } else if (state.screen === "welcome") {
+        } else if (state.screen === "welcome" && hasConsent()) {
           speakWelcomeIntro(state.language);
         }
       }
