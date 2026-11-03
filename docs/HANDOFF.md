@@ -35,7 +35,7 @@ Providers: on-device vision always runs. Cloud verification works out-of-the-box
   `finish`, `pass`, `retry`, `pass-big`, `pass-close`, `retry-far`, `hurry`,
   `hurry-final`, `scoring-wait`); audio manifest
   `{"version":1,"clips":{"<lang>:<beat>-<nn>":"available"|"mock"}}` (231 entries:
-  230 EN MP3s incl. `nudge` + 1 mock) — unlisted IDs fall back to synth/TTS.
+  230 EN MP3s incl. `nudge` + 1 mock) — unlisted IDs stay silent (neural-voice-only policy; `speakText` synth path permanently disabled).
   `announceGameVerdict()` routes through `selectVerdictBeat()` + `speakHost()`
   (sting-segue: hype sting first, voice 320ms later, mute/generation guarded) +
   `playVerdictSfx()`, chains `speakScoreNumber()` (weighted total) on BOTH

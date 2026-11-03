@@ -122,9 +122,9 @@ PL num: 00 zero, 01 jeden, 02 dwa, 03 trzy, 04 cztery, 05 pięć, 06 sześć, 07
 
 ## 4. File naming + manifest + record priority
 
-Naming: `assets/audio/<lang>/<beat>-<nn>.mp3` (nn zero-padded; today only `en/start-00` is `mock`). Manifest keeps the existing scheme: `{"version": 1, "clips": {"<lang>:<beat>-<nn>": "available"|"mock"}}` — everything not listed falls back to synth, no code change needed.
+Naming: `assets/audio/<lang>/<beat>-<nn>.mp3` (nn zero-padded; today only `en/start-00` is `mock`). Manifest keeps the existing scheme: `{"version": 1, "clips": {"<lang>:<beat>-<nn>": "available"|"mock"}}` — everything not listed stays silent under the neural-voice-only policy, no code change needed.
 Totals if fully recorded: legacy 360 (5x24x3) + new hype 252 (7x12x3) + numbers (EN 30+4, ES 39+7, PL 30+5) = 767 files.
-Record priority: pass-big/pass-close + hurry + scoring-wait first (verdict moments), then numbers/glue, then streak/board/inspect (rarer triggers). Keep per-clip loudness matched; TTS fallback voice stays for unrecorded IDs. Pause convention `...` ≈ 300 ms.
+Record priority: pass-big/pass-close + hurry + scoring-wait first (verdict moments), then numbers/glue, then streak/board/inspect (rarer triggers). Keep per-clip loudness matched; neural-voice-only policy — unrecorded IDs stay silent, never synth. Pause convention `...` ≈ 300 ms.
 Open item: score thresholds splitting pass-big / pass-solid / pass-close (script side ready; game logic picks the beat).
 
 ## 5. Coordinator decisions (arbitration log)
@@ -241,7 +241,7 @@ PL: num 00–20 (00 zero … 20 dwadzieścia), tens 30–90 as words; 21–99 co
 
 ## v2.4 Coverage table (beats x variants x languages + total NEW v2 clips)
 
-16 new beats x 12 lines x 3 langs = 576 new clips. Legacy 360 (5x24x3, trims applied) + new hype 252 (7x12x3 from v1) + v2 new 576 + numbers (EN 30+4+4 time, ES 39+7+4 time, PL 32+5+8 time incl. jedna/dwie + time nouns) ≈ 1,316 files under assets/audio/<lang>/<beat>-<nn>.mp3. Record priority: verdict moments (pass tiers, retry tiers, hurry-final), then numbers/time glue, then streak/board/inspect/record/edge, then attract/hello/welcome/countdown/early/late/demo/crowd. Manifest keeps the available|mock scheme; TTS fallback voice stays for unrecorded IDs. Judge sign-off: all ES/PL lines reviewed for naturalness, gender lock, and declension; corrections applied above; v2 scripts approved for recording.
+16 new beats x 12 lines x 3 langs = 576 new clips. Legacy 360 (5x24x3, trims applied) + new hype 252 (7x12x3 from v1) + v2 new 576 + numbers (EN 30+4+4 time, ES 39+7+4 time, PL 32+5+8 time incl. jedna/dwie + time nouns) ≈ 1,316 files under assets/audio/<lang>/<beat>-<nn>.mp3. Record priority: verdict moments (pass tiers, retry tiers, hurry-final), then numbers/time glue, then streak/board/inspect/record/edge, then attract/hello/welcome/countdown/early/late/demo/crowd. Manifest keeps the available|mock scheme; unrecorded IDs stay silent under the neural-voice-only policy (no TTS fallback). Judge sign-off: all ES/PL lines reviewed for naturalness, gender lock, and declension; corrections applied above; v2 scripts approved for recording.
 
 ## Billy swap spec (hackathon voice-line swap, no passport/crew/supervisor lines)
 

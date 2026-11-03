@@ -26,8 +26,8 @@ approval, offline/demo always works.
 
 | Gap | Now | Target |
 |---|---|---|
-| Verdict voice | `announceGameVerdict()` bypasses clips via raw TTS | Route verdict through `speakHost()` tiers: pass-big / pass / pass-close / retry / retry-far by margin; clips first, TTS fallback |
-| Score explanation | Single cleanliness % | Three bars: Clean (measured surfaces), Technique (visible order/dwell evidence or "not measured"), Time vs benchmark (capped, gradual, never zero; very fast = review flag, not bonus) |
+| Verdict voice | `announceGameVerdict()` bypasses clips via raw TTS | Route verdict through `speakHost()` tiers: pass-big / pass / pass-close / retry / retry-far by margin; neural clips only, silence when unrecorded (never synth) |
+| Score explanation | Three bars (Clean / Technique / Time vs benchmark) + plain-language untouched-area callout ("Looks untouched: top left… Go wipe it") | Keep verdicts to one short line each; no verbose paragraphs after AI analysis |
 | Leaderboard fairness | Full ranked list | Top 10 + own entry only; never show last place |
 | Appeals | None | One-tap Dispute on results → local appeal record (open, 5-business-day promise shown as text); no code path can edit a score |
 | Consent & privacy | Disclaimer text only | Plain-language consent gate before first run, read aloud in chosen language; "faces are never identified" stated; consent flag in-browser only |
@@ -35,7 +35,7 @@ approval, offline/demo always works.
 | Check-in | Free framing | Area template pick + system-assigned high-impact spot + frame guide; in-app capture only (already true — assert it) |
 | After photo | Plain capture | Ghost overlay of the before shot to match angle |
 | Offline | Offline score note | Run queue: completed runs saved locally, marked "awaiting score", scored when back online |
-| Swipe deck | 22 cards, once/day | 5-card daily session, missed topics repeat until correct, private mistakes; generic labeled sponsor slot after answer only (operator-filled, never hardcoded) |
+| Swipe deck | 22 cards, once/day | 10-card daily session, missed topics repeat until correct, private mistakes; plain ✔ RIGHT / ✘ WRONG verdicts, generic labeled sponsor slot after answer only (operator-filled, never hardcoded) |
 | Crews (code-kept, UI hidden for hackathon) | None | Local crews (3–8) + virtual squad for solo workers; weekly matchup from local runs; crew MVP = top run, system-chosen — code kept post-hackathon, not demoed or judged |
 | Progress | None | 13-week benchmark-consistency meter ("Week N of 13, on track") — never called a certification |
 

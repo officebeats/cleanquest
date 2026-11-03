@@ -17,7 +17,7 @@ CleanQuest scores visible cleanliness and technique only — it never claims to 
 3. **Two-Rung AI Verification (On-Device + Zero-Setup Cloud):**
    - **Rung 1 (On-Device, Zero Signal Required):** MediaPipe **EfficientDet-Lite0** verifies the station environment (`verifyStationEnvironment`) and counts cleared objects, **96×72 structural edge + 3×3 luminance zone analysis** grades visible change and top-to-bottom technique, and **Pose Landmarker Lite** scores the victory pose.
    - **Rung 2 (Cloud Verification — Works Out-of-the-Box):** A token-efficient serverless proxy routes to **Meta's `Muse Spark Open`** on **Baseten (`meta-models/muse-spark-open`)** with automatic failover to **Fireworks AI (`accounts/fireworks/models/muse-spark-open`)** — grading each surface (`counter`, `glass`, `floor`, `fixture`) with confidence gating (`0.6`), drawing **SAM 3.1 / `box_2d`** surface highlight boxes, and logging exact token telemetry to an exportable **Provider Run Log**. Users can also enter direct keys in Settings for **Meta Model API (`muse-spark-1.3`, `sam-3.1`, `muse-voice-transcribe-1.0`)**.
-4. **5-Tier Audio Verdict, Automated 2-Week Deck Seasons & Dual Leaderboard:** Hear a 5-tier musical stinger + spoken score summary, review the 50/25/25 weighted bars (Cleanliness 50% · Technique 25% · Time 25%), and compete on both the **Shift Challenge Leaderboard** and the **Bi-Weekly Daily Deck Leaderboard**.
+4. **5-Tier Audio Verdict, Automated 2-Week Deck Seasons & Dual Leaderboard:** Hear a 5-tier musical stinger + neural spoken score summary (neural clips only — never robotic synth), review the 50/25/25 weighted bars (Cleanliness 50% · Technique 25% · Time 25%) plus a plain-language untouched-area callout, and compete on both the **Shift Challenge Leaderboard** and the **Bi-Weekly Daily Deck Leaderboard**.
 
 ## Automated 2-Week Season Packs & Cached AI Shift Notes
 
@@ -37,6 +37,6 @@ No build step required — open `index.html` in any modern browser.
 ## Tech Summary
 
 - **Architecture:** Vanilla JS app shell across the hackathon demo loop (consent-gated check-in, locked timer, scorecard, 30-card deck, top-10 leaderboard, inspection-log export, spectator board) plus code-kept post-hackathon supervisor panes (UI hidden for the hackathon) and a live `?spectator=1` breakroom board.
-- **On-Device Vision & Audio:** MediaPipe EfficientDet-Lite0 + Pose Landmarker Lite + 9-zone luminance/edge analyzer; 651 trilingual neural voice MP3s (Kokoro-82M EN, Mexican Spanish `es_MX-claude-high` ES, Piper VITS PL) + 122 BPM WebAudio synthesizer.
+- **On-Device Vision & Audio:** MediaPipe EfficientDet-Lite0 + Pose Landmarker Lite + 9-zone luminance/edge analyzer; 706 trilingual neural voice MP3s (Kokoro-82M EN, Mexican Spanish `es_MX-claude-high` ES, Piper VITS PL) + 122 BPM WebAudio synthesizer.
 - **Cloud AI & Open Weights:** Meta Model API (`muse-spark-1.3`, `sam-3.1`, `muse-voice-transcribe-1.0`) + Serverless `Muse Spark Open` primary/failover engine on **Baseten** (`meta-models/muse-spark-open`) and **Fireworks AI** (`accounts/fireworks/models/muse-spark-open`) with live token telemetry and exportable JSON audit logs.
 - **Automated Verification:** 6/6 hermetic self-test + 11/11 end-to-end persona suite + 100% mobile/desktop above-the-fold CTA compliance.
