@@ -417,7 +417,7 @@ const translations = {
     autoRefresh: "AUTO REFRESH · 15S",
 
     findingAllCleared: "Detected countable objects were cleared.",
-    findingFraming: "Before/after framing changed too much. Keep the camera fixed and rescan.",
+    findingFraming: "The camera moved too much between Before and After — keep the phone in the same spot and redo.",
     findingZones: "{improved} of 9 zones visibly improved · {residual} remaining.",
     findingZonesOne: "{improved} of 9 zones visibly improved · 1 zone needs another pass.",
     findingUntouched: "Looks untouched: {areas}. Go wipe {them}.",
@@ -427,7 +427,7 @@ const translations = {
     findingRemaining: "{objects} still detected after the challenge.",
     findingNew: "{objects} appeared in the after image.",
     findingDemo: "Demo score uses placeholder images; no camera judgment was made.",
-    findingModelFailed: "Vision model unavailable. Showing a clearly labeled demo score.",
+    findingModelFailed: "Couldn't read the surface from this angle — point the camera straight at the spot and redo.",
 
     voiceWelcome: "Welcome, challengers! Tonight, cleaning meets glory!",
     voiceInstructionsIntro: "Three steps stand between you and victory!",
@@ -843,7 +843,7 @@ const translations = {
     autoRefresh: "ACTUALIZA · 15S",
 
     findingAllCleared: "Los objetos detectables fueron retirados.",
-    findingFraming: "El encuadre antes/después cambió demasiado. Mantén la cámara fija y repite.",
+    findingFraming: "La cámara se movió demasiado entre Antes y Después — mantén el teléfono fijo y repite.",
     findingZones: "{improved} de 9 zonas mejoraron visiblemente · {residual} pendientes.",
     findingZonesOne: "{improved} de 9 zonas mejoraron visiblemente · 1 zona necesita otra pasada.",
     findingUntouched: "Sin limpiar: {areas}. Pásale un paño.",
@@ -853,7 +853,7 @@ const translations = {
     findingRemaining: "{objects} siguen detectados después del reto.",
     findingNew: "{objects} aparecieron en la imagen final.",
     findingDemo: "La puntuación demo usa imágenes de muestra; la cámara no emitió ningún juicio.",
-    findingModelFailed: "El modelo de visión no está disponible. Se muestra una puntuación demo claramente indicada.",
+    findingModelFailed: "No se pudo leer la superficie desde este ángulo — apunta la cámara directo al área y repite.",
 
     voiceWelcome: "¡Bienvenidos, campeones! ¡Hoy la limpieza busca la gloria!",
     voiceInstructionsIntro: "¡Tres pasos te separan de la victoria!",
@@ -1269,7 +1269,7 @@ const translations = {
     autoRefresh: "ODŚWIEŻANIE · 15S",
 
     findingAllCleared: "Wykryte obiekty zostały usunięte.",
-    findingFraming: "Kadr przed/po zmienił się zbyt mocno. Trzymaj kamerę nieruchomo i zeskanuj ponownie.",
+    findingFraming: "Kamera poruszyła się za bardzo między Przed i Po — trzymaj telefon nieruchomo i powtórz.",
     findingZones: "{improved} z 9 stref wyraźnie lepsze · {residual} do poprawy.",
     findingZonesOne: "{improved} z 9 stref wyraźnie lepsze · 1 strefa wymaga poprawki.",
     findingUntouched: "Nieruszone: {areas}. Wytrzyj {them}.",
@@ -1279,7 +1279,7 @@ const translations = {
     findingRemaining: "{objects} nadal wykryto po zakończeniu wyzwania.",
     findingNew: "{objects} pojawiły się na zdjęciu po sprzątaniu.",
     findingDemo: "Wynik demo korzysta z obrazów zastępczych; kamera nie dokonała oceny.",
-    findingModelFailed: "Model wizyjny jest niedostępny. Pokazujemy wyraźnie oznaczony wynik demo.",
+    findingModelFailed: "Nie udało się odczytać powierzchni pod tym kątem — skieruj kamerę prosto na miejsce i powtórz.",
 
     voiceWelcome: "Witajcie, mistrzowie! Dziś sprzątanie walczy o chwałę!",
     voiceInstructionsIntro: "Trzy kroki dzielą cię od zwycięstwa!",
@@ -7083,8 +7083,13 @@ function calculateLocalScore(
   // Unscorable with no other explanation: say WHY in plain words, not just RESCAN.
   if (!scoreDirective && !enoughEvidence) {
     const lum = Number(change.avgLuminance ?? 128);
-    const noObjects = (beforeCount || 0) === 0 && (afterObjects?.length || 0) === 0;
-    const reasonKey = noObjects ? "rescanEmpty" : lum < 50 ? "rescanDark" : lum > 210 ? "rescanBright" : "rescanGeneric";
+    const reasonKey = lum < 50
+      ? "rescanDark"
+      : lum > 210
+        ? "rescanBright"
+        : (sceneMatch < 0.42 || Number(change.changedPixelPercent || 0) >= 35)
+          ? "rescanGeneric"
+          : "rescanEmpty";
     findings.push(t(reasonKey));
     setDirective(reasonKey);
     scoreCta = t("ctaRetake");
@@ -8635,6 +8640,9 @@ function getMockAIScore() {
     scorable: false,
     confidenceBand: "rescan",
     findings: [t("findingModelFailed")],
+    scoreDirective: t("findingModelFailed"),
+    scoreDirectiveKey: "findingModelFailed",
+    scoreCta: t("ctaRetake"),
     confidence: 0,
     source: "demo",
     simulated: true,
