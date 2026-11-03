@@ -5146,6 +5146,12 @@ select:focus-visible {
   display: none !important;
 }
 
+/* Dispute feedback must stay visible: it confirms the appeal + voice note. */
+#resultsScreen #disputeStatus,
+#resultsScreen #disputeVoiceStatus {
+  display: block !important;
+}
+
 #resultsScreen #disputePanel:not(.hidden) {
   display: block !important;
 }

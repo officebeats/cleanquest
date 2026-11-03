@@ -1987,6 +1987,7 @@ function applyTranslations() {
 
   if (state.result) {
     renderResults();
+    try { announceGameVerdict(); } catch {}
   }
 
   if (SPECTATOR_MODE) {
@@ -3644,13 +3645,13 @@ function announceGameVerdict() {
   const customHypeRaw = isVerified && ai?.verified?.hypeLine ? String(ai.verified.hypeLine) : "";
   const customHype = scorableRun && spokenScore !== null && spokenScore >= passMark ? customHypeRaw : "";
   const noChg = Boolean(state.result?.ai?.noVisibleChange || state.result?.noVisibleChange);
-  const directive = !noChg ? state.result?.ai?.scoreDirective : null;
+  const directive = !noChg ? directiveText(state.result?.ai) : "";
   const hushed = Boolean(noChg || directive || !scorableRun);
   const pickedVerdict = pickHostLine(beat, state.language);
   const pickedFinish = beat.startsWith("pass") ? pickHostLine("finish", state.language) : null;
   if (badge) badge.textContent = !hushed ? tierRankLabel(beat, spokenScore) : (spokenScore !== null && scorableRun ? `${Math.round(spokenScore)}%` : t("badgeRescan"));
   const summaryCaption = !scorableRun
-    ? (state.result?.ai?.scoreDirective || t("evidenceRescan"))
+    ? (directiveText(state.result?.ai) || t("evidenceRescan"))
     : spokenScore !== null && (noChg || directive)
     ? `${Math.round(spokenScore)}% — ${noChg ? t("findingNoChange") : directive}`
     : [
@@ -6952,6 +6953,15 @@ function verifyStationEnvironment(
   return { matched: true, reason: "ok" };
 }
 
+// Directive text in the *current* language: stored as key+params so a
+// mid-results language switch re-renders instead of freezing old copy.
+function directiveText(ai) {
+  try {
+    if (ai && ai.scoreDirectiveKey) return t(ai.scoreDirectiveKey, ai.scoreDirectiveParams || {});
+    if (ai && ai.scoreDirective) return ai.scoreDirective;
+  } catch {}
+  return "";
+}
 function calculateLocalScore(
   beforeObjects,
   afterObjects,
@@ -7026,14 +7036,17 @@ function calculateLocalScore(
     ? "rescan"
     : evidenceConfidence >= 0.68 ? "high" : "medium";
 
-  let scoreDirective = null;
   let scoreCta = null;
+  let scoreDirective = null;
+  let scoreDirectiveKey = null;
+  let scoreDirectiveParams = null;
+  const setDirective = (key, params) => { scoreDirectiveKey = key; scoreDirectiveParams = params || null; scoreDirective = t(key, params || {}); };
   const findings = [];
   if (!envCheck.matched && envCheck.message) {
     findings.push(envCheck.message);
   } else if (!sceneValid) {
     findings.push(t("findingFraming"));
-    scoreDirective = t("findingFraming");
+    setDirective("findingFraming");
     scoreCta = t("ctaRetake");
   } else if (beforeCount > 0 && clearedCount === beforeCount && newCount === 0) {
     findings.push(t("findingAllCleared"));
@@ -7041,22 +7054,22 @@ function calculateLocalScore(
   if (envCheck.matched && surface) {
     if (noVisibleChange) {
       findings.push(t("findingNoChange"));
-      scoreDirective = t("findingNoChange");
+      setDirective("findingNoChange");
       scoreCta = t("ctaClean");
     } else {
       const untouched = describeUntouchedZones(surface.zones);
       const allObjectsCleared = beforeCount > 0 && clearedCount === beforeCount && newCount === 0;
-      if (untouched && !allObjectsCleared && (cleanliness == null || cleanliness < 90)) { findings.push(t("findingUntouched", untouched)); scoreDirective = t("findingUntouched", untouched); scoreCta = t("ctaWipe"); }
+      if (untouched && !allObjectsCleared && (cleanliness == null || cleanliness < 90)) { findings.push(t("findingUntouched", untouched)); setDirective("findingUntouched", untouched); scoreCta = t("ctaWipe"); }
     }
   }
-  if (envCheck.matched && remainingCount > 0) { findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) })); if (!scoreDirective) { scoreDirective = t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }); scoreCta = t("ctaClean"); } }
+  if (envCheck.matched && remainingCount > 0) { const remDesc = describeObjects(matching.matches.map((m) => m.after)); findings.push(t("findingRemaining", { objects: remDesc })); if (!scoreDirective) { setDirective("findingRemaining", { objects: remDesc }); scoreCta = t("ctaClean"); } }
   if (envCheck.matched && newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
   // Unscorable with no other explanation: say WHY in plain words, not just RESCAN.
   if (!scoreDirective && !enoughEvidence) {
     const lum = Number(change.avgLuminance ?? 128);
-    const reason = lum < 50 ? t("rescanDark") : lum > 210 ? t("rescanBright") : t("rescanGeneric");
-    findings.push(reason);
-    scoreDirective = reason;
+    const reasonKey = lum < 50 ? "rescanDark" : lum > 210 ? "rescanBright" : "rescanGeneric";
+    findings.push(t(reasonKey));
+    setDirective(reasonKey);
     scoreCta = t("ctaRetake");
   }
   if (!findings.length) {
@@ -7080,6 +7093,8 @@ function calculateLocalScore(
     noVisibleChange,
     scoreDirective,
     scoreCta,
+    scoreDirectiveKey,
+    scoreDirectiveParams,
     source: "local",
     simulated: false,
     changeMagnitude: change.changedPixelPercent,
@@ -8718,6 +8733,8 @@ async function scoreChallenge(
         if (localScore.noVisibleChange) {
           fallback.noVisibleChange = true;
           fallback.scoreDirective = t("findingNoChange");
+          fallback.scoreDirectiveKey = "findingNoChange";
+          fallback.scoreDirectiveParams = null;
           fallback.scoreCta = t("ctaClean");
           if (Number.isFinite(Number(fallback.cleanliness))) fallback.cleanliness = Math.min(Number(fallback.cleanliness), 20);
           if (Array.isArray(fallback.findings)) fallback.findings.unshift(t("findingNoChange"));
@@ -8824,7 +8841,7 @@ function renderResults() {
         ? t("evidenceDemo")
         : score.noVisibleChange
           ? t("evidenceNoChange")
-          : score.scoreDirective || (score.confidenceBand === "high"
+          : directiveText(score) || (score.confidenceBand === "high"
             ? t("evidenceHigh")
             : score.confidenceBand === "medium"
               ? t("evidenceMedium")
@@ -8844,7 +8861,7 @@ function renderResults() {
   // No findings box: only the stored directive line renders, unboxed.
   const plainEl = document.getElementById("plainFinding");
   if (plainEl) {
-    plainEl.textContent = score.scoreDirective || "";
+    plainEl.textContent = directiveText(score);
     plainEl.classList.toggle("hidden", !plainEl.textContent);
   }
   const plainCta = document.getElementById("plainCta");

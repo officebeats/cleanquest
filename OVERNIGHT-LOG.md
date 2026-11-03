@@ -610,3 +610,12 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Pose fully hidden (gate disabled, panel auto-hidden); dispute form + voice note wired and verified end-to-end (appeal stored with note).
 - QA: consistency probe green on deck + results + timer; mobile 390px AFTER tile fully above fold (263–607px).
 - Blockers: none.
+
+## 2026-11-03 — Independent QA verdict applied (B1–B5 + polish) — DONE
+- B1 deck reset race: silent season sync never clobbers an in-progress deck (defers to next open); explicit AI-bonus taps force-apply.
+- B2 praise pairing: new `hushed` gate — directive/no-change/unscorable runs get a plain score badge (RESCAN when unscorable), no confetti, no praise voice/sfx; verdict beat follows the displayed score, not cloud overall.
+- B3 local chips hidden when flagged; B4 leaderboard always shows the SVG logo mark (never raw text); B5 submit waits for in-progress voice recording before creating the appeal.
+- P1–P6: full deck stillness list; neural selftest check; 10-card copy/pips everywhere; ES/PL run-again phrasing + localized tier names + even-coverage; directive stored as key+params so mid-results language switches re-render cleanly; dispute status lines unhidden; inline SVG favicon (kills 404).
+- QA: tools/cq-mobile-qa.mjs (390×844 DPR3 touch + overflow + consistency + selftest + personas + console traps) green; tools/qa-consistency.js hardened with pairing/CTA/sponsor-deck-bound/uninterpolated-token checks.
+- Evidence: syntax clean; mobile runner 38s, all personas PASS, probe 0 failures.
+- Blockers: none.
