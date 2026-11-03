@@ -6511,10 +6511,10 @@ function describeUntouchedZones(zones) {
   // Texture can't separate dirt from clean pattern (e.g. grout lines), so the
   // hook site also gates on: not all-objects-cleared and score < 90. The copy
   // stays hedged ("Looks") — a directional nudge, never a dirt conviction.
-  if (untouched.length >= zones.length) return { areas: words.all, them: lang === "en" ? words.themOne : words.themMany };
+  const cells = untouched.map((z) => [z.row, z.col]);
   const names = untouched.slice(0, 5).map((z) => `${words.rows[z.row] ?? ""} ${words.cols[z.col] ?? ""}`.trim());
   if (untouched.length > 5) names.push(lang === "es" ? `y ${untouched.length - 5} más` : lang === "pl" ? `i ${untouched.length - 5} więcej` : `and ${untouched.length - 5} more`);
-  return { areas: names.join(", "), them: untouched.length === 1 ? words.themOne : words.themMany };
+  return { areas: names.join(", "), them: untouched.length === 1 ? words.themOne : words.themMany, zoneList: cells };
 }
 
 const SPOT_LOGIC_PROFILES = {
@@ -6955,8 +6955,21 @@ function verifyStationEnvironment(
 
 // Directive text in the *current* language: stored as key+params so a
 // mid-results language switch re-renders instead of freezing old copy.
+function localizeUntouchedZones(zoneList) {
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+  const words = UNTOUCHED_ZONE_WORDS[lang];
+  const cells = Array.isArray(zoneList) ? zoneList : [];
+  if (!cells.length) return { areas: words.all, them: lang === "en" ? words.themOne : words.themMany };
+  const names = cells.slice(0, 5).map(([r, c]) => `${words.rows[r] ?? ""} ${words.cols[c] ?? ""}`.trim());
+  if (cells.length > 5) names.push(lang === "es" ? `y ${cells.length - 5} más` : lang === "pl" ? `i ${cells.length - 5} więcej` : `and ${cells.length - 5} more`);
+  return { areas: names.join(", "), them: cells.length === 1 ? words.themOne : words.themMany };
+}
 function directiveText(ai) {
   try {
+    if (ai && ai.scoreDirectiveKey === "findingUntouched" && ai.scoreDirectiveParams && Array.isArray(ai.scoreDirectiveParams.zoneList)) {
+      const loc = localizeUntouchedZones(ai.scoreDirectiveParams.zoneList);
+      return t("findingUntouched", loc);
+    }
     if (ai && ai.scoreDirectiveKey) return t(ai.scoreDirectiveKey, ai.scoreDirectiveParams || {});
     if (ai && ai.scoreDirective) return ai.scoreDirective;
   } catch {}
@@ -11296,6 +11309,10 @@ function renderLeaderboard() {
   if (els.playAgainButton) {
     els.playAgainButton.textContent = state.leaderboardMode === "deck" ? t("playDailyDeck") : t("playAgain");
   }
+  // Logo-mark only from the first paint in ANY mode: never show raw placeholder text.
+  document.getElementById("lbSponsorTag")?.classList.add("hidden");
+  const lbCopyEl = document.getElementById("lbSponsorCopy");
+  if (lbCopyEl && !lbCopyEl.querySelector(".sponsor-logo-svg")) lbCopyEl.innerHTML = buildSponsorLogoSvg();
   if (state.leaderboardMode === "deck") {
     document.getElementById("leaderboardSizeBar")?.classList.add("hidden");
     renderDeckLeaderboardView();
@@ -11310,10 +11327,7 @@ function renderLeaderboard() {
   }
   const rawBoard = loadLeaderboard();
   renderLeaderboardSizeBar();
-  // Logo-mark only from the first paint: never show the raw placeholder text.
-  document.getElementById("lbSponsorTag")?.classList.add("hidden");
-  const lbCopy = document.getElementById("lbSponsorCopy");
-  if (lbCopy && !lbCopy.querySelector(".sponsor-logo-svg")) lbCopy.innerHTML = buildSponsorLogoSvg();
+ 
   const sizeF = leaderboardSizeFilter();
   const sizedBoard = sizeF === "all" ? rawBoard : rawBoard.filter((e) => e && e.siteSize === sizeF);
   let savedViewerRunId = state.latestRunId;
@@ -12144,8 +12158,10 @@ async function submitDisputeAppeal() {
     // before submitting so the voice note is never silently dropped.
     if (state.disputeRecorder && state.disputeRecorder.state !== "inactive") {
       try { state.disputeRecorder.stop(); } catch {}
+    }
+    if (state.disputeVoiceBusy || state.disputeRecorder) {
       const t0 = Date.now();
-      while (state.disputeRecorder && Date.now() - t0 < 8000) {
+      while ((state.disputeVoiceBusy || state.disputeRecorder) && Date.now() - t0 < 8000) {
         await new Promise((r) => setTimeout(r, 120));
       }
     }
@@ -12187,6 +12203,7 @@ async function startDisputeVoice() {
       void finishDisputeVoice();
     };
     state.disputeRecorder = recorder;
+    state.disputeVoiceBusy = true;
     recorder.start();
     els.disputeVoiceRecord?.classList.add("hidden");
     els.disputeVoiceStop?.classList.remove("hidden");
@@ -12234,6 +12251,7 @@ async function finishDisputeVoice() {
     }
   } finally {
     state.disputeRecorder = null;
+    state.disputeVoiceBusy = false;
     state.disputeRecordChunks = [];
   }
 }
