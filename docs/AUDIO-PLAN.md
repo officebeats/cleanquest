@@ -242,3 +242,9 @@ PL: num 00–20 (00 zero … 20 dwadzieścia), tens 30–90 as words; 21–99 co
 ## v2.4 Coverage table (beats x variants x languages + total NEW v2 clips)
 
 16 new beats x 12 lines x 3 langs = 576 new clips. Legacy 360 (5x24x3, trims applied) + new hype 252 (7x12x3 from v1) + v2 new 576 + numbers (EN 30+4+4 time, ES 39+7+4 time, PL 32+5+8 time incl. jedna/dwie + time nouns) ≈ 1,316 files under assets/audio/<lang>/<beat>-<nn>.mp3. Record priority: verdict moments (pass tiers, retry tiers, hurry-final), then numbers/time glue, then streak/board/inspect/record/edge, then attract/hello/welcome/countdown/early/late/demo/crowd. Manifest keeps the available|mock scheme; TTS fallback voice stays for unrecorded IDs. Judge sign-off: all ES/PL lines reviewed for naturalness, gender lock, and declension; corrections applied above; v2 scripts approved for recording.
+
+## Billy swap spec (hackathon voice-line swap, no passport/crew/supervisor lines)
+
+- Slots: `acceptChallenge` ("Accept the Challenge") maps to `welcome-intro.mp3` and `dailyDeck` ("Daily Deck") maps to `deck-intro.mp3`, under `assets/audio/{en,es,pl}/` per language.
+- Swap = drop 6 MP3s (mono, 44.1kHz) into `assets/audio/en/`, `assets/audio/es/`, `assets/audio/pl/` (`welcome-intro.mp3` + `deck-intro.mp3` each) + bump `FEATURE_MUSIC.version` in `app.js` so cached clients fetch the new lines.
+- Voice-line ban: no recorded or scripted voice line may reference passport, crew, or supervisor features. Billy lines stay inside the hackathon demo loop (welcome, deck intro) only.

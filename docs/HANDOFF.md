@@ -18,13 +18,13 @@ https://officebeats.github.io/cleanquest/ or open `index.html` in a mobile brows
 ## Screens (15 MVP: 10 cleaner + 5 admin) — feature map
 | Screen | What it does |
 |---|---|
-| welcome | Entry; FTUE steps 1 Language (persisted) / 2 PIN / 3 Consent (gates first run, read-aloud) / 4 Home hub (passport, crew matchup, streak, sponsor card, 13-week meter) |
+| welcome | Entry; FTUE steps 1 Language (persisted) / 2 PIN / 3 Consent (gates first run, read-aloud) / 4 Home hub (streak, sponsor card, 13-week meter, inspection-log shortcut) |
 | instructions | How a round works; consent-gated camera entry; demo-mode entry when camera denied |
 | camera | Check-in bar (league/area/system-assigned SPOT + QR scan), frame guide, before-photo |
 | timer | Spot bar + QR, 4-mode Before-shadow ghost, 3x3 live zone grid + idle nudge, dwell cue, host callouts at 75/60/45/30/20/10s, big Finish |
 | results | Weighted TOTAL hero (50/25/25), 3 bars + details, honest surface map, uncropped evidence + full-screen lightbox, 1-tap read-only Dispute, voice note, pose |
-| leaderboard | Top-10 + own (weighted sort; practice runs excluded), crew matchup/MVP, personal record |
-| records | Inspection log + supervisor panes 11–15 (pledge-gated tools, sites+QR stickers, bulk invite, training gaps + 1-tap `✨ AI SHIFT BRIEFING`, assign packs) |
+| leaderboard | Top-10 + own (weighted sort; practice runs excluded), personal record |
+| records | Inspection-log screen only for the hackathon (geofenced log + CSV/JSON export). Supervisor panes 11–15 (pledge-gated tools, sites+QR stickers, bulk invite, training gaps + cached AI shift note, assign packs) are code-kept, UI hidden for the hackathon — not demoed, not judged |
 | settings | API keys, provider toggle (Meta Model API / Partner Cloud `Muse Spark Open` with Baseten Primary → Fireworks Failover default + Dual Benchmark option), 1-tap `⚡ TEST & LOG TELEMETRY`, cumulative token counter, hype levels |
 | deck | Daily swipe deck: 30 static trilingual cards (`deck.js`) + automated 14-day Bi-Weekly AI Season Pack rotation (3 station cards + localized Season Theme cached across server & `localStorage`), pointer-drag + stamps + keys, missed-card repeat, 5/day |
 | spectator | `?spectator=1` distance board (weighted display, 15s refresh) |
@@ -45,7 +45,7 @@ Providers: on-device vision always runs. Cloud verification works out-of-the-box
   (CQ-QR-<LEAGUE>-<AREA>[-<SPOTSLUG>], decodable V2-L encoder
   `encodeQrVersion2L`), `ensureActiveCrew`+`recordCrewRun` in
   `saveCompletedRun` (first-save only; manual spot = `spotOverride` →
-  `prizeEligible:false`, no crew/public credit), `computeWeightedRunScore`
+  `prizeEligible:false`, no public credit; crew-credit calls are code-kept, UI hidden for the hackathon), `computeWeightedRunScore`
   hero/boards/personal-best, hermetic `runPersonaSuite` (full storage+state
   snapshot/restore), `localizedDeckField`/`localizedRuleSummary`.
 - `deck.js` — 30 static trilingual training cards (no `window.SWIPE_DECK`; lexical const).
@@ -58,8 +58,7 @@ Providers: on-device vision always runs. Cloud verification works out-of-the-box
 - VM audio harness: `node /tmp/cq-vm-verify.mjs` (all-true).
 - Self-test + personas (headless): `node /tmp/cq-cdp-verify.mjs` — must be
   6/6 PASS and 0 persona fails (12 personas incl. `consent-first-timer`
-  gated, `crew-member`, `supervisor-and-pin`). Suite is hermetic: it must
-  leave consent/storage exactly as found.
+  gated and code-kept `crew-member` / `supervisor-and-pin` pane flows, UI hidden for the hackathon). Suite is hermetic: it must
 - Banned-token grep over `app.js deck.js index.html styles.css` (brands,
   currency, certification/sanitized claims) must be zero.
 - Phone-first: primary CTA of every screen visible without scroll at 360x740

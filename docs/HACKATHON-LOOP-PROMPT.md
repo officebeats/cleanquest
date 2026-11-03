@@ -46,6 +46,8 @@ No commit is pushed until Wonder has graded the screenshots PASS.
 4. Delegate read-only scouts only (grep/read/probe); Wonder synthesizes, never lets scouts edit.
 5. Emit the bounded implementation contract (§★1). If any of 1–4 is missing, STOP — do not implement.
 
+> **Hackathon scope note:** Passport/crew/supervisor panes are code-kept and hidden for the hackathon. Do not build against them, do not demo them, and do not present them as judged capabilities. Judged loop only: inspection log (records screen), top-10 leaderboard, 30-card swipe deck, sponsors.
+
 ### 1b. Post-build Wonder Skeptical Review (mandatory, after gates + screenshots)
 Compare source intent vs. live Orca behavior/pixels. Reject self-praise. Output exactly one verdict:
 - FIX (name the failing gate/rubric line + minimal repair, max 2 attempts), or
@@ -69,9 +71,9 @@ Compare source intent vs. live Orca behavior/pixels. Reject self-praise. Output 
 2. Read `local://mvp-gap-matrix.md` P0→P2 queue. Priority order (already ranked):
    - **P0-1** Start `ReferenceError` + default-off voice violation.
    - **P0-2** Hidden Screens 1–4 + silent consent bypass.
-   - **P0-3** Run→crew pipeline + weighted-score headline.
-   - **P1-1…P1-4** Multi-zone grade map, ghost timing + offline queue, trilingual deck + crew bonus, verdict number speech.
-   - **P2-1…P2-2** Admin 11–15 workflow + full trilingual `data-i18n`.
+   - **P0-3** Weighted-score headline (run→crew pipeline parked: code-kept, UI hidden for the hackathon).
+   - **P1-1…P1-4** Multi-zone grade map, ghost timing + offline queue, trilingual deck, verdict number speech (crew-bonus slice parked: code-kept, UI hidden for the hackathon).
+   - **P2-1…P2-2** Admin 11–15 workflow parked (code-kept, UI hidden for the hackathon — not built against, not judged) + full trilingual `data-i18n`.
 3. Output: `LOOP N · slice · why-now · acceptance IDs`.
 
 ### ★1. Scope contract (Wonder)

@@ -296,6 +296,9 @@ const translations = {
     cameraLive: "CAMERA LIVE",
     cameraUnavailable: "CAMERA UNAVAILABLE",
     retryCamera: "RETRY CAMERA",
+    cameraExplainTitle: "HOW THE CHALLENGE WORKS",
+    cameraExplainBody: "Snap a BEFORE photo, tap Start and clean against the clock, then snap AFTER. The game compares the two photos and scores visible cleanliness. The camera is how the game sees your work.",
+    cameraExplainAllow: "📷 ALLOW CAMERA & START",
     continueWithoutCamera: "CONTINUE WITHOUT CAMERA",
     demoMode: "DEMO MODE",
     demoCameraPlaceholder: "CAMERA PLACEHOLDER",
@@ -477,7 +480,7 @@ const translations = {
     surfaceUnverified: "unverified",
     consentTitle: "BEFORE YOUR FIRST RUN",
     consentReadAloud: "🔊 READ ALOUD",
-    consentBody: "CleanQuest captures before and after photos of the work surface. Faces are never identified (no facial recognition or biometrics). An optional victory-pose photo is processed on this device only. Location is recorded only if you share it. When cloud verification is enabled in Settings (via Muse Spark Open on Baseten and Fireworks AI or your own key), work-surface photos and voice notes may be sent for scorecard verification or transcription; otherwise everything is stored in this browser only. Scores and records are for training and recognition — never for discipline.",
+    consentBody: "CleanQuest captures before and after photos of the work surface. Faces are never identified (no facial recognition or biometrics). An optional victory-pose photo is processed on this device only. Location is recorded only if you share it. When cloud verification is enabled in Settings (via Muse Spark Open on Baseten and Fireworks AI on our secure servers), work-surface photos and voice notes may be sent for scorecard verification or transcription; otherwise everything is stored in this browser only. Scores and records are for training and recognition — never for discipline.",
     consentAgreeLabel: "I understand and agree",
     consentConfirm: "CONFIRM",
     consentSavedNote: "✓ Consent recorded in this browser.",
@@ -647,6 +650,10 @@ const translations = {
     areaFitness: "🏋️ Locker & Fitness Floor",
     areaRetailfloor: "🛒 Sales Floor & Checkout",
     lbTabShift: "⚡ SHIFT CHALLENGE",
+    sizeMine: "My size",
+    sizeAll: "All sizes",
+    siteSizeLabel: "📐 SITE SIZE (optional)",
+    siteSizeHint: "e.g. dentist office = Under 5k · skip if unsure — you'll rank on All sizes.",
     lbTabDeck: "🃏 DAILY DECK",
     lbOpenDeckAction: "🃏 DAILY DECK",
     playDailyDeck: "🃏 PLAY DAILY DECK",
@@ -684,6 +691,9 @@ const translations = {
     cameraLive: "CÁMARA ACTIVA",
     cameraUnavailable: "CÁMARA NO DISPONIBLE",
     retryCamera: "REINTENTAR CÁMARA",
+    cameraExplainTitle: "CÓMO FUNCIONA EL RETO",
+    cameraExplainBody: "Toma una foto de ANTES, toca Iniciar y limpia contra el reloj, luego toma la de DESPUÉS. El juego compara las dos fotos y califica la limpieza visible. La cámara es como el juego ve tu trabajo.",
+    cameraExplainAllow: "📷 PERMITIR CÁMARA Y EMPEZAR",
     continueWithoutCamera: "CONTINUAR SIN CÁMARA",
     demoMode: "MODO DEMO",
     demoCameraPlaceholder: "IMAGEN DE DEMOSTRACIÓN",
@@ -865,7 +875,7 @@ const translations = {
     surfaceUnverified: "sin verificar",
     consentTitle: "ANTES DE TU PRIMERA RONDA",
     consentReadAloud: "🔊 ESCUCHAR",
-    consentBody: "CleanQuest toma fotos del antes y después de la superficie de trabajo. Los rostros nunca se identifican (sin reconocimiento facial ni biometría). Una foto opcional de pose de victoria se procesa solo en este dispositivo. La ubicación se registra solo si la compartes. Cuando la verificación en la nube está activada en Ajustes (mediante Muse Spark Open en Baseten y Fireworks AI o tu propia clave), las fotos de la superficie y notas de voz pueden enviarse para verificación o transcripción; si no, todo se guarda solo en este navegador. Las puntuaciones y registros son para formación y reconocimiento — nunca para disciplina.",
+    consentBody: "CleanQuest toma fotos del antes y después de la superficie de trabajo. Los rostros nunca se identifican (sin reconocimiento facial ni biometría). Una foto opcional de pose de victoria se procesa solo en este dispositivo. La ubicación se registra solo si la compartes. Cuando la verificación en la nube está activada en Ajustes (mediante Muse Spark Open en Baseten y Fireworks AI en nuestros servidores seguros), las fotos de la superficie y notas de voz pueden enviarse para verificación o transcripción; si no, todo se guarda solo en este navegador. Las puntuaciones y registros son para formación y reconocimiento — nunca para disciplina.",
     consentAgreeLabel: "Entiendo y acepto",
     consentConfirm: "CONFIRMAR",
     consentSavedNote: "✓ Consentimiento guardado en este navegador.",
@@ -1035,6 +1045,10 @@ const translations = {
     areaFitness: "🏋️ Vestidores y Área de Entrenamiento",
     areaRetailfloor: "🛒 Piso de Venta y Cajas",
     lbTabShift: "⚡ RETO DE TURNO",
+    sizeMine: "Mi tamaño",
+    sizeAll: "Todos",
+    siteSizeLabel: "📐 TAMAÑO DEL SITIO (opcional)",
+    siteSizeHint: "p. ej. consultorio = Under 5k · si no estás seguro, omítelo — competirás en Todos.",
     lbTabDeck: "🃏 MAZO DIARIO",
     lbOpenDeckAction: "🃏 MAZO DIARIO",
     playDailyDeck: "🃏 JUGAR MAZO DIARIO",
@@ -1072,6 +1086,9 @@ const translations = {
     cameraLive: "KAMERA AKTYWNA",
     cameraUnavailable: "KAMERA NIEDOSTĘPNA",
     retryCamera: "SPRÓBUJ PONOWNIE",
+    cameraExplainTitle: "JAK DZIAŁA WYZWANIE",
+    cameraExplainBody: "Zrób zdjęcie PRZED, dotknij Start i sprzątaj na czas, potem zrób zdjęcie PO. Gra porównuje oba zdjęcia i ocenia widoczną czystość. Kamera to oczy gry — tak widzi Twoją pracę.",
+    cameraExplainAllow: "📷 ZEZWÓL NA KAMERĘ I START",
     continueWithoutCamera: "GRAJ BEZ KAMERY",
     demoMode: "TRYB DEMO",
     demoCameraPlaceholder: "OBRAZ ZASTĘPCZY",
@@ -1253,7 +1270,7 @@ const translations = {
     surfaceUnverified: "niezweryfikowana",
     consentTitle: "PRZED PIERWSZYM BIEGIEM",
     consentReadAloud: "🔊 CZYTAJ NA GŁOS",
-    consentBody: "CleanQuest robi zdjęcia przed i po powierzchni roboczej. Twarze nigdy nie są identyfikowane (brak rozpoznawania twarzy i biometrii). Opcjonalne zdjęcie pozy zwycięstwa jest przetwarzane tylko na tym urządzeniu. Lokalizacja jest zapisywana tylko, jeśli ją udostępnisz. Gdy weryfikacja w chmurze jest włączona w Ustawieniach (przez Muse Spark Open w Baseten i Fireworks AI lub własny klucz), zdjęcia powierzchni i notatki głosowe mogą zostać wysłane w celu weryfikacji lub transkrypcji; w przeciwnym razie wszystko jest zapisane tylko w tej przeglądarce. Wyniki i wpisy służą szkoleniu i uznaniu — nigdy dyscyplinie.",
+    consentBody: "CleanQuest robi zdjęcia przed i po powierzchni roboczej. Twarze nigdy nie są identyfikowane (brak rozpoznawania twarzy i biometrii). Opcjonalne zdjęcie pozy zwycięstwa jest przetwarzane tylko na tym urządzeniu. Lokalizacja jest zapisywana tylko, jeśli ją udostępnisz. Gdy weryfikacja w chmurze jest włączona w Ustawieniach (przez Muse Spark Open w Baseten i Fireworks AI na naszych bezpiecznych serwerach), zdjęcia powierzchni i notatki głosowe mogą zostać wysłane w celu weryfikacji lub transkrypcji; w przeciwnym razie wszystko jest zapisane tylko w tej przeglądarce. Wyniki i wpisy służą szkoleniu i uznaniu — nigdy dyscyplinie.",
     consentAgreeLabel: "Rozumiem i zgadzam się",
     consentConfirm: "POTWIERDŹ",
     consentSavedNote: "✓ Zgoda zapisana w tej przeglądarce.",
@@ -1423,6 +1440,10 @@ const translations = {
     areaFitness: "🏋️ Szatnia i Strefa Treningowa",
     areaRetailfloor: "🛒 Sala Sprzedaży i Strefa Kas",
     lbTabShift: "⚡ WYZWANIE ZMIANY",
+    sizeMine: "Mój rozmiar",
+    sizeAll: "Wszystkie",
+    siteSizeLabel: "📐 ROZMIAR OBIEKTU (opcjonalnie)",
+    siteSizeHint: "np. gabinet = Under 5k · jeśli nie wiesz, pomiń — zagrasz we Wszystkie.",
     lbTabDeck: "🃏 TALIA DNIA",
     lbOpenDeckAction: "🃏 TALIA DNIA",
     playDailyDeck: "🃏 ZAGRAJ W TALIĘ DNIA",
@@ -1526,6 +1547,7 @@ const state = {
     areaKey: "breakroom",
     assignedSpot: "Sink & counter",
     site: null,
+    siteSize: null,
     ghostEnabled: true,
     dwellCreditSeconds: 0,
     aligningAfter: false
@@ -2930,10 +2952,12 @@ function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null)
       played.then(() => {
         state.voice.pendingAutoplayIntro = false;
         state.voice.pendingAutoplayAudio = null;
+        try { updateMuteButton(); } catch {}
       }).catch((err) => {
         if (err && (err.name === "NotAllowedError" || audio.paused)) {
           cleanup();
           state.voice.pendingAutoplayIntro = true;
+          try { updateMuteButton(); } catch {}
           return;
         }
         cleanup();
@@ -3057,11 +3081,32 @@ function speakHost(beat, overrideText) {
   deliverHostLine();
 }
 
+/* Billy music swap slots: drop replacements at these exact paths (MP3, mono,
+ * 44.1kHz), then bump version below to bust cache. No code changes needed.
+ * Spec lives in docs/AUDIO-PLAN.md ("Billy swap"). */
+const FEATURE_MUSIC = {
+  version: "20261031-29",
+  acceptChallenge: {
+    en: "assets/audio/en/welcome-intro.mp3",
+    es: "assets/audio/es/welcome-intro.mp3",
+    pl: "assets/audio/pl/welcome-intro.mp3"
+  },
+  dailyDeck: {
+    en: "assets/audio/en/deck-intro.mp3",
+    es: "assets/audio/es/deck-intro.mp3",
+    pl: "assets/audio/pl/deck-intro.mp3"
+  }
+};
+function featureMusicUrl(slot, lang) {
+  const paths = FEATURE_MUSIC[slot] || FEATURE_MUSIC.acceptChallenge;
+  const file = paths[lang] || paths.en;
+  return `${file}?v=${FEATURE_MUSIC.version}`;
+}
 function speakWelcomeIntro(language = state.language) {
   if (state.voice.muted || SELFTEST_MODE) return null;
   stopSpeech();
   const lang = HOST_LINES[language] ? language : "en";
-  const url = `assets/audio/${lang}/welcome-intro.mp3?v=20261031-29`;
+  const url = featureMusicUrl("acceptChallenge", lang);
   const fallback = t("welcomeBody");
   state.voice.lastPath = "clip";
   return playHostClip(url, fallback, { rate: 1.0, pitch: 1.0 }, "welcome-intro");
@@ -3071,7 +3116,7 @@ function speakDeckIntro(language = state.language) {
   if (state.voice.muted || SELFTEST_MODE) return null;
   stopSpeech();
   const lang = HOST_LINES[language] ? language : "en";
-  const url = `assets/audio/${lang}/deck-intro.mp3?v=20261031-29`;
+  const url = featureMusicUrl("dailyDeck", lang);
   const fallback = t("deckSubtitle");
   state.voice.lastPath = "clip";
   return playHostClip(url, fallback, { rate: 1.0, pitch: 1.0 }, "deck-intro");
@@ -3239,8 +3284,9 @@ function speakScoreNumber(value, unit = "percent", onComplete = null) {
     })();
     return urls;
   }
-  speakText(`${Math.round(Number(value) || 0)}%`);
-  if (typeof onComplete === "function") setTimeout(onComplete, 700);
+  // Same-narrator guarantee: never TTS the score. The visual count-up
+  // already shows it; only recorded number clips may speak it.
+  if (typeof onComplete === "function") setTimeout(onComplete, 400);
   return [];
 }
 
@@ -3554,15 +3600,14 @@ function announceGameVerdict() {
 
   if (SELFTEST_MODE) {
     playVerdictSfx(beat);
-    if (customHype) speakHost(beat, customHype);
-    else speakHost(beat);
+    speakHost(beat);
     return;
   }
 
   // Choreographed Results Sequence:
   // 1. Score Count-Up Roll (0% -> spokenScore% over 550ms with rising Dorian pluck ticks)
   // 2. 5-Tier Musical Stinger (playVerdictSfx)
-  // 3. Gapless Chained Voice Summary: [Spoken Score %] -> [Tier Reaction Clip] -> [Finish Celebration Clip]
+  // 3. Gapless Chained Voice Summary (recorded narrator clips only, never TTS): [Score % if number clips exist] -> [Tier Reaction Clip] -> [Finish Celebration Clip]. Dynamic hype text shows in the transcript line only.
   const scheduledGen = state.voice.speakGeneration || 0;
   pill?.classList.add("is-playing");
   if (!SELFTEST_MODE) {
@@ -3607,11 +3652,6 @@ function announceGameVerdict() {
       const playVerdictAndFinish = () => {
         if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGen) {
           pill?.classList.remove("is-playing");
-          return;
-        }
-        if (customHype) {
-          speakHost(beat, customHype);
-          setTimeout(() => pill?.classList.remove("is-playing"), 2200);
           return;
         }
         const base = HOST_PROSODY[beat] || HOST_PROSODY.start;
@@ -4245,7 +4285,9 @@ function updateMuteButton() {
     ? "🔇 OFF"
     : state.voice.hypeLevel === "chill"
       ? "🎧 CHILL"
-      : "🔊 FULL";
+      : state.voice.pendingAutoplayIntro
+        ? "🔊 TAP FOR SOUND"
+        : "🔊 FULL";
 }
 
 function navigateTo(screen) {
@@ -4940,6 +4982,17 @@ function updateCameraUI() {
 
   updateTrackDebug();
   renderCheckinSites();
+  renderSiteSizeChips();
+}
+
+function showCameraExplainer() {
+  const modal = document.getElementById("cameraExplainModal");
+  if (modal) modal.classList.remove("hidden");
+  try { speakText(t("cameraExplainBody"), {}); } catch {}
+}
+
+function hideCameraExplainer() {
+  document.getElementById("cameraExplainModal")?.classList.add("hidden");
 }
 
 async function retryCamera() {
@@ -10367,6 +10420,7 @@ function saveCompletedRun() {
     // visible locally, never prize/crew credit.
     prizeEligible: !state.checkin?.spotOverride && !isDemoRun && siteOk,
     qrCode: state.checkin?.qrCode || null,
+    siteSize: state.checkin?.siteSize || null,
     timeMs: state.timer.elapsedMs,
     styleScore:
       state.latestScore.styleScore ?? 7.5,
@@ -10476,6 +10530,78 @@ function sortLeaderboard(entries) {
       Number(a.styleScore || 0)
     );
   });
+}
+
+// Site size bands (MECE, cleaner-answerable; cleanable sq ft per visit).
+// Picker labels are numeric-universal; examples live in siteSizeHint copy.
+const SITE_SIZE_BANDS = [
+  { id: "s1", label: "Under 5k" },
+  { id: "s2", label: "5–25k" },
+  { id: "s3", label: "25–50k" },
+  { id: "s4", label: "50–100k" },
+  { id: "s5", label: "100k+" }
+];
+function siteSizeLabel(id) {
+  const band = SITE_SIZE_BANDS.find((b) => b.id === id);
+  return band ? `${band.label} sq ft` : "";
+}
+function selectSiteSize(id) {
+  if (!state.checkin) return;
+  state.checkin.siteSize = state.checkin.siteSize === id ? null : id;
+  renderSiteSizeChips();
+}
+function renderSiteSizeChips() {
+  const host = document.getElementById("siteSizeChips");
+  if (!host) return;
+  host.innerHTML = "";
+  SITE_SIZE_BANDS.forEach((b) => {
+    const active = state.checkin?.siteSize === b.id;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mvp-tab-chip" + (active ? " active" : "");
+    btn.setAttribute("aria-pressed", String(active));
+    btn.textContent = b.label;
+    btn.addEventListener("click", () => selectSiteSize(b.id));
+    host.appendChild(btn);
+  });
+}
+function latestViewerSize() {
+  try {
+    const entries = loadLeaderboard();
+    const id = state.latestRunId || localStorage.getItem("cleanquest.viewerRunId");
+    const own = (entries || []).find((e) => e && (e.id === id || e.runId === id));
+    return (own && own.siteSize) || null;
+  } catch { return null; }
+}
+function leaderboardSizeFilter() {
+  const f = state.leaderboardSize || "all";
+  if (f === "mine") {
+    return state.checkin?.siteSize || latestViewerSize() || "all";
+  }
+  return f;
+}
+function setLeaderboardSize(f) {
+  state.leaderboardSize = f;
+  renderLeaderboardSizeBar();
+  renderLeaderboard();
+}
+function renderLeaderboardSizeBar() {
+  const host = document.getElementById("leaderboardSizeBar");
+  if (!host) return;
+  host.innerHTML = "";
+  const f = leaderboardSizeFilter();
+  const mk = (id, label) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "mvp-tab-chip" + (f === id ? " active" : "");
+    btn.setAttribute("aria-selected", String(f === id));
+    btn.textContent = label;
+    btn.addEventListener("click", () => setLeaderboardSize(id));
+    host.appendChild(btn);
+  };
+  mk("mine", t("sizeMine"));
+  mk("all", t("sizeAll"));
+  SITE_SIZE_BANDS.forEach((b) => mk(b.id, b.label));
 }
 
 function visibleLeaderboard(entries, viewerRunId = state.latestRunId) {
@@ -10773,9 +10899,11 @@ function renderLeaderboard() {
     els.playAgainButton.textContent = state.leaderboardMode === "deck" ? t("playDailyDeck") : t("playAgain");
   }
   if (state.leaderboardMode === "deck") {
+    document.getElementById("leaderboardSizeBar")?.classList.add("hidden");
     renderDeckLeaderboardView();
     return;
   }
+  document.getElementById("leaderboardSizeBar")?.classList.remove("hidden");
   const headerSpans = document.querySelectorAll("#leaderboardScreen .leaderboard-header span");
   if (headerSpans.length >= 5) {
     headerSpans[2].textContent = t("quality");
@@ -10783,13 +10911,16 @@ function renderLeaderboard() {
     headerSpans[4].textContent = t("style");
   }
   const rawBoard = loadLeaderboard();
+  renderLeaderboardSizeBar();
+  const sizeF = leaderboardSizeFilter();
+  const sizedBoard = sizeF === "all" ? rawBoard : rawBoard.filter((e) => e && e.siteSize === sizeF);
   let savedViewerRunId = state.latestRunId;
   if (!savedViewerRunId) {
     try {
       savedViewerRunId = localStorage.getItem("cleanquest.viewerRunId") || null;
     } catch {}
   }
-  const visible = visibleLeaderboard(rawBoard, savedViewerRunId);
+  const visible = visibleLeaderboard(sizedBoard, savedViewerRunId);
 
   els.leaderboardList.innerHTML = "";
   renderCrewAndConsistencyUI();
@@ -13483,7 +13614,7 @@ async function runPersonaSuite() {
       && state.latestScore
       && els.offlineScoreNote
       && !els.offlineScoreNote.classList.contains("hidden");
-    const foldOk = (navigateTo("camera"), ctasInViewport(["#cameraContinue", "#continueWithoutCamera"]))
+    const foldOk = (navigateTo("camera"), ctasInViewport(["#cameraContinue"]))
       && (navigateTo("timer"), ctasInViewport(["#startPauseButton", "#completeButton"]));
     navigateTo("results");
     push(
@@ -14340,6 +14471,10 @@ function bindEvents() {
       setInstructionsSeen(true);
       navigateTo("camera");
 
+      if (!state.demoMode && !state.camera.ready) {
+        showCameraExplainer();
+        return;
+      }
       if (!state.demoMode) {
         await ensureCameraReady();
       }
@@ -14390,6 +14525,13 @@ function bindEvents() {
     "click",
     retryCamera
   );
+  const cameraExplainAllow = document.getElementById("cameraExplainAllow");
+  if (cameraExplainAllow) {
+    cameraExplainAllow.addEventListener("click", async () => {
+      hideCameraExplainer();
+      await ensureCameraReady();
+    });
+  }
 
   els.timerRetryCamera.addEventListener(
     "click",

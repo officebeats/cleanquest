@@ -378,6 +378,11 @@
             </button>
           </div>
           <span id="assignedSpotBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
+          <div class="checkin-size-row">
+            <span class="checkin-area-label" data-i18n="siteSizeLabel">📐 SITE SIZE (optional)</span>
+            <div id="siteSizeChips" class="size-chip-row" role="group" aria-label="Site size"></div>
+            <small class="settings-keys-explain" data-i18n="siteSizeHint">e.g. dentist office = Under 5k · skip if unsure — you'll rank on All sizes.</small>
+          </div>
         </div>
 
         <div class="camera-frame">
@@ -400,6 +405,25 @@
               <span></span>
             </div>
             <strong data-i18n="startingCamera">STARTING CAMERA</strong>
+          </div>
+
+          <div id="cameraExplainModal" class="camera-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="cameraExplainTitle">
+            <div class="consent-gate hologram-card">
+              <div class="consent-gate-head">
+                <strong id="cameraExplainTitle" data-i18n="cameraExplainTitle">HOW THE CHALLENGE WORKS</strong>
+              </div>
+              <p id="cameraExplainBody" class="consent-copy" data-i18n="cameraExplainBody">
+                Snap a BEFORE photo, tap Start and clean against the clock, then snap AFTER. The game compares the two photos and scores visible cleanliness. The camera is how the game sees your work.
+              </p>
+              <button
+                id="cameraExplainAllow"
+                class="primary-button"
+                type="button"
+                data-i18n="cameraExplainAllow"
+              >
+                📷 ALLOW CAMERA &amp; START
+              </button>
+            </div>
           </div>
 
           <div id="setupCameraError" class="camera-overlay camera-error hidden">
@@ -964,6 +988,7 @@
           <button id="lbTabShift" class="mvp-tab-chip active" type="button" role="tab" aria-selected="true" data-i18n="lbTabShift">⚡ SHIFT CHALLENGE</button>
           <button id="lbTabDeck" class="mvp-tab-chip" type="button" role="tab" aria-selected="false" data-i18n="lbTabDeck">🃏 DAILY DECK</button>
         </div>
+        <div id="leaderboardSizeBar" class="size-chip-row leaderboard-size-bar" role="tablist" aria-label="Leaderboard size filter"></div>
         <div id="leaderboardRivalBanner" class="leaderboard-rival-banner hologram-card"></div>
         <div id="crewLeaderboardSummary" class="crew-summary-bar hologram-card hidden" aria-hidden="true"></div>
         <div id="personalRecordBar" class="crew-summary-bar hologram-card">
@@ -1045,7 +1070,7 @@
             <rect x="8" y="6" width="20" height="24" rx="4" fill="rgba(69,234,255,0.16)" stroke="#45eaff" stroke-width="2"/>
             <path class="lottie-pulse" d="M13 18 l3.5 3.5 l7-7" fill="none" stroke="#39f5bc" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          <h2 data-i18n="recordsTitle">PASSPORT, RECORDS &amp; SUPERVISOR</h2>
+          <h2 data-i18n="recordsTitle">INSPECTION LOG</h2>
         </div>
         <div id="recordsPassportSummary" class="crew-summary-bar hologram-card"></div>
         <div id="offlineQueueSection" class="offline-queue-section hologram-card hidden">

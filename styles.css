@@ -1889,6 +1889,7 @@ h3 {
   #timerScreen .complete-button {
     min-height: 40px;
   }
+  #cameraScreen .content,
   #leaderboardScreen .content,
   #instructionsScreen .content,
   #recordsScreen .content,
@@ -1898,6 +1899,11 @@ h3 {
     overflow-y: auto;
     padding-top: 12px;
     padding-bottom: max(10px, env(safe-area-inset-bottom));
+  }
+  #cameraScreen #cameraContinue {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
   }
   .sticky-cta {
     position: sticky;
@@ -7298,4 +7304,37 @@ body #resultsScreen .results-cta-bar {
 .advanced-cloud-panel[open] .advanced-cloud-summary {
   margin-bottom: 6px;
   opacity: 0.85;
+}
+
+/* Hackathon scope trim: passport / crew / supervisor UI hidden, code kept.
+ * !important so runtime classList toggles cannot resurface it. */
+#openPassportHubButton,
+#homePassportPanel,
+#recordsPassportSummary,
+#sharePassportButton,
+#adminDashboardPanel,
+#scanAreaQrButton,
+#timerScanQrButton,
+#qrScannerModal,
+#qrStickerPreview,
+#qrStickerQuickGrid,
+#continueWithoutCamera,
+#dwellCueBanner,
+#dwellCreditButton {
+  display: none !important;
+}
+.size-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0 2px;
+}
+.checkin-size-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 6px;
+}
+.leaderboard-size-bar {
+  margin: 8px 0 2px;
 }
