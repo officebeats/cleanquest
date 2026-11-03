@@ -4358,6 +4358,14 @@ body.lightbox-open {
     min-width: 0 !important;
     width: 100% !important;
   }
+  #settingsScreen .identity-panel .settings-row {
+    flex-wrap: wrap !important;
+  }
+  #settingsScreen #verifyLiveTelemetryButton,
+  #settingsScreen #providerLogExport {
+    flex: 1 1 100% !important;
+    white-space: normal !important;
+  }
   #cameraScreen #assignedSpotBadge {
     grid-column: 1 / -1 !important;
     text-align: left !important;
