@@ -14835,6 +14835,10 @@ function bindEvents() {
     els.consentAcceptButton.addEventListener("click", () => {
       if (els.consentCheckbox?.checked) {
         setConsentAccepted(true);
+        // The CONFIRM tap is a user gesture, so the audio narrative is
+        // allowed to start here: unlock, then play the welcome intro.
+        try { unlockAudio(); } catch {}
+        try { speakWelcomeIntro(state.language); } catch {}
       }
     });
   }
