@@ -351,9 +351,10 @@ const translations = {
     evidenceHigh: "HIGH CONFIDENCE",
     evidenceMedium: "MEDIUM CONFIDENCE",
     evidenceRescan: "RESCAN · HOLD STEADY AND REDO",
-    rescanDark: "TOO DARK — ADD LIGHT AND REDO",
-    rescanBright: "TOO BRIGHT — CUT THE GLARE AND REDO",
-    rescanGeneric: "HOLD STEADY AND REDO",
+    rescanDark: "Too dark to see the surface — turn on a light and redo.",
+    rescanBright: "Too much glare on the surface — angle the camera and redo.",
+    rescanGeneric: "Camera moved between Before and After — hold steady and redo.",
+    rescanEmpty: "Couldn't see the cleaning surface — point the camera closer and redo.",
     badgeRescan: "RESCAN",
     evidenceNoChange: "NO CHANGE — CLEAN AND TRY AGAIN",
     ctaClean: "CLEAN",
@@ -775,10 +776,11 @@ const translations = {
     objectsRemaining: "OBJETOS RESTANTES",
     evidenceHigh: "ALTA CONFIANZA",
     evidenceMedium: "CONFIANZA MEDIA",
-    evidenceRescan: "REPETIR · FOTOS POCO CLARAS",
-    rescanDark: "MUY OSCURO — AGREGA LUZ Y REPITE",
-    rescanBright: "MUY CLARO — QUITA EL REFLEJO Y REPITE",
-    rescanGeneric: "SOSTÉN EL MÓVIL Y REPITE",
+    evidenceRescan: "REPETIR · SOSTÉN EL MÓVIL Y REPITE",
+    rescanDark: "Muy oscuro para ver la superficie — enciende la luz y repite.",
+    rescanBright: "Demasiado reflejo en la superficie — cambia el ángulo y repite.",
+    rescanGeneric: "La cámara se movió entre Antes y Después — sostén firme y repite.",
+    rescanEmpty: "No se ve la superficie a limpiar — acerca la cámara y repite.",
     badgeRescan: "REPETIR",
     evidenceNoChange: "SIN CAMBIOS — LIMPIA Y VUELVE A INTENTARLO",
     ctaClean: "LIMPIA",
@@ -1200,10 +1202,11 @@ const translations = {
     objectsRemaining: "POZOSTAŁE OBIEKTY",
     evidenceHigh: "WYSOKA PEWNOŚĆ",
     evidenceMedium: "ŚREDNIA PEWNOŚĆ",
-    evidenceRescan: "POWTÓRZ · ZDJĘCIA NIEWYRAŹNE",
-    rescanDark: "ZA CIEMNO — DOŚWIETL I POWTÓRZ",
-    rescanBright: "ZA JASNO — ZMNIEJSZ ODBLASK I POWTÓRZ",
-    rescanGeneric: "TRZYMAJ STABILNIE I POWTÓRZ",
+    evidenceRescan: "POWTÓRZ · TRZYMAJ STABILNIE I POWTÓRZ",
+    rescanDark: "Za ciemno, by widzieć powierzchnię — włącz światło i powtórz.",
+    rescanBright: "Zbyt duży odblask na powierzchni — zmień kąt i powtórz.",
+    rescanGeneric: "Kamera poruszyła się między Przed i Po — trzymaj stabilnie i powtórz.",
+    rescanEmpty: "Nie widać powierzchni do sprzątania — przybliż kamerę i powtórz.",
     badgeRescan: "POWTÓRZ",
     evidenceNoChange: "BRAK ZMIAN — WYCZYŚĆ I SPRÓBUJ PONOWNIE",
     ctaClean: "CZYŚĆ",
@@ -6921,7 +6924,7 @@ function verifyStationEnvironment(
         claimedStation: `${areaKey} · ${assignedSpot}`,
         detectedSummary: uniq,
         inferredStation: inferred,
-        message: `⚠️ Station mismatch: Selected "${assignedSpot}", but camera detected ${uniq} (looks like ${inferred}). Point camera at ${assignedSpot} or switch SPOT to Workstation desk & shelf.`
+        message: `Wrong spot: you picked "${assignedSpot}", but the camera sees ${uniq}. Point at ${assignedSpot} and redo.`
       };
     }
     if (bigPerson && anchorHits.length === 0) {
@@ -6931,7 +6934,7 @@ function verifyStationEnvironment(
         claimedStation: `${areaKey} · ${assignedSpot}`,
         detectedSummary: "person / selfie view",
         inferredStation: "Webcam selfie",
-        message: `⚠️ Station not in frame: Camera is pointed at a person instead of "${assignedSpot}". Point the camera directly at the cleaning surface.`
+        message: `Camera is pointed at a person instead of "${assignedSpot}". Point at the surface and redo.`
       };
     }
   }
@@ -6946,7 +6949,7 @@ function verifyStationEnvironment(
         claimedStation: `${areaKey} · ${assignedSpot}`,
         detectedSummary: Array.from(new Set(bathroomHits)).join(", "),
         inferredStation: "Restroom / Sink & counter",
-        message: `⚠️ Station mismatch: Selected "${assignedSpot}", but camera detected ${bathroomHits[0]}. Switch SPOT to Sink & counter.`
+        message: `Wrong spot: you picked "${assignedSpot}", but the camera sees ${bathroomHits[0]}. Point at ${assignedSpot} and redo.`
       };
     }
   }
@@ -7055,6 +7058,8 @@ function calculateLocalScore(
   const findings = [];
   if (!envCheck.matched && envCheck.message) {
     findings.push(envCheck.message);
+    scoreDirective = envCheck.message;
+    scoreCta = t("ctaRetake");
   } else if (!sceneValid) {
     findings.push(t("findingFraming"));
     setDirective("findingFraming");
@@ -7078,7 +7083,8 @@ function calculateLocalScore(
   // Unscorable with no other explanation: say WHY in plain words, not just RESCAN.
   if (!scoreDirective && !enoughEvidence) {
     const lum = Number(change.avgLuminance ?? 128);
-    const reasonKey = lum < 50 ? "rescanDark" : lum > 210 ? "rescanBright" : "rescanGeneric";
+    const noObjects = (beforeCount || 0) === 0 && (afterObjects?.length || 0) === 0;
+    const reasonKey = noObjects ? "rescanEmpty" : lum < 50 ? "rescanDark" : lum > 210 ? "rescanBright" : "rescanGeneric";
     findings.push(t(reasonKey));
     setDirective(reasonKey);
     scoreCta = t("ctaRetake");
@@ -8108,6 +8114,8 @@ async function getVerifiedScore(aiResult, before, after) {
       SELFTEST_MODE ||
       VOICE_TEST_MODE ||
       state.inPersonaSuite ||
+      aiResult?.scorable === false ||
+      aiResult?.noVisibleChange ||
       before?.placeholder ||
       after?.placeholder ||
       (state.demoMode && !state.judgeDemo && !state.forceCloudVerify) ||
@@ -8546,11 +8554,7 @@ async function getSamOverlays(aiResult, before, after) {
   const skipped = { status: "skipped" };
 
   try {
-    if (state.judgeDemo) {
-      return skipped;
-    }
-
-    if (!aiResult || aiResult.verified?.status !== "verified") {
+    if (state.judgeDemo || !aiResult || aiResult.scorable === false || aiResult.noVisibleChange || aiResult.verified?.status !== "verified") {
       return skipped;
     }
 
@@ -8855,11 +8859,21 @@ function renderResults() {
         ? t("evidenceDemo")
         : score.noVisibleChange
           ? t("evidenceNoChange")
-          : directiveText(score) || (score.confidenceBand === "high"
-            ? t("evidenceHigh")
-            : score.confidenceBand === "medium"
-              ? t("evidenceMedium")
-              : t("evidenceRescan"));
+          : score.environmentMismatch
+            ? "WRONG SPOT — REDO"
+            : score.scoreDirectiveKey === "rescanDark"
+              ? "TOO DARK — REDO"
+              : score.scoreDirectiveKey === "rescanBright"
+                ? "TOO MUCH GLARE — REDO"
+                : score.scoreDirectiveKey === "rescanEmpty"
+                  ? "NO SURFACE IN VIEW — REDO"
+                  : !scorable
+                    ? "CAMERA MOVED — REDO"
+                    : score.confidenceBand === "high"
+                      ? t("evidenceHigh")
+                      : score.confidenceBand === "medium"
+                        ? t("evidenceMedium")
+                        : t("evidenceRescan");
     els.scoreEvidenceState.textContent = `${formatElapsedLong(elapsed)} · ${stateLabel}`;
   }
   els.resultTime.textContent = formatTimer(elapsed);
@@ -8908,8 +8922,8 @@ function renderResults() {
   if (els.objectsRemainingValue) els.objectsRemainingValue.textContent = String(score.detection?.remainingCount ?? 0);
 
   updateEvidenceThumbnails();
-  renderDetectionOverlay(els.beforeDetectionOverlay, score.detection?.beforeObjects || []);
-  renderDetectionOverlay(els.afterDetectionOverlay, (score.detection?.remainingObjects?.length ? score.detection.remainingObjects : score.detection?.beforeObjects) || [], Boolean(score.detection?.remainingObjects?.length));
+  renderDetectionOverlay(els.beforeDetectionOverlay, scorable ? (score.detection?.beforeObjects || []) : []);
+  renderDetectionOverlay(els.afterDetectionOverlay, scorable ? ((score.detection?.remainingObjects?.length ? score.detection.remainingObjects : score.detection?.beforeObjects) || []) : [], Boolean(score.detection?.remainingObjects?.length));
 
   if (state.captures.pose?.dataUrl) {
     els.poseThumbnail.src = state.captures.pose.dataUrl;
@@ -8920,9 +8934,12 @@ function renderResults() {
   // Unscorable run: the "after" photo is the whole story. Hide the empty
   // bars and the time cards so nothing competes with the photo + directive.
   const showScores = scorable;
-  document.getElementById("scoreBreakdownBars")?.classList.toggle("hidden", !showScores);
-  document.querySelector("#scoreBreakdownCard > .section-label")?.classList.toggle("hidden", !showScores);
+  document.getElementById("scoreBreakdownCard")?.classList.toggle("hidden", !showScores);
+  document.getElementById("disputePanel")?.classList.toggle("hidden", !showScores);
   document.querySelector("#resultsScreen .result-grid")?.classList.toggle("hidden", !showScores);
+  if (els.resultsContinue) {
+    els.resultsContinue.textContent = showScores ? t("viewLeaderboard") : (score.scoreCta || t("ctaRetake"));
+  }
   renderDisputeUI();
   renderOfflineQueueNotice();
 }
@@ -15118,6 +15135,11 @@ function bindEvents() {
     "click",
     () => {
       stopSpeech();
+      const ai = state.result?.ai;
+      if (ai && (ai.scorable === false || ai.noVisibleChange || !Number.isFinite(ai.cleanliness))) {
+        navigateTo("camera");
+        return;
+      }
       saveCompletedRun();
       navigateTo("leaderboard");
     }

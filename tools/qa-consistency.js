@@ -45,8 +45,8 @@
   if (isUnscorable && /%/.test(badge) && !/RESCAN|REDO|REPITE|POWTÓRZ|CLEAN|LIMPIA|CZYŚĆ/i.test(badge)) {
     failures.push("score-on-rescan: badge shows \"" + badge.slice(0, 40) + "\"");
   }
-  if (isUnscorable && shown("scoreBreakdownBars")) {
-    failures.push("bars-on-unscorable: scoreBreakdownBars visible when run is unscored/no-change");
+  if (isUnscorable && (shown("scoreBreakdownBars") || shown("scoreBreakdownCard") || shown("disputePanel"))) {
+    failures.push("sections-on-unscorable: breakdown or dispute visible when run has nothing to submit");
   }
 
   // 4. Praise must never contradict a directive or no-change finding.
@@ -65,7 +65,7 @@
     if (chips > 0) failures.push("contested-grades: " + chips + " surface chip(s) beside directive");
   }
   if (directive) {
-    var zoneWords = ["top", "middle", "bottom", "wipe", "clean", "retake", "redo", "limpia", "frota", "repite", "wyczy", "powt", "przetrzyj", "zona", "stref", "góra", "dół", "środek", "lewa", "prawa", "toda", "wszystkie", "whole", "sin ", "brak", "retake", "raises", "frame", "encuadre", "kadr"];
+    var zoneWords = ["top", "middle", "bottom", "wipe", "clean", "retake", "redo", "limpia", "frota", "repite", "wyczy", "powt", "przetrzyj", "zona", "stref", "góra", "dół", "środek", "lewa", "prawa", "toda", "wszystkie", "whole", "sin ", "brak", "frame", "encuadre", "kadr", "spot", "surface", "camera", "light", "glare", "steady"];
     var hasZone = false;
     var lower = directive.toLowerCase();
     for (var k = 0; k < zoneWords.length; k++) { if (lower.indexOf(zoneWords[k]) !== -1) hasZone = true; }
@@ -91,6 +91,18 @@
   var heroEl = document.getElementById("cleanlinessScore");
   var hero = heroEl ? (heroEl.textContent || "") : "";
   if (isUnscorable && /%/.test(hero)) failures.push("hero-percent-on-rescan: \"" + hero.slice(0, 20) + "\"");
+  // 5c. After-photo thumbnail must fill its wrapper (not collapse to 52px).
+  if (isResults && shown("afterEvidenceCard")) {
+    var wrap = document.querySelector("#afterEvidenceCard .evidence-image-wrap");
+    var img = document.getElementById("afterThumbnail");
+    if (wrap && img && !img.classList.contains("hidden")) {
+      var wr = wrap.getBoundingClientRect();
+      var ir = img.getBoundingClientRect();
+      if (wr.height > 120 && ir.height < wr.height * 0.6) {
+        failures.push("thumbnail-collapsed: afterThumbnail height " + Math.round(ir.height) + "px inside " + Math.round(wr.height) + "px wrap");
+      }
+    }
+  }
   // 6. Deck language: AGREE/DISAGREE family only.
   if (isDeck) {
     if (/RIGHT CALL|\(MISS\)|NAILED IT|TRICK CALL/i.test(document.body.innerText || "")) {

@@ -7502,3 +7502,55 @@ body #resultsScreen .results-cta-bar {
 #deckScreen .deck-floater {
   animation: none !important;
 }
+
+/* Authoritative evidence layout (must sit after all breakpoint overrides):
+   AFTER is full-width, BEFORE is a 132px reference thumbnail, and the
+   <img> fills its wrapper instead of collapsing to the old 52px cap. */
+body #resultsScreen .evidence-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 10px !important;
+}
+body #resultsScreen #afterEvidenceCard {
+  order: -1 !important;
+}
+body #resultsScreen #afterEvidenceCard .evidence-image-wrap {
+  display: block !important;
+  position: relative !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 200px !important;
+  max-height: 44dvh !important;
+  aspect-ratio: 4 / 3 !important;
+  overflow: hidden !important;
+}
+body #resultsScreen #afterEvidenceCard .evidence-image-wrap > img,
+body #resultsScreen #beforeEvidenceCard .evidence-image-wrap > img {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100% !important;
+  max-height: none !important;
+  object-fit: cover !important;
+}
+body #resultsScreen #beforeEvidenceCard {
+  display: grid !important;
+  grid-template-columns: 96px 1fr !important;
+  align-items: center !important;
+}
+body #resultsScreen #beforeEvidenceCard .evidence-image-wrap {
+  display: block !important;
+  position: relative !important;
+  width: 96px !important;
+  height: 72px !important;
+  min-height: 72px !important;
+  max-height: 72px !important;
+  aspect-ratio: 4 / 3 !important;
+  overflow: hidden !important;
+}
+body #resultsScreen #beforeEvidenceCard .detection-overlay {
+  display: none !important;
+}
+body #resultsScreen #beforeEvidenceCard figcaption {
+  text-align: left !important;
+}
