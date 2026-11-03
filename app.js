@@ -6356,8 +6356,11 @@ const UNTOUCHED_ZONE_WORDS = {
 function describeUntouchedZones(zones) {
   const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
   const words = UNTOUCHED_ZONE_WORDS[lang];
-  const untouched = (zones || []).filter((z) => (z.improvement ?? 0) < 0.05 && (z.residual ?? 0) >= 0.3);
+  const untouched = (zones || []).filter((z) => (z.improvement ?? 0) < 0.05 && (z.residual ?? 0) >= 0.5);
   if (!untouched.length) return null;
+  // Texture can't separate dirt from clean pattern (e.g. grout lines), so the
+  // hook site also gates on: not all-objects-cleared and score < 90. The copy
+  // stays hedged ("Looks") — a directional nudge, never a dirt conviction.
   if (untouched.length >= zones.length) return { areas: words.all, them: lang === "en" ? words.themOne : words.themMany };
   const names = untouched.slice(0, 5).map((z) => `${words.rows[z.row] ?? ""} ${words.cols[z.col] ?? ""}`.trim());
   if (untouched.length > 5) names.push(lang === "es" ? `y ${untouched.length - 5} más` : lang === "pl" ? `i ${untouched.length - 5} więcej` : `and ${untouched.length - 5} more`);
@@ -6877,7 +6880,8 @@ function calculateLocalScore(
     const zoneKey = Number(surface.residualZones) === 1 ? "findingZonesOne" : "findingZones";
     findings.push(t(zoneKey, { improved: surface.improvedZones, residual: surface.residualZones }));
     const untouched = describeUntouchedZones(surface.zones);
-    if (untouched) findings.push(t("findingUntouched", untouched));
+    const allObjectsCleared = beforeCount > 0 && clearedCount === beforeCount && newCount === 0;
+    if (untouched && !allObjectsCleared && (cleanliness == null || cleanliness < 90)) findings.push(t("findingUntouched", untouched));
   }
   if (envCheck.matched && remainingCount > 0) findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }));
   if (envCheck.matched && newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
