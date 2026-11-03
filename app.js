@@ -6508,6 +6508,7 @@ function describeUntouchedZones(zones) {
   const words = UNTOUCHED_ZONE_WORDS[lang];
   const untouched = (zones || []).filter((z) => (z.improvement ?? 0) < 0.05 && (z.residual ?? 0) >= 0.5);
   if (!untouched.length) return null;
+  if (untouched.length >= (zones || []).length && (zones || []).length > 0) return { areas: words.all, them: words.themMany, zoneList: untouched.map((z) => [z.row, z.col]) };
   // Texture can't separate dirt from clean pattern (e.g. grout lines), so the
   // hook site also gates on: not all-objects-cleared and score < 90. The copy
   // stays hedged ("Looks") — a directional nudge, never a dirt conviction.
@@ -6959,7 +6960,7 @@ function localizeUntouchedZones(zoneList) {
   const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
   const words = UNTOUCHED_ZONE_WORDS[lang];
   const cells = Array.isArray(zoneList) ? zoneList : [];
-  if (!cells.length) return { areas: words.all, them: lang === "en" ? words.themOne : words.themMany };
+  if (!cells.length || cells.length >= 9) return { areas: words.all, them: lang === "en" ? words.themOne : words.themMany };
   const names = cells.slice(0, 5).map(([r, c]) => `${words.rows[r] ?? ""} ${words.cols[c] ?? ""}`.trim());
   if (cells.length > 5) names.push(lang === "es" ? `y ${cells.length - 5} más` : lang === "pl" ? `i ${cells.length - 5} więcej` : `and ${cells.length - 5} more`);
   return { areas: names.join(", "), them: cells.length === 1 ? words.themOne : words.themMany };
