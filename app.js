@@ -419,7 +419,7 @@ const translations = {
     findingUntouched: "Looks untouched: {areas}. Go wipe {them}.",
     findingNoChange: "No change detected — the surface looks the same. Clean it and try again.",
     findingDemoStation: "Demo station: 3 of 3 surface items (cup, bottle, bowl) cleared; counter and sink basin visibly improved.",
-    findingNoObjects: "Not enough countable objects were detected for strong verification.",
+    findingNoObjects: "Couldn't see enough objects — retake both photos.",
     findingRemaining: "{objects} still detected after the challenge.",
     findingNew: "{objects} appeared in the after image.",
     findingDemo: "Demo score uses placeholder images; no camera judgment was made.",
@@ -452,6 +452,7 @@ const translations = {
     hostVoiceTitle: "HOST VOICE",
     viewDeck: "DAILY DECK",
     deckTitle: "DAILY DECK",
+    deckSubtitle: "Daily deck — read each card. If you agree, swipe right. If you disagree, swipe left.",
     deckCatSurface: "SURFACE",
     deckCatProduct: "PRODUCT",
     deckCatTechnique: "TECHNIQUE",
@@ -459,6 +460,8 @@ const translations = {
     deckMiss: "⟵ ✘ DISAGREE",
     deckCorrect: "✔ Agree.",
     deckWrong: "✘ Disagree.",
+    deckPickAgree: "Agree",
+    deckPickDisagree: "Disagree",
     deckComplete: "Deck complete for today.",
     deckStreak: "Day streak: {n}",
     deckCardOf: "Card {i} of {n}",
@@ -833,7 +836,7 @@ const translations = {
     findingUntouched: "Sin limpiar: {areas}. Pásale un paño.",
     findingNoChange: "Sin cambios — la superficie se ve igual. Límpiala e inténtalo de nuevo.",
     findingDemoStation: "Estación demo: 3 de 3 objetos de la superficie (taza, botella, tazón) retirados; la encimera y el lavabo mejoraron visiblemente.",
-    findingNoObjects: "No se detectaron suficientes objetos para una verificación sólida.",
+    findingNoObjects: "No se ven suficientes objetos — repite ambas fotos.",
     findingRemaining: "{objects} siguen detectados después del reto.",
     findingNew: "{objects} aparecieron en la imagen final.",
     findingDemo: "La puntuación demo usa imágenes de muestra; la cámara no emitió ningún juicio.",
@@ -866,6 +869,7 @@ const translations = {
     hostVoiceTitle: "VOZ DEL ANFITRIÓN",
     viewDeck: "MAZO DIARIO",
     deckTitle: "MAZO DIARIO",
+    deckSubtitle: "Mazo diario — lee cada tarjeta. Si estás de acuerdo, desliza a la derecha. Si estás en desacuerdo, desliza a la izquierda.",
     deckCatSurface: "SUPERFICIE",
     deckCatProduct: "PRODUCTO",
     deckCatTechnique: "TÉCNICA",
@@ -873,6 +877,8 @@ const translations = {
     deckMiss: "⟵ ✘ EN DESACUERDO",
     deckCorrect: "✔ De acuerdo.",
     deckWrong: "✘ En desacuerdo.",
+    deckPickAgree: "De acuerdo",
+    deckPickDisagree: "En desacuerdo",
     deckComplete: "Mazo completo por hoy.",
     deckStreak: "Racha: {n} días",
     deckCardOf: "Tarjeta {i} de {n}",
@@ -1247,7 +1253,7 @@ const translations = {
     findingUntouched: "Nieruszone: {areas}. Wytrzyj {them}.",
     findingNoChange: "Brak zmian — powierzchnia wygląda tak samo. Wyczyść ją i spróbuj ponownie.",
     findingDemoStation: "Stacja demo: 3 z 3 przedmiotów (kubek, butelka, miska) usunięte; blat i umywalka wyraźnie lepsze.",
-    findingNoObjects: "Wykryto zbyt mało obiektów, aby mocno potwierdzić wynik.",
+    findingNoObjects: "Widać za mało obiektów — zrób oba zdjęcia jeszcze raz.",
     findingRemaining: "{objects} nadal wykryto po zakończeniu wyzwania.",
     findingNew: "{objects} pojawiły się na zdjęciu po sprzątaniu.",
     findingDemo: "Wynik demo korzysta z obrazów zastępczych; kamera nie dokonała oceny.",
@@ -1280,13 +1286,16 @@ const translations = {
     hostVoiceTitle: "GŁOS PROWADZĄCEGO",
     viewDeck: "DZIENNA TALIA",
     deckTitle: "DZIENNA TALIA",
+    deckSubtitle: "Talia dnia — przeczytaj każdą kartę. Jeśli się zgadzasz, przesuń w prawo. Jeśli nie, przesuń w lewo.",
     deckCatSurface: "POWIERZCHNIA",
     deckCatProduct: "PRODUKT",
     deckCatTechnique: "TECHNIKA",
-    deckRight: "✔ TAK ⟶",
-    deckMiss: "⟵ ✘ NIE",
+    deckRight: "✔ ZGADZAM SIĘ ⟶",
+    deckMiss: "⟵ ✘ NIE ZGADZAM SIĘ",
     deckCorrect: "✔ Tak.",
     deckWrong: "✘ Nie.",
+    deckPickAgree: "Zgadzam się",
+    deckPickDisagree: "Nie zgadzam się",
     deckComplete: "Talia na dziś ukończona.",
     deckStreak: "Seria: {n} dni",
     deckCardOf: "Karta {i} z {n}",
@@ -1469,8 +1478,8 @@ const translations = {
     qrApply: "ZASTOSUJ KOD QR",
     maximizeBadge: "⤢",
     lightboxGhostOpacity: "PRZEZROCZYSTOŚĆ CIENIA PRZED",
-    deckStampLeft: "⟵ ✘ NIE",
-    deckStampRight: "✔ TAK ⟶",
+    deckStampLeft: "⟵ ✘ NIE ZGADZAM SIĘ",
+    deckStampRight: "✔ ZGADZAM SIĘ ⟶",
     openSupervisorTools: "📋 OTWÓRZ DZIENNIK I NARZĘDZIA NADZORU (11–15) →",
     leagueOffice: "🏢 Biurowiec i Korporacja",
     leagueEducation: "🏫 Edukacja i Kampus",
@@ -3099,7 +3108,7 @@ function speakHost(beat, overrideText) {
  * 44.1kHz), then bump version below to bust cache. No code changes needed.
  * Spec lives in docs/AUDIO-PLAN.md ("Billy swap"). */
 const FEATURE_MUSIC = {
-  version: "20261031-29",
+  version: "20261103-30",
   acceptChallenge: {
     en: "assets/audio/en/welcome-intro.mp3",
     es: "assets/audio/es/welcome-intro.mp3",
@@ -10623,9 +10632,20 @@ function answerDeck(pick) {
   const vStamp = document.getElementById("deckVerdictStamp");
   if (vStamp) {
     const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
-    vStamp.textContent = hit
-      ? (lang === "es" ? "✔ DE ACUERDO +100 XP" : lang === "pl" ? "✔ TAK +100 XP" : "✔ AGREE +100 XP")
-      : (lang === "es" ? "✘ EN DESACUERDO — mira por qué" : lang === "pl" ? "✘ NIE — zobacz dlaczego" : "✘ DISAGREE — here is why");
+    const pickedAgree = pick !== "miss";
+    if (lang === "es") {
+      vStamp.textContent = pickedAgree
+        ? (hit ? "✔ DE ACUERDO +100 XP" : "✘ DE ACUERDO — casi, mira por qué")
+        : (hit ? "✔ EN DESACUERDO +100 XP" : "✘ EN DESACUERDO — casi, mira por qué");
+    } else if (lang === "pl") {
+      vStamp.textContent = pickedAgree
+        ? (hit ? "✔ TAK +100 XP" : "✘ TAK — prawie, zobacz dlaczego")
+        : (hit ? "✔ NIE +100 XP" : "✘ NIE — prawie, zobacz dlaczego");
+    } else {
+      vStamp.textContent = pickedAgree
+        ? (hit ? "✔ AGREE +100 XP" : "✘ AGREE — close, here is why")
+        : (hit ? "✔ DISAGREE +100 XP" : "✘ DISAGREE — close, here is why");
+    }
     vStamp.className = `deck-verdict-stamp ${hit ? "is-hit" : "is-miss"}`;
   }
 
@@ -10641,7 +10661,7 @@ function answerDeck(pick) {
   if (els.deckFeedback) {
     const productType = localizedDeckField(card, "productType");
     const productNote = productType ? ` · ${t("productTypePrefix")} ${productType}.` : "";
-    els.deckFeedback.textContent = `${hit ? t("deckCorrect") : t("deckWrong")} ${localizedDeckField(card, "why")}${productNote}`;
+    els.deckFeedback.textContent = `${hit ? "✔" : "✘"} “${(pick !== "miss" ? t("deckPickAgree") : t("deckPickDisagree"))}” — ${localizedDeckField(card, "why")}${productNote}`;
     els.deckFeedback.className = `deck-feedback ${hit ? "is-correct" : "is-wrong"}`;
   }
 

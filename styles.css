@@ -6237,7 +6237,7 @@ button.btn-pop-active::before {
 
 .sponsor-logo-svg {
   width: 100% !important;
-  max-width: 300px !important;
+  max-width: 220px !important;
   height: auto !important;
   margin: 0 auto !important;
   display: block !important;

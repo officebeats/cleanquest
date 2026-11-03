@@ -586,3 +586,12 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - QA: new tools/qa-consistency.js probe (rank-on-rescan, praise-beside-warning, contested grades, stale wording) passes on deck + results.
 - Evidence: node --check clean; 390px screenshots; probe 0 failures.
 - Blockers: none.
+
+## 2026-11-03 (morning) — Agree/disagree, rescan honesty, dispute notes — DONE
+- Deck is now AGREE / DISAGREE everywhere (buttons, stamps, hint, verdict stamp, feedback, deck-subtitle + re-rendered deck-intro.mp3 ×3, version bumped) with matching neural choice voice (deck-agree/deck-disagree.mp3 × EN/ES/PL); stamp + feedback + voice all echo the player's pick so they can't contradict each other.
+- Polish uses full ZGADZAM SIĘ / NIE ZGADZAM SIĘ wording.
+- Rescan honesty: no rank badge on unscorable runs (badge shows RESCAN), transcript states the reason, cloud card + hype hidden, surface chips suppressed when unscored; customHype gated on pass mark (0% can never praise).
+- Dispute takes optional typed note + voice note before submit; record-note panel hidden; pose gate + panel stay hidden.
+- MECE outcome model: every finding renders one directive + one-word CTA (CLEAN/WIPE/RETAKE); no-change evidence label explains why; surface grades moved into the AFTER tile with a note tying them to the AI outlines (outlines made prominent).
+- QA: consistency probe passes on deck + results; syntax clean.
+- Blockers: none.
