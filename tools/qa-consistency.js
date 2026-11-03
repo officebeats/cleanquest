@@ -36,14 +36,17 @@
   // 3. Unscorable runs: no rank, no praise, state the reason.
   var evState = txt("scoreEvidenceState");
   var badge = txt("verdictSummaryBadge");
-  var unscorableWords = ["RESCAN", "REDO", "REPITE", "POWTÓRZ", "HOLD STEADY", "SOSTÉN", "TRZYMAJ"];
+  var unscorableWords = ["RESCAN", "REDO", "REPITE", "POWTÓRZ", "HOLD STEADY", "SOSTÉN", "TRZYMAJ", "NO CHANGE", "SIN CAMBIOS", "BRAK ZMIAN"];
   var isUnscorable = false;
   for (var i = 0; i < unscorableWords.length; i++) {
     if ((badge + " " + evState).indexOf(unscorableWords[i]) !== -1) isUnscorable = true;
   }
   if (/RANK/i.test(badge) && isUnscorable) failures.push("rank-on-rescan: badge shows \"" + badge.slice(0, 40) + "\"");
-  if (isUnscorable && /%/.test(badge) && !/RESCAN|REDO|REPITE|POWTÓRZ/i.test(badge)) {
+  if (isUnscorable && /%/.test(badge) && !/RESCAN|REDO|REPITE|POWTÓRZ|CLEAN|LIMPIA|CZYŚĆ/i.test(badge)) {
     failures.push("score-on-rescan: badge shows \"" + badge.slice(0, 40) + "\"");
+  }
+  if (isUnscorable && shown("scoreBreakdownBars")) {
+    failures.push("bars-on-unscorable: scoreBreakdownBars visible when run is unscored/no-change");
   }
 
   // 4. Praise must never contradict a directive or no-change finding.

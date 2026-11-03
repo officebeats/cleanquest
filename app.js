@@ -3640,19 +3640,19 @@ function announceGameVerdict() {
   const badge = document.getElementById("verdictSummaryBadge");
   const transcriptEl = document.getElementById("verdictTranscriptLine");
   if (pill) pill.dataset.tier = beat;
-  const scorableRun = ai?.scorable !== false && spokenScore !== null;
+  const noChg = Boolean(state.result?.ai?.noVisibleChange || state.result?.noVisibleChange);
+  const scorableRun = ai?.scorable !== false && !noChg && spokenScore !== null;
   const passMark = Number(CONFIG.verdictTiers?.passMark || 70);
   const customHypeRaw = isVerified && ai?.verified?.hypeLine ? String(ai.verified.hypeLine) : "";
   const customHype = scorableRun && spokenScore !== null && spokenScore >= passMark ? customHypeRaw : "";
-  const noChg = Boolean(state.result?.ai?.noVisibleChange || state.result?.noVisibleChange);
   const directive = !noChg ? directiveText(state.result?.ai) : "";
   const hushed = Boolean(noChg || directive || !scorableRun);
   const pickedVerdict = pickHostLine(beat, state.language);
   const pickedFinish = beat.startsWith("pass") ? pickHostLine("finish", state.language) : null;
-  if (badge) badge.textContent = !hushed ? tierRankLabel(beat, spokenScore) : (spokenScore !== null && scorableRun ? `${Math.round(spokenScore)}%` : t("badgeRescan"));
+  if (badge) badge.textContent = !hushed ? tierRankLabel(beat, spokenScore) : (scorableRun ? `${Math.round(spokenScore)}%` : (ai?.scoreCta || t("ctaRetake")));
   const summaryCaption = !scorableRun
-    ? (directiveText(state.result?.ai) || t("evidenceRescan"))
-    : spokenScore !== null && (noChg || directive)
+    ? (noChg ? t("findingNoChange") : (directiveText(state.result?.ai) || t("evidenceRescan")))
+    : (noChg || directive)
     ? `${Math.round(spokenScore)}% — ${noChg ? t("findingNoChange") : directive}`
     : [
       `${Math.round(spokenScore)}%`,
@@ -3676,7 +3676,7 @@ function announceGameVerdict() {
   if (!SELFTEST_MODE) {
     if (!hushed) triggerArcadeFx(beat.startsWith("pass") ? "confetti" : "pixels");
   }
-  if (spokenScore !== null && els.cleanlinessScore && ai?.scorable !== false) {
+  if (scorableRun && els.cleanlinessScore) {
     const startTs = performance.now();
     const durMs = 540;
     let lastTickVal = -1;
@@ -7015,10 +7015,10 @@ function calculateLocalScore(
   const sceneValid = sceneMatch >= 0.35 && envCheck.matched;
   // Nothing actually cleaned: the two frames are nearly identical and no
   // counted objects moved — or no zone improved at all. A slight camera
-  // shift still counts: same scene, same dirt. This is evidence, so the
-  // run stays scorable and gets capped instead of a RESCAN.
+  // shift still counts: same scene, same dirt. Never award a score when
+  // nothing changed; show the CLEAN CTA and hide the score bars.
   const noVisibleChange = sceneValid && clearedCount === 0 && newCount === 0 && (Number(change.changedPixelPercent || 0) < 4 || (Number(surface?.improvedZones || 0) === 0 && Number(change.changedPixelPercent || 0) < 12));
-  const enoughEvidence = (sceneValid && (beforeCount >= 1 || surfaceClearSignal >= 0.12 || sceneMatch >= 0.5)) || noVisibleChange;
+  const enoughEvidence = sceneValid && !noVisibleChange && (beforeCount >= 1 || surfaceClearSignal >= 0.12 || sceneMatch >= 0.5);
 
   // Compute top-to-bottom technique order from 3x3 surface zones
   const zones = surface?.zones || [];
@@ -7042,10 +7042,7 @@ function calculateLocalScore(
   const rawCleanliness = enoughEvidence
     ? Math.max(15, Math.min(100, Math.round(rawScore * 100)))
     : null;
-  // Nothing actually cleaned: the two frames are nearly identical and no
-  // counted objects moved. Cap the score and say so directly instead of
-  // praising an unchanged surface.
-  const cleanliness = noVisibleChange && rawCleanliness != null ? Math.min(rawCleanliness, 20) : rawCleanliness;
+  const cleanliness = rawCleanliness;
   const confidenceBand = !enoughEvidence
     ? "rescan"
     : evidenceConfidence >= 0.68 ? "high" : "medium";
@@ -8746,11 +8743,14 @@ async function scoreChallenge(
       if (fallback) {
         if (localScore.noVisibleChange) {
           fallback.noVisibleChange = true;
+          fallback.scorable = false;
+          fallback.cleanliness = null;
+          fallback.taskCompletion = null;
+          fallback.techniqueEvidence = null;
           fallback.scoreDirective = t("findingNoChange");
           fallback.scoreDirectiveKey = "findingNoChange";
           fallback.scoreDirectiveParams = null;
           fallback.scoreCta = t("ctaClean");
-          if (Number.isFinite(Number(fallback.cleanliness))) fallback.cleanliness = Math.min(Number(fallback.cleanliness), 20);
           if (Array.isArray(fallback.findings)) fallback.findings.unshift(t("findingNoChange"));
         }
         return fallback;
@@ -8833,12 +8833,12 @@ function renderResults() {
   const targetMs = CONFIG.challengeDurationSeconds * 1000;
   const elapsed = state.result.elapsedMs;
   const differenceMs = targetMs - elapsed;
-  const scorable = score.scorable !== false && Number.isFinite(score.cleanliness);
+  const scorable = score.scorable !== false && !score.noVisibleChange && Number.isFinite(score.cleanliness);
 
   const weightedHero = scorable ? computeWeightedRunScore() : null;
   els.cleanlinessScore.textContent = scorable
     ? `${weightedHero ?? score.cleanliness}%`
-    : score.simulated ? "DEMO" : "RESCAN";
+    : score.simulated ? "DEMO" : (score.scoreCta || t("ctaRetake"));
 
   const scoreHero = els.cleanlinessScore.closest(".score-hero");
   const verdictBeat = selectVerdictBeat();
@@ -8919,8 +8919,9 @@ function renderResults() {
   renderScoreBreakdown();
   // Unscorable run: the "after" photo is the whole story. Hide the empty
   // bars and the time cards so nothing competes with the photo + directive.
-  const showScores = score.scorable !== false;
+  const showScores = scorable;
   document.getElementById("scoreBreakdownBars")?.classList.toggle("hidden", !showScores);
+  document.querySelector("#scoreBreakdownCard > .section-label")?.classList.toggle("hidden", !showScores);
   document.querySelector("#resultsScreen .result-grid")?.classList.toggle("hidden", !showScores);
   renderDisputeUI();
   renderOfflineQueueNotice();
@@ -11711,7 +11712,7 @@ function syncConsentUI() {
 }
 
 function cleanBarExplanation(run) {
-  const val = run && Number.isFinite(Number(run.cleanliness)) && run.scorable !== false
+  const val = run && Number.isFinite(Number(run.cleanliness)) && run.scorable !== false && !run.noVisibleChange
     ? Math.max(0, Math.min(100, Math.round(Number(run.cleanliness))))
     : null;
   if (val === null) {
@@ -11735,7 +11736,7 @@ function cleanBarExplanation(run) {
 }
 
 function techniqueBarExplanation(run) {
-  if (run && run.scorable === false) {
+  if (run && (run.scorable === false || run.noVisibleChange)) {
     return {
       key: "technique",
       label: t("barTechnique"),
@@ -11875,6 +11876,7 @@ function buildScoreExplanation(runInput) {
   const run = runInput || {
     cleanliness: state.result?.ai?.cleanliness,
     scorable: state.result?.ai?.scorable,
+    noVisibleChange: state.result?.ai?.noVisibleChange,
     verified: state.result?.ai?.verified,
     techniqueScore: state.result?.ai?.techniqueScore,
     techniqueEvidence: state.result?.ai?.techniqueEvidence,
@@ -16019,6 +16021,7 @@ window.cleaningChallenge = {
   saveCompletedRun,
   renderLeaderboard,
   renderSpectatorLeaderboard,
+  renderResults,
 
   runSelfTest,
   runPersonaSuite,
