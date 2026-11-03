@@ -8235,6 +8235,13 @@ function renderVerifiedScorecard() {
 
   if (els.verifiedHype) {
     els.verifiedHype.textContent = verified.hypeLine || "";
+    // One voice, one line: the verdict pill already speaks/shows this hype.
+    // Hide the card copy when it repeats the transcript.
+    const norm = (s) => String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
+    const hype = norm(verified.hypeLine);
+    const spoken = norm(document.getElementById("verdictTranscriptLine")?.textContent);
+    const dup = hype.length > 12 && spoken.includes(hype);
+    els.verifiedHype.classList.toggle("hidden", dup);
   }
 
   card.classList.remove("hidden");
