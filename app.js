@@ -3518,17 +3518,18 @@ function selectVerdictBeat(result = state.result) {
   const tiers = CONFIG.verdictTiers;
   const isVerified = ai?.verified?.status === "verified";
   const weighted = result === state.result ? computeWeightedRunScore() : null;
-  const numericScore = isVerified && Number.isFinite(Number(ai.verified.overall))
-    ? Number(ai.verified.overall)
-    : Number.isFinite(weighted)
-      ? Number(weighted)
+  const numericScore = Number.isFinite(weighted)
+    ? Number(weighted)
+    : isVerified && Number.isFinite(Number(ai.verified.overall))
+      ? Number(ai.verified.overall)
       : Number.isFinite(Number(ai?.cleanliness))
         ? Number(ai.cleanliness)
         : null;
 
-  const isRetry = isVerified
-    ? ai.verified.verdict === "retry"
-    : ai?.scorable === false || (numericScore !== null && numericScore < tiers.passMark);
+  const cloudRetry = isVerified && ai.verified.verdict === "retry";
+  const isRetry = ai?.scorable === false
+    || (numericScore !== null && numericScore < tiers.passMark)
+    || (cloudRetry && !Number.isFinite(weighted));
 
   if (isRetry) {
     if (numericScore !== null && numericScore <= tiers.passMark - tiers.retryFarMargin) {
@@ -5789,7 +5790,7 @@ async function handleStartPause() {
       await captureFrame("before");
     }
     state.checkin.ghostEnabled = true;
-    state.checkin.ghostMode = state.checkin.ghostMode || "shadow60";
+    state.checkin.ghostMode = state.checkin.ghostMode || "off";
     updateGhostOverlay();
 
     playTone(620, 0.07);
@@ -12643,7 +12644,7 @@ function updateGhostOverlay() {
   if (!els.ghostOverlay || !els.ghostToggleButton) return;
   const hasBefore = Boolean(state.captures.before?.dataUrl);
   els.ghostToggleButton.classList.toggle("hidden", !hasBefore);
-  const modeId = state.checkin.ghostEnabled === false ? "off" : (state.checkin.ghostMode || "shadow60");
+  const modeId = state.checkin.ghostEnabled === false ? "off" : (state.checkin.ghostMode || "off");
   const mode = GHOST_MODES.find((m) => m.id === modeId) || GHOST_MODES[0];
   GHOST_MODES.forEach((m) => els.ghostOverlay.classList.remove(m.className));
   if (hasBefore && mode.id !== "off") {
@@ -12658,7 +12659,7 @@ function updateGhostOverlay() {
 }
 
 function toggleGhostOverlay() {
-  const currentId = state.checkin.ghostEnabled === false ? "off" : (state.checkin.ghostMode || "shadow60");
+  const currentId = state.checkin.ghostEnabled === false ? "off" : (state.checkin.ghostMode || "off");
   const idx = GHOST_MODES.findIndex((m) => m.id === currentId);
   const next = GHOST_MODES[(idx + 1) % GHOST_MODES.length];
   state.checkin.ghostMode = next.id;

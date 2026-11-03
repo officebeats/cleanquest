@@ -662,6 +662,10 @@ h3 {
     rgba(4, 8, 15, 0.9);
 }
 
+#cameraExplainModal {
+  z-index: 12 !important;
+}
+
 .demo-camera-placeholder {
   z-index: 3;
   color: var(--cyan);
