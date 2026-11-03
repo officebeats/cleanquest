@@ -5319,7 +5319,7 @@ select:focus-visible {
 
 .deck-progress-pips {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(10, minmax(0, 1fr));
   gap: 6px;
   margin: 0 0 14px;
 }
@@ -7489,6 +7489,10 @@ body #resultsScreen .results-cta-bar {
 #deckScreen .deck-illustration .loader-sparkle,
 #deckScreen .deck-illustration .lottie-sparkle,
 #deckScreen .deck-illustration .lottie-float,
+#deckScreen .deck-illustration .sparkle-spin,
+#deckScreen .deck-illustration .lottie-pulse,
+#deckScreen .deck-illustration .lottie-orbit,
+#deckScreen .deck-illustration .liquid-slosh,
 #deckScreen .deck-floater {
   animation: none !important;
 }

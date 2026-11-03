@@ -548,6 +548,11 @@ const translations = {
     srcTopToBottomOrder: "top-to-bottom order",
     srcSurfaceOrder: "surface order",
     srcTechniqueScore: "technique score",
+    srcEvenCoverage: "even coverage",
+    tierSuperstar: "SUPERSTAR",
+    tierWinner: "CLEAN WINNER",
+    tierPhoto: "PHOTO FINISH",
+    tierClose: "SO CLOSE",
     barDetailTechniqueNone: "No technique reading — clean and try again.",
     barDetailTechnique: "From measured evidence ({sources}).",
     barDetailNoTime: "No time recorded.",
@@ -954,7 +959,7 @@ const translations = {
     scoreBreakdownTitle: "EXPLICACIÓN DE PUNTUACIÓN (LIMPIEZA · TÉCNICA · TIEMPO)",
     barClean: "Limpieza",
     barDetailClean: "Limpieza visible, antes vs después.",
-    barDetailCleanNone: "No se pudo medir — repite ambas fotos.",
+    barDetailCleanNone: "No se pudo medir — limpia e inténtalo de nuevo.",
     gapHow: "Cumplimiento del tiempo de contacto, orden de arriba abajo y de limpio a sucio, producto según superficie",
     gapWhenPattern: "Patrón de turno {bucket} ({count} de {total} rondas registradas)",
     gapWhenNone: "Aún no hay rondas con hora registrada",
@@ -968,7 +973,12 @@ const translations = {
     srcTopToBottomOrder: "orden de arriba abajo",
     srcSurfaceOrder: "orden de superficies",
     srcTechniqueScore: "puntuación de técnica",
-    barDetailTechniqueNone: "Sin lectura de técnica — repite ambas fotos.",
+    srcEvenCoverage: "cobertura uniforme",
+    tierSuperstar: "SUPERESTRELLA",
+    tierWinner: "GANADOR LIMPIO",
+    tierPhoto: "FINAL DE FOTO",
+    tierClose: "CASI LO LOGRAS",
+    barDetailTechniqueNone: "Sin lectura de técnica — limpia e inténtalo de nuevo.",
     barDetailTechnique: "De evidencia medida ({sources}).",
     barDetailNoTime: "Sin tiempo registrado.",
     barDetailTimeReview: "Muy por debajo del estándar — revisión humana.",
@@ -1374,7 +1384,7 @@ const translations = {
     scoreBreakdownTitle: "WYJAŚNIENIE WYNIKU (CZYSTOŚĆ · TECHNIKA · CZAS)",
     barClean: "Czystość",
     barDetailClean: "Czystość widoczna, przed vs po.",
-    barDetailCleanNone: "Nie udało się zmierzyć — zrób oba zdjęcia jeszcze raz.",
+    barDetailCleanNone: "Nie udało się zmierzyć — wyczyść i spróbuj ponownie.",
     gapHow: "Zgodność czasu kontaktu, kolejność od góry do dołu i od czystego do brudnego, produkt do powierzchni",
     gapWhenPattern: "Wzorzec zmiany {bucket} ({count} z {total} zapisanych biegów)",
     gapWhenNone: "Brak biegów z zapisaną godziną",
@@ -1388,7 +1398,12 @@ const translations = {
     srcTopToBottomOrder: "kolejność od góry do dołu",
     srcSurfaceOrder: "kolejność powierzchni",
     srcTechniqueScore: "wynik techniki",
-    barDetailTechniqueNone: "Brak odczytu techniki — zrób oba zdjęcia jeszcze raz.",
+    srcEvenCoverage: "równe pokrycie",
+    tierSuperstar: "SUPERGWIAZDA",
+    tierWinner: "CZYSTY ZWYCIĘZCA",
+    tierPhoto: "FINISZ NA ZDJĘCIU",
+    tierClose: "PRAWIE SIĘ UDAŁO",
+    barDetailTechniqueNone: "Brak odczytu techniki — wyczyść i spróbuj ponownie.",
     barDetailTechnique: "Ze zmierzonych dowodów ({sources}).",
     barDetailNoTime: "Brak zapisanego czasu.",
     barDetailTimeReview: "Znacznie poniżej normy — przegląd człowieka.",
@@ -3598,10 +3613,10 @@ function buildVerdictText(result = state.result) {
 
 function tierRankLabel(beat, score) {
   const pct = Number.isFinite(score) ? ` · ${Math.round(score)}%` : "";
-  if (beat === "pass-big") return `🏆 S-RANK · SUPERSTAR${pct}`;
-  if (beat === "pass") return `✨ A-RANK · CLEAN WINNER${pct}`;
-  if (beat === "pass-close") return `😅 B-RANK · PHOTO FINISH${pct}`;
-  if (beat === "retry") return `🔥 C-RANK · SO CLOSE${pct}`;
+  if (beat === "pass-big") return `🏆 S-RANK · ${t("tierSuperstar")}${pct}`;
+  if (beat === "pass") return `✨ A-RANK · ${t("tierWinner")}${pct}`;
+  if (beat === "pass-close") return `😅 B-RANK · ${t("tierPhoto")}${pct}`;
+  if (beat === "retry") return `🔥 C-RANK · ${t("tierClose")}${pct}`;
   return `💪 D-RANK${pct}`;
 }
 
@@ -3628,12 +3643,12 @@ function announceGameVerdict() {
   const passMark = Number(CONFIG.verdictTiers?.passMark || 70);
   const customHypeRaw = isVerified && ai?.verified?.hypeLine ? String(ai.verified.hypeLine) : "";
   const customHype = scorableRun && spokenScore !== null && spokenScore >= passMark ? customHypeRaw : "";
-  if (badge) badge.textContent = scorableRun ? tierRankLabel(beat, spokenScore) : t("badgeRescan");
-
-  const pickedVerdict = pickHostLine(beat, state.language);
-  const pickedFinish = beat.startsWith("pass") ? pickHostLine("finish", state.language) : null;
   const noChg = Boolean(state.result?.ai?.noVisibleChange || state.result?.noVisibleChange);
   const directive = !noChg ? state.result?.ai?.scoreDirective : null;
+  const hushed = Boolean(noChg || directive || !scorableRun);
+  const pickedVerdict = pickHostLine(beat, state.language);
+  const pickedFinish = beat.startsWith("pass") ? pickHostLine("finish", state.language) : null;
+  if (badge) badge.textContent = !hushed ? tierRankLabel(beat, spokenScore) : (spokenScore !== null && scorableRun ? `${Math.round(spokenScore)}%` : t("badgeRescan"));
   const summaryCaption = !scorableRun
     ? (state.result?.ai?.scoreDirective || t("evidenceRescan"))
     : spokenScore !== null && (noChg || directive)
@@ -3658,7 +3673,7 @@ function announceGameVerdict() {
   const scheduledGen = state.voice.speakGeneration || 0;
   pill?.classList.add("is-playing");
   if (!SELFTEST_MODE) {
-    triggerArcadeFx(beat.startsWith("pass") ? "confetti" : "pixels");
+    if (!hushed) triggerArcadeFx(beat.startsWith("pass") ? "confetti" : "pixels");
   }
   if (spokenScore !== null && els.cleanlinessScore && ai?.scorable !== false) {
     const startTs = performance.now();
@@ -3686,7 +3701,7 @@ function announceGameVerdict() {
   }
 
   setTimeout(() => {
-    if (state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGen) {
+    if (hushed || state.voice.muted || (state.voice.speakGeneration || 0) !== scheduledGen) {
       pill?.classList.remove("is-playing");
       return;
     }
@@ -7585,7 +7600,13 @@ function ensureSeasonCardsInSwipeDeck(pack) {
   return normalized;
 }
 
-function applyBiWeeklyCardsToDeck(pack) {
+function applyBiWeeklyCardsToDeck(pack, opts = {}) {
+  // Never clobber an in-progress deck: stash the pack for the next open.
+  if (!opts.force && state.deck && (state.deck.index > 0 || state.deck.locked || state.deck.answeredCurrent)) {
+    state.pendingSeasonPack = { pack, seasonNum: pack.seasonNum, areaKey: state.checkin?.areaKey || "breakroom" };
+    return false;
+  }
+  try { clearTimeout(state.deck?.advanceTimer); } catch {}
   const cards = ensureSeasonCardsInSwipeDeck(pack);
   if (!cards.length) return false;
   const fullOrder = buildDailyDeck(cards);
@@ -7644,7 +7665,7 @@ async function generateLiveAiBonusCard(forceNetwork = false, silentSync = false)
   // Tier 1 Cache (0 tokens, 0ms): Local browser cache for the current 14-day bi-weekly window
   if (!forceNetwork && cached && cached.seasonNum === seasonNum && cached.areaKey === areaKey) {
     ensureSeasonCardsInSwipeDeck(cached);
-    if (!silentSync) applyBiWeeklyCardsToDeck(cached);
+    if (!silentSync) applyBiWeeklyCardsToDeck(cached, { force: true });
     return cached;
   }
   if (btn && !silentSync) {
@@ -10131,6 +10152,13 @@ function openDeck() {
   state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false, answeredCurrent: false };
   navigateTo("deck");
   renderDeck();
+  // Apply a season pack deferred from a previous in-progress session.
+  if (state.pendingSeasonPack && state.pendingSeasonPack.seasonNum === seasonNum && state.pendingSeasonPack.areaKey === areaKey && state.pendingSeasonPack.pack) {
+    const pendingPack = state.pendingSeasonPack.pack;
+    state.pendingSeasonPack = null;
+    applyBiWeeklyCardsToDeck(pendingPack);
+    return;
+  }
   // Zero-touch automated bi-weekly rotation: if the 14-day clock rolled over or station changed, sync automatically
   if (!SELFTEST_MODE && !VOICE_TEST_MODE && !state.inPersonaSuite && (!cachedSeason || cachedSeason.seasonNum !== seasonNum || cachedSeason.areaKey !== areaKey)) {
     void generateLiveAiBonusCard(false, true);
@@ -11027,7 +11055,7 @@ function loadDeckLeaderboard() {
   return [];
 }
 
-function recordDeckSessionToLeaderboard(correct = 0, total = 5, streakCount = 1) {
+function recordDeckSessionToLeaderboard(correct = 0, total = 10, streakCount = 1) {
   try {
     const { seasonNum } = getBiWeeklySeasonMeta();
     const board = loadDeckLeaderboard().filter((e) => !e.viewerOwned);
@@ -11135,10 +11163,10 @@ function renderDeckLeaderboardView() {
         : "🃏 DAILY DECK STANDINGS · +100 XP PER CARD";
       pill.textContent = lang === "es" ? "🔥 RACHA DIARIA" : lang === "pl" ? "🔥 SERIA DNIA" : "🔥 BUILD YOUR STREAK";
       copy.textContent = lang === "es"
-        ? "¡Desliza 5 cartas de entrenamiento para ganar XP, subir tu racha y escalar en la tabla!"
+        ? "¡Desliza 10 cartas de entrenamiento para ganar XP, subir tu racha y escalar en la tabla!"
         : lang === "pl"
-        ? "Przesuń 5 kart szkoleniowych, aby zdobyć XP, zbudować serię i wspiąć się w rankingu!"
-        : "Swipe 5 Daily Deck training cards to earn Deck XP, build your daily streak, and climb the board!";
+        ? "Przesuń 10 kart szkoleniowych, aby zdobyć XP, zbudować serię i wspiąć się w rankingu!"
+        : "Swipe 10 Daily Deck training cards to earn Deck XP, build your daily streak, and climb the board!";
       fill.style.width = "28%";
     }
     head.append(tag, pill);
@@ -11265,6 +11293,10 @@ function renderLeaderboard() {
   }
   const rawBoard = loadLeaderboard();
   renderLeaderboardSizeBar();
+  // Logo-mark only from the first paint: never show the raw placeholder text.
+  document.getElementById("lbSponsorTag")?.classList.add("hidden");
+  const lbCopy = document.getElementById("lbSponsorCopy");
+  if (lbCopy && !lbCopy.querySelector(".sponsor-logo-svg")) lbCopy.innerHTML = buildSponsorLogoSvg();
   const sizeF = leaderboardSizeFilter();
   const sizedBoard = sizeF === "all" ? rawBoard : rawBoard.filter((e) => e && e.siteSize === sizeF);
   let savedViewerRunId = state.latestRunId;
@@ -11721,7 +11753,7 @@ function techniqueBarExplanation(run) {
     score: avg,
     display: `${avg}%`,
     sources,
-    detail: t("barDetailTechnique", { sources: sources.map((s) => t({ dwellTime: "srcDwellTime", topToBottomOrder: "srcTopToBottomOrder", surfaceOrder: "srcSurfaceOrder", techniqueScore: "srcTechniqueScore" }[s] || "") || (s === "zoneUniformity" ? "even coverage" : s)).join(", ") })
+    detail: t("barDetailTechnique", { sources: sources.map((s) => t({ dwellTime: "srcDwellTime", topToBottomOrder: "srcTopToBottomOrder", surfaceOrder: "srcSurfaceOrder", techniqueScore: "srcTechniqueScore", zoneUniformity: "srcEvenCoverage" }[s] || "") || s).join(", ") })
   };
 }
 
@@ -11858,8 +11890,9 @@ function renderScoreBreakdown(runInput) {
     const activeAi = runInput || state.result?.ai;
     const flagged = Boolean(activeAi?.scoreDirective || activeAi?.noVisibleChange);
     const hasCloudCard = !flagged && activeAi?.verified?.status === "verified";
-    els.surfaceGradeMap.classList.toggle("hidden", Boolean(hasCloudCard));
-    if (!hasCloudCard) {
+    els.surfaceGradeMap.classList.toggle("hidden", Boolean(hasCloudCard) || flagged);
+    if (!hasCloudCard && !flagged) {
+ 
       const surfaces = gradeRunSurfaces(activeAi);
       surfaces.forEach((s) => {
         const chip = document.createElement("span");
@@ -12075,6 +12108,10 @@ function showDisputeForm() {
     return;
   }
   els.disputeForm?.classList.remove("hidden");
+  if (els.disputeVoiceStatus) { els.disputeVoiceStatus.textContent = ""; els.disputeVoiceStatus.classList.add("hidden"); }
+  if (els.disputeVoiceAudio) { els.disputeVoiceAudio.removeAttribute("src"); els.disputeVoiceAudio.classList.add("hidden"); }
+  els.disputeVoiceRecord?.classList.remove("hidden");
+  els.disputeVoiceStop?.classList.add("hidden");
   try { els.disputeNoteText?.focus?.({ preventScroll: true }); } catch {}
 }
 
@@ -12083,16 +12120,30 @@ function hideDisputeForm() {
   stopDisputeVoice();
 }
 
-function submitDisputeAppeal() {
-  const note = String(els.disputeNoteText?.value || "");
-  openAppeal(state.latestRunId, { note, voiceDataUrl: state.disputeVoiceDataUrl || "" });
-  if (els.disputeNoteText) els.disputeNoteText.value = "";
-  state.disputeVoiceDataUrl = null;
-  if (els.disputeVoiceAudio) {
-    els.disputeVoiceAudio.removeAttribute("src");
-    els.disputeVoiceAudio.classList.add("hidden");
+async function submitDisputeAppeal() {
+  if (els.disputeSubmitButton) els.disputeSubmitButton.disabled = true;
+  try {
+    // If the cleaner is mid-recording, stop and wait for the audio file
+    // before submitting so the voice note is never silently dropped.
+    if (state.disputeRecorder && state.disputeRecorder.state !== "inactive") {
+      try { state.disputeRecorder.stop(); } catch {}
+      const t0 = Date.now();
+      while (state.disputeRecorder && Date.now() - t0 < 8000) {
+        await new Promise((r) => setTimeout(r, 120));
+      }
+    }
+    const note = String(els.disputeNoteText?.value || "");
+    openAppeal(state.latestRunId, { note, voiceDataUrl: state.disputeVoiceDataUrl || "" });
+    if (els.disputeNoteText) els.disputeNoteText.value = "";
+    state.disputeVoiceDataUrl = null;
+    if (els.disputeVoiceAudio) {
+      els.disputeVoiceAudio.removeAttribute("src");
+      els.disputeVoiceAudio.classList.add("hidden");
+    }
+    hideDisputeForm();
+  } finally {
+    if (els.disputeSubmitButton) els.disputeSubmitButton.disabled = false;
   }
-  hideDisputeForm();
 }
 
 async function startDisputeVoice() {
@@ -14308,12 +14359,12 @@ async function runPersonaSuite() {
     push("offline-queued", "Offline shift worker — area spot check-in, dwell credit, offline queue scored on reconnect", false, String(error?.message || error), "Offline queue persona threw.");
   }
 
-  // Phase 4 persona: crew-member (5-card daily deck + missed repeat + virtual squad + MVP + 13-week meter)
+  // Phase 4 persona: crew-member (10-card daily deck + missed repeat + virtual squad + MVP + 13-week meter)
   try {
     localStorage.removeItem(DECK_PROGRESS_KEY);
     recordDeckCardAnswer("deck-03", false);
     const session1 = buildDailyDeck();
-    const repeatsMissed = session1.length === 5 && session1[0].id === "deck-03";
+    const repeatsMissed = session1.length === CONFIG.deck.dailyCount && session1[0].id === "deck-03";
     recordDeckCardAnswer("deck-03", true);
     const summary = getShareableDeckSummary();
     const mistakesPrivate = !("missedIds" in summary) && !("answers" in summary);
@@ -14323,7 +14374,7 @@ async function runPersonaSuite() {
     const consistency = getConsistencyProgress([82, 85, 88, 84, 86, 90]);
     push(
       "crew-member",
-      "Crew member — 5-card deck with missed repeat, virtual squad, system MVP, 13-week meter",
+    "Crew member — 10-card deck with missed repeat, virtual squad, system MVP, 13-week meter",
       repeatsMissed && mistakesPrivate && squad.members.length >= 3 && mvp?.score === 94 && consistency.windowWeeks === 13,
       `deckSize=${session1.length} repeatsMissed=${repeatsMissed} mvp=${mvp?.member}:${mvp?.score} week=${consistency.currentWeek}/${consistency.windowWeeks}`,
       ""
@@ -14573,48 +14624,35 @@ async function runSelfTest() {
     setSelfTestResult(
       "voice",
       "running",
-      "Checking speech synthesis queue…"
+      "Checking neural voice clips…"
     );
 
     try {
-      if (
-        !("speechSynthesis" in window) ||
-        !(
-          "SpeechSynthesisUtterance"
-          in window
-        )
-      ) {
-        throw new Error(
-          "Speech synthesis is unavailable."
-        );
+      if (!("Audio" in window)) {
+        throw new Error("Web audio unavailable.");
       }
-
-      const utterance =
-        createUtterance(
-          "Self test voice check."
-        );
-
-      utterance.volume = 0;
-
-      window.speechSynthesis.speak(
-        utterance
-      );
-
-      window.speechSynthesis.cancel();
-
+      const probe = new Audio(clipUrlFor(state.language === "es" || state.language === "pl" ? state.language : "en", "consent", "00"));
+      await new Promise((resolve, reject) => {
+        const done = () => { probe.removeEventListener("canplaythrough", done); resolve(); };
+        probe.addEventListener("canplaythrough", done, { once: true });
+        probe.addEventListener("error", () => reject(new Error("Neural clip failed to load.")), { once: true });
+        setTimeout(() => reject(new Error("Neural clip timed out.")), 8000);
+        probe.load();
+      });
       setSelfTestResult(
         "voice",
         "pass",
-        "Speech synthesis is available and a test utterance was queued."
+        "Neural voice clips load and play (no robotic synth)."
       );
     } catch (error) {
       setSelfTestResult(
         "voice",
         "fail",
         error?.message ||
-          "Speech synthesis check failed."
+          "Neural voice check failed."
       );
     }
+ 
 
     setSelfTestResult(
       "leaderboard",
