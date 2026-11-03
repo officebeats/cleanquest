@@ -351,6 +351,9 @@ const translations = {
     evidenceHigh: "HIGH CONFIDENCE",
     evidenceMedium: "MEDIUM CONFIDENCE",
     evidenceRescan: "RESCAN · PHOTOS UNCLEAR",
+    rescanDark: "TOO DARK — ADD LIGHT AND RETAKE",
+    rescanBright: "TOO BRIGHT — CUT THE GLARE AND RETAKE",
+    rescanGeneric: "HOLD STEADY AND RETAKE",
     badgeRescan: "RESCAN",
     evidenceNoChange: "NO CHANGE — CLEAN AND TRY AGAIN",
     ctaClean: "CLEAN",
@@ -531,7 +534,7 @@ const translations = {
     scoreBreakdownTitle: "SCORE EXPLANATION (CLEAN · TECHNIQUE · TIME)",
     barClean: "Clean",
     barDetailClean: "Visible cleanliness, before vs after.",
-    barDetailCleanNone: "Couldn't measure — retake both photos.",
+    barDetailCleanNone: "Couldn't measure — clean and try again.",
     gapHow: "Dwell-time compliance, top-to-bottom order, product-to-surface match",
     gapWhenPattern: "{bucket} shift pattern ({count} of {total} logged runs)",
     gapWhenNone: "No timed runs logged yet",
@@ -545,7 +548,7 @@ const translations = {
     srcTopToBottomOrder: "top-to-bottom order",
     srcSurfaceOrder: "surface order",
     srcTechniqueScore: "technique score",
-    barDetailTechniqueNone: "No technique reading — retake both photos.",
+    barDetailTechniqueNone: "No technique reading — clean and try again.",
     barDetailTechnique: "From measured evidence ({sources}).",
     barDetailNoTime: "No time recorded.",
     barDetailTimeReview: "Much faster than benchmark — held for human review.",
@@ -768,6 +771,9 @@ const translations = {
     evidenceHigh: "ALTA CONFIANZA",
     evidenceMedium: "CONFIANZA MEDIA",
     evidenceRescan: "REPETIR · FOTOS POCO CLARAS",
+    rescanDark: "MUY OSCURO — AGREGA LUZ Y REPITE",
+    rescanBright: "MUY CLARO — QUITA EL REFLEJO Y REPITE",
+    rescanGeneric: "SOSTÉN EL MÓVIL Y REPITE",
     badgeRescan: "REPETIR",
     evidenceNoChange: "SIN CAMBIOS — LIMPIA Y VUELVE A INTENTARLO",
     ctaClean: "LIMPIA",
@@ -1185,6 +1191,9 @@ const translations = {
     evidenceHigh: "WYSOKA PEWNOŚĆ",
     evidenceMedium: "ŚREDNIA PEWNOŚĆ",
     evidenceRescan: "POWTÓRZ · ZDJĘCIA NIEWYRAŹNE",
+    rescanDark: "ZA CIEMNO — DOŚWIETL I POWTÓRZ",
+    rescanBright: "ZA JASNO — ZMNIEJSZ ODBLASK I POWTÓRZ",
+    rescanGeneric: "TRZYMAJ STABILNIE I POWTÓRZ",
     badgeRescan: "POWTÓRZ",
     evidenceNoChange: "BRAK ZMIAN — WYCZYŚĆ I SPRÓBUJ PONOWNIE",
     ctaClean: "CZYŚĆ",
@@ -1866,6 +1875,10 @@ const els = {
   lightboxBeforeImg: document.getElementById("lightboxBeforeImg"),
   lightboxAfterImg: document.getElementById("lightboxAfterImg"),
   lightboxGhostImg: document.getElementById("lightboxGhostImg"),
+  lightboxBeforeDetection: document.getElementById("lightboxBeforeDetection"),
+  lightboxBeforeSam: document.getElementById("lightboxBeforeSam"),
+  lightboxAfterDetection: document.getElementById("lightboxAfterDetection"),
+  lightboxAfterSam: document.getElementById("lightboxAfterSam"),
   lightboxGhostControl: document.getElementById("lightboxGhostControl"),
   lightboxGhostSlider: document.getElementById("lightboxGhostSlider"),
   lightboxModeSplit: document.getElementById("lightboxModeSplit"),
@@ -3621,7 +3634,7 @@ function announceGameVerdict() {
   const noChg = Boolean(state.result?.ai?.noVisibleChange || state.result?.noVisibleChange);
   const directive = !noChg ? state.result?.ai?.scoreDirective : null;
   const summaryCaption = !scorableRun
-    ? t("evidenceRescan")
+    ? (state.result?.ai?.scoreDirective || t("evidenceRescan"))
     : spokenScore !== null && (noChg || directive)
     ? `${Math.round(spokenScore)}% — ${noChg ? t("findingNoChange") : directive}`
     : [
@@ -6338,6 +6351,8 @@ function compareFrames(
 
   let changed = 0;
   let totalDifference = 0;
+  let lumBeforeSum = 0;
+  let lumAfterSum = 0;
   let structuralDifference = 0;
   let structuralSamples = 0;
   const totalPixels = width * height;
@@ -6348,6 +6363,8 @@ function compareFrames(
     data[pixelIndex + 2] * 0.0722;
 
   for (let index = 0; index < before.data.length; index += 4) {
+    lumBeforeSum += before.data[index] * 0.2126 + before.data[index + 1] * 0.7152 + before.data[index + 2] * 0.0722;
+    lumAfterSum += after.data[index] * 0.2126 + after.data[index + 1] * 0.7152 + after.data[index + 2] * 0.0722;
     const difference = (
       Math.abs(before.data[index] - after.data[index]) +
       Math.abs(before.data[index + 1] - after.data[index + 1]) +
@@ -6382,6 +6399,7 @@ function compareFrames(
     changedPixelRatio,
     changedPixelPercent: changedPixelRatio * 100,
     averageDifference: totalPixels > 0 ? totalDifference / totalPixels : 0,
+    avgLuminance: totalPixels > 0 ? Math.min(lumBeforeSum, lumAfterSum) / totalPixels : 128,
     sceneMatch,
     sceneMatchPercent: sceneMatch * 100
   };
@@ -7017,6 +7035,14 @@ function calculateLocalScore(
   }
   if (envCheck.matched && remainingCount > 0) { findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) })); if (!scoreDirective) { scoreDirective = t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }); scoreCta = t("ctaClean"); } }
   if (envCheck.matched && newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
+  // Unscorable with no other explanation: say WHY in plain words, not just RESCAN.
+  if (!scoreDirective && !enoughEvidence) {
+    const lum = Number(change.avgLuminance ?? 128);
+    const reason = lum < 50 ? t("rescanDark") : lum > 210 ? t("rescanBright") : t("rescanGeneric");
+    findings.push(reason);
+    scoreDirective = reason;
+    scoreCta = t("ctaRetake");
+  }
   if (!findings.length) {
     findings.push(profile[`focusNote_${state.language}`] || profile.focusNote);
   }
@@ -8776,11 +8802,11 @@ function renderResults() {
         ? t("evidenceDemo")
         : score.noVisibleChange
           ? t("evidenceNoChange")
-          : score.confidenceBand === "high"
+          : score.scoreDirective || (score.confidenceBand === "high"
             ? t("evidenceHigh")
             : score.confidenceBand === "medium"
               ? t("evidenceMedium")
-              : t("evidenceRescan");
+              : t("evidenceRescan"));
     els.scoreEvidenceState.textContent = `${formatElapsedLong(elapsed)} · ${stateLabel}`;
   }
   els.resultTime.textContent = formatTimer(elapsed);
@@ -8838,6 +8864,11 @@ function renderResults() {
   }
 
   renderScoreBreakdown();
+  // Unscorable run: the "after" photo is the whole story. Hide the empty
+  // bars and the time cards so nothing competes with the photo + directive.
+  const showScores = score.scorable !== false;
+  document.getElementById("scoreBreakdownBars")?.classList.toggle("hidden", !showScores);
+  document.querySelector("#resultsScreen .result-grid")?.classList.toggle("hidden", !showScores);
   renderDisputeUI();
   renderOfflineQueueNotice();
 }
@@ -11639,6 +11670,17 @@ function cleanBarExplanation(run) {
 }
 
 function techniqueBarExplanation(run) {
+  if (run && run.scorable === false) {
+    return {
+      key: "technique",
+      label: t("barTechnique"),
+      measured: false,
+      score: null,
+      display: t("notMeasured"),
+      sources: [],
+      detail: t("barDetailTechniqueNone")
+    };
+  }
   const values = [];
   const sources = [];
   if (run && Number.isFinite(Number(run.techniqueScore))) {
@@ -12649,6 +12691,12 @@ function openEvidenceLightbox(mode = "split") {
   if (els.lightboxGhostImg) {
     els.lightboxGhostImg.src = beforeUrl || EMPTY_IMG_SRC;
   }
+  // Mirror the AI recognition overlays (objects + SAM surface boxes) into the
+  // zoomed view; boxes use % coordinates so they scale with the image.
+  if (els.lightboxBeforeDetection) els.lightboxBeforeDetection.innerHTML = document.getElementById("beforeDetectionOverlay")?.innerHTML || "";
+  if (els.lightboxBeforeSam) els.lightboxBeforeSam.innerHTML = document.getElementById("beforeSamOverlay")?.innerHTML || "";
+  if (els.lightboxAfterDetection) els.lightboxAfterDetection.innerHTML = document.getElementById("afterDetectionOverlay")?.innerHTML || "";
+  if (els.lightboxAfterSam) els.lightboxAfterSam.innerHTML = document.getElementById("afterSamOverlay")?.innerHTML || "";
   if (els.lightboxModeBefore) {
     els.lightboxModeBefore.disabled = !beforeUrl;
     els.lightboxModeBefore.setAttribute("aria-disabled", String(!beforeUrl));
@@ -12702,7 +12750,7 @@ function setEvidenceLightboxMode(mode = "split") {
   els.lightboxGhostControl?.classList.toggle("hidden", !isAfter || !beforeUrl);
   document.getElementById("lightboxStage")?.classList.toggle("single-pane-mode", !isSplit);
   if (isAfter && els.lightboxGhostImg && els.lightboxGhostSlider) {
-    els.lightboxGhostImg.style.opacity = String(Number(els.lightboxGhostSlider.value || 55) / 100);
+    els.lightboxGhostImg.style.opacity = String(Number(els.lightboxGhostSlider.value || 0) / 100);
   }
   return true;
 }
@@ -14856,6 +14904,9 @@ function bindEvents() {
         syncConsentUI();
         els.consentGate?.classList.add("needs-attention");
         els.consentGate?.scrollIntoView?.({ behavior: "smooth", block: "nearest" });
+        // First tap also starts the audio: read the consent text aloud so the
+        // narration begins here, in the default language, with context.
+        try { speakConsentAloud(); } catch {}
         return;
       }
       state.editingFtue = false;
@@ -15308,6 +15359,30 @@ function bindEvents() {
     });
   }
 
+  // On-screen keyboard: keep the focused field (dispute note, player name,
+  // settings inputs) visible without hiding the keyboard. The viewport meta
+  // uses interactive-widget=resizes-content; this nudges the field into view
+  // on resize, with a focusin fallback for older browsers.
+  const keepFieldVisible = () => {
+    const active = document.activeElement;
+    if (active && (active.tagName === "TEXTAREA" || (active.tagName === "INPUT" && /^(text|tel|number|password|search|url|email)$/i.test(active.type || "text")))) {
+      try {
+        active.scrollIntoView({ block: "center", behavior: "smooth" });
+      } catch {}
+    }
+  };
+  if (window.visualViewport) {
+    try {
+      window.visualViewport.addEventListener("resize", () => {
+        setTimeout(keepFieldVisible, 120);
+      });
+    } catch {}
+  }
+  document.addEventListener("focusin", (event) => {
+    if (event.target && (event.target.tagName === "TEXTAREA" || event.target.tagName === "INPUT")) {
+      setTimeout(keepFieldVisible, 350);
+    }
+  });
   if (els.beforeEvidenceCard) {
     els.beforeEvidenceCard.addEventListener("click", () => openEvidenceLightbox("before"));
     els.beforeEvidenceCard.addEventListener("keydown", (event) => {
@@ -15380,7 +15455,7 @@ function bindEvents() {
   if (els.lightboxGhostSlider) {
     els.lightboxGhostSlider.addEventListener("input", (event) => {
       if (els.lightboxGhostImg) {
-        els.lightboxGhostImg.style.opacity = String(Number(event.target.value || 55) / 100);
+        els.lightboxGhostImg.style.opacity = String(Number(event.target.value ?? 0) / 100);
       }
     });
   }
@@ -15802,7 +15877,7 @@ function initializeApp() {
       if (state.voice.pendingAutoplayIntro || (!state.voice.currentAudio && activeVoiceAudios.size === 0)) {
         if (state.editingFtue && state.cleanerFtueStep === 3 && !hasConsent()) {
           speakConsentAloud();
-        } else if (state.screen === "welcome" && hasConsent()) {
+        } else if (state.screen === "welcome") {
           speakWelcomeIntro(state.language);
         }
       }

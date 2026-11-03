@@ -595,3 +595,11 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - MECE outcome model: every finding renders one directive + one-word CTA (CLEAN/WIPE/RETAKE); no-change evidence label explains why; surface grades moved into the AFTER tile with a note tying them to the AI outlines (outlines made prominent).
 - QA: consistency probe passes on deck + results; syntax clean.
 - Blockers: none.
+
+## 2026-11-03 — Results hierarchy, evidence reasons, dispute notes — DONE
+- Evidence moved directly under the score hero (AFTER maximized ~44dvh, BEFORE a 132px reference thumbnail); surface grades + outline note live inside the AFTER tile; verifiedScorecard sits right below evidence; empty bars/time cards hidden on unscorable runs.
+- No-change and dark/bright/generic rescan reasons now name the cause (avg-luminance gated, ×3 locales) with a matching one-word CTA; transcript/subline use the reason, not "RESCAN".
+- Dispute takes optional typed note + voice note before submit (stored on the appeal); record-note panel hidden; pose gate + panel hidden.
+- Lightbox (expand view) mirrors AI detection + SAM overlays; shadow overlay defaults to 0/off; viewport uses interactive-widget=resizes-content + focus scroll keeps fields above the keyboard.
+- QA: consistency probe passes deck + results; syntax clean; 390px AFTER tile fully above fold (263–607px).
+- Blockers: none.

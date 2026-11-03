@@ -1186,6 +1186,7 @@ h3 {
   letter-spacing: 0.13em;
   text-align: center;
 }
+ 
 
 .finding-card {
   margin: 12px 0;
@@ -3323,16 +3324,29 @@ p {
 
 #resultsScreen .evidence-grid {
   display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
+  grid-template-columns: 1fr !important;
   gap: 10px !important;
   margin-top: 4px !important;
 }
-
-#resultsScreen .evidence-grid .evidence-image-wrap {
-  max-height: none !important;
+#resultsScreen #afterEvidenceCard {
+  order: -1 !important;
+}
+#resultsScreen #afterEvidenceCard .evidence-image-wrap {
+  max-height: 44dvh !important;
   height: auto !important;
-  aspect-ratio: 16 / 9 !important;
-  overflow: visible !important;
+  aspect-ratio: 4 / 3 !important;
+  overflow: hidden !important;
+}
+#resultsScreen #beforeEvidenceCard {
+  display: grid !important;
+  grid-template-columns: 132px 1fr !important;
+  align-items: center !important;
+}
+#resultsScreen #beforeEvidenceCard .evidence-image-wrap {
+  aspect-ratio: 1 / 1 !important;
+}
+#resultsScreen #beforeEvidenceCard figcaption {
+  text-align: left !important;
 }
 
 #resultsScreen .evidence-card figcaption {
@@ -3696,6 +3710,16 @@ body.lightbox-open {
   object-fit: contain !important;
   pointer-events: none !important;
   filter: contrast(1.25) saturate(1.2) !important;
+}
+
+.lightbox-image-wrap {
+  position: relative !important;
+  width: 100% !important;
+}
+.lightbox-image-wrap > .detection-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  pointer-events: none !important;
 }
 
 .lightbox-pane figcaption {

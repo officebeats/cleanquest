@@ -5,11 +5,11 @@
   <meta charset="UTF-8" />
   <meta
     name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
+    content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content"
   />
   <meta name="theme-color" content="#030711" />
   <title>CleanQuest</title>
-  <link rel="stylesheet" href="styles.css?v=20261101-15" />
+  <link rel="stylesheet" href="styles.css?v=20261103-16" />
 </head>
 
 <body>
@@ -727,31 +727,6 @@
               <p id="verdictTranscriptLine" class="verdict-transcript-line" aria-live="polite"></p>
             </div>
           </div>
-
-          <div class="result-grid">
-            <article class="result-card hologram-card">
-              <span data-i18n="yourTime">YOUR TIME</span>
-              <strong id="resultTime">0:00.0</strong>
-            </article>
-
-            <article class="result-card hologram-card">
-              <span data-i18n="target">TARGET</span>
-              <strong>1:30.0</strong>
-            </article>
-
-            <article class="result-card full-width hologram-card">
-              <span data-i18n="timeResult">TIME RESULT</span>
-              <strong id="timeComparison">--</strong>
-            </article>
-          </div>
-
-          <section id="scoreBreakdownCard" class="score-breakdown-card hologram-card" aria-label="Three-bar score explanation">
-            <div class="section-label" data-i18n="scoreBreakdownTitle">SCORE EXPLANATION (CLEAN 50% · TECHNIQUE 25% · TIME 25%)</div>
-            <div id="scoreBreakdownBars" class="score-breakdown-bars"></div>
-            <p id="plainFinding" class="plain-finding"></p>
-            <button id="plainCta" class="secondary-button compact-chip hidden" type="button"></button>
-          </section>
-
           <div class="evidence-section">
             <div class="section-label" data-i18n="visualEvidence">VISUAL EVIDENCE</div>
 
@@ -791,6 +766,31 @@
             <div id="verifiedBody"></div>
             <p id="verifiedHype" class="verified-hype"></p>
           </div>
+
+          <div class="result-grid">
+            <article class="result-card hologram-card">
+              <span data-i18n="yourTime">YOUR TIME</span>
+              <strong id="resultTime">0:00.0</strong>
+            </article>
+
+            <article class="result-card hologram-card">
+              <span data-i18n="target">TARGET</span>
+              <strong>1:30.0</strong>
+            </article>
+
+            <article class="result-card full-width hologram-card">
+              <span data-i18n="timeResult">TIME RESULT</span>
+              <strong id="timeComparison">--</strong>
+            </article>
+          </div>
+
+          <section id="scoreBreakdownCard" class="score-breakdown-card hologram-card" aria-label="Three-bar score explanation">
+            <div class="section-label" data-i18n="scoreBreakdownTitle">SCORE EXPLANATION (CLEAN 50% · TECHNIQUE 25% · TIME 25%)</div>
+            <div id="scoreBreakdownBars" class="score-breakdown-bars"></div>
+            <p id="plainFinding" class="plain-finding"></p>
+            <button id="plainCta" class="secondary-button compact-chip hidden" type="button"></button>
+          </section>
+
 
  
 
@@ -1398,18 +1398,26 @@
         </div>
         <div id="lightboxStage" class="lightbox-stage">
           <figure id="lightboxBeforePane" class="lightbox-pane">
-            <img id="lightboxBeforeImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Full Before capture" />
+            <div class="lightbox-image-wrap">
+              <img id="lightboxBeforeImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Full Before capture" />
+              <div id="lightboxBeforeDetection" class="detection-overlay" aria-hidden="true"></div>
+              <div id="lightboxBeforeSam" class="detection-overlay sam-overlay" aria-hidden="true"></div>
+            </div>
             <figcaption data-i18n="before">BEFORE</figcaption>
           </figure>
           <figure id="lightboxAfterPane" class="lightbox-pane">
-            <img id="lightboxAfterImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Full After capture" />
-            <img id="lightboxGhostImg" class="lightbox-ghost-img hidden" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Before shadow overlay" />
+            <div class="lightbox-image-wrap">
+              <img id="lightboxAfterImg" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Full After capture" />
+              <img id="lightboxGhostImg" class="lightbox-ghost-img hidden" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E" alt="Before shadow overlay" />
+              <div id="lightboxAfterDetection" class="detection-overlay" aria-hidden="true"></div>
+              <div id="lightboxAfterSam" class="detection-overlay sam-overlay" aria-hidden="true"></div>
+            </div>
             <figcaption data-i18n="after">AFTER</figcaption>
           </figure>
         </div>
         <div id="lightboxGhostControl" class="lightbox-ghost-control hidden">
           <label for="lightboxGhostSlider" data-i18n="lightboxGhostOpacity">BEFORE SHADOW OVERLAY OPACITY</label>
-          <input id="lightboxGhostSlider" type="range" min="0" max="90" value="55" />
+          <input id="lightboxGhostSlider" type="range" min="0" max="90" value="0" />
         </div>
       </div>
     </div>
