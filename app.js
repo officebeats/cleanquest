@@ -8857,7 +8857,7 @@ function renderResults() {
 
   updateEvidenceThumbnails();
   renderDetectionOverlay(els.beforeDetectionOverlay, score.detection?.beforeObjects || []);
-  renderDetectionOverlay(els.afterDetectionOverlay, score.detection?.remainingObjects || [], true);
+  renderDetectionOverlay(els.afterDetectionOverlay, (score.detection?.remainingObjects?.length ? score.detection.remainingObjects : score.detection?.beforeObjects) || [], Boolean(score.detection?.remainingObjects?.length));
 
   if (state.captures.pose?.dataUrl) {
     els.poseThumbnail.src = state.captures.pose.dataUrl;
@@ -12696,8 +12696,8 @@ function openEvidenceLightbox(mode = "split") {
   // zoomed view; boxes use % coordinates so they scale with the image.
   if (els.lightboxBeforeDetection) els.lightboxBeforeDetection.innerHTML = document.getElementById("beforeDetectionOverlay")?.innerHTML || "";
   if (els.lightboxBeforeSam) els.lightboxBeforeSam.innerHTML = document.getElementById("beforeSamOverlay")?.innerHTML || "";
-  if (els.lightboxAfterDetection) els.lightboxAfterDetection.innerHTML = document.getElementById("afterDetectionOverlay")?.innerHTML || "";
-  if (els.lightboxAfterSam) els.lightboxAfterSam.innerHTML = document.getElementById("afterSamOverlay")?.innerHTML || "";
+  if (els.lightboxAfterDetection) els.lightboxAfterDetection.innerHTML = document.getElementById("afterDetectionOverlay")?.innerHTML || document.getElementById("beforeDetectionOverlay")?.innerHTML || "";
+  if (els.lightboxAfterSam) els.lightboxAfterSam.innerHTML = document.getElementById("afterSamOverlay")?.innerHTML || document.getElementById("beforeSamOverlay")?.innerHTML || "";
   if (els.lightboxModeBefore) {
     els.lightboxModeBefore.disabled = !beforeUrl;
     els.lightboxModeBefore.setAttribute("aria-disabled", String(!beforeUrl));

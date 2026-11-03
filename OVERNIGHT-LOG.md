@@ -603,3 +603,10 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Lightbox (expand view) mirrors AI detection + SAM overlays; shadow overlay defaults to 0/off; viewport uses interactive-widget=resizes-content + focus scroll keeps fields above the keyboard.
 - QA: consistency probe passes deck + results; syntax clean; 390px AFTER tile fully above fold (263–607px).
 - Blockers: none.
+
+## 2026-11-03 — Beat unification, ghost off, lightbox overlays — DONE
+- Verdict beat now follows the displayed weighted score (cloud retry yields to clear local pass); no rank + reason-only transcript on unscorable runs; customHype gated on pass mark.
+- Ghost/shadow overlays default OFF (timer + lightbox); lightbox mirrors detection + SAM boxes with before-fallback when after is empty; after overlay falls back to cleared items.
+- Pose fully hidden (gate disabled, panel auto-hidden); dispute form + voice note wired and verified end-to-end (appeal stored with note).
+- QA: consistency probe green on deck + results + timer; mobile 390px AFTER tile fully above fold (263–607px).
+- Blockers: none.
