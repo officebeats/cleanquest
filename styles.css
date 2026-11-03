@@ -4330,7 +4330,7 @@ body.lightbox-open {
   }
   #cameraScreen .camera-content > .camera-frame {
     grid-row: 1 !important;
-    min-height: 180px !important;
+    min-height: 42dvh !important;
     border: 1px solid rgba(74, 226, 255, 0.25) !important;
     border-radius: 14px !important;
   }
@@ -4366,6 +4366,7 @@ body.lightbox-open {
     flex: 1 1 100% !important;
     white-space: normal !important;
   }
+ 
   #cameraScreen #assignedSpotBadge {
     grid-column: 1 / -1 !important;
     text-align: left !important;
@@ -5719,6 +5720,15 @@ button.btn-pop-active::before {
   text-overflow: ellipsis !important;
 }
 
+#timerScreen .spot-pill-chip.spot-pill-icon {
+  flex: 0 0 auto !important;
+  min-width: 52px !important;
+  min-height: 52px !important;
+  padding: 6px !important;
+  font-size: 24px !important;
+  line-height: 1 !important;
+}
+
 #timerScreen .timer-actions {
   grid-template-columns: 1fr !important;
 }
@@ -6070,6 +6080,16 @@ button.btn-pop-active::before {
   height: 100vh;
   pointer-events: none;
   z-index: 9992;
+}
+
+/* Celebration FX canvas is fullscreen (z-index 9992): sponsor surfaces
+   must paint above it so bursts never cover sponsor logos. */
+#deckScreen .sponsor-slot,
+#homeSponsorSlot,
+#loadingSponsorCard,
+#leaderboardSponsorBanner {
+  position: relative;
+  z-index: 9993;
 }
 
 .deck-illustration svg {
@@ -7376,6 +7396,10 @@ body #resultsScreen .results-cta-bar {
 /* Deck readability: no perpetual motion on the card while reading. */
 #deckScreen .deck-illustration .bubble-rise,
 #deckScreen .deck-illustration .lottie-bubble,
+#deckScreen .deck-illustration .sweep-arc,
+#deckScreen .deck-illustration .loader-sparkle,
+#deckScreen .deck-illustration .lottie-sparkle,
+#deckScreen .deck-illustration .lottie-float,
 #deckScreen .deck-floater {
   animation: none !important;
 }

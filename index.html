@@ -378,11 +378,18 @@
             </button>
           </div>
           <span id="assignedSpotBadge" class="assigned-spot-badge">RULE: 55% SURFACE · 25% ZONES · 20% ITEMS</span>
-          <div class="checkin-size-row">
-            <span class="checkin-area-label" data-i18n="siteSizeLabel">📐 SITE SIZE (optional)</span>
-            <div id="siteSizeChips" class="size-chip-row" role="group" aria-label="Site size"></div>
+          <label class="checkin-area-label checkin-size-row" for="siteSizeSelect">
+            <span data-i18n="siteSizeLabel">📐 SITE SIZE (optional)</span>
+            <select id="siteSizeSelect" class="area-select">
+              <option value="" data-i18n="siteSizePlaceholder">Select size (optional)</option>
+              <option value="s1">Under 5k sq ft</option>
+              <option value="s2">5–25k sq ft</option>
+              <option value="s3">25–50k sq ft</option>
+              <option value="s4">50–100k sq ft</option>
+              <option value="s5">100k+ sq ft</option>
+            </select>
             <small class="settings-keys-explain" data-i18n="siteSizeHint">e.g. dentist office = Under 5k · skip if unsure — you'll rank on All sizes.</small>
-          </div>
+          </label>
         </div>
 
         <div class="camera-frame">
@@ -638,6 +645,19 @@
           </svg>
           <h2 data-i18n="challengeComplete">Challenge complete</h2>
         </div>
+        <div id="poseGate" class="camera-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="poseGateTitle">
+          <div class="consent-gate hologram-card">
+            <div class="consent-gate-head">
+              <strong id="poseGateTitle" data-i18n="poseGateTitle">STRIKE A POSE? (+5%)</strong>
+            </div>
+            <p id="poseGateNote" class="consent-copy" data-i18n="poseGateNote">Hit a pose now for up to +5% style bonus. Skip = no bonus, lower score.</p>
+            <div id="poseGateGrid" class="pose-emote-grid pose-gate-grid" role="radiogroup" aria-label="Victory pose"></div>
+            <div class="settings-row">
+              <button id="poseGateStrike" class="primary-button" type="button" data-i18n="poseGateStrike">✋ STRIKE POSE</button>
+              <button id="poseGateSkip" class="secondary-button" type="button" data-i18n="poseGateSkip">SKIP</button>
+            </div>
+          </div>
+        </div>
         <div id="analysisLoading" class="analysis-loading hidden" role="status" aria-live="polite">
           <div class="cleaning-loader-stage">
             <svg class="cleaning-loader-svg" viewBox="0 0 320 110" aria-hidden="true">
@@ -703,11 +723,7 @@
             <strong id="cleanlinessScore">--</strong>
             <small id="scoreEvidenceState" class="score-evidence-state">WAITING FOR EVIDENCE</small>
             <div id="verdictAudioPill" class="verdict-audio-pill" data-tier="pass">
-              <button id="replaySummaryButton" type="button" class="verdict-replay-btn" aria-label="Replay audio summary">
-                <span class="verdict-waveform" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-                <span id="verdictSummaryBadge" class="verdict-tier-badge">✨ A-RANK</span>
-                <span id="replaySummaryLabel" data-i18n="replaySummary">🔊 REPLAY SUMMARY</span>
-              </button>
+              <span id="verdictSummaryBadge" class="verdict-tier-badge">✨ A-RANK</span>
               <p id="verdictTranscriptLine" class="verdict-transcript-line" aria-live="polite"></p>
             </div>
           </div>
@@ -733,6 +749,7 @@
             <div class="section-label" data-i18n="scoreBreakdownTitle">SCORE EXPLANATION (CLEAN 50% · TECHNIQUE 25% · TIME 25%)</div>
             <div id="scoreBreakdownBars" class="score-breakdown-bars"></div>
             <div id="surfaceGradeMap" class="surface-grade-map"></div>
+            <p id="plainFinding" class="plain-finding"></p>
           </section>
 
           <div class="evidence-section">
@@ -769,10 +786,7 @@
             </div>
           </div>
 
-          <article class="finding-card">
-            <div class="finding-label" data-i18n="visualFinding">VISUAL FINDING</div>
-            <p id="findingText"></p>
-          </article>
+ 
 
           <div id="proofGridPanel" class="proof-grid hidden" aria-label="AI evidence summary">
             <article class="proof-card hologram-card">
@@ -801,7 +815,7 @@
         </div>
 
           <div id="verifiedScorecard" class="verified-card hologram-card hidden">
-            <div class="section-label" data-i18n="verifiedScorecard">VERIFIED SCORECARD</div>
+            <div class="section-label" data-i18n="verifiedScorecard">SURFACE SCORES</div>
             <div id="verifiedBody"></div>
             <p id="verifiedHype" class="verified-hype"></p>
           </div>
@@ -884,6 +898,22 @@
                   <circle cx="38" cy="4" r="2.2" fill="#ffd35c" />
                 </svg>
                 <span class="pose-emote-name" data-pose-label="star">DISCO</span>
+              </button>
+              <button type="button" class="pose-emote-card" data-pose="peace" role="radio" aria-checked="false">
+                <svg class="pose-silhouette-svg" viewBox="0 0 48 48" aria-hidden="true">
+                  <circle cx="24" cy="11" r="4.2" fill="currentColor" />
+                  <path class="pose-body" d="M24 16v13M24 29l-6 13M24 29l6 13" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none" />
+                  <path class="pose-limb" d="M24 19l-5-9-3-7M24 19l4 10" stroke="#39f5bc" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                </svg>
+                <span class="pose-emote-name" data-pose-label="peace">PEACE</span>
+              </button>
+              <button type="button" class="pose-emote-card" data-pose="thumbsup" role="radio" aria-checked="false">
+                <svg class="pose-silhouette-svg" viewBox="0 0 48 48" aria-hidden="true">
+                  <circle cx="24" cy="11" r="4.2" fill="currentColor" />
+                  <path class="pose-body" d="M24 16v13M24 29l-6 13M24 29l6 13" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" fill="none" />
+                  <path class="pose-limb" d="M24 19l-9-1-3-6M24 19l4 10" stroke="#ffd35c" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                </svg>
+                <span class="pose-emote-name" data-pose-label="thumbsup">THUMBS UP</span>
               </button>
             </div>
 
@@ -988,7 +1018,10 @@
           <button id="lbTabShift" class="mvp-tab-chip active" type="button" role="tab" aria-selected="true" data-i18n="lbTabShift">⚡ SHIFT CHALLENGE</button>
           <button id="lbTabDeck" class="mvp-tab-chip" type="button" role="tab" aria-selected="false" data-i18n="lbTabDeck">🃏 DAILY DECK</button>
         </div>
-        <div id="leaderboardSizeBar" class="size-chip-row leaderboard-size-bar" role="tablist" aria-label="Leaderboard size filter"></div>
+        <label class="checkin-area-label leaderboard-size-select" for="leaderboardSizeSelect">
+          <span data-i18n="sizeFilterLabel">SIZE</span>
+          <select id="leaderboardSizeSelect" class="area-select"></select>
+        </label>
         <div id="leaderboardRivalBanner" class="leaderboard-rival-banner hologram-card"></div>
         <div id="crewLeaderboardSummary" class="crew-summary-bar hologram-card hidden" aria-hidden="true"></div>
         <div id="personalRecordBar" class="crew-summary-bar hologram-card">
@@ -999,14 +1032,11 @@
             </button>
           </div>
           <div id="leaderboardDeckStatus" class="leaderboard-deck-status"></div>
-          <label class="consent-check-label" for="optInShareCheckbox">
-            <input id="optInShareCheckbox" type="checkbox" />
-            <span data-i18n="optInShareLabel">Opt-in: share verified record with current site (portable record owned by you)</span>
-          </label>
+ 
           <small id="passportShareStatus" class="consent-status-badge hidden"></small>
           <div id="leaderboardSponsorBanner" class="leaderboard-sponsor-banner">
             <span class="lb-sponsor-pill" id="lbSponsorTag">SPONSORED CHALLENGE</span>
-            <span class="lb-sponsor-text" id="lbSponsorCopy">YOUR LOGO HERE · Weekly Crew &amp; MVP Prize Pool</span>
+            <span class="lb-sponsor-text" id="lbSponsorCopy">✦ NOVACLEAN · Weekly Crew &amp; MVP Prize Pool</span>
           </div>
         </div>
         <div class="leaderboard-right-col">

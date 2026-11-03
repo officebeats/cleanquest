@@ -27,7 +27,7 @@ approval, offline/demo always works.
 | Gap | Now | Target |
 |---|---|---|
 | Verdict voice | `announceGameVerdict()` bypasses clips via raw TTS | Route verdict through `speakHost()` tiers: pass-big / pass / pass-close / retry / retry-far by margin; neural clips only, silence when unrecorded (never synth) |
-| Score explanation | Three bars (Clean / Technique / Time vs benchmark) + plain-language untouched-area callout ("Looks untouched: top left… Go wipe it") | Keep verdicts to one short line each; no verbose paragraphs after AI analysis |
+| Score explanation | Three bars (Clean / Technique / Time vs benchmark), one plain directive line, no findings box; near-identical before/after caps at 20% with "no change" callout | Keep verdicts to one short line each; no verbose paragraphs after AI analysis |
 | Leaderboard fairness | Full ranked list | Top 10 + own entry only; never show last place |
 | Appeals | None | One-tap Dispute on results → local appeal record (open, 5-business-day promise shown as text); no code path can edit a score |
 | Consent & privacy | Disclaimer text only | Plain-language consent gate before first run, read aloud in chosen language; "faces are never identified" stated; consent flag in-browser only |

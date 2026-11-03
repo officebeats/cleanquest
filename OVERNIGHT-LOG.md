@@ -560,3 +560,12 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Docs revised: README (neural-only + 706 clips + untouched callout), PRODUCT-PLAN (voice row, deck row, score-explanation row), AUDIO-PLAN (3x TTS-fallback → silent), HANDOFF (fallback policy), judges report.html (10-card x2) + submission.html (RIGHT verdict copy).
 - Evidence: node --check clean; local 390px screenshots of deck/instructions/camera/results; commit b779474 pushed to main.
 - Blockers: none.
+
+## 2026-11-02 — Results declutter + pose gate + no-change detection — DONE
+- Results: findings red box removed (plain unboxed directive line under the bars); zones-stat sentence gone; REPLAY SUMMARY button removed (badge stays); WARMUP ROUND dropped from D-tier + voice line; total subline now elapsed-only ("6 seconds" / "1:18"); "VERIFIED SCORECARD" renamed "SURFACE SCORES" (×3 locales).
+- No-change detection: <4% changed pixels + no counted objects moved → score capped at 20, "No change detected — the surface looks the same. Clean it and try again." (×3), transcript follows suit, survives cloud fallback. Tested: unchanged-clean silent, unchanged-dirty flags, cleaned silent.
+- Pose: 6 emotes (+PEACE, +THUMBS UP with matcher branches); pre-submit gate after COMPLETE (STRIKE for up to +5% / SKIP forfeits bonus, disclosed); defer-mode prevents mutating previous run; judge demo bypasses gate. Fixed a self-inflicted ReferenceError (dropped `const findings`) caught by demo-run A/B vs pre-change build.
+- Leaderboard: share-record row removed; size tiles → SIZE dropdown; NOVACLEAN brand logo (was "YOUR LOGO HERE") on deck/home/loading/leaderboard.
+- Camera: site size chips → dropdown; viewfinder min 42dvh; camera explainer popup on first visit + neural voiceover (camera-explain.mp3 rendered EN/ES/PL via repo Piper pipeline); timer spot pills icon-only; sponsor surfaces paint above FX canvas (z9993).
+- Evidence: node --check clean; local 390px screenshots (camera, results 58% demo, leaderboard); live Pages verified serving latest.
+- Blockers: none.

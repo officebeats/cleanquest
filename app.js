@@ -368,6 +368,10 @@ const translations = {
 
     victoryPose: "VICTORY POSE",
     strikePose: "STRIKE A POSE",
+    poseGateTitle: "STRIKE A POSE? (+5%)",
+    poseGateNote: "Hit a pose now for up to +5% style bonus. Skip = no bonus, lower score.",
+    poseGateStrike: "✋ STRIKE POSE",
+    poseGateSkip: "SKIP",
     poseReady: "Celebrate your finish with a style score.",
     poseAnalyzing: "Reading that championship pose…",
     poseCaptured: "Victory pose scored!",
@@ -405,6 +409,7 @@ const translations = {
     findingZones: "{improved} of 9 zones visibly improved · {residual} remaining.",
     findingZonesOne: "{improved} of 9 zones visibly improved · 1 zone needs another pass.",
     findingUntouched: "Looks untouched: {areas}. Go wipe {them}.",
+    findingNoChange: "No change detected — the surface looks the same. Clean it and try again.",
     findingDemoStation: "Demo station: 3 of 3 surface items (cup, bottle, bowl) cleared; counter and sink basin visibly improved.",
     findingNoObjects: "Not enough countable objects were detected for strong verification.",
     findingRemaining: "{objects} still detected after the challenge.",
@@ -475,7 +480,7 @@ const translations = {
     settingsClear: "CLEAR KEYS",
     settingsSaved: "Saved in this browser.",
     settingsDone: "DONE",
-    verifiedScorecard: "VERIFIED SCORECARD",
+    verifiedScorecard: "SURFACE SCORES",
     offlineScoreNote: "Offline score — showing the on-device score.",
     scorecardErrorNote: "Cloud check failed — showing the on-device score.",
     surfaceUnverified: "unverified",
@@ -652,8 +657,10 @@ const translations = {
     areaRetailfloor: "🛒 Sales Floor & Checkout",
     lbTabShift: "⚡ SHIFT CHALLENGE",
     sizeMine: "My size",
+    sizeFilterLabel: "SIZE",
     sizeAll: "All sizes",
     siteSizeLabel: "📐 SITE SIZE (optional)",
+    siteSizePlaceholder: "Select size (optional)",
     siteSizeHint: "e.g. dentist office = Under 5k · skip if unsure — you'll rank on All sizes.",
     lbTabDeck: "🃏 DAILY DECK",
     lbOpenDeckAction: "🃏 DAILY DECK",
@@ -764,6 +771,10 @@ const translations = {
 
     victoryPose: "POSE DE VICTORIA",
     strikePose: "¡HAZ TU POSE!",
+    poseGateTitle: "¿POSE? (+5%)",
+    poseGateNote: "Haz una pose ahora para hasta +5% de bono de estilo. Omitir = sin bono, menos puntos.",
+    poseGateStrike: "✋ HACER POSE",
+    poseGateSkip: "OMITIR",
     poseReady: "Celebra tu final con una puntuación de estilo.",
     poseAnalyzing: "Analizando esa pose de campeón…",
     poseCaptured: "¡Pose de victoria puntuada!",
@@ -801,6 +812,7 @@ const translations = {
     findingZones: "{improved} de 9 zonas mejoraron visiblemente · {residual} pendientes.",
     findingZonesOne: "{improved} de 9 zonas mejoraron visiblemente · 1 zona necesita otra pasada.",
     findingUntouched: "Sin limpiar: {areas}. Pásale un paño.",
+    findingNoChange: "Sin cambios — la superficie se ve igual. Límpiala e inténtalo de nuevo.",
     findingDemoStation: "Estación demo: 3 de 3 objetos de la superficie (taza, botella, tazón) retirados; la encimera y el lavabo mejoraron visiblemente.",
     findingNoObjects: "No se detectaron suficientes objetos para una verificación sólida.",
     findingRemaining: "{objects} siguen detectados después del reto.",
@@ -871,7 +883,7 @@ const translations = {
     settingsClear: "BORRAR CLAVES",
     settingsSaved: "Guardadas en este navegador.",
     settingsDone: "LISTO",
-    verifiedScorecard: "TARJETA VERIFICADA",
+    verifiedScorecard: "PUNTUACIONES POR SUPERFICIE",
     offlineScoreNote: "Puntuación local — se muestra la puntuación del dispositivo.",
     scorecardErrorNote: "Falló la comprobación en la nube — se muestra la puntuación local.",
     surfaceUnverified: "sin verificar",
@@ -1047,9 +1059,11 @@ const translations = {
     areaFitness: "🏋️ Vestidores y Área de Entrenamiento",
     areaRetailfloor: "🛒 Piso de Venta y Cajas",
     lbTabShift: "⚡ RETO DE TURNO",
+    sizeFilterLabel: "TAMAÑO",
     sizeMine: "Mi tamaño",
     sizeAll: "Todos",
     siteSizeLabel: "📐 TAMAÑO DEL SITIO (opcional)",
+    siteSizePlaceholder: "Seleccionar tamaño (opcional)",
     siteSizeHint: "p. ej. consultorio = Under 5k · si no estás seguro, omítelo — competirás en Todos.",
     lbTabDeck: "🃏 MAZO DIARIO",
     lbOpenDeckAction: "🃏 MAZO DIARIO",
@@ -1160,6 +1174,10 @@ const translations = {
 
     victoryPose: "POZA ZWYCIĘZCY",
     strikePose: "ZRÓB POZĘ!",
+    poseGateTitle: "POZA? (+5%)",
+    poseGateNote: "Zrób pozę teraz i zgarnij do +5% bonusu stylu. Pomiń = brak bonusu, niższy wynik.",
+    poseGateStrike: "✋ ZRÓB POZĘ",
+    poseGateSkip: "POMIŃ",
     poseReady: "Świętuj finisz i zdobądź punkty za styl.",
     poseAnalyzing: "Oceniamy tę mistrzowską pozę…",
     poseCaptured: "Poza zwycięzcy oceniona!",
@@ -1197,6 +1215,7 @@ const translations = {
     findingZones: "{improved} z 9 stref wyraźnie lepsze · {residual} do poprawy.",
     findingZonesOne: "{improved} z 9 stref wyraźnie lepsze · 1 strefa wymaga poprawki.",
     findingUntouched: "Nieruszone: {areas}. Wytrzyj {them}.",
+    findingNoChange: "Brak zmian — powierzchnia wygląda tak samo. Wyczyść ją i spróbuj ponownie.",
     findingDemoStation: "Stacja demo: 3 z 3 przedmiotów (kubek, butelka, miska) usunięte; blat i umywalka wyraźnie lepsze.",
     findingNoObjects: "Wykryto zbyt mało obiektów, aby mocno potwierdzić wynik.",
     findingRemaining: "{objects} nadal wykryto po zakończeniu wyzwania.",
@@ -1267,7 +1286,7 @@ const translations = {
     settingsClear: "WYCZYŚĆ KLUCZE",
     settingsSaved: "Zapisano w tej przeglądarce.",
     settingsDone: "GOTOWE",
-    verifiedScorecard: "ZWERYFIKOWANA KARTA",
+    verifiedScorecard: "WYNIKI POWIERZCHNI",
     offlineScoreNote: "Wynik lokalny — wyświetlono wynik z urządzenia.",
     scorecardErrorNote: "Weryfikacja w chmurze nie powiodła się — wyświetlono wynik lokalny.",
     surfaceUnverified: "niezweryfikowana",
@@ -1443,9 +1462,11 @@ const translations = {
     areaFitness: "🏋️ Szatnia i Strefa Treningowa",
     areaRetailfloor: "🛒 Sala Sprzedaży i Strefa Kas",
     lbTabShift: "⚡ WYZWANIE ZMIANY",
+    sizeFilterLabel: "ROZMIAR",
     sizeMine: "Mój rozmiar",
     sizeAll: "Wszystkie",
     siteSizeLabel: "📐 ROZMIAR OBIEKTU (opcjonalnie)",
+    siteSizePlaceholder: "Wybierz rozmiar (opcjonalnie)",
     siteSizeHint: "np. gabinet = Under 5k · jeśli nie wiesz, pomiń — zagrasz we Wszystkie.",
     lbTabDeck: "🃏 TALIA DNIA",
     lbOpenDeckAction: "🃏 TALIA DNIA",
@@ -2143,7 +2164,7 @@ const HOST_LINES = {
     retry: ["So close! Run it back and take the crown!", "Right on the edge! You've got the next one!", "Just missed the cut! Shake it off and attack again!", "Almost had it! One more push takes it!", "Champions reload! Run that spot back!", "Just a fraction short! Next run is yours!", "Ooh, razor close! Let's fire it up again!", "Not quite there yet, but the speed is real!", "So near the mark! Give it one more blitz!", "Shake it off and hit that surface again!", "Almost locked it! Come back swinging!", "Close call! Bring that fire into the next run!", "Right at the doorstep! One more try!", "Reload time! You know the angles now, go!", "Just below the line! Run it back fast!", "One more round! You are right there!", "Close one! Hit those missed zones and own it!", "Big heart out there! Let's run it one more time!", "The spot is waiting! Jump back in and crush it!", "Retry! Turn that frustration into speed!", "So close! Hit the corners and claim that pass!", "Next run is the winner! Let's go!", "Tough break, huge effort! Run it back!", "Again! Faster, sharper, and all the way clean!"],
     "pass-big": ["Massive win! Absolutely glowing from top to bottom!", "Blown away! That is a monster championship score!", "History made on camera! Look at that shine!", "Unreal result! Take a bow, you crushed the benchmark!", "Total triumph! Every single zone transformed!", "Legendary clean! Straight to the top of the board!", "Off the charts! Incredible speed and technique!", "An absolute masterpiece! Pure gold!", "Best run of the day! Simply flawless!", "Record-breaking energy! Enjoy that huge win!", "Pure perfection across the whole spot! Wow!", "Champion level! Undisputed number one!"],
     "pass-close": ["Squeaked right through! A win is a win!", "By a whisker! You beat the benchmark!", "Just enough to lock the pass! Celebrate it!", "Narrow victory! Clutch finish under pressure!", "Cut it razor close and pulled it off!", "Right over the line! What a finish!", "Made it by a hair! That final burst paid off!", "Tight score, big win! It is all yours!", "Scraped through on grit! Take the points!", "Photo finish and you got the pass!", "Barely cleared it, but it counts on the board!", "Clutch survival! You got the job done!"],
-    "retry-far": ["Tough round! Reset the frame and attack every zone!", "Off the mark this time, keep your head high!", "Missed a few zones! Step back in and light them up!", "Rough pass, bigger comeback! Shake it off!", "Plenty of room to climb! Hit that spot again!", "No sweat! Check the zone map and reload!", "Camera wants more action! Run it back strong!", "Tough break! Line up the shadow guide and go again!", "Missed the target zones! Next run is the comeback!", "Shake off that round and bring the heat!", "Reset, refocus, and attack that surface!", "Every pro has a warmup round! Now go crush it!"],
+    "retry-far": ["Tough round! Reset the frame and attack every zone!", "Off the mark this time, keep your head high!", "Missed a few zones! Step back in and light them up!", "Rough pass, bigger comeback! Shake it off!", "Plenty of room to climb! Hit that spot again!", "No sweat! Check the zone map and reload!", "Camera wants more action! Run it back strong!", "Tough break! Line up the shadow guide and go again!", "Missed the target zones! Next run is the comeback!", "Shake off that round and bring the heat!", "Reset, refocus, and attack that surface!", "Every pro bounces back! Now go crush it!"],
     hurry: ["Final stretch! Let's go! Bring that sparkle home!", "Final stretch! Pour on the speed and finish strong!", "Thirty seconds on the clock! Push, push, push!", "Home stretch! Empty the tank and make it shine!", "Final thirty! Attack those last corners right now!", "Closing speed! Show the judges what you've got!", "Here comes the bell! Finish every last inch!", "Final countdown! Turn the tempo all the way up!", "Almost home! Fast hands, lock in that clean!", "Final moments! Give it everything you have!", "Nearly there! Polish it off before the buzzer!", "Seconds ticking down! Sprint to the finish!"],
     "hurry-final": ["Ten, nine, eight! Sprint to the buzzer, let's go!", "Final ten seconds! Leave nothing behind, push!", "Clock is screaming! Give me one big final burst!", "Last ten seconds! Fast hands, finish that spot!", "Ten seconds left! Attack the final zone right now!", "The buzzer is coming! Empty the tank!", "Final burst! Everything you've got for ten seconds!", "Ten seconds to glory! Bring it home right now!", "Almost over! Make this final wipe count!", "Last call on the clock! Full speed to the bell!", "Final ten! Championship effort right to the line!", "Buzzer about to sound! Finish strong, let's go!"],
     "scoring-wait": ["Judges locking in the tape! Here comes the score!", "Hold your breath! Vision engine tallying the zones!", "Scores incoming! Let's see how you did!", "Drumroll please! Checking every surface zone!", "Judges deciding right now! Big moment!", "Checking the before and after! Stand by!", "Tallying up the clean and technique bars!", "Moment of truth! The scoreboard is lighting up!", "Locking in the benchmark verdict! Here it comes!", "Fingers crossed! Let's see that percentage!", "The verdict is almost ready! What a run!", "High drama in the booth! Score coming right up!"],
@@ -3513,7 +3534,7 @@ function tierRankLabel(beat, score) {
   if (beat === "pass") return `✨ A-RANK · CLEAN WINNER${pct}`;
   if (beat === "pass-close") return `😅 B-RANK · PHOTO FINISH${pct}`;
   if (beat === "retry") return `🔥 C-RANK · SO CLOSE${pct}`;
-  return `💪 D-RANK · WARMUP ROUND${pct}`;
+  return `💪 D-RANK${pct}`;
 }
 
 function announceGameVerdict() {
@@ -3539,11 +3560,14 @@ function announceGameVerdict() {
 
   const pickedVerdict = pickHostLine(beat, state.language);
   const pickedFinish = beat.startsWith("pass") ? pickHostLine("finish", state.language) : null;
-  const summaryCaption = [
-    spokenScore !== null ? `${Math.round(spokenScore)}%` : null,
-    customHype || pickedVerdict?.text || "",
-    pickedFinish?.text || ""
-  ].filter(Boolean).join(" — ");
+  const noChg = Boolean(state.result?.ai?.noVisibleChange || state.result?.noVisibleChange);
+  const summaryCaption = noChg && spokenScore !== null
+    ? `${Math.round(spokenScore)}% — ${t("findingNoChange")}`
+    : [
+      spokenScore !== null ? `${Math.round(spokenScore)}%` : null,
+      customHype || pickedVerdict?.text || "",
+      pickedFinish?.text || ""
+    ].filter(Boolean).join(" — ");
   if (transcriptEl) transcriptEl.textContent = summaryCaption;
 
   if (SELFTEST_MODE) {
@@ -4934,7 +4958,28 @@ function updateCameraUI() {
 function showCameraExplainer() {
   const modal = document.getElementById("cameraExplainModal");
   if (modal) modal.classList.remove("hidden");
-  try { speakText(t("cameraExplainBody"), {}); } catch {}
+  // Neural voiceover only: pre-rendered camera-explain.mp3 per language.
+  if (!state.voice.muted && !SELFTEST_MODE) {
+    const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+    playHostClip(`assets/audio/${lang}/camera-explain.mp3`, t("cameraExplainBody"), { rate: 1.0, pitch: 1.0 }, "camera-explain");
+  }
+}
+const CAMERA_EXPLAIN_SEEN_KEY = "cleanquest.cameraExplainSeen.v1";
+
+function hasSeenCameraExplain() {
+  try {
+    return localStorage.getItem(CAMERA_EXPLAIN_SEEN_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function setSeenCameraExplain(seen = true) {
+  try {
+    if (seen) localStorage.setItem(CAMERA_EXPLAIN_SEEN_KEY, "1");
+    else localStorage.removeItem(CAMERA_EXPLAIN_SEEN_KEY);
+  } catch {}
+  return hasSeenCameraExplain();
 }
 
 function hideCameraExplainer() {
@@ -5636,6 +5681,15 @@ function formatTimer(milliseconds) {
   return `${minutes}:${String(seconds).padStart(2, "0")}.${tenths}`;
 }
 
+// Plain elapsed duration for the results header ("6 seconds" / "1:24").
+function formatElapsedLong(milliseconds) {
+  const totalSeconds = Math.max(0, Math.round(milliseconds / 1000));
+  if (totalSeconds < 60) {
+    const unit = state.language === "es" ? (totalSeconds === 1 ? "segundo" : "segundos") : state.language === "pl" ? (totalSeconds === 1 ? "sekundę" : "sekund") : (totalSeconds === 1 ? "second" : "seconds");
+    return `${totalSeconds} ${unit}`;
+  }
+  return `${Math.floor(totalSeconds / 60)}:${String(totalSeconds % 60).padStart(2, "0")}`;
+}
 async function handleStartPause() {
   unlockAudio();
 
@@ -5732,10 +5786,10 @@ function syncLoadingSponsorCard() {
   }
   if (lbCopy) {
     lbCopy.textContent = lang === "es"
-      ? "TU LOGO AQUÍ · Premio Semanal de Equipo y MVP"
+      ? "✦ NOVACLEAN · Premio Semanal de Equipo y MVP"
       : lang === "pl"
-      ? "TWOJE LOGO TUTAJ · Tygodniowa Pula Nagród Zespołu i MVP"
-      : "YOUR LOGO HERE · Weekly Crew & MVP Prize Pool";
+      ? "✦ NOVACLEAN · Tygodniowa Pula Nagród Zespołu i MVP"
+      : "✦ NOVACLEAN · Weekly Crew & MVP Prize Pool";
   }
 }
 
@@ -5867,8 +5921,13 @@ async function completeChallenge() {
   }
 
   await captureFrame("after");
+  // Pose counts toward the submitted score: strike now (up to +5%) or skip
+  // (no bonus). Runs after capture so the camera is hot.
+  state.posePreScore = null;
+  state.poseSkipped = false;
   navigateTo("results");
   setAnalysisLoading(true);
+  await runPoseGate();
   const t0 = Date.now();
   await analyzeChallenge();
   if (!SELFTEST_MODE && !VOICE_TEST_MODE && !state.inPersonaSuite) {
@@ -5914,8 +5973,11 @@ async function analyzeChallenge() {
     );
   }
 
-  aiResult.styleScore =
-    state.latestScore?.styleScore ?? 7.5;
+  aiResult.styleScore = state.posePreScore?.styleScore ?? state.latestScore?.styleScore ?? 7.5;
+  if (state.posePreScore && !state.poseSkipped) {
+    aiResult.poseBonus = state.posePreScore.bonusPts || 0;
+    aiResult.poseEmote = state.posePreScore.emote || getSelectedPoseId();
+  }
 
   state.latestScore = aiResult;
 
@@ -6861,13 +6923,19 @@ function calculateLocalScore(
     newObjectPenalty * 0.14
   );
 
-  const cleanliness = enoughEvidence
+  const rawCleanliness = enoughEvidence
     ? Math.max(15, Math.min(100, Math.round(rawScore * 100)))
     : null;
+  // Nothing actually cleaned: the two frames are nearly identical and no
+  // counted objects moved. Cap the score and say so directly instead of
+  // praising an unchanged surface.
+  const noVisibleChange = envCheck.matched && clearedCount === 0 && newCount === 0 && Number(change.changedPixelPercent || 0) < 4;
+  const cleanliness = noVisibleChange && rawCleanliness != null ? Math.min(rawCleanliness, 20) : rawCleanliness;
   const confidenceBand = !enoughEvidence
     ? "rescan"
     : evidenceConfidence >= 0.68 ? "high" : "medium";
 
+  let scoreDirective = null;
   const findings = [];
   if (!envCheck.matched && envCheck.message) {
     findings.push(envCheck.message);
@@ -6877,11 +6945,14 @@ function calculateLocalScore(
     findings.push(t("findingAllCleared"));
   }
   if (envCheck.matched && surface) {
-    const zoneKey = Number(surface.residualZones) === 1 ? "findingZonesOne" : "findingZones";
-    findings.push(t(zoneKey, { improved: surface.improvedZones, residual: surface.residualZones }));
-    const untouched = describeUntouchedZones(surface.zones);
-    const allObjectsCleared = beforeCount > 0 && clearedCount === beforeCount && newCount === 0;
-    if (untouched && !allObjectsCleared && (cleanliness == null || cleanliness < 90)) findings.push(t("findingUntouched", untouched));
+    if (noVisibleChange) {
+      findings.push(t("findingNoChange"));
+      scoreDirective = t("findingNoChange");
+    } else {
+      const untouched = describeUntouchedZones(surface.zones);
+      const allObjectsCleared = beforeCount > 0 && clearedCount === beforeCount && newCount === 0;
+      if (untouched && !allObjectsCleared && (cleanliness == null || cleanliness < 90)) { findings.push(t("findingUntouched", untouched)); scoreDirective = t("findingUntouched", untouched); }
+    }
   }
   if (envCheck.matched && remainingCount > 0) findings.push(t("findingRemaining", { objects: describeObjects(matching.matches.map((m) => m.after)) }));
   if (envCheck.matched && newCount > 0) findings.push(t("findingNew", { objects: describeObjects(matching.newObjects) }));
@@ -6903,6 +6974,8 @@ function calculateLocalScore(
     scorable: enoughEvidence,
     confidenceBand,
     findings,
+    noVisibleChange,
+    scoreDirective,
     source: "local",
     simulated: false,
     changeMagnitude: change.changedPixelPercent,
@@ -8522,7 +8595,15 @@ async function scoreChallenge(
           afterDataURL
         );
 
-      if (fallback) return fallback;
+      if (fallback) {
+        if (localScore.noVisibleChange) {
+          fallback.noVisibleChange = true;
+          fallback.scoreDirective = t("findingNoChange");
+          if (Number.isFinite(Number(fallback.cleanliness))) fallback.cleanliness = Math.min(Number(fallback.cleanliness), 20);
+          if (Array.isArray(fallback.findings)) fallback.findings.unshift(t("findingNoChange"));
+        }
+        return fallback;
+      }
     }
 
     return localScore;
@@ -8626,7 +8707,7 @@ function renderResults() {
           : score.confidenceBand === "medium"
             ? t("evidenceMedium")
             : t("evidenceRescan");
-    els.scoreEvidenceState.textContent = `${formatTimer(elapsed)} / 1:30.0 · ${stateLabel}`;
+    els.scoreEvidenceState.textContent = `${formatElapsedLong(elapsed)} · ${stateLabel}`;
   }
   els.resultTime.textContent = formatTimer(elapsed);
   const differenceSeconds = Math.abs(Math.round(differenceMs / 100) / 10);
@@ -8638,7 +8719,12 @@ function renderResults() {
     els.timeComparison.textContent = differenceMs >= 0 ? `${differenceSeconds}s UNDER` : `${differenceSeconds}s OVER`;
   }
 
-  els.findingText.textContent = score.findings?.join(" ") || t("findingNoObjects");
+  // No findings box: only the stored directive line renders, unboxed.
+  const plainEl = document.getElementById("plainFinding");
+  if (plainEl) {
+    plainEl.textContent = score.scoreDirective || "";
+    plainEl.classList.toggle("hidden", !plainEl.textContent);
+  }
   els.analysisMethod.textContent = score.source === "local"
     ? t("localAI")
     : score.source === "cloud" ? t("cloudAI") : t("simulatedDemo");
@@ -8774,6 +8860,24 @@ const POSE_EMOTES = {
       pl: "Cel: GWIAZDA DISCO — Jedna ręka w niebo, druga w bok!"
     },
     demoJoints: { lw: [0.22, 0.58], le: [0.32, 0.50], ls: [0.41, 0.44], rs: [0.59, 0.44], re: [0.69, 0.31], rw: [0.80, 0.14] }
+  },
+  peace: {
+    name: { en: "PEACE", es: "PAZ", pl: "POKÓJ" },
+    prompt: {
+      en: "Target: PEACE — One arm straight up, other arm relaxed down!",
+      es: "Objetivo: PAZ — ¡Un brazo recto hacia arriba, el otro relajado abajo!",
+      pl: "Cel: POKÓJ — Jedna ręka prosto w górę, druga luźno w dół!"
+    },
+    demoJoints: { lw: [0.35, 0.08], le: [0.38, 0.28], ls: [0.41, 0.44], rs: [0.59, 0.44], re: [0.62, 0.60], rw: [0.62, 0.78] }
+  },
+  thumbsup: {
+    name: { en: "THUMBS UP", es: "PULGAR ARRIBA", pl: "KCIUK W GÓRĘ" },
+    prompt: {
+      en: "Target: THUMBS UP — One fist up by your shoulder!",
+      es: "Objetivo: PULGAR ARRIBA — ¡Un puño arriba junto al hombro!",
+      pl: "Cel: KCIUK W GÓRĘ — Jedna pięść w górę przy ramieniu!"
+    },
+    demoJoints: { lw: [0.33, 0.30], le: [0.30, 0.46], ls: [0.41, 0.44], rs: [0.59, 0.44], re: [0.62, 0.60], rw: [0.62, 0.78] }
   }
 };
 
@@ -8846,6 +8950,17 @@ function evaluatePoseEmoteMatch(landmarks, poseId = getSelectedPoseId()) {
     const wristsLow = (clamp((leftWrist.y - leftElbow.y + 0.04) / 0.22) + clamp((rightWrist.y - rightElbow.y + 0.04) / 0.22)) / 2;
     const diamondElbows = clamp((elbowSpan - wristSpan + 0.08) / (shoulderWidth * 1.1));
     matchRatio = wristsLow * 0.45 + diamondElbows * 0.35 + elbowSymmetry * 0.20;
+  } else if (poseId === "peace") {
+    const up = Math.max(leftRaise, rightRaise);
+    const down = Math.min(leftRaise, rightRaise);
+    const oneUp = clamp((up - 0.55) / 0.3) * clamp((0.35 - down) / 0.3);
+    matchRatio = oneUp * 0.70 + symmetryScore * 0.15 + spreadScore * 0.15;
+  } else if (poseId === "thumbsup") {
+    const up = Math.max(leftRaise, rightRaise);
+    const down = Math.min(leftRaise, rightRaise);
+    const oneUp = clamp((up - 0.45) / 0.3) * clamp((0.40 - down) / 0.35);
+    const narrow = 1 - clamp(wristSpan / (shoulderWidth * 1.2));
+    matchRatio = oneUp * 0.55 + narrow * 0.25 + elbowSymmetry * 0.20;
   } else if (poseId === "star") {
     const asymm = clamp(Math.abs(leftWrist.y - rightWrist.y) / 0.26);
     const topHandHigh = Math.max(leftRaise, rightRaise);
@@ -8937,6 +9052,67 @@ async function renderPoseSkeletonThumbnail(baseDataUrl, landmarks, poseId, accur
   return canvas.toDataURL("image/png");
 }
 
+// Pre-submit pose gate: after COMPLETE, before scoring. Strike a pose for
+// up to +5% style bonus, or skip (no bonus). Runs once per submission.
+function buildPoseGateGrid() {
+  const grid = document.getElementById("poseGateGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
+  const lang = state.language === "es" || state.language === "pl" ? state.language : "en";
+  Object.keys(POSE_EMOTES).forEach((poseId) => {
+    const meta = POSE_EMOTES[poseId];
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "pose-emote-card" + (getSelectedPoseId() === poseId ? " active" : "");
+    btn.setAttribute("role", "radio");
+    btn.setAttribute("aria-checked", String(getSelectedPoseId() === poseId));
+    btn.innerHTML = `<span class="pose-emote-name">${meta.name[lang] || meta.name.en}</span>`;
+    btn.addEventListener("click", () => {
+      selectPoseEmote(poseId);
+      grid.querySelectorAll(".pose-emote-card").forEach((el) => el.classList.toggle("active", el === btn));
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function runPoseGate() {
+  if (SELFTEST_MODE || state.demoMode || state.inPersonaSuite) {
+    state.poseSkipped = true;
+    return Promise.resolve("skipped");
+  }
+  const gate = document.getElementById("poseGate");
+  if (!gate) return Promise.resolve("skipped");
+  try { applyTranslations(); } catch {}
+  buildPoseGateGrid();
+  gate.classList.remove("hidden");
+  return new Promise((resolve) => {
+    const done = (choice) => {
+      gate.classList.add("hidden");
+      document.getElementById("poseGateStrike")?.removeEventListener("click", onStrike);
+      document.getElementById("poseGateSkip")?.removeEventListener("click", onSkip);
+      resolve(choice);
+    };
+    const onStrike = async () => {
+      gate.classList.add("hidden");
+      document.getElementById("poseGateSkip")?.removeEventListener("click", onSkip);
+      state.poseSkipped = false;
+      state.poseDeferApply = true;
+      try {
+        const res = await runVictoryPose();
+        if (res) state.posePreScore = res;
+      } catch {}
+      state.poseDeferApply = false;
+      resolve("struck");
+    };
+    const onSkip = () => {
+      state.poseSkipped = true;
+      done("skipped");
+    };
+    document.getElementById("poseGateStrike")?.addEventListener("click", onStrike);
+    document.getElementById("poseGateSkip")?.addEventListener("click", onSkip);
+  });
+}
+
 async function runVictoryPose() {
   if (state.pose.running) return;
 
@@ -9013,33 +9189,40 @@ async function runVictoryPose() {
     validMatch = false;
     els.poseStatus.textContent = t("poseUnavailable");
   } finally {
-    if (state.latestScore) {
-      state.latestScore.styleScore = styleScore;
-      state.latestScore.poseBonus = bonusPts;
-      state.latestScore.poseEmote = poseId;
-    }
-    if (state.result?.ai) {
-      state.result.ai.styleScore = styleScore;
-      state.result.ai.poseBonus = bonusPts;
-      state.result.ai.poseEmote = poseId;
-    }
-    els.styleScoreDisplay.textContent = bonusPts > 0
-      ? `${styleScore.toFixed(1)}/10 (+${bonusPts}%)`
-      : `${styleScore.toFixed(1)} / 10`;
-    if (state.result?.ai?.scorable !== false && els.cleanlinessScore) {
-      const baseWeighted = computeWeightedRunScore();
-      if (Number.isFinite(baseWeighted)) {
-        const boosted = Math.min(100, baseWeighted + bonusPts);
-        els.cleanlinessScore.textContent = `${boosted}%`;
+    // Gate mode (pre-submit): stash the result for analysis instead of
+    // mutating the previous run's score.
+    const deferApply = state.poseDeferApply === true;
+    if (!deferApply) {
+      if (state.latestScore) {
+        state.latestScore.styleScore = styleScore;
+        state.latestScore.poseBonus = bonusPts;
+        state.latestScore.poseEmote = poseId;
+      }
+      if (state.result?.ai) {
+        state.result.ai.styleScore = styleScore;
+        state.result.ai.poseBonus = bonusPts;
+        state.result.ai.poseEmote = poseId;
       }
     }
-    if (validMatch && bonusPts > 0) {
-      playDeckAnswerSfx(true);
+    if (!deferApply) {
+      els.styleScoreDisplay.textContent = bonusPts > 0
+        ? `${styleScore.toFixed(1)}/10 (+${bonusPts}%)`
+        : `${styleScore.toFixed(1)} / 10`;
+      if (state.result?.ai?.scorable !== false && els.cleanlinessScore) {
+        const baseWeighted = computeWeightedRunScore();
+        if (Number.isFinite(baseWeighted)) {
+          const boosted = Math.min(100, baseWeighted + bonusPts);
+          els.cleanlinessScore.textContent = `${boosted}%`;
+        }
+      }
+      if (validMatch && bonusPts > 0) {
+        playDeckAnswerSfx(true);
+      }
+      updateSavedRunStyleScore(styleScore, bonusPts);
     }
-    updateSavedRunStyleScore(styleScore, bonusPts);
 
-    state.pose.running = false;
     els.poseButton.disabled = false;
+    return { styleScore, accuracyPct, bonusPts, emote: poseId, valid: validMatch };
   }
 }
 
@@ -10527,23 +10710,17 @@ function siteSizeLabel(id) {
 }
 function selectSiteSize(id) {
   if (!state.checkin) return;
-  state.checkin.siteSize = state.checkin.siteSize === id ? null : id;
+  state.checkin.siteSize = id || null;
   renderSiteSizeChips();
 }
 function renderSiteSizeChips() {
-  const host = document.getElementById("siteSizeChips");
-  if (!host) return;
-  host.innerHTML = "";
-  SITE_SIZE_BANDS.forEach((b) => {
-    const active = state.checkin?.siteSize === b.id;
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "mvp-tab-chip" + (active ? " active" : "");
-    btn.setAttribute("aria-pressed", String(active));
-    btn.textContent = b.label;
-    btn.addEventListener("click", () => selectSiteSize(b.id));
-    host.appendChild(btn);
-  });
+  const sel = document.getElementById("siteSizeSelect");
+  if (!sel) return;
+  sel.value = state.checkin?.siteSize || "";
+  if (!sel.dataset.bound) {
+    sel.dataset.bound = "1";
+    sel.addEventListener("change", () => selectSiteSize(sel.value || null));
+  }
 }
 function latestViewerSize() {
   try {
@@ -10566,22 +10743,24 @@ function setLeaderboardSize(f) {
   renderLeaderboard();
 }
 function renderLeaderboardSizeBar() {
-  const host = document.getElementById("leaderboardSizeBar");
-  if (!host) return;
-  host.innerHTML = "";
+  const sel = document.getElementById("leaderboardSizeSelect");
+  if (!sel) return;
+  sel.innerHTML = "";
   const f = leaderboardSizeFilter();
-  const mk = (id, label) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "mvp-tab-chip" + (f === id ? " active" : "");
-    btn.setAttribute("aria-selected", String(f === id));
-    btn.textContent = label;
-    btn.addEventListener("click", () => setLeaderboardSize(id));
-    host.appendChild(btn);
+  const add = (id, label) => {
+    const opt = document.createElement("option");
+    opt.value = id;
+    opt.textContent = label;
+    sel.appendChild(opt);
   };
-  mk("mine", t("sizeMine"));
-  mk("all", t("sizeAll"));
-  SITE_SIZE_BANDS.forEach((b) => mk(b.id, b.label));
+  add("mine", t("sizeMine"));
+  add("all", t("sizeAll"));
+  SITE_SIZE_BANDS.forEach((b) => add(b.id, b.label));
+  sel.value = f;
+  if (!sel.dataset.bound) {
+    sel.dataset.bound = "1";
+    sel.addEventListener("change", () => setLeaderboardSize(sel.value));
+  }
 }
 
 function visibleLeaderboard(entries, viewerRunId = state.latestRunId) {
@@ -11724,8 +11903,11 @@ function assignSpotForArea(areaKey = state.checkin.areaKey, leagueKey = state.ch
     pillSpots.forEach((sp) => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = `mvp-tab-chip spot-pill-chip${sp === chosenSpot ? " active" : ""}`;
-      btn.textContent = localizedSpotName(sp);
+      btn.className = `mvp-tab-chip spot-pill-chip spot-pill-icon${sp === chosenSpot ? " active" : ""}`;
+      btn.textContent = spotIconFor(sp);
+      btn.title = localizedSpotName(sp);
+      btn.setAttribute("aria-label", localizedSpotName(sp));
+      btn.setAttribute("aria-pressed", String(sp === chosenSpot));
       btn.addEventListener("click", () => selectCleaningSpot(sp));
       els.timerSpotPills.appendChild(btn);
     });
@@ -12781,8 +12963,8 @@ function buildSponsorLogoSvg() {
       <path d="M28 4 L48 12 L48 30 C48 43 39 51 28 55 C17 51 8 43 8 30 L8 12 Z" fill="rgba(57,245,188,0.14)" stroke="url(#crestGrad)" stroke-width="2.2"/>
       <path d="M28 15 l3.8 9.2 l9.2 3.8 l-9.2 3.8 l-3.8 9.2 l-3.8-9.2 l-9.2-3.8 l9.2-3.8 z" fill="#ffd35c"/>
       <circle cx="39" cy="17" r="2.2" fill="#39f5bc"/>
-      <text x="64" y="33" fill="#f4f8ff" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="900" letter-spacing="0.14em">YOUR LOGO</text>
-      <text x="65" y="49" fill="rgba(165,216,255,0.72)" font-family="Plus Jakarta Sans, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.34em">HERE · PRO SERIES</text>
+      <text x="64" y="33" fill="#f4f8ff" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="900" letter-spacing="0.14em">NOVACLEAN</text>
+      <text x="65" y="49" fill="rgba(165,216,255,0.72)" font-family="Plus Jakarta Sans, sans-serif" font-size="10.5" font-weight="800" letter-spacing="0.34em">PRO SERIES</text>
     </g>
     <rect x="500" y="12" width="84" height="20" rx="10" fill="rgba(255,211,92,0.12)" stroke="rgba(255,211,92,0.45)" stroke-width="1"/>
     <text x="542" y="25.5" text-anchor="middle" fill="rgba(255,211,92,0.85)" font-size="9" font-weight="800" letter-spacing="0.1em">SPONSORED</text>
@@ -14451,7 +14633,7 @@ function bindEvents() {
       setInstructionsSeen(true);
       navigateTo("camera");
 
-      if (!state.demoMode && !state.camera.ready) {
+      if (!state.demoMode && (!state.camera.ready || !hasSeenCameraExplain())) {
         showCameraExplainer();
         return;
       }
@@ -14509,6 +14691,7 @@ function bindEvents() {
   if (cameraExplainAllow) {
     cameraExplainAllow.addEventListener("click", async () => {
       hideCameraExplainer();
+      setSeenCameraExplain(true);
       await ensureCameraReady();
     });
   }
