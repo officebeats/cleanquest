@@ -569,3 +569,10 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Camera: site size chips → dropdown; viewfinder min 42dvh; camera explainer popup on first visit + neural voiceover (camera-explain.mp3 rendered EN/ES/PL via repo Piper pipeline); timer spot pills icon-only; sponsor surfaces paint above FX canvas (z9993).
 - Evidence: node --check clean; local 390px screenshots (camera, results 58% demo, leaderboard); live Pages verified serving latest.
 - Blockers: none.
+
+## 2026-11-02 — Scorecard reconciliation + gesture poses — DONE
+- Cloud card hidden when local directive/no-change set; local surface chips show instead (no more 98% PASS beside untouched warnings); transcript mirrors the directive instead of praise; verified hype suppressed on flagged runs; REVIEW badge style added.
+- PEACE/THUMBS UP now verified with MediaPipe GestureRecognizer (Victory/Thumb_Up ≥0.5, model URL checked live 200); arm geometry remains as fallback when recognizer offline; fingers-not-visible limitation documented.
+- Sponsors are logo-only (YOUR LOGO HERE crest mark, no surrounding copy) on deck/home/leaderboard; post-score pose UI removed (pre-submit gate is the only path); skipped runs hide the pose panel with an explicit no-bonus note.
+- Evidence: node --check clean; 390px demo screenshot (directive + local chips, no card/panel/praise); live deploy verified serving prior batch.
+- Blockers: none.

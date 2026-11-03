@@ -11725,7 +11725,8 @@ function renderScoreBreakdown(runInput) {
   if (els.surfaceGradeMap) {
     els.surfaceGradeMap.innerHTML = "";
     const activeAi = runInput || state.result?.ai;
-    const hasCloudCard = activeAi?.verified?.status === "verified";
+    const flagged = Boolean(activeAi?.scoreDirective || activeAi?.noVisibleChange);
+    const hasCloudCard = !flagged && activeAi?.verified?.status === "verified";
     els.surfaceGradeMap.classList.toggle("hidden", Boolean(hasCloudCard));
     if (!hasCloudCard) {
       const surfaces = gradeRunSurfaces(activeAi);
