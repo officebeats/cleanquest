@@ -619,3 +619,10 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - QA: tools/cq-mobile-qa.mjs (390×844 DPR3 touch + overflow + consistency + selftest + personas + console traps) green; tools/qa-consistency.js hardened with pairing/CTA/sponsor-deck-bound/uninterpolated-token checks.
 - Evidence: syntax clean; mobile runner 38s, all personas PASS, probe 0 failures.
 - Blockers: none.
+
+## 2026-11-03 — Independent review applied + mobile QA runner — DONE
+- Reviewer (4-slice audit) verdict: FIX-first; all 5 blockers fixed and verified (deck season-sync guard + deferred pack; hushed badge/voice/confetti on directive lows; local chips hidden when flagged; leaderboard always shows logo mark; submit waits for voice recording).
+- New tools/cq-mobile-qa.mjs: headless Chrome, 390x844 DPR3 touch, overflow + consistency probe, screenshots, selftest, personas, console traps — 38s, all green (6/6 selftest incl. neural voice check, 11/11 personas, 0 findings).
+- qa-consistency.js hardened: unscorable/praise-badge/grades/CTA-agreement/sponsor-scope checks + multilingual deck progress and ES-friendly vague-directive guard.
+- Evidence: screenshots per screen in /tmp/cq-qa*; live bundle verified serving latest.
+- Blockers: none. Remaining polish (R2–R4) is post-hackathon.
