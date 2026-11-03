@@ -2905,7 +2905,7 @@ function hostLineId(index) {
 }
 
 function clipUrlFor(lang, beat, id) {
-  return `assets/audio/${lang}/${beat}-${id}.mp3`;
+  return `assets/audio/${lang}/${beat}-${id}.mp3?v=${FEATURE_MUSIC.version}`;
 }
 
 function clipStatus(lang, beat, id) {
@@ -3149,7 +3149,7 @@ function speakHost(beat, overrideText) {
  * 44.1kHz), then bump version below to bust cache. No code changes needed.
  * Spec lives in docs/AUDIO-PLAN.md ("Billy swap"). */
 const FEATURE_MUSIC = {
-  version: "20261103-32",
+  version: "20261103-33",
   acceptChallenge: {
     en: "assets/audio/en/welcome-intro.mp3",
     es: "assets/audio/es/welcome-intro.mp3",
