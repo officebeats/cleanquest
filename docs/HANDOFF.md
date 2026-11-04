@@ -22,7 +22,7 @@ https://officebeats.github.io/cleanquest/ or open `index.html` in a mobile brows
 | instructions | How a round works; consent-gated camera entry; demo-mode entry when camera denied |
 | camera | Check-in bar (league/area/system-assigned SPOT + QR scan), frame guide, before-photo |
 | timer | Spot bar + QR, 4-mode Before-shadow ghost, 3x3 live zone grid + idle nudge, dwell cue, host callouts at 75/60/45/30/20/10s, big Finish |
-| results | Weighted TOTAL hero (50/25/25), 3 bars + details, honest surface map, uncropped evidence + full-screen lightbox, 1-tap read-only Dispute, voice note, pose |
+ | results | Score hero shows weighted TOTAL when scorable; **NOT SCORED** + layman reason + TAKE NEW PHOTOS / CLEAN & TAKE NEW PHOTO CTA when unscorable (7 reasons: WRONG AREA, PERSON IN PHOTO, TOO DARK, TOO MUCH GLARE, CAMERA MOVED, TOO FAR AWAY, NO CHANGE — never `REDO`/`RESCAN`); honest surface map, maximized AFTER + 96px BEFORE reference, full-screen lightbox, 1-tap read-only Dispute (hidden on unscored runs), voice note |
 | leaderboard | Top-10 + own (weighted sort; practice runs excluded), personal record |
 | records | Inspection-log screen only for the hackathon (geofenced log + CSV/JSON export). Supervisor panes 11–15 (pledge-gated tools, sites+QR stickers, bulk invite, training gaps + cached AI shift note, assign packs) are code-kept, UI hidden for the hackathon — not demoed, not judged |
 | settings | API keys, provider toggle (Meta Model API / Partner Cloud `Muse Spark Open` with Baseten Primary → Fireworks Failover default + Dual Benchmark option), 1-tap `⚡ TEST & LOG TELEMETRY`, cumulative token counter, hype levels |
@@ -31,17 +31,13 @@ https://officebeats.github.io/cleanquest/ or open `index.html` in a mobile brows
 
 Providers: on-device vision always runs. Cloud verification works out-of-the-box via the serverless proxy (`CONFIG.cloud.backendProxyUrl`) routing to Baseten (`meta-models/muse-spark-open`) as primary with automatic failover to Fireworks AI (`accounts/fireworks/models/muse-spark-open`), or with user-supplied keys in Settings (Meta Model API `muse-spark-1.3` + `sam-3.1` + `muse-voice-transcribe-1.0`). Every verified run and token count is logged to the exportable `PROVIDER RUN LOG`.
 ## Code anchors
-- `app.js` — everything. `HOST_LINES` = host script lines (`start`, `mid`,
-  `finish`, `pass`, `retry`, `pass-big`, `pass-close`, `retry-far`, `hurry`,
-  `hurry-final`, `scoring-wait`); audio manifest
-  `{"version":1,"clips":{"<lang>:<beat>-<nn>":"available"|"mock"}}` (231 entries:
-  230 EN MP3s incl. `nudge` + 1 mock) — unlisted IDs stay silent (neural-voice-only policy; `speakText` synth path permanently disabled).
-  `announceGameVerdict()` routes through `selectVerdictBeat()` + `speakHost()`
-  (sting-segue: hype sting first, voice 320ms later, mute/generation guarded) +
-  `playVerdictSfx()`, chains `speakScoreNumber()` (weighted total) on BOTH
-  verdict paths, and clips play through the WebAudio Broadcast Studio chain
-  (`attachBroadcastStudioChain`, `state.voice.currentAudio` stoppable via
-  `stopSpeech`). Loop-era anchors: `parseAreaQrPayload`/`openQrScannerModal`
+ - `app.js` — everything. `HOST_LINES` = host script lines (`start`, `mid`,
+   `finish`, `pass`, `retry`, `pass-big`, `pass-close`, `retry-far`, `hurry`,
+   `hurry-final`, `scoring-wait`); every gameplay clip plays through
+   `playHostClip()` at 1.0x; `clipUrlFor()` appends `?v=FEATURE_MUSIC.version`
+   so re-rendered clips bust cache. Audio: 715 MP3s under
+   `assets/audio/<lang>/` (235 EN Kokoro-82M `af_heart` incl. intro/deck/camera/agree/disagree + `num`/`glue`/`nudge`, 247 ES `es_MX-claude-high`, 233 PL `pl_PL-gosia-medium`; all 24 kHz mono, one EN pitch/EQ/loudness chain). Unscored-run policy: `scorable=false` → hero `NOT SCORED` + `unscorableReason()`, badge hidden, breakdown/dispute/result-grid hidden, CTA retakes photos.
+ `announceGameVerdict()` routes through `selectVerdictBeat()` + `speakHost()` (hushed gate on directive/unscored runs: no rank badge, no praise voice/confetti) + `speakScoreNumber()` (weighted total). Loop-era anchors: `parseAreaQrPayload`/`openQrScannerModal`
   (CQ-QR-<LEAGUE>-<AREA>[-<SPOTSLUG>], decodable V2-L encoder
   `encodeQrVersion2L`), `ensureActiveCrew`+`recordCrewRun` in
   `saveCompletedRun` (first-save only; manual spot = `spotOverride` →
@@ -55,10 +51,8 @@ Providers: on-device vision always runs. Cloud verification works out-of-the-box
 
 ## Verify any change
 - Syntax: `node --check app.js && node --check deck.js`.
-- VM audio harness: `node /tmp/cq-vm-verify.mjs` (all-true).
-- Self-test + personas (headless): `node /tmp/cq-cdp-verify.mjs` — must be
-  6/6 PASS and 0 persona fails (12 personas incl. `consent-first-timer`
-  gated and code-kept `crew-member` / `supervisor-and-pin` pane flows, UI hidden for the hackathon). Suite is hermetic: it must
+ - Mobile QA runner: `node tools/cq-mobile-qa.mjs` (390×844 DPR3 overflow + `tools/qa-consistency.js` + self-test + personas + console traps).
+ - Gates: 6/6 self-test + 11/11 personas (incl. `consent-first-timer` gated and code-kept `crew-member` / `supervisor-and-pin` flows). Suite is hermetic: full `localStorage` + state snapshot/restore.
 - Banned-token grep over `app.js deck.js index.html styles.css` (brands,
   currency, certification/sanitized claims) must be zero.
 - Phone-first: primary CTA of every screen visible without scroll at 360x740

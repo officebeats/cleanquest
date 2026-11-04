@@ -1,16 +1,13 @@
-> **Status (overnight loop):** EN host audio is SHIPPED — 230 MP3s under
-> `assets/audio/en/` wired through `CLIPS_MANIFEST`, rendered offline
-> (Piper verdict batches, then Kokoro-82M high-energy game-show batches
-> with broadcast mastering). ES host audio is SHIPPED — 192 MP3s under
-> `assets/audio/es/` (all 11 beats from `HOST_LINES.es`, Piper
-> es_ES-sharvard-medium, loudnorm -19 LUFS). Voice attribution:
-> es_ES-sharvard-medium is CC BY 3.0 — credit: "es_ES-sharvard-medium
-> (Piper TTS voice)". PL host audio is SHIPPED — 192 MP3s under
-> `assets/audio/pl/` (same 11 beats, Piper pl_PL-gosia-medium, CC0).
-> All three languages now play real clips; synth is fallback only.
-> The plan below is the original research/spec record.
-> Parked: announcer-voice regen needs an operator listen-back before
-> replacing shipped clips (see `../OVERNIGHT-LOG.md`).
+ > **Status (shipped):** 715 trilingual neural MP3s under `assets/audio/<lang>/` —
+ > 235 EN (Kokoro-82M `af_heart`: all HOST_LINES game-show beats + `welcome-intro` /
+ > `deck-intro` / `camera-explain` / `deck-agree` / `deck-disagree` + `num` / `glue` /
+ > `nudge`), 247 ES (`es_MX-claude-high`), 233 PL (`pl_PL-gosia-medium`) — all
+ > 24 kHz mono. Every EN clip shares one voice + one broadcast chain
+ > (`asetrate=24000*1.03`, 3.2 kHz presence EQ, compressor, `-18 LUFS` loudnorm;
+ > `welcome-intro` −18.7 dB ≈ `consent-00` −18.8 dB), played at exact 1.0x via
+ > `playHostClip()` with `?v=FEATURE_MUSIC.version` cache-busting. ES/PL keep
+ > their pinned Piper VITS voices. Unrecorded IDs stay silent (neural-only).
+ > The plan below is the original research/spec record.
 
 # AUDIO PLAN — CleanQuest voice clips + SFX (research, no installs, no audio generated yet)
 

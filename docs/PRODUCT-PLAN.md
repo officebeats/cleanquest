@@ -5,10 +5,10 @@ repo) reconciled against the current vanilla-JS build. No external brand names,
 sponsor names, dollar figures, or revenue mechanics appear in code or in this
 doc. Generic terms only: "standards body", "sponsor slot", "operator".
 
-> **Status (overnight loop):** all four phases below are SHIPPED and verified
-> (6/6 self-test, 12/12 personas, weighted 50/25/25 scoring everywhere).
-> The living ledger is `../OVERNIGHT-LOG.md`; the loop contract is
-> `HACKATHON-LOOP-PROMPT.md`; parked items are listed in `HANDOFF.md`.
+ > **Status (overnight loop):** all four phases below are SHIPPED and verified
+ > (6/6 self-test, 11/11 personas, weighted 50/25/25 scoring everywhere).
+ > The living ledger is `../OVERNIGHT-LOG.md`; the loop contract is
+ > `HACKATHON-LOOP-PROMPT.md`; parked items are listed in `HANDOFF.md`.
 
 ## Positioning pivot
 
@@ -26,8 +26,8 @@ approval, offline/demo always works.
 
 | Gap | Now | Target |
 |---|---|---|
-| Verdict voice | `announceGameVerdict()` bypasses clips via raw TTS | Route verdict through `speakHost()` tiers: pass-big / pass / pass-close / retry / retry-far by margin; neural clips only, silence when unrecorded (never synth) |
-| Score explanation | Three bars (Clean / Technique / Time vs benchmark), one plain directive line, no findings box; near-identical before/after caps at 20% with "no change" callout | Keep verdicts to one short line each; no verbose paragraphs after AI analysis |
+ | Verdict voice | `announceGameVerdict()` routes every verdict through `speakHost()` tiers: pass-big / pass / pass-close / retry / retry-far by margin (hushed gate: directive/unscored runs get no rank badge, no praise voice/confetti); neural clips only, silence when unrecorded (never synth) | Tier thresholds (dominant ≥ +15 over pass mark, solid = pass, close = within 5 under big-tier line, retry-far = clear miss), `speakHost()` routing, EN numbers/glue clips so scores can be spoken (`num`/`glue` per AUDIO-PLAN §3), synth SFX for verdict moments |
+ | Score explanation | Three bars (Clean / Technique / Time vs benchmark), one plain directive line, no findings box; unscorable runs show NOT SCORED + layman reason + retake CTA and hide bars/dispute; near-identical before/after is never scored ("NO CHANGE — wipe and retake") | Keep verdicts to one short line each; never verbose paragraphs after AI analysis |
 | Leaderboard fairness | Full ranked list | Top 10 + own entry only; never show last place |
 | Appeals | None | One-tap Dispute on results → local appeal record (open, 5-business-day promise shown as text); no code path can edit a score |
 | Consent & privacy | Disclaimer text only | Plain-language consent gate before first run, read aloud in chosen language; "faces are never identified" stated; consent flag in-browser only |
