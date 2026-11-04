@@ -642,3 +642,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Inspected all claim-bearing shots (01/02/04/05/06/07/08/09/11/12/13/17/18/19/26/28/29 + QA 07): QR absent, dwell absent, consent pose-free, loader real, judge demo 93% S-Rank, NOT SCORED pair correct.
 - Evidence: node --check clean; full QA runner green (8/8 screens 0 findings, 11/11 personas, 6/6 self-test); CTA paths verified EN/ES/PL.
 - Blockers: none.
+
+## 2026-11-03 (night) — Consent read-aloud matches shown text — DONE
+- Advisory catch: EN consent-00.mp3 had been reverted to the old abridged script while the shown consentBody changed (pose sentence removed), and ES/PL scripts omitted location/cloud clauses. Re-rendered all three consent-00.mp3 from the EXACT current consentBody (EN Kokoro-82M af_heart 1.06 + broadcast chain 25.3s; ES es_MX-claude-high 35.4s; PL pl_PL-gosia-medium 34.5s; all 24 kHz mono). Verified read-aloud path (`speakConsentAloud` → versioned `clipUrlFor`) serves HTTP 200 in all 3 languages.
+- Evidence: ffprobe clean (24 kHz, durations scale with text); clips served 200.
+- Blockers: none.
