@@ -533,12 +533,12 @@
       <li>
         <strong>0:50–1:50 · Live Clean + Meta AI Stack (Meta AI Tooling 25%):</strong>
         <ul>
-          <li>On Camera Check-In, show the <strong>10 Building Sectors, 13 Areas &amp; 28 Spots</strong> + single-QR scanner.</li>
+          <li>On Camera Check-In, show the <strong>10 Building Sectors, 13 Areas &amp; 28 Spots</strong> dropdown check-in (QR sticker scanning is code-kept post-hackathon — no QR button shown).</li>
           <li>Tap <code>START</code> on Timer: highlight the <strong>locked counter</strong>, <strong>host voice inspiring every 6–8 seconds</strong>, and live 9-zone luma sampling.</li>
           <li>Tap <code>COMPLETE CHALLENGE</code>: auto-captures the 2nd photo in 1 step and reveals the per-surface scorecard + <strong>SAM 3.1</strong> bounding boxes (or a plain-language NOT SCORED reason + retake CTA when the shot can't be scored).</li>
         </ul>
         <div class="script-shots">
-          <figure class="script-shot-card"><img src="shots/05-camera.png" alt="Camera Check-In with 10 Building Sectors" /><figcaption>3A. Station Check-In &amp; QR Scanner</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/05-camera.png" alt="Camera Check-In with dropdown station picker" /><figcaption>3A. Station Check-In (dropdowns)</figcaption></figure>
           <figure class="script-shot-card"><img src="shots/06-timer.png" alt="Locked 1:30 Countdown Timer" /><figcaption>3B. Locked Timer &amp; 1-Tap Complete</figcaption></figure>
           <figure class="script-shot-card"><img src="shots/19-desktop-results.png" alt="Desktop 2-Column Results Scorecard" /><figcaption>3C. Full-Canvas Before/After Scorecard</figcaption></figure>
         </div>
@@ -547,10 +547,10 @@
         <strong>1:50–2:25 · Baseten Spark Open + Inspection-Log Export (Technical Depth 20%):</strong>
         <ul>
           <li>Open <code>⚙ Settings</code>: show <strong>Baseten Spark Open</strong> and the verified <strong>Provider Run Log</strong>.</li>
-          <li>Open <code>🧾 RECORDS</code>: show the geofenced inspection log and its CSV/JSON export. (Passport/crew/supervisor panes are code-kept and hidden for the hackathon — not demoed, not judged.)</li>
+          <li>Open <code>🧾 RECORDS</code>: show the geofenced inspection log and its one-tap JSON backup + CSV spreadsheet download. (Passport/crew/supervisor panes are code-kept and hidden for the hackathon — not demoed, not judged.)</li>
         </ul>
         <div class="script-shots">
-          <figure class="script-shot-card"><img src="shots/11-settings.png" alt="Settings with Baseten Spark Open and Provider Run Log" /><figcaption>4A. Settings, 1-Click SSO &amp; Provider Log</figcaption></figure>
+          <figure class="script-shot-card"><img src="shots/11-settings.png" alt="Settings with cloud routing and Provider Run Log" /><figcaption>4A. Settings, Cloud Routing &amp; Provider Log</figcaption></figure>
           <figure class="script-shot-card"><img src="shots/09-records.png" alt="Inspection log and geofenced export" /><figcaption>4B. Inspection Log &amp; Geofenced Export</figcaption></figure>
           <figure class="script-shot-card"><img src="shots/08-leaderboard.png" alt="Top-10 leaderboard" /><figcaption>4C. Top-10 Leaderboard</figcaption></figure>
           <figure class="script-shot-card"><img src="shots/12-deck.png" alt="30-card swipe deck" /><figcaption>4D. 30-Card Swipe Deck</figcaption></figure>
@@ -615,7 +615,7 @@ Bonus Prizes:
         <strong>4. One-Sentence Pitch</strong>
         <button class="copy-btn" type="button" onclick="copyBlock(this)">Copy</button>
       </div>
-      <pre class="copy-content">CleanQuest turns the invisible 2 a.m. commercial cleaning shift into a trilingual AI-verified game, automated 2-week micro-training season deck, and geofenced inspection log exportable by the cleaner as CSV/JSON.</pre>
+      <pre class="copy-content">CleanQuest turns the invisible 2 a.m. commercial cleaning shift into a trilingual AI-verified game, automated 2-week micro-training season deck, and geofenced inspection log exportable by the cleaner (JSON backup + CSV spreadsheet).</pre>
     </div>
 
     <div class="copy-box">
@@ -646,7 +646,7 @@ Live Breakroom Spectator Board: https://officebeats.github.io/cleanquest/?specta
    - Neural speech: 715 pre-rendered trilingual voice clips (235 EN Kokoro-82M af_heart, 247 Mexican Spanish es_MX, 233 PL) over a 122 BPM WebAudio house synth.
 
 3. HOW CLEANQUEST USES THE TECH (END-TO-END LOOP):
-   - Check-In &amp; Locked 1:30 Run: Version-2 QR station check-in across 10 building sectors &amp; 28 spots, locked countdown, +15s chemical dwell credit, and 1-tap After auto-capture.
+   - Check-In &amp; Locked 1:30 Run: Dropdown station check-in across 10 building sectors &amp; 28 spots, locked countdown, and 1-tap After auto-capture (QR scanning + dwell-credit button code-kept post-hackathon).
    - AI Loader + Sponsor Monetization: Animated squeegee/bubble loader displays station-matched sponsor tips while MediaPipe + Muse Spark Open grade the surface.
    - 50/25/25 Scorecard with NOT SCORED layman reasons: Grades Cleanliness (50%), Technique (25%), and Time (25%) when scorable; otherwise shows NOT SCORED + plain reason + retake CTA. (Pose bonus temporarily hidden: no bonus applies.)
    - Automated 2-Week Season Deck &amp; Cached AI Shift Notes: 14-day batched trilingual Season Packs and fingerprint-cached AI shift notes (0-token repeat views; supervisor-pane UI hidden for the hackathon, code kept post-hackathon).</pre>
@@ -665,7 +665,7 @@ Live Breakroom Spectator Board: https://officebeats.github.io/cleanquest/?specta
       <pre class="copy-content">We built CleanQuest for the @MetaforDevs &amp; @cerebral_valley Global AI Developer Hackathon! 🧹✨
 
 CleanQuest turns commercial night cleaning into a trilingual (EN / ES-MX / PL) AI-verified game powered by Muse Spark 1.3, SAM 3.1 &amp; Baseten Spark Open:
-1. 📸 1-tap Before/After capture + QR check-in
+1. 📸 1-tap Before/After capture at your station
 2. 🎙️ Neural host hypes you every 6–8s over a 122 BPM house groove
 3. 🧠 50/25/25 scorecard + SAM 3.1 surface overlays
 4. 🃏 Daily Swipe Deck + Dual Esports Leaderboard

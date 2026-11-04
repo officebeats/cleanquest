@@ -633,3 +633,12 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Retook all 26 referenced tour screenshots (mobile 390 + desktop 1440) with tools/cq-tour-shots.mjs incl. real timer screen + new 28/29-noscored NOT SCORED pair; removed 5 unreferenced stale shots; wired 28/29 into report Screen 8 tour; updated all 75%-A-Rank claims to 93% S-Rank sample; removed residual Victory Pose demo steps from report/submission scripts.
 - Evidence: node --check clean; full QA runner green (8/8 screens 0 findings, 11/11 personas, 6/6 self-test with fake camera); EN/ES/PL CTA paths verified (TAKE NEW PHOTOS / LIMPIAR Y TOMAR FOTO / ZRÓB NOWE ZDJĘCIA, no raw keys); live bundle SHA-256 matched.
 - Blockers: none.
+
+## 2026-11-03 (night) — Hidden-UI docs audit + consent/loader/instructions fixes — DONE
+- Advisory audit vs `display:none` trim: report/submission/README/PRODUCT-PLAN/HANDOFF claimed a visible QR scanner modal, QR check-in enforcement, and +15s dwell-credit button — all hidden for the hackathon. Rewrote every claim to dropdown check-in + code-kept QR/dwell (timer tour, Screen 5 tour, demo script, X post, score-math row, guardrails, README steps 1/3, HANDOFF camera/timer rows; pose-free consent already covered).
+- Export copy matched to on-screen buttons: reports now name SAVE BACKUP (JSON) / DOWNLOAD SPREADSHEET (CSV); removed invented "1-Click SSO" caption.
+- App fix: consent body named an "optional victory-pose photo" (feature hidden) — removed the sentence ×3 locales and re-rendered ES/PL consent-00.mp3 (EN original script was already pose-free; reverted EN audio to avoid drift). 02-consent shots retaken.
+- Tour script fixes: 04 now navigates explicitly to instructions (shows JUDGE DEMO button); 26/27 loader captured mid-analysis via no-delay screenshot (AI ANALYZING + 3 pills + sponsor-free tip verified); timer step drives fake camera with demo fallback (real 1:24 timer captured).
+- Inspected all claim-bearing shots (01/02/04/05/06/07/08/09/11/12/13/17/18/19/26/28/29 + QA 07): QR absent, dwell absent, consent pose-free, loader real, judge demo 93% S-Rank, NOT SCORED pair correct.
+- Evidence: node --check clean; full QA runner green (8/8 screens 0 findings, 11/11 personas, 6/6 self-test); CTA paths verified EN/ES/PL.
+- Blockers: none.

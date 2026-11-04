@@ -377,7 +377,7 @@
         <tr><th>Criterion (weight)</th><th>CleanQuest's answer</th><th>MVP coverage (Operating Standards)</th><th>Where to see it</th></tr>
         <tr><td><strong>Impact 30%</strong></td><td><strong>3-way win:</strong> Cleaners get a verified inspection record they can export; contractors get geofenced proof without re-checks; sponsors teach product rules at the moment of work.</td><td>Screens 1–4 (EN/ES/PL, 44px glove PIN pad, consent read-aloud, home hub), Screen 9 (30-card deck), Screen 10 (top-10 dual leaderboard). Passport/crew/supervisor panes are code-kept and hidden for the hackathon — not demoed, not judged.</td><td>Switch to Español; run <em>Judge Demo</em></td></tr>
         <tr><td><strong>Meta AI Tooling 25%</strong></td><td><strong>Zero-Key Meta Open Weights + Full Stack:</strong> Serverless <code>Muse Spark Open</code> (Baseten → Fireworks failover) powers per-surface scorecards + <code>box_2d</code> overlays and 2-week training seasons out of the box (plus direct <code>Muse Spark 1.3</code>, <code>SAM 3.1</code> &amp; <code>Muse Voice Transcribe</code> support).</td><td>Screen 8 (50/25/25 scorecard + <code>box_2d</code> + NOT SCORED layman reasons), Screens 9–10 (2-week AI Season Deck + cached AI shift notes), Settings (token telemetry log).</td><td>Run <em>Judge Demo</em>; tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in Settings</td></tr>
-        <tr><td><strong>Demo 25%</strong></td><td><strong>Works in 10 seconds or live in any room:</strong> 1-tap Judge Demo shows the animated AI Cleaning Loader + Sponsor Ad + 93% S-Rank sample reveal; live loop runs across 10 building sectors &amp; 28 spots.</td><td>Screens 5–7 (QR check-in, locked 1:30 timer, 1-tap After auto-capture), AI Loading + Sponsor Ad screen, Screen 9 (10-card swipe deck), <code>?spectator=1</code> board.</td><td>Instructions → <em>Judge Demo</em>; open <code>?spectator=1</code>.</td></tr>
+        <tr><td><strong>Demo 25%</strong></td><td><strong>Works in 10 seconds or live in any room:</strong> 1-tap Judge Demo shows the animated AI Cleaning Loader + Sponsor Ad + 93% S-Rank sample reveal; live loop runs across 10 building sectors &amp; 28 spots.</td><td>Screens 5–7 (dropdown check-in, locked 1:30 timer, 1-tap After auto-capture), AI Loading + Sponsor Ad screen, Screen 9 (10-card swipe deck), <code>?spectator=1</code> board.</td><td>Instructions → <em>Judge Demo</em>; open <code>?spectator=1</code>.</td></tr>
         <tr><td><strong>Technical Depth 20%</strong></td><td><strong>Zero-dependency vanilla JS + hermetic gates:</strong> 6/6 self-test PASS, 11/11 personas PASS, 50% fewer API calls via Primary→Failover, 56% smaller vision payloads, and 0-token cached season replays.</td><td>All 9 Experience Principles (44px targets, offline queue + auto-rescore, 100% above-the-fold CTAs on mobile &amp; desktop, zero score-editing paths).</td><td>Settings → <em>Run Self-Test</em>; Appendix below</td></tr>
       </table>
     </div>
@@ -390,7 +390,7 @@
         <tr><th>#</th><th>MVP screen / rule</th><th>Status</th><th>Evidence in this build</th></tr>
         <tr><td>1–3</td><td>Language picker · Phone+PIN · Consent + read-aloud</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Top-level EN/ES/PL; local hashed 4-digit PIN with 44px glove numpad (no email); first-run consent gate with native MP3/TTS read-aloud, "faces never identified", "never for discipline".</td></tr>
         <tr><td>4</td><td>Home (Start, streak, cards, sponsor card, 13-wk meter)</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Always-visible status strip shows streak + week of 13 at a glance; full inspection-log/sponsor/meter hub one tap below. (Passport/crew matchup views are code-kept and hidden for the hackathon.)</td></tr>
-        <tr><td>5–7</td><td>Check-in (10 Building Sectors · 13 Areas · 28 Spots + Single-QR) · Locked Run Timer · 1-Tap Complete</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Full commercial cleaning station options (10 Building verticals, 13 Functional Areas, 28 Cleaning Spots) + single-QR modal; locked countdown (cannot pause/stop mid-run) with 6–8s continuous host voice inspiration + 1-tap <code>COMPLETE CHALLENGE</code> auto-capturing the After photo.</td></tr>
+        <tr><td>5–7</td><td>Check-in (10 Building Sectors · 13 Areas · 28 Spots) · Locked Run Timer · 1-Tap Complete</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Full commercial cleaning station options (10 Building verticals, 13 Functional Areas, 28 Cleaning Spots) via dropdown check-in + frame guide, in-app capture only (gallery uploads impossible); locked countdown (cannot pause/stop mid-run) with 6–8s continuous host voice inspiration + 1-tap <code>COMPLETE CHALLENGE</code> auto-capturing the After photo. (QR sticker scanning/printing and the +15s dwell-credit button are code-kept post-hackathon; their UI is hidden for the hackathon.)</td></tr>
         <tr><td>8</td><td>Score reveal (total, 5-tier audio summary, NOT SCORED layman reasons, 3 bars, surface map)</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>50/25/25 weighted hero when scorable; unscorable runs show <strong>NOT SCORED</strong> + plain reason (<code>WRONG AREA</code>, <code>PERSON IN PHOTO</code>, <code>TOO DARK</code>, <code>TOO MUCH GLARE</code>, <code>CAMERA MOVED</code>, <code>TOO FAR AWAY</code>, <code>NO CHANGE</code>) + one-sentence explanation + retake CTA — never <code>REDO</code>/<code>RESCAN</code> jargon, bars and dispute hidden. 5-tier musical stinger + neural spoken summary (<code>🔊 REPLAY SUMMARY</code>), crimson alert theme (<code>.verdict-is-low</code>), and full-width Clean/Technique/Time bars on scored runs. (Victory-pose bonus capture temporarily hidden: pose panel auto-hides, no bonus applies.)</td></tr>
         <tr><td>9–10</td><td>Swipe deck (5/day, missed repeat, subtle logo banner) · Shift &amp; Daily Deck Leaderboards</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>30 trilingual brand-neutral cards with widescreen SVG dioramas, right/wrong game-show SFX, subtle <code>YOUR LOGO HERE</code> sponsor logo lockup, and dual-mode <strong>Shift Challenge + Daily Deck Leaderboard</strong> (<code>⚡ SHIFT CHALLENGE</code> / <code>🃏 DAILY DECK</code>).</td></tr>
         <tr><td>11–15</td><td>Admin: Pledge · Sites &amp; QR print · Crew &amp; squads · Training gaps · One-tap packs</td><td><span class="verdict v-hidden">HIDDEN-FOR-HACKATHON</span></td><td>Code kept post-hackathon; UI hidden for the hackathon and not judged. Pledge-gated site registry, printable V2 QR stickers, squad switcher, training gaps, and 5-day pack assignment remain in code only.</td></tr>
@@ -428,10 +428,10 @@
         </svg>
       </div>
       <ul>
-        <li><strong>Play</strong> — check in at a registered site with a QR code, system-assigned spot, frame guide, in-app capture only.</li>
+        <li><strong>Play</strong> — check in at a registered site from dropdowns, system-assigned spot, frame guide, in-app capture only.</li>
         <li><strong>Verify</strong> — three-bar scorecard (Clean 50 / Technique 25 / Time 25), per-surface verdicts with confidence, SAM overlays, provenance line naming the model.</li>
         <li><strong>Celebrate</strong> — 5-tier musical stinger + chained spoken score &amp; reaction summary. No person anywhere can edit a score — enforced in code, not policy.</li>
-        <li><strong>Record</strong> — geofenced, exportable inspection log with opt-in CSV/JSON export.</li>
+        <li><strong>Record</strong> — geofenced, exportable inspection log with one-tap backup (JSON) + spreadsheet (CSV) export.</li>
         <li><strong>Train</strong> — 30-card trilingual swipe deck with missed-topic repeat and 13-week consistency meter.</li>
       </ul>
       <p>Say it on stage: <em>"The system scores, nobody edits — every run goes straight into a verified, exportable record."</em></p>
@@ -470,7 +470,7 @@
       <ol>
         <li><strong>1. Judge Demo (10s):</strong> Open Instructions → tap <em>Judge Demo</em> to see the animated <strong>Squeegee/Bubble AI Loader + Sponsored Ad Slot</strong>, <code>0% → 93%</code> count-up, <strong>🏆 S-Rank sample reveal</strong>, and 50/25/25 scorecard.</li>
         <li><strong>2. NOT SCORED layman reasons:</strong> Run a wrong-room shot to see <strong>NOT SCORED</strong> + a plain reason (<code>WRONG AREA</code>, <code>PERSON IN PHOTO</code>, <code>TOO DARK</code>…) + one-sentence explanation and a retake CTA — never <code>REDO</code> jargon. (Victory-pose bonus capture is temporarily hidden; no pose step in the demo.)</li>
-        <li><strong>3. Live Room Run (60s):</strong> Pick station/QR, tap <em>Start</em> (locked clock + 6–8s host voice), and tap <em>Complete Challenge</em> (1-tap After auto-capture + live <code>Muse Spark Open</code> scorecard).</li>
+        <li><strong>3. Live Room Run (60s):</strong> Pick station from dropdowns, tap <em>Start</em> (locked clock + 6–8s host voice), and tap <em>Complete Challenge</em> (1-tap After auto-capture + live <code>Muse Spark Open</code> scorecard).</li>
         <li><strong>4. Zero Setup Needed:</strong> Cloud AI works out-of-the-box via our serverless <strong>Baseten → Fireworks AI</strong> proxy (tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in Settings to inspect the live token audit log).</li>
       </ol>
     </section>
@@ -528,7 +528,7 @@
     <ol>
       <li><strong>Station Mismatch Gate (Google MediaPipe <code>EfficientDet-Lite0</code>):</strong> Checks visible objects before scoring and rejects wrong-room or selfie photos as <strong>NOT SCORED</strong> with a layman reason (<code>WRONG AREA</code> / <code>PERSON IN PHOTO</code>).</li>
       <li><strong>Per-Surface Vision Scorecard (Meta <code>Muse Spark</code> on Baseten → Fireworks Failover):</strong> Grades <code>counter</code>, <code>glass</code>, <code>floor</code>, and <code>fixture</code> (<code>0–100%</code>, <code>0.6</code> confidence floor) and draws <strong><code>SAM 3.1 / box_2d</code></strong> highlight boxes (<code>512px</code> JPEG cuts tokens by <code>~56%</code>).</li>
-      <li><strong>50/25/25 Weighted Score Math (On-Device + Cloud):</strong> Combines <strong>Visible Cleanliness (50%)</strong>, <strong>Top-to-Bottom Technique (25% via 3×3 luminance grid)</strong>, and <strong>Benchmark Time (25% with +15s spray dwell credits)</strong>.</li>
+      <li><strong>50/25/25 Weighted Score Math (On-Device + Cloud):</strong> Combines <strong>Visible Cleanliness (50%)</strong>, <strong>Top-to-Bottom Technique (25% via 3×3 luminance grid)</strong>, and <strong>Benchmark Time (25% vs the 1:30 benchmark)</strong>. (Chemical dwell discipline is taught in training tips; the timed +15s dwell-credit button is code-kept post-hackathon.)</li>
       <li><strong>Victory Pose Emote Scorer (Google MediaPipe <code>Pose Landmarker Lite</code>, code-kept, UI hidden):</strong> Pose capture and the <code>+5%</code> bonus path are temporarily hidden (pose panel auto-hides, no bonus applies); the 33-joint tracking code remains for post-hackathon.</li>
       <li><strong>Automated 14-Day Bi-Weekly Training Seasons (Meta <code>Muse Spark Open</code>):</strong> Every 2 weeks, 1 batched call generates a localized Season Theme + 3 trilingual (<code>EN/ES/PL</code>) cards, cached on server + phone so repeat plays cost <strong><code>0</code> tokens</strong>.</li>
       <li><strong>Cached AI Shift Note (Meta <code>Muse Spark Open</code>, code-kept):</strong> Summarizes recent inspection logs into a 2-sentence coaching note and 5-day training pack pick (fingerprint-cached for <strong><code>0-token</code> repeat views</strong>). Supervisor-pane UI is hidden for the hackathon and not judged; code kept post-hackathon.</li>
@@ -582,11 +582,11 @@
           <figure><img src="shots/17-desktop-camera.png" alt="Desktop Camera Check-In" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>Commercial Station Check-In &amp; Single-QR Scanner (Screen 5)</h4>
+          <h4>Commercial Station Check-In (Screen 5)</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> Registered site picker across <strong>10 Building Sectors, 13 Areas &amp; 28 Spots</strong>, single-QR scanner modal, alignment guide, and <code>CAPTURE BEFORE</code>.</li>
+            <li><strong>On-Screen Functionality:</strong> Registered site picker across <strong>10 Building Sectors, 13 Areas &amp; 28 Spots</strong> (dropdowns, no typing), camera explainer with neural voiceover, alignment guide, and <code>CAPTURE BEFORE</code>. (QR sticker scanning is code-kept post-hackathon; no QR button is shown for the hackathon.)</li>
             <li><strong>Value Prop:</strong> Binds every run to a real commercial station and prevents fake gallery uploads.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> <code>MediaDevices.getUserMedia</code> in-app capture + Version-2 QR payload parser (<code>CQ-QR-&lt;LEAGUE&gt;-&lt;AREA&gt;-&lt;SPOT&gt;</code>).</li>
+            <li><strong>Tech &amp; How It's Used:</strong> <code>MediaDevices.getUserMedia</code> in-app capture only. The Version-2 QR payload parser (<code>CQ-QR-&lt;LEAGUE&gt;-&lt;AREA&gt;-&lt;SPOT&gt;</code>) is code-kept post-hackathon.</li>
           </ol>
           <span class="verdict v-ready">READY · MVP 5</span>
         </div>
@@ -598,10 +598,10 @@
           <figure><img src="shots/18-desktop-timer.png" alt="Desktop Locked Timer" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>Locked 1:30 Countdown, +15s Dwell Credit &amp; 1-Tap Complete (Screens 6–7)</h4>
+          <h4>Locked 1:30 Countdown &amp; 1-Tap Complete (Screens 6–7)</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> Locked <code>1:30</code> clock, 4-mode Before ghost overlay, <code>+15s DWELL</code> chemical contact button, and 1-tap <code>COMPLETE CHALLENGE</code>.</li>
-            <li><strong>Value Prop:</strong> Eliminates clock-gaming while rewarding proper chemical dwell time and auto-capturing the After photo in 1 tap.</li>
+            <li><strong>On-Screen Functionality:</strong> Locked <code>1:30</code> clock with elapsed readout, live 9-zone motion sampler, Before/After capture badges, and 1-tap <code>COMPLETE CHALLENGE</code>.</li>
+            <li><strong>Value Prop:</strong> Eliminates clock-gaming and auto-captures the After photo in 1 tap. (The +15s chemical dwell-credit button is code-kept post-hackathon; time is scored against the benchmark.)</li>
             <li><strong>Tech &amp; How It's Used:</strong> Live <code>36×27</code> 9-zone luma motion sampler + <code>320×240</code> mid-run frame capture + continuous 6–8s neural host voice hype.</li>
           </ol>
           <span class="verdict v-ready">READY · MVP 6 &amp; 7</span>
@@ -699,7 +699,7 @@
         <div class="desc">
           <h4>Inspection Log, Geofenced Export &amp; Post-Hackathon Supervisor Code (Screens 11–15 hidden)</h4>
           <ol>
-            <li><strong>On-Screen Functionality (hackathon demo):</strong> Geofenced inspection log with JSON/CSV export. (Passport/crew/supervisor panes are code-kept and hidden for the hackathon — not demoed, not judged.)</li>
+            <li><strong>On-Screen Functionality (hackathon demo):</strong> Geofenced inspection log with one-tap <code>⬇ SAVE BACKUP</code> (JSON) + <code>⬇ DOWNLOAD SPREADSHEET</code> (CSV). (Passport/crew/supervisor panes are code-kept and hidden for the hackathon — not demoed, not judged.)</li>
             <li><strong>Value Prop:</strong> Gives contractors audit-ready proof of work from the exportable log.</li>
             <li><strong>Code-kept post-hackathon (not in demo):</strong> Non-discipline pledge gate, V2 QR sticker printer, squad switcher, <code>✨ AI SHIFT BRIEFING</code> cached shift notes, and 1-tap 5-day training packs remain in code only.</li>
           </ol>
@@ -745,7 +745,7 @@
       <h2>Current scope &amp; honest guardrails</h2>
       <ol>
         <li><strong>Zero-key cloud AI works out-of-the-box:</strong> Our serverless <strong>Baseten → Fireworks AI</strong> proxy runs live <code>Muse Spark Open</code> vision scorecards, <code>box_2d</code> overlays, and 2-week Season Packs with zero user API key setup (custom keys in Settings are optional).</li>
-        <li><strong>Physical QR check-in enforced:</strong> Prize-eligible runs require an admin-registered site and system-assigned spot (manual spot overrides are marked practice-only).</li>
+        <li><strong>Registered-site check-in enforced:</strong> Prize-eligible runs require an admin-registered site and system-assigned spot (manual spot overrides are marked practice-only). (QR sticker scanning/printing is code-kept post-hackathon; no QR UI is shown for the hackathon.)</li>
         <li><strong>Graceful offline fallback:</strong> In airplane mode, on-device classical vision + 3×3 zone scoring runs locally and queues runs for automatic cloud re-score on reconnect.</li>
       </ol>
     </section>

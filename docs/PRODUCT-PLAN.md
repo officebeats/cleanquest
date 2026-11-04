@@ -48,8 +48,8 @@ approval, offline/demo always works.
    pass mark, solid = pass, close = within 5 under big-tier line, retry-far =
    clear miss), `speakHost()` routing, EN numbers/glue clips so scores can be
    spoken (`num`/`glue` per AUDIO-PLAN §3), synth SFX for verdict moments.
-3. **Pilot loop** — area check-in + assigned spot, ghost overlay, offline run
-   queue, dwell cue as UI text (never host speech).
+ 3. **Pilot loop** — area check-in + assigned spot, ghost overlay, offline run
+    queue. Dwell cue + QR sticker scanning/printing are code-kept post-hackathon (UI hidden for the hackathon; time is scored against the benchmark).
 4. **Learning (hackathon) + crews (code-kept post-hackathon)** — 5/day deck pacing + missed-repeat, 13-week consistency meter, generic sponsor slots
    (empty by default, labeled when operator fills them locally). Crew/squad matchup + MVP stays in code, UI hidden for the hackathon — not demoed, not judged.
 

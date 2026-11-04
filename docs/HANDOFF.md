@@ -20,11 +20,11 @@ https://officebeats.github.io/cleanquest/ or open `index.html` in a mobile brows
 |---|---|
 | welcome | Entry; FTUE steps 1 Language (persisted) / 2 PIN / 3 Consent (gates first run, read-aloud) / 4 Home hub (streak, sponsor card, 13-week meter, inspection-log shortcut) |
 | instructions | How a round works; consent-gated camera entry; demo-mode entry when camera denied |
-| camera | Check-in bar (league/area/system-assigned SPOT + QR scan), frame guide, before-photo |
-| timer | Spot bar + QR, 4-mode Before-shadow ghost, 3x3 live zone grid + idle nudge, dwell cue, host callouts at 75/60/45/30/20/10s, big Finish |
- | results | Score hero shows weighted TOTAL when scorable; **NOT SCORED** + layman reason + TAKE NEW PHOTOS / CLEAN & TAKE NEW PHOTO CTA when unscorable (7 reasons: WRONG AREA, PERSON IN PHOTO, TOO DARK, TOO MUCH GLARE, CAMERA MOVED, TOO FAR AWAY, NO CHANGE — never `REDO`/`RESCAN`); honest surface map, maximized AFTER + 96px BEFORE reference, full-screen lightbox, 1-tap read-only Dispute (hidden on unscored runs), voice note |
+ | camera | Check-in bar (league/area/system-assigned SPOT dropdowns), frame guide, camera explainer + neural voiceover, before-photo (QR scan code-kept post-hackathon, UI hidden) |
+ | timer | Spot bar, Before-shadow ghost (default off), 3x3 live zone grid + idle nudge, host callouts at 75/60/45/30/20/10s, big Finish (QR scan + dwell-credit button code-kept post-hackathon, UI hidden) |
+ | results | Score hero shows weighted TOTAL when scorable; **NOT SCORED** + layman reason + TAKE NEW PHOTOS / CLEAN & TAKE NEW PHOTO CTA when unscorable (7 reasons: WRONG AREA, PERSON IN PHOTO, TOO DARK, TOO MUCH GLARE, CAMERA MOVED, TOO FAR AWAY, NO CHANGE — never `REDO`/`RESCAN`); honest surface map, maximized AFTER + 96px BEFORE reference, full-screen lightbox, 1-tap read-only Dispute (hidden on unscored runs), voice note on disputes |
 | leaderboard | Top-10 + own (weighted sort; practice runs excluded), personal record |
-| records | Inspection-log screen only for the hackathon (geofenced log + CSV/JSON export). Supervisor panes 11–15 (pledge-gated tools, sites+QR stickers, bulk invite, training gaps + cached AI shift note, assign packs) are code-kept, UI hidden for the hackathon — not demoed, not judged |
+ | records | Inspection-log screen only for the hackathon (geofenced log + JSON-backup / CSV-spreadsheet export). Supervisor panes 11–15 (pledge-gated tools, sites+QR stickers, bulk invite, training gaps + cached AI shift note, assign packs) are code-kept, UI hidden for the hackathon — not demoed, not judged |
 | settings | API keys, provider toggle (Meta Model API / Partner Cloud `Muse Spark Open` with Baseten Primary → Fireworks Failover default + Dual Benchmark option), 1-tap `⚡ TEST & LOG TELEMETRY`, cumulative token counter, hype levels |
 | deck | Daily swipe deck: 30 static trilingual cards (`deck.js`) + automated 14-day Bi-Weekly AI Season Pack rotation (3 station cards + localized Season Theme cached across server & `localStorage`), pointer-drag + stamps + keys, missed-card repeat, 5/day |
 | spectator | `?spectator=1` distance board (weighted display, 15s refresh) |
@@ -37,8 +37,8 @@ Providers: on-device vision always runs. Cloud verification works out-of-the-box
    `playHostClip()` at 1.0x; `clipUrlFor()` appends `?v=FEATURE_MUSIC.version`
    so re-rendered clips bust cache. Audio: 715 MP3s under
    `assets/audio/<lang>/` (235 EN Kokoro-82M `af_heart` incl. intro/deck/camera/agree/disagree + `num`/`glue`/`nudge`, 247 ES `es_MX-claude-high`, 233 PL `pl_PL-gosia-medium`; all 24 kHz mono, one EN pitch/EQ/loudness chain). Unscored-run policy: `scorable=false` → hero `NOT SCORED` + `unscorableReason()`, badge hidden, breakdown/dispute/result-grid hidden, CTA retakes photos.
- `announceGameVerdict()` routes through `selectVerdictBeat()` + `speakHost()` (hushed gate on directive/unscored runs: no rank badge, no praise voice/confetti) + `speakScoreNumber()` (weighted total). Loop-era anchors: `parseAreaQrPayload`/`openQrScannerModal`
-  (CQ-QR-<LEAGUE>-<AREA>[-<SPOTSLUG>], decodable V2-L encoder
+ `announceGameVerdict()` routes through `selectVerdictBeat()` + `speakHost()` (hushed gate on directive/unscored runs: no rank badge, no praise voice/confetti) + `speakScoreNumber()` (weighted total). Loop-era anchors: QR `parseAreaQrPayload`/`openQrScannerModal`
+ (CQ-QR-<LEAGUE>-<AREA>[-<SPOTSLUG>], decodable V2-L encoder
   `encodeQrVersion2L`), `ensureActiveCrew`+`recordCrewRun` in
   `saveCompletedRun` (first-save only; manual spot = `spotOverride` →
   `prizeEligible:false`, no public credit; crew-credit calls are code-kept, UI hidden for the hackathon), `computeWeightedRunScore`

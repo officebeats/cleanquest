@@ -90,6 +90,13 @@ async function shot(name) {
   fs.writeFileSync(path.join(SHOTS, name + ".png"), Buffer.from(data, "base64"));
   console.log("saved", name);
 }
+async function shotNow(name) {
+  const r = await send("Page.captureScreenshot", { format: "png" });
+  const data = r?.result?.data;
+  if (!data) throw new Error("empty screenshot " + name);
+  fs.writeFileSync(path.join(SHOTS, name + ".png"), Buffer.from(data, "base64"));
+  console.log("saved", name);
+}
  const desktopMap = { "01": "15-desktop-welcome", "02": "21-desktop-consent", "04": "22-desktop-instructions", "05": "17-desktop-camera", "06": "18-desktop-timer", "07": "19-desktop-results", "28": "29-desktop-noscored", "12": "23-desktop-deck", "08": "20-desktop-leaderboard", "09": "24-desktop-records", "11": "25-desktop-settings", "26": "27-desktop-ai-loading" };
  function desktopName(n, mobile) {
    if (mobile) return n;
@@ -142,9 +149,10 @@ async function runPass(mode) {
   await sleep(400);
   await clickText("CONFIRM|Accept");
   await sleep(1200);
-  // Instructions
+  // Instructions (explicit nav: CONFIRM returns to welcome hub in this flow)
+  await evaluate(`(() => { window.cleaningChallenge.navigateTo("instructions"); return window.cleaningChallenge.state.screen; })()`);
   await shot(P("04-instructions"));
-  await clickText("^CONTINUE$");
+  await evaluate(`(() => { window.cleaningChallenge.navigateTo("camera"); return window.cleaningChallenge.state.screen; })()`);
   await sleep(1200);
   // Camera (fake media stream provides video)
   await shot(P("05-camera"));
@@ -170,8 +178,7 @@ async function runPass(mode) {
   await clickText("ACCEPT THE CHALLENGE");
   await sleep(1500);
   await clickText("JUDGE DEMO");
-  await sleep(2500);
-  await shot(P("26-ai-loading-sponsor"));
+  await shotNow(P("26-ai-loading-sponsor"));
   await evaluate(`(async () => { for (let i = 0; i < 14; i++) { await new Promise((r) => setTimeout(r, 7000)); const t = document.body.innerText || ""; if (!/ANALYZING|Loading vision/i.test(t)) break; } return "done"; })()`, true);
   await shot(P("07-results"));
   // NOT SCORED wrong-area state (user's exact scenario)
