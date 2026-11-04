@@ -4332,7 +4332,7 @@ function startDiscoHouseGroove() {
  function startScreenMusic() {
    if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) { stopDiscoHouseGroove(); stopScreenTrack(); return; }
    const track = SCREEN_TRACKS[state.screen];
-   if (track) { playScreenTrack(track); } else { stopScreenTrack(); startDiscoHouseGroove(); }
+   if (track) { playScreenTrack(track); } else { stopScreenTrack(); stopDiscoHouseGroove(); }
  }
 function toggleDiscoGroove() {
   state.voice.discoEnabled = state.voice.discoEnabled === false;
@@ -5864,14 +5864,14 @@ async function handleStartPause() {
     setTimeout(() => playTone(820, 0.08), 90);
 
     startTimer();
-    startDiscoHouseGroove();
+    startScreenMusic();
     sampleLiveRunActivity();
     speakHost("start");
     return;
   }
 
   startTimer();
-  startDiscoHouseGroove();
+  startScreenMusic();
   playTone(660, 0.07);
 }
 
@@ -10748,9 +10748,7 @@ function swipeDeckCard(direction) {
     const isLeft = pick === "miss";
     if (els.deckStampLeft) els.deckStampLeft.style.opacity = isLeft ? "1" : "0";
     if (els.deckStampRight) els.deckStampRight.style.opacity = isLeft ? "0" : "1";
-    els.deckCard.style.transform = isLeft
-      ? "translate3d(-130px, 0, 0) rotate(-8deg)"
-      : "translate3d(130px, 0, 0) rotate(8deg)";
+    els.deckCard.style.transform = isLeft ? "rotate(-4deg)" : "rotate(4deg)";
   }
   answerDeck(pick);
   return pick;
@@ -15068,7 +15066,7 @@ function bindEvents() {
         () => {
           unlockAudio();
           setLanguage(button.dataset.language);
-          startDiscoHouseGroove();
+          startScreenMusic();
           if (!SELFTEST_MODE && !state.voice.muted) {
             speakWelcomeIntro(button.dataset.language);
           }
@@ -16051,7 +16049,7 @@ function initializeApp() {
   updateCameraUI();
 
   if (!SELFTEST_MODE && !state.voice.muted) {
-    startDiscoHouseGroove();
+    startScreenMusic();
     speakWelcomeIntro(state.language);
     const gestureEvents = ["pointerup", "touchend", "click", "pointerdown", "keydown"];
     const removeGestureListeners = () => {
@@ -16064,7 +16062,7 @@ function initializeApp() {
         removeGestureListeners();
         return;
       }
-      startDiscoHouseGroove();
+      startScreenMusic();
       const clickedSpecial = event?.target?.closest?.(".language-button, #welcomeContinue, #muteButton, #consentReadAloud");
       if (clickedSpecial) {
         state.voice.pendingAutoplayIntro = false;

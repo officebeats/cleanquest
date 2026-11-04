@@ -7472,6 +7472,13 @@ body #resultsScreen .results-cta-bar {
 #dwellCreditButton {
   display: none !important;
 }
+/* Synth groove retired: user-supplied per-screen tracks instead (timer/deck).
+ * Hide the groove track-cycle buttons; MUSIC pills remain as the master switch. */
+#discoNextTrackButton,
+#leaderboardNextTrackButton,
+#settingsTrackCycleButton {
+  display: none !important;
+}
 .size-chip-row {
   display: flex;
   flex-wrap: wrap;
@@ -7562,4 +7569,22 @@ body #resultsScreen .score-hero.insufficient > strong {
 }
 body #resultsScreen #verdictSummaryBadge.hidden {
   display: none !important;
+}
+/* Deck above-the-fold on phones: answered card stays in frame (tilt only,
+ * never translated off-screen) and the compact layout keeps the verdict,
+ * feedback, sponsor ad, and action buttons visible without scrolling. */
+@media (max-width: 480px) {
+  body #deckScreen .deck-top-hud { margin-bottom: 6px !important; }
+  body #deckScreen .deck-top-hud h2 { font-size: 20px !important; }
+  body #deckScreen .deck-progress-pips { margin-bottom: 8px !important; }
+  body #deckScreen .deck-stage { margin: 2px 0 6px !important; padding-bottom: 10px !important; }
+  body #deckScreen .deck-stage::before,
+  body #deckScreen .deck-stage::after { height: 26px !important; }
+  body #deckScreen #deckCard { padding: 10px 12px 12px !important; }
+  body #deckScreen .deck-illustration { height: 64px !important; margin: 4px 0 8px !important; }
+  body #deckScreen .deck-illustration svg { height: 56px !important; }
+  body #deckScreen .deck-card p#deckText { font-size: 16px !important; margin: 6px 0 !important; }
+  body #deckScreen .deck-verdict-stamp { padding: 4px 12px !important; font-size: 13px !important; margin: 2px 0 6px !important; }
+  body #deckScreen .deck-feedback { margin-top: 6px !important; font-size: 13.5px !important; }
+  body #deckScreen .deck-actions-row { margin-top: 6px !important; }
 }

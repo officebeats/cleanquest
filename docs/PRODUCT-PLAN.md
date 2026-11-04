@@ -66,13 +66,9 @@ certification claims) over code + docs; headless-Chrome self-test 6/6 and
 persona suite; phone fold at 360×740 and 390×844; a persona added per phase
 (consent-first-timer, appellant, offline-queued run, code-kept crew-member pane flow).
 
-## Phase 5: Music Engine (3 Disclosure-Style House Tracks) & Spotify / Apple Music Account Integration
+ ## Phase 5: Per-Screen Music (user-supplied tracks) & Spotify / Apple Music Account Integration
 
-1. **Built-in WebAudio UK Garage / Deep-Disco House Producer Engine (`DISCLOSURE_TRACKS`):**
-   - **Track 1 — *Latch Groove* (122 BPM · F minor / Ab major · Default):** Polyrhythmic 6/8-over-4/4 Juno-106 9th chord stabs (`Fm9 → Dbmaj9 → Abmaj9 → Cm7/Eb`), pitch-gliding vocal-chop synth lead, skipping UKG rimshot pocket, and deep sub + Korg M1 Organ-2 bass.
-   - **Track 2 — *White Noise* (124 BPM · A minor / D Dorian):** Driving 909 club house kick, sizzling open hi-hats, resonant M1/saw bassline, and Philly/French-disco string falls.
-   - **Track 3 — *Omen Velvet* (126 BPM · C# minor / E major):** Slap-octave Nu-Disco bassline, sidechained Rhodes/Juno chords, and syncopated synth-brass hook.
-   - **Adaptive Mix & Sidechain Ducking:** Plays at `1.0x` energy on the Daily Deck, `0.38x` subtle ambient club mix during Camera Check-In & active Timer runs, and automatically ducks to `0.22x` whenever the game-show host speaks.
+ 1. **Retired synth groove, per-screen songs (shipped):** The built-in WebAudio house-groove engine (`DISCLOSURE_TRACKS`: Latch/White-Noise/Omen) is retired — no groove plays anywhere. The timer loops the user-supplied `assets/audio/time-trial.mp3`, the deck loops `assets/audio/daily-deck.mp3`, and all other screens are silent. Both duck to 0.12 under host voice. Short WebAudio SFX (countdown beeps, stings, verdict fanfares) remain.
 2. **Spotify & Apple Music Account / Playlist Integration (`#settingsHostVoicePanel`):**
    - **Today (Zero-Key Browser Embeds):** Cleaners can tap `Spotify ↗` or `Apple Music ↗` in Settings (or paste any playlist/track URL) to mount an official Spotify (`open.spotify.com/embed/...`) or Apple Music (`embed.music.apple.com/...`) player using their signed-in browser session.
    - **Next (Full OAuth 2.0 PKCE + Web Playback SDK / MusicKit JS v3):**

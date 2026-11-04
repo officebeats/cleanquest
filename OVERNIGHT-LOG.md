@@ -669,3 +669,10 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Deck answer voice now announces the verdict: `deck-correct.mp3` / `deck-wrong.mp3` × EN/ES/PL (Correct!/Incorrect!, ¡Correcto!/¡Incorrecto!, Dobrze!/Źle!) instead of echoing agree/disagree; removed 6 superseded agree/disagree clips. Asset refs v24.
 - Evidence: CDP — deck nav requests daily-deck.mp3 + playing looped (ducked 0.12 under intro); wrong pick on right-answer card requests deck-wrong.mp3 with correct count unchanged; node --check clean.
 - Blockers: none.
+
+## 2026-11-04 — Groove fully retired + deck above-the-fold fix — DONE
+- Synth groove removed from the experience: non-track screens are now silent (groove never starts; track-cycle buttons hidden, MUSIC pills remain as master switch). Timer → time-trial, deck → daily-deck, everything else silent.
+- Deck fold fix from user screenshot: answered card no longer parks off-screen (tilt-only rotate ±4deg, was translate ±130px); compact ≤480px CSS (smaller illustration/HUD/type, tighter spacing) keeps verdict + feedback + sponsor ad + actions above the fold — verified at 390×844 (card in-frame, ad bottom 638/844).
+- Docs scrubbed of groove claims (README, PRODUCT-PLAN Phase 5, AUDIO-PLAN, report, submission). Asset refs v25.
+- Evidence: node --check clean; CDP silence map (welcome/camera/results null) + fold metrics + screenshot.
+- Blockers: none.
