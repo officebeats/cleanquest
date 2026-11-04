@@ -626,3 +626,10 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - qa-consistency.js hardened: unscorable/praise-badge/grades/CTA-agreement/sponsor-scope checks + multilingual deck progress and ES-friendly vague-directive guard.
 - Evidence: screenshots per screen in /tmp/cq-qa*; live bundle verified serving latest.
 - Blockers: none. Remaining polish (R2–R4) is post-hackathon.
+
+## 2026-11-03 (evening) — Judge-demo sample-score fix + full tour refresh — DONE
+- Judge demo regressed to NOT SCORED/CAMERA MOVED (lum gating + improvement threshold rejected the synthetic demo captures through the live pipeline). Fix: `runJudgeDemo` now marks demo captures `placeholder: true` so it routes to the deterministic `getDemoScore` (91 raw → 93% weighted S-RANK sample, SAMPLE RUN label); judge-demo note copy updated ×3 locales to "sample score on demo photos".
+- Also fixed: judge-demo hero showed "DEMO" instead of the score (`simulated && !judgeDemo` guard); unscored runs with an untouched directive now show NEEDS A WIPE hero instead of contradicting CAMERA MOVED; `ctaWipe` is now WIPE & RETAKE (×3 locales).
+- Retook all 26 referenced tour screenshots (mobile 390 + desktop 1440) with tools/cq-tour-shots.mjs incl. real timer screen + new 28/29-noscored NOT SCORED pair; removed 5 unreferenced stale shots; wired 28/29 into report Screen 8 tour; updated all 75%-A-Rank claims to 93% S-Rank sample; removed residual Victory Pose demo steps from report/submission scripts.
+- Evidence: node --check clean; full QA runner green (8/8 screens 0 findings, 11/11 personas, 6/6 self-test with fake camera); EN/ES/PL CTA paths verified (TAKE NEW PHOTOS / LIMPIAR Y TOMAR FOTO / ZRÓB NOWE ZDJĘCIA, no raw keys); live bundle SHA-256 matched.
+- Blockers: none.

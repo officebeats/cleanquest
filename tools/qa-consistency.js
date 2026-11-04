@@ -37,7 +37,7 @@
   var evState = txt("scoreEvidenceState");
   var badge = txt("verdictSummaryBadge");
   var heroTxt = txt("cleanlinessScore");
-  var unscorableWords = ["RESCAN", "REDO", "REPITE", "POWTÓRZ", "HOLD STEADY", "SOSTÉN", "TRZYMAJ", "NO CHANGE", "SIN CAMBIOS", "BRAK ZMIAN", "WRONG AREA", "ÁREA INCORRECTA", "ZŁE MIEJSCE", "PERSON IN PHOTO", "PERSONA EN FOTO", "OSOBA W KADRZE", "TOO DARK", "MUY OSCURO", "ZA CIEMNO", "TOO MUCH GLARE", "MUCHO REFLEJO", "ZA DUŻO ODBLASKU", "TOO FAR AWAY", "MUY LEJOS", "ZA DALEKO", "CAMERA MOVED", "CÁMARA MOVIDA", "PORUSZONY KADR"];
+  var unscorableWords = ["RESCAN", "REDO", "REPITE", "POWTÓRZ", "HOLD STEADY", "SOSTÉN", "TRZYMAJ", "NO CHANGE", "SIN CAMBIOS", "BRAK ZMIAN", "WRONG AREA", "ÁREA INCORRECTA", "ZŁE MIEJSCE", "PERSON IN PHOTO", "PERSONA EN FOTO", "OSOBA W KADRZE", "TOO DARK", "MUY OSCURO", "ZA CIEMNO", "TOO MUCH GLARE", "MUCHO REFLEJO", "ZA DUŻO ODBLASKU", "TOO FAR AWAY", "MUY LEJOS", "ZA DALEKO", "CAMERA MOVED", "CÁMARA MOVIDA", "PORUSZONY KADR", "NEEDS A WIPE", "FALTA LIMPIAR", "WYMAGA PRZETARCIA", "Take new Before", "Toma nuevas", "Zrób nowe", "NOT SCORED", "SIN PUNTUACIÓN", "BEZ WYNIKU"];
   var isUnscorable = false;
   for (var i = 0; i < unscorableWords.length; i++) {
     if ((badge + " " + evState + " " + heroTxt).indexOf(unscorableWords[i]) !== -1) isUnscorable = true;
@@ -69,7 +69,7 @@
     if (chips > 0) failures.push("contested-grades: " + chips + " surface chip(s) beside directive");
   }
   if (directive) {
-    var zoneWords = ["top", "middle", "bottom", "wipe", "clean", "retake", "redo", "take", "photo", "limpia", "frota", "repite", "toma", "foto", "wyczy", "powt", "przetrzyj", "zdj", "zona", "stref", "góra", "dół", "środek", "lewa", "prawa", "toda", "wszystkie", "whole", "sin ", "brak", "frame", "encuadre", "kadr", "spot", "surface", "camera", "light", "glare", "steady"];
+    var zoneWords = ["top", "middle", "bottom", "wipe", "clean", "retake", "redo", "take", "photo", "limpia", "frota", "repite", "toma", "foto", "wyczy", "powt", "przetrzyj", "zdj", "zona", "stref", "góra", "dół", "środek", "lewa", "prawa", "toda", "wszystkie", "whole", "sin ", "brak", "frame", "encuadre", "kadr", "spot", "surface", "camera", "light", "glare", "steady", "dark", "oscuro", "ciemno"];
     var hasZone = false;
     var lower = directive.toLowerCase();
     for (var k = 0; k < zoneWords.length; k++) { if (lower.indexOf(zoneWords[k]) !== -1) hasZone = true; }

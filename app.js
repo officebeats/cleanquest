@@ -305,7 +305,7 @@ const translations = {
     demoMode: "DEMO MODE",
     demoCameraPlaceholder: "CAMERA PLACEHOLDER",
     judgeDemoAction: "JUDGE DEMO · SAMPLE SCORE",
-    judgeDemoNote: "Judge demo · scored live by the on-device pipeline on sample photos. No leaderboard credit.",
+    judgeDemoNote: "Judge demo · sample score on demo photos. No leaderboard credit.",
     verifyProvenanceVerified: "Verified by {provider} · {model}",
     verifyProvenanceSamSuffix: " · SAM 3.1 overlays",
     verifyProvenanceOffline: "On-device pipeline · EfficientDet-Lite0 + classical vision · no cloud key",
@@ -362,7 +362,7 @@ const translations = {
     evidenceNoChange: "Wipe the surface and take a new After photo",
     ctaClean: "CLEAN & TAKE NEW PHOTO",
     ctaRetake: "TAKE NEW PHOTOS",
-    ctaWipe: "WIPE",
+    ctaWipe: "WIPE & RETAKE",
     evidenceDemo: "DEMO · NOT AI VERIFIED",
     yourTime: "YOUR TIME",
     target: "TARGET",
@@ -734,7 +734,7 @@ const translations = {
     demoMode: "MODO DEMO",
     demoCameraPlaceholder: "IMAGEN DE DEMOSTRACIÓN",
     judgeDemoAction: "DEMO JURADO · EJEMPLO",
-    judgeDemoNote: "Demo para el jurado · puntuado en vivo localmente con fotos de muestra. Sin crédito en la tabla.",
+    judgeDemoNote: "Demo para el jurado · puntuación de muestra con fotos demo. Sin crédito en la tabla.",
     verifyProvenanceVerified: "Verificado por {provider} · {model}",
     verifyProvenanceSamSuffix: " · superposiciones SAM 3.1",
     verifyProvenanceOffline: "Pipeline local · EfficientDet-Lite0 + visión clásica · sin clave en la nube",
@@ -791,7 +791,7 @@ const translations = {
     evidenceNoChange: "Limpia la superficie y toma una nueva foto",
     ctaClean: "LIMPIAR Y TOMAR FOTO",
     ctaRetake: "TOMAR NUEVAS FOTOS",
-    ctaWipe: "FROTA",
+    ctaWipe: "FROTA Y REPITE",
     evidenceDemo: "DEMO · NO VERIFICADO POR IA",
     yourTime: "TU TIEMPO",
     target: "META",
@@ -1163,7 +1163,7 @@ const translations = {
     demoMode: "TRYB DEMO",
     demoCameraPlaceholder: "OBRAZ ZASTĘPCZY",
     judgeDemoAction: "DEMO JURY · PRZYKŁAD",
-    judgeDemoNote: "Demo dla jury · ocenione na żywo lokalnie na przykładowych zdjęciach. Bez wpływu na ranking.",
+    judgeDemoNote: "Demo dla jury · przykładowy wynik na zdjęciach demo. Bez wpływu na ranking.",
     verifyProvenanceVerified: "Zweryfikowano: {provider} · {model}",
     verifyProvenanceSamSuffix: " · nakładki SAM 3.1",
     verifyProvenanceOffline: "Potok lokalny · EfficientDet-Lite0 + klasyczna wizja · brak klucza chmury",
@@ -1220,7 +1220,7 @@ const translations = {
     evidenceNoChange: "Wyczyść powierzchnię i zrób nowe zdjęcie",
     ctaClean: "WYCZYŚĆ I ZRÓB ZDJĘCIE",
     ctaRetake: "ZRÓB NOWE ZDJĘCIA",
-    ctaWipe: "PRZETRZYJ",
+    ctaWipe: "PRZETRZYJ I POWTÓRZ",
     evidenceDemo: "DEMO · NIEZWERYFIKOWANE PRZEZ AI",
     yourTime: "TWÓJ CZAS",
     target: "CEL",
@@ -5933,9 +5933,9 @@ async function runJudgeDemo() {
   state.checkin.assignedSpot = state.checkin.assignedSpot || "Sink & counter";
   state.checkin.spotOverride = false;
   const before = createDemoCapture("before");
-  before.placeholder = false;
+  before.placeholder = true;
   const after = createDemoCapture("after");
-  after.placeholder = false;
+  after.placeholder = true;
   state.captures.before = before;
   state.captures.after = after;
   state.captures.pose = null;
@@ -8904,6 +8904,9 @@ function renderResults() {
     if (score.scoreDirectiveKey === "rescanBright") {
       return lang === "es" ? "MUCHO REFLEJO" : lang === "pl" ? "ZA DUŻO ODBLASKU" : "TOO MUCH GLARE";
     }
+    if (score.scoreDirectiveKey === "findingUntouched") {
+      return lang === "es" ? "FALTA LIMPIAR" : lang === "pl" ? "WYMAGA PRZETARCIA" : "NEEDS A WIPE";
+    }
     if (score.scoreDirectiveKey === "rescanEmpty" || score.scoreDirectiveKey === "findingNoObjects" || score.scoreDirectiveKey === "findingModelFailed") {
       return lang === "es" ? "MUY LEJOS" : lang === "pl" ? "ZA DALEKO" : "TOO FAR AWAY";
     }
@@ -8911,7 +8914,7 @@ function renderResults() {
   };
   els.cleanlinessScore.textContent = scorable
     ? `${weightedHero ?? score.cleanliness}%`
-    : score.simulated ? "DEMO" : unscorableReason();
+    : (score.simulated && !score.judgeDemo) ? "DEMO" : unscorableReason();
 
   const verdictBeat = selectVerdictBeat();
   const isLowOrRescan = !scorable || verdictBeat === "retry" || verdictBeat === "retry-far" || (Number.isFinite(weightedHero ?? score.cleanliness) && (weightedHero ?? score.cleanliness) < (CONFIG.verdictTiers?.passMark || 70));
