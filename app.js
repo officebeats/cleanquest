@@ -3934,17 +3934,12 @@ function updateDiscoTrackUI() {
   document.body?.style?.setProperty("--bar-ms", `${trk.stepMs * 8}ms`);
 }
 
-function cycleDiscoTrack() {
-  discoTrackIndex = (discoTrackIndex + 1) % DISCLOSURE_TRACKS.length;
-  updateDiscoTrackUI();
-  if (discoTimerId) {
-    stopDiscoHouseGroove();
-    startDiscoHouseGroove();
-  } else {
-    state.voice.discoEnabled = true;
-    startDiscoHouseGroove();
-  }
-}
+ function cycleDiscoTrack() {
+   // Synth groove retired: cycle only refreshes the (hidden) track badges.
+   // Audible music now comes exclusively from per-screen MP3 tracks.
+   discoTrackIndex = (discoTrackIndex + 1) % DISCLOSURE_TRACKS.length;
+   updateDiscoTrackUI();
+ }
 
 function ensureDiscoAudioGraph() {
   const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -10927,7 +10922,6 @@ function answerDeck(pick) {
 
   renderDeckSponsorSlot(true, card);
 
-  deck.answeredAt = Date.now();
   deck.advanceTimer = setTimeout(() => {
     if (state.deck !== deck) return;
     advanceDeckCard();
@@ -15403,14 +15397,10 @@ function bindEvents() {
     els.deckNextButton.addEventListener("click", advanceDeckCard);
   }
 
-  // Tap a locked (answered) card or its feedback to move on immediately —
-  // guarded by answeredAt so the tap that answers never double-fires.
-  const tapAdvanceDeck = () => {
-    const deck = state.deck;
-    if (deck?.locked && Date.now() - (deck.answeredAt || 0) > 800) advanceDeckCard();
-  };
-  if (els.deckCard) els.deckCard.addEventListener("click", tapAdvanceDeck);
-  if (els.deckFeedback) els.deckFeedback.addEventListener("click", tapAdvanceDeck);
+  // Tap answered feedback to move on immediately. (Taps on the card itself are
+  // already handled by the swipe click-handler below, which advances instantly
+  // when locked and eats only the originating swipe's synthetic click.)
+  if (els.deckFeedback) els.deckFeedback.addEventListener("click", () => { if (state.deck?.locked) advanceDeckCard(); });
 
   if (els.deckPracticeAgain) {
     els.deckPracticeAgain.addEventListener("click", practiceAnotherDeck);

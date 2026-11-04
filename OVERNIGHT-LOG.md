@@ -700,3 +700,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Bumped app.js to v27 so the fixture/copy fixes actually reach returning clients.
 - Evidence: node --check; motif screenshots inspected; tree clean.
 - Blockers: none.
+
+## 2026-11-04 — Instant tap-advance, no-review time display — DONE
+- Removed the 800ms tap gate: answering taps on the card were already handled by the swipe click-handler (instant advance when locked, eats only the originating swipe's synthetic click); deleted the redundant guarded listener + answeredAt. Feedback taps also advance instantly. Verified: button answer + 150ms card tap advances immediately.
+- Time bar no longer mentions review anywhere user-facing (detail copy ×3, dropped the REVIEW suffix; internal flag kept for self-test).
+- Evidence: CDP wrong-answer run at 360×640 — card in frame, sponsor above fold; screenshot inspected.
+- Blockers: none.
