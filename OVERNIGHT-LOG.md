@@ -676,3 +676,12 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Docs scrubbed of groove claims (README, PRODUCT-PLAN Phase 5, AUDIO-PLAN, report, submission). Asset refs v25.
 - Evidence: node --check clean; CDP silence map (welcome/camera/results null) + fold metrics + screenshot.
 - Blockers: none.
+
+## 2026-11-04 — Deck pacing, contextual art, plain bar copy, no-wipe CTA — DONE
+- Tap answered card/feedback advances immediately (800ms guard vs answer-tap double-fire); auto-advance shortened (2.2s + 25/char, 6s cap).
+- Illustrations now contextual per question: keyword motif router (product/cloth/dwell/technique/fixture/surface) + 3 new SVG motifs (folded cloth, dwell clock, faucet+knob), passed EN card text at both render sites; all-motifs unit check green.
+- Season cards show just the scenario (dropped "Season #N:" prefix from question text; why keeps season context).
+- Bar copy: technique is now "Wipe order and zone coverage, top to bottom" (×3); implausibly-fast time no longer claims human review ("full time points", ×3).
+- WIPE & RETAKE CTA removed everywhere (untouched findings now use CLEAN & TAKE NEW PHOTO); remaining-objects directive made actionable ("wipe it and take a new photo", ×3) so the consistency probe stays green.
+- Asset ref v26. Evidence: node --check, tap-advance CDP (0→1), motif unit test, probe 0 failures on untouched+wrong-area.
+- Blockers: none.

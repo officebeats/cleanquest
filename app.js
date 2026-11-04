@@ -362,7 +362,6 @@ const translations = {
     evidenceNoChange: "Wipe the surface and take a new After photo",
     ctaClean: "CLEAN & TAKE NEW PHOTO",
     ctaRetake: "TAKE NEW PHOTOS",
-    ctaWipe: "WIPE & RETAKE",
     evidenceDemo: "DEMO · NOT AI VERIFIED",
     yourTime: "YOUR TIME",
     target: "TARGET",
@@ -427,7 +426,7 @@ const translations = {
     findingNoChange: "The Before and After photos look the same — wipe the surface first, then take a new After photo.",
     findingDemoStation: "Demo station: 3 of 3 surface items (cup, bottle, bowl) cleared; counter and sink basin visibly improved.",
     findingNoObjects: "Couldn't see enough — clean and try again.",
-    findingRemaining: "{objects} still detected after the challenge.",
+    findingRemaining: "{objects} still detected after the challenge — wipe it and take a new photo.",
     findingNew: "{objects} appeared in the after image.",
     findingDemo: "Demo score uses placeholder images; no camera judgment was made.",
     findingModelFailed: "The surface is too far away to see clearly — step closer so it fills the screen and take a new photo.",
@@ -558,9 +557,9 @@ const translations = {
     tierPhoto: "PHOTO FINISH",
     tierClose: "SO CLOSE",
     barDetailTechniqueNone: "No technique reading — clean and try again.",
-    barDetailTechnique: "From measured evidence ({sources}).",
+    barDetailTechnique: "Wipe order and zone coverage, top to bottom.",
     barDetailNoTime: "No time recorded.",
-    barDetailTimeReview: "Much faster than benchmark — held for human review.",
+    barDetailTimeReview: "Much faster than benchmark — full time points.",
     barDetailTimeOk: "Within benchmark — full time points.",
     barTechnique: "Technique",
     barTime: "Time vs. benchmark",
@@ -791,7 +790,6 @@ const translations = {
     evidenceNoChange: "Limpia la superficie y toma una nueva foto",
     ctaClean: "LIMPIAR Y TOMAR FOTO",
     ctaRetake: "TOMAR NUEVAS FOTOS",
-    ctaWipe: "FROTA Y REPITE",
     evidenceDemo: "DEMO · NO VERIFICADO POR IA",
     yourTime: "TU TIEMPO",
     target: "META",
@@ -856,7 +854,7 @@ const translations = {
     findingNoChange: "Las fotos de Antes y Después se ven iguales — limpia primero la superficie y toma una nueva foto.",
     findingDemoStation: "Estación demo: 3 de 3 objetos de la superficie (taza, botella, tazón) retirados; la encimera y el lavabo mejoraron visiblemente.",
     findingNoObjects: "No se ven suficientes — limpia e inténtalo de nuevo.",
-    findingRemaining: "{objects} siguen detectados después del reto.",
+    findingRemaining: "{objects} siguen detectados después del reto — frótalos y toma una nueva foto.",
     findingNew: "{objects} aparecieron en la imagen final.",
     findingDemo: "La puntuación demo usa imágenes de muestra; la cámara no emitió ningún juicio.",
     findingModelFailed: "La superficie está muy lejos para verse bien — acércate para que llene la pantalla y toma una nueva foto.",
@@ -987,9 +985,9 @@ const translations = {
     tierPhoto: "FINAL DE FOTO",
     tierClose: "CASI LO LOGRAS",
     barDetailTechniqueNone: "Sin lectura de técnica — limpia e inténtalo de nuevo.",
-    barDetailTechnique: "De evidencia medida ({sources}).",
+    barDetailTechnique: "Orden de pasado y cobertura por zonas, de arriba abajo.",
     barDetailNoTime: "Sin tiempo registrado.",
-    barDetailTimeReview: "Muy por debajo del estándar — revisión humana.",
+    barDetailTimeReview: "Mucho más rápido que la referencia — puntos completos.",
     barDetailTimeOk: "Dentro del estándar — puntos completos.",
     barTechnique: "Técnica",
     barTime: "Tiempo vs. referencia",
@@ -1220,7 +1218,6 @@ const translations = {
     evidenceNoChange: "Wyczyść powierzchnię i zrób nowe zdjęcie",
     ctaClean: "WYCZYŚĆ I ZRÓB ZDJĘCIE",
     ctaRetake: "ZRÓB NOWE ZDJĘCIA",
-    ctaWipe: "PRZETRZYJ I POWTÓRZ",
     evidenceDemo: "DEMO · NIEZWERYFIKOWANE PRZEZ AI",
     yourTime: "TWÓJ CZAS",
     target: "CEL",
@@ -1285,7 +1282,7 @@ const translations = {
     findingNoChange: "Zdjęcia Przed i Po wyglądają tak samo — najpierw wyczyść powierzchnię i zrób nowe zdjęcie.",
     findingDemoStation: "Stacja demo: 3 z 3 przedmiotów (kubek, butelka, miska) usunięte; blat i umywalka wyraźnie lepsze.",
     findingNoObjects: "Widać za mało — wyczyść i spróbuj ponownie.",
-    findingRemaining: "{objects} nadal wykryto po zakończeniu wyzwania.",
+    findingRemaining: "{objects} nadal wykryto po zakończeniu wyzwania — wytrzyj je i zrób nowe zdjęcie.",
     findingNew: "{objects} pojawiły się na zdjęciu po sprzątaniu.",
     findingDemo: "Wynik demo korzysta z obrazów zastępczych; kamera nie dokonała oceny.",
     findingModelFailed: "Powierzchnia jest za daleko, by było ją wyraźnie widać — podejdź bliżej i zrób nowe zdjęcie.",
@@ -1416,9 +1413,9 @@ const translations = {
     tierPhoto: "FINISZ NA ZDJĘCIU",
     tierClose: "PRAWIE SIĘ UDAŁO",
     barDetailTechniqueNone: "Brak odczytu techniki — wyczyść i spróbuj ponownie.",
-    barDetailTechnique: "Ze zmierzonych dowodów ({sources}).",
+    barDetailTechnique: "Kolejność przecierania i pokrycie stref, z góry na dół.",
     barDetailNoTime: "Brak zapisanego czasu.",
-    barDetailTimeReview: "Znacznie poniżej normy — przegląd człowieka.",
+    barDetailTimeReview: "Znacznie szybciej niż wzorzec — pełne punkty.",
     barDetailTimeOk: "W normie — pełne punkty.",
     barTechnique: "Technika",
     barTime: "Czas vs. wzorzec",
@@ -7145,7 +7142,7 @@ function calculateLocalScore(
     } else {
       const untouched = describeUntouchedZones(surface.zones);
       const allObjectsCleared = beforeCount > 0 && clearedCount === beforeCount && newCount === 0;
-      if (untouched && !allObjectsCleared && (cleanliness == null || cleanliness < 90)) { findings.push(t("findingUntouched", untouched)); setDirective("findingUntouched", untouched); scoreCta = t("ctaWipe"); }
+      if (untouched && !allObjectsCleared && (cleanliness == null || cleanliness < 90)) { findings.push(t("findingUntouched", untouched)); setDirective("findingUntouched", untouched); scoreCta = t("ctaClean"); }
     }
   }
   if (envCheck.matched && remainingCount > 0) { const remDesc = describeObjects(matching.matches.map((m) => m.after)); findings.push(t("findingRemaining", { objects: remDesc })); if (!scoreDirective) { setDirective("findingRemaining", { objects: remDesc }); scoreCta = t("ctaClean"); } }
@@ -7648,9 +7645,9 @@ function normalizeSeasonCard(c, idx, seasonNum, areaKey, themeObjOrStr) {
     isSeasonCard: true,
     seasonNum,
     areaKey,
-    text: `🗓️ Season #${seasonNum}: ${cleanEn}`,
-    text_es: `🗓️ Temporada #${seasonNum}: ${cleanEs}`,
-    text_pl: `🗓️ Sezon #${seasonNum}: ${cleanPl}`,
+    text: cleanEn,
+    text_es: cleanEs,
+    text_pl: cleanPl,
     productType: c.productType || "Color-coded microfiber cloth + neutral cleaner",
     productType_es: c.productType_es || "Paño de microfibra por colores + limpiador neutro",
     productType_pl: c.productType_pl || "Ściereczka z mikrofibry z kodem kolorów + środek neutralny",
@@ -10533,11 +10530,24 @@ function triggerArcadeFx(mode = "pixels", opts = {}) {
   }
 }
 
-function renderDeckIllustration(catRaw, finished = false, verdictState = null) {
-  populateDeckAmbientFloaters();
-  const el = document.getElementById("deckIllustration");
-  if (!el) return;
-  const accentStroke = verdictState === "hit" ? "#39f5bc" : verdictState === "miss" ? "#ff5b76" : "#45eaff";
+ function deckMotifFor(text = "", catRaw = "") {
+   const t = String(text || "").toLowerCase();
+   const has = (...words) => words.some((w) => t.includes(w));
+   if (has("dwell", "soak", "contact time", "keep wet", "let it sit", "sit for", "leave it")) return "dwell";
+   if (has("spray", "bottle", "glass", "ph ", "acid", "bleach", "cleaner", "solution", "chemical", "detergent", "disinfect")) return "product";
+   if (has("cloth", "microfiber", "microfibre", "rag", "wring")) return "cloth";
+   if (has("handle", "knob", "faucet", "tap ", "mirror", "sink", "fixture", "toilet", "flush", "rail")) return "fixture";
+   if (has("mop", "broom", "vacuum", "sweep", "scrub", "squeegee", "overlap", "stroke", "passes", "crevice")) return "technique";
+   if (has("floor", "carpet", "tile", "grout", "sill", "dust", "cobweb", "trash", "bin", "edge", "corner", "baseboard", "stain", "spill")) return "surface";
+   return catRaw || "surface";
+ }
+
+ function renderDeckIllustration(catRaw, finished = false, verdictState = null, cardText = "") {
+   populateDeckAmbientFloaters();
+   const el = document.getElementById("deckIllustration");
+   if (!el) return;
+   const accentStroke = verdictState === "hit" ? "#39f5bc" : verdictState === "miss" ? "#ff5b76" : "#45eaff";
+   const motif = deckMotifFor(cardText, catRaw);
   if (finished) {
     el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
       <defs>
@@ -10560,7 +10570,7 @@ function renderDeckIllustration(catRaw, finished = false, verdictState = null) {
     </svg>`;
     return;
   }
-  if (catRaw === "product") {
+  if (motif === "product") {
     el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
       <!-- Left Wing: Animated pH Chemistry Meter -->
       <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
@@ -10585,7 +10595,7 @@ function renderDeckIllustration(catRaw, finished = false, verdictState = null) {
       <path d="M358 74 v-22 a14 14 0 0 1 28 0 v8" fill="none" stroke="#e2f7ff" stroke-width="4.5" stroke-linecap="round"/>
       <path class="sparkle-spin" d="M392 32 l3.5 9 l9 3.5 l-9 3.5 l-3.5 9 l-3.5-9 l-9-3.5 l9-3.5 z" fill="#ffd35c"/>
     </svg>`;
-  } else if (catRaw === "technique") {
+  } else if (motif === "technique") {
     el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
       <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
       <circle cx="66" cy="56" r="22" fill="rgba(69,234,255,0.12)" stroke="#45eaff" stroke-width="2"/>
@@ -10599,7 +10609,51 @@ function renderDeckIllustration(catRaw, finished = false, verdictState = null) {
       <rect x="326" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
       <path class="sparkle-spin" d="M374 34 l5 13 l13 5 l-13 5 l-5 13 l-5-13 l-13-5 l13-5 z" fill="#39f5bc"/>
     </svg>`;
-  } else {
+  } else if (motif === "cloth") {
+    el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
+      <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <text x="66" y="40" text-anchor="middle" fill="#9bdfff" font-size="10" font-weight="800">8-FOLD</text>
+      <path d="M42 52 h48 M42 62 h48 M42 72 h48" stroke="rgba(69,234,255,0.5)" stroke-width="3" stroke-linecap="round"/>
+      <rect x="132" y="16" width="176" height="80" rx="14" fill="rgba(10,34,54,0.88)" stroke="${accentStroke}" stroke-width="2"/>
+      <g class="sweep-arc">
+        <rect x="168" y="66" width="104" height="16" rx="6" fill="#45eaff" opacity="0.9"/>
+        <rect x="176" y="50" width="104" height="16" rx="6" fill="#39f5bc" opacity="0.9"/>
+        <rect x="168" y="34" width="104" height="16" rx="6" fill="rgba(224,250,255,0.9)"/>
+      </g>
+      <circle class="bubble-rise" cx="300" cy="70" r="5" fill="#39f5bc"/>
+      <rect x="326" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <path class="sparkle-spin" d="M374 34 l5 13 l13 5 l-13 5 l-5 13 l-5-13 l-13-5 l13-5 z" fill="#39f5bc"/>
+    </svg>`;
+  } else if (motif === "dwell") {
+    el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
+      <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <text x="66" y="40" text-anchor="middle" fill="#9bdfff" font-size="10" font-weight="800">DWELL</text>
+      <circle cx="66" cy="62" r="16" fill="rgba(255,211,92,0.14)" stroke="#ffd35c" stroke-width="2.5"/>
+      <line class="lottie-orbit" x1="66" y1="62" x2="66" y2="50" stroke="#ffd35c" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="132" y="16" width="176" height="80" rx="14" fill="rgba(10,34,54,0.88)" stroke="${accentStroke}" stroke-width="2"/>
+      <circle cx="220" cy="56" r="28" fill="rgba(255,211,92,0.12)" stroke="#ffd35c" stroke-width="2.5"/>
+      <line class="lottie-orbit" x1="220" y1="56" x2="220" y2="36" stroke="#ffd35c" stroke-width="3" stroke-linecap="round"/>
+      <line x1="220" y1="56" x2="234" y2="62" stroke="#e0faff" stroke-width="3" stroke-linecap="round"/>
+      <circle cx="220" cy="56" r="3.5" fill="#ffd35c"/>
+      <rect x="326" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <path class="sparkle-spin" d="M374 34 l5 13 l13 5 l-13 5 l-5 13 l-5-13 l-13-5 l13-5 z" fill="#ffd35c"/>
+    </svg>`;
+  } else if (motif === "fixture") {
+    el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
+      <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <circle cx="66" cy="56" r="16" fill="none" stroke="#e2f7ff" stroke-width="4"/>
+      <circle cx="66" cy="56" r="5" fill="#45eaff"/>
+      <rect x="132" y="16" width="176" height="80" rx="14" fill="rgba(10,34,54,0.88)" stroke="${accentStroke}" stroke-width="2"/>
+      <path d="M186 78 v-24 a16 16 0 0 1 32 0 v10" fill="none" stroke="#e2f7ff" stroke-width="5" stroke-linecap="round"/>
+      <g class="sweep-arc">
+        <circle cx="218" cy="78" r="3" fill="#45eaff"/>
+        <circle cx="226" cy="88" r="3.5" fill="#39f5bc"/>
+      </g>
+      <circle cx="262" cy="56" r="14" fill="rgba(69,234,255,0.14)" stroke="#45eaff" stroke-width="2.5"/>
+      <circle cx="262" cy="56" r="4" fill="#ffd35c"/>
+      <rect x="326" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
+      <path class="sparkle-spin" d="M374 34 l5 13 l13 5 l-13 5 l-5 13 l-5-13 l-13-5 l13-5 z" fill="#39f5bc"/>
+    </svg>`;
     el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
       <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
       <text x="66" y="40" text-anchor="middle" fill="#9bdfff" font-size="10" font-weight="800">9-ZONE SCAN</text>
@@ -10696,7 +10750,7 @@ function renderDeck() {
   const catRaw = String(card.category || "").toLowerCase();
   const catIcon = catRaw === "surface" ? "🧽 " : catRaw === "product" ? "🧪 " : "⚡ ";
   if (els.deckCategory) els.deckCategory.textContent = `${catIcon}${t(catRaw === "surface" ? "deckCatSurface" : catRaw === "product" ? "deckCatProduct" : "deckCatTechnique")}`;
-  renderDeckIllustration(catRaw, false);
+  renderDeckIllustration(catRaw, false, null, String(card?.text || ""));
   if (els.deckText) els.deckText.textContent = localizedDeckField(card, "text");
   if (els.deckProgress) {
     els.deckProgress.textContent = t("deckCardOf", { i: deck.index + 1, n: deck.order.length });
@@ -10829,7 +10883,7 @@ function answerDeck(pick) {
   els.deckRight?.classList.add("hidden");
   els.deckNextButton?.classList.remove("hidden");
   const catRaw = String(card?.category || "").toLowerCase();
-  renderDeckIllustration(catRaw, false, hit ? "hit" : "miss");
+  renderDeckIllustration(catRaw, false, hit ? "hit" : "miss", String(card?.text || ""));
   if (els.deckCard) {
     els.deckCard.classList.remove("card-verdict-hit", "card-verdict-miss");
     void els.deckCard.offsetWidth;
@@ -10872,10 +10926,11 @@ function answerDeck(pick) {
 
   renderDeckSponsorSlot(true, card);
 
+  deck.answeredAt = Date.now();
   deck.advanceTimer = setTimeout(() => {
     if (state.deck !== deck) return;
     advanceDeckCard();
-  }, Math.min(9000, 2400 + (els.deckFeedback?.textContent?.length || 0) * 45));
+  }, Math.min(6000, 2200 + (els.deckFeedback?.textContent?.length || 0) * 25));
 }
 
 function openRecords() {
@@ -15346,6 +15401,15 @@ function bindEvents() {
   if (els.deckNextButton) {
     els.deckNextButton.addEventListener("click", advanceDeckCard);
   }
+
+  // Tap a locked (answered) card or its feedback to move on immediately —
+  // guarded by answeredAt so the tap that answers never double-fires.
+  const tapAdvanceDeck = () => {
+    const deck = state.deck;
+    if (deck?.locked && Date.now() - (deck.answeredAt || 0) > 800) advanceDeckCard();
+  };
+  if (els.deckCard) els.deckCard.addEventListener("click", tapAdvanceDeck);
+  if (els.deckFeedback) els.deckFeedback.addEventListener("click", tapAdvanceDeck);
 
   if (els.deckPracticeAgain) {
     els.deckPracticeAgain.addEventListener("click", practiceAnotherDeck);
