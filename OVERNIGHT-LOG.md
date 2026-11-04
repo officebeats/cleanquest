@@ -647,3 +647,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Advisory catch: EN consent-00.mp3 had been reverted to the old abridged script while the shown consentBody changed (pose sentence removed), and ES/PL scripts omitted location/cloud clauses. Re-rendered all three consent-00.mp3 from the EXACT current consentBody (EN Kokoro-82M af_heart 1.06 + broadcast chain 25.3s; ES es_MX-claude-high 35.4s; PL pl_PL-gosia-medium 34.5s; all 24 kHz mono). Verified read-aloud path (`speakConsentAloud` → versioned `clipUrlFor`) serves HTTP 200 in all 3 languages.
 - Evidence: ffprobe clean (24 kHz, durations scale with text); clips served 200.
 - Blockers: none.
+
+## 2026-11-03 (night) — Cache-bust new consent audio — DONE
+- New verbatim consent clips would have been shadowed by cached `?v=20261103-33` audio URLs: bumped `FEATURE_MUSIC.version` to `20261103-34` and asset refs to `v=20261103-22` so clients refetch JS + audio.
+- Evidence: node --check clean; parity verified below.
+- Blockers: none.
