@@ -657,3 +657,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Challenge (timer) music is now `assets/audio/time-trial.mp3` (user file, -18 LUFS, 44.1 kHz stereo, 128k, 21s looped) instead of the synth groove; groove stays on all other screens. New `startScreenMusic()` router; track ducks to 0.12 under host voice via playHostClip hooks, stops on mute/disable/screen-leave/embed. Bumped FEATURE_MUSIC to 20261103-35 + asset refs v23.
 - Evidence: node --check clean; headless nav timer→results→timer fires versioned track URL twice with zero errors; submission X-post + AUDIO-PLAN updated.
 - Blockers: none.
+
+## 2026-11-04 — Challenge-track review fixes + real playback verification — DONE
+- Deck branch routed through startScreenMusic (was starting groove over the still-playing track); added challengeTrackState() debug accessor to exports.
+- Real CDP verification (autoplay on, muted Chrome): timer → playing looped @0.5; speakHost clip → 0.12 during, 0.5 after end; deck → stopped (null); back to timer → playing; all with zero errors.
+- Evidence: node --check clean; CDP state dump above.
+- Blockers: none.

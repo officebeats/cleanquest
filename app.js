@@ -4438,7 +4438,7 @@ function navigateTo(screen) {
       state.deck = { order: buildDailyDeck(), index: 0, correct: 0, locked: false, answeredCurrent: false };
     }
     renderDeck();
-    startDiscoHouseGroove();
+    startScreenMusic();
     if (!SELFTEST_MODE && !state.voice.muted && state.deck.index === 0 && !state.deck.locked) {
       speakDeckIntro(state.language);
     }
@@ -16206,6 +16206,7 @@ window.cleaningChallenge = {
   selectCleaningSpot,
   sampleLiveRunActivity,
   openEvidenceLightbox,
+  challengeTrackState: () => (challengeTrackAudio ? { src: (challengeTrackAudio.currentSrc || challengeTrackAudio.src || "").split("/").pop().split("?")[0], paused: challengeTrackAudio.paused, loop: challengeTrackAudio.loop, volume: Number(challengeTrackAudio.volume.toFixed(2)) } : null),
   setEvidenceLightboxMode,
   closeEvidenceLightbox,
   parseAreaQrPayload,
