@@ -685,3 +685,12 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - WIPE & RETAKE CTA removed everywhere (untouched findings now use CLEAN & TAKE NEW PHOTO); remaining-objects directive made actionable ("wipe it and take a new photo", ×3) so the consistency probe stays green.
 - Asset ref v26. Evidence: node --check, tap-advance CDP (0→1), motif unit test, probe 0 failures on untouched+wrong-area.
 - Blockers: none.
+
+## 2026-11-04 — Deck pacing, contextual art, plain bar copy, no-wipe CTA — DONE
+- Tap answered card/feedback advances immediately (800ms guard vs answer-tap double-fire); auto-advance shortened (2.2s + 25/char, 6s cap).
+- Illustrations now contextual per question: keyword motif router (product/cloth/dwell/technique/fixture/surface) + 3 new SVG motifs (folded cloth, dwell clock, faucet+knob); all 6 visually verified via screenshots.
+- Season cards show just the scenario (dropped "Season #N:" prefix from question text; why keeps season context).
+- Bar copy: technique is "Wipe order and zone coverage, top to bottom" (×3); implausibly fast time no longer claims human review ("full time points", ×3; REVIEW suffix + flag also stripped from the bar display path).
+- WIPE & RETAKE CTA removed everywhere (untouched findings now use CLEAN & TAKE NEW PHOTO); remaining-objects directive made actionable without wipe/retake language; probe green on untouched + wrong-area states.
+- Asset refs v26. Evidence: node --check, tap-advance CDP (0→1), motif unit test + 6 inspected renders, probe 0 failures.
+- Blockers: none.

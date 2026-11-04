@@ -426,7 +426,7 @@ const translations = {
     findingNoChange: "The Before and After photos look the same — wipe the surface first, then take a new After photo.",
     findingDemoStation: "Demo station: 3 of 3 surface items (cup, bottle, bowl) cleared; counter and sink basin visibly improved.",
     findingNoObjects: "Couldn't see enough — clean and try again.",
-    findingRemaining: "{objects} still detected after the challenge — wipe it and take a new photo.",
+    findingRemaining: "{objects} still in the frame — not fully cleared.",
     findingNew: "{objects} appeared in the after image.",
     findingDemo: "Demo score uses placeholder images; no camera judgment was made.",
     findingModelFailed: "The surface is too far away to see clearly — step closer so it fills the screen and take a new photo.",
@@ -854,7 +854,7 @@ const translations = {
     findingNoChange: "Las fotos de Antes y Después se ven iguales — limpia primero la superficie y toma una nueva foto.",
     findingDemoStation: "Estación demo: 3 de 3 objetos de la superficie (taza, botella, tazón) retirados; la encimera y el lavabo mejoraron visiblemente.",
     findingNoObjects: "No se ven suficientes — limpia e inténtalo de nuevo.",
-    findingRemaining: "{objects} siguen detectados después del reto — frótalos y toma una nueva foto.",
+    findingRemaining: "{objects} siguen en el encuadre — sin retirar del todo.",
     findingNew: "{objects} aparecieron en la imagen final.",
     findingDemo: "La puntuación demo usa imágenes de muestra; la cámara no emitió ningún juicio.",
     findingModelFailed: "La superficie está muy lejos para verse bien — acércate para que llene la pantalla y toma una nueva foto.",
@@ -1282,7 +1282,7 @@ const translations = {
     findingNoChange: "Zdjęcia Przed i Po wyglądają tak samo — najpierw wyczyść powierzchnię i zrób nowe zdjęcie.",
     findingDemoStation: "Stacja demo: 3 z 3 przedmiotów (kubek, butelka, miska) usunięte; blat i umywalka wyraźnie lepsze.",
     findingNoObjects: "Widać za mało — wyczyść i spróbuj ponownie.",
-    findingRemaining: "{objects} nadal wykryto po zakończeniu wyzwania — wytrzyj je i zrób nowe zdjęcie.",
+    findingRemaining: "{objects} nadal w kadrze — nie w pełni usunięte.",
     findingNew: "{objects} pojawiły się na zdjęciu po sprzątaniu.",
     findingDemo: "Wynik demo korzysta z obrazów zastępczych; kamera nie dokonała oceny.",
     findingModelFailed: "Powierzchnia jest za daleko, by było ją wyraźnie widać — podejdź bliżej i zrób nowe zdjęcie.",
@@ -10654,6 +10654,7 @@ function triggerArcadeFx(mode = "pixels", opts = {}) {
       <rect x="326" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
       <path class="sparkle-spin" d="M374 34 l5 13 l13 5 l-13 5 l-5 13 l-5-13 l-13-5 l13-5 z" fill="#39f5bc"/>
     </svg>`;
+  } else {
     el.innerHTML = `<svg viewBox="0 0 440 112" role="presentation">
       <rect x="18" y="18" width="96" height="76" rx="12" fill="rgba(8,28,46,0.85)" stroke="${accentStroke}" stroke-width="1.5"/>
       <text x="66" y="40" text-anchor="middle" fill="#9bdfff" font-size="10" font-weight="800">9-ZONE SCAN</text>
@@ -12069,7 +12070,7 @@ function renderScoreBreakdown(runInput) {
     label.textContent = bar.label;
     const val = document.createElement("strong");
     val.textContent = bar.measured
-      ? `${bar.display}${bar.flag ? ` · ${t("reviewFlag")}` : ""}`
+      ? `${bar.display}`
       : t("notMeasured");
     head.append(label, val);
 
