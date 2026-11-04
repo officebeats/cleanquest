@@ -7,7 +7,7 @@
  > `welcome-intro` −18.7 dB ≈ `consent-00` −18.8 dB), played at exact 1.0x via
  > `playHostClip()` with `?v=FEATURE_MUSIC.version` cache-busting. ES/PL keep
  > their pinned Piper VITS voices. Unrecorded IDs stay silent (neural-only).
- > The plan below is the original research/spec record.
+ > The plan below is the original research/spec record. Challenge-run music is a single looped track, `assets/audio/time-trial.mp3` (user-supplied time-trial song, -18 LUFS, 44.1 kHz stereo, looped on the timer screen, ducked to 0.12 under host voice); the WebAudio synth groove remains on all other screens.
 
 # AUDIO PLAN — CleanQuest voice clips + SFX (research, no installs, no audio generated yet)
 

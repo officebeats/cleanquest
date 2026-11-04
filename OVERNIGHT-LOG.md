@@ -652,3 +652,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - New verbatim consent clips would have been shadowed by cached `?v=20261103-33` audio URLs: bumped `FEATURE_MUSIC.version` to `20261103-34` and asset refs to `v=20261103-22` so clients refetch JS + audio.
 - Evidence: node --check clean; parity verified below.
 - Blockers: none.
+
+## 2026-11-04 — User-supplied time-trial challenge track — DONE
+- Challenge (timer) music is now `assets/audio/time-trial.mp3` (user file, -18 LUFS, 44.1 kHz stereo, 128k, 21s looped) instead of the synth groove; groove stays on all other screens. New `startScreenMusic()` router; track ducks to 0.12 under host voice via playHostClip hooks, stops on mute/disable/screen-leave/embed. Bumped FEATURE_MUSIC to 20261103-35 + asset refs v23.
+- Evidence: node --check clean; headless nav timer→results→timer fires versioned track URL twice with zero errors; submission X-post + AUDIO-PLAN updated.
+- Blockers: none.

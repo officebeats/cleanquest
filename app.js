@@ -2992,8 +2992,10 @@ function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null)
     audio.playbackRate = 1.0;
     audio.volume = 1.0;
     attachBroadcastStudioChain(audio);
+    duckChallengeTrack();
     const cleanup = () => {
       activeVoiceAudios.delete(audio);
+      unduckChallengeTrack();
       try { (audio._cqNodes || []).forEach((n) => n.disconnect()); } catch {}
       if (state.voice.currentAudio === audio) state.voice.currentAudio = null;
     };
@@ -3149,7 +3151,7 @@ function speakHost(beat, overrideText) {
  * 44.1kHz), then bump version below to bust cache. No code changes needed.
  * Spec lives in docs/AUDIO-PLAN.md ("Billy swap"). */
 const FEATURE_MUSIC = {
-  version: "20261103-34",
+  version: "20261103-35",
   acceptChallenge: {
     en: "assets/audio/en/welcome-intro.mp3",
     es: "assets/audio/es/welcome-intro.mp3",
@@ -3819,8 +3821,9 @@ function setHypeLevel(level, persist = true) {
   if (state.voice.muted) {
     stopSpeech();
     stopDiscoHouseGroove();
+    stopChallengeTrack();
   } else if (state.voice.discoEnabled !== false && ["welcome", "deck", "instructions", "camera", "timer", "results", "leaderboard"].includes(state.screen)) {
-    startDiscoHouseGroove();
+    startScreenMusic();
   }
   updateMuteButton();
   if (els.hypeLevelOff) els.hypeLevelOff.checked = normalized === "off";
@@ -4292,14 +4295,40 @@ function startDiscoHouseGroove() {
     }, trk.stepMs);
   } catch {}
 }
+ function stopDiscoHouseGroove() {
+   clearInterval(discoTimerId);
+   discoTimerId = null;
+   clearTimeout(beatThumpTimerId);
+   beatThumpTimerId = null;
+   document.body?.classList?.remove("music-playing", "music-beat-thump");
+ }
 
-function stopDiscoHouseGroove() {
-  clearInterval(discoTimerId);
-  discoTimerId = null;
-  clearTimeout(beatThumpTimerId);
-  beatThumpTimerId = null;
-  document.body?.classList?.remove("music-playing", "music-beat-thump");
-}
+ function challengeTrackVolume() { return activeVoiceAudios.size > 0 ? 0.12 : 0.5; }
+ function duckChallengeTrack() { try { if (challengeTrackAudio) challengeTrackAudio.volume = 0.12; } catch {} }
+ function unduckChallengeTrack() { try { if (challengeTrackAudio) challengeTrackAudio.volume = challengeTrackVolume(); } catch {} }
+ let challengeTrackAudio = null;
+ function startChallengeTrack() {
+   if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) return;
+   stopDiscoHouseGroove();
+   if (challengeTrackAudio && !challengeTrackAudio.ended) {
+     try { challengeTrackAudio.volume = challengeTrackVolume(); const p = challengeTrackAudio.play(); if (p && typeof p.catch === "function") p.catch(() => {}); } catch {}
+     return;
+   }
+   try {
+     const audio = new Audio(`assets/audio/time-trial.mp3?v=${FEATURE_MUSIC.version}`);
+     audio.loop = true;
+     audio.preload = "auto";
+     audio.volume = challengeTrackVolume();
+     challengeTrackAudio = audio;
+     const p = audio.play();
+     if (p && typeof p.catch === "function") p.catch(() => {});
+   } catch {}
+ }
+ function stopChallengeTrack() { try { challengeTrackAudio?.pause(); } catch {} challengeTrackAudio = null; }
+ function startScreenMusic() {
+   if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) { stopDiscoHouseGroove(); stopChallengeTrack(); return; }
+   if (state.screen === "timer") { startChallengeTrack(); } else { stopChallengeTrack(); startDiscoHouseGroove(); }
+ }
 function toggleDiscoGroove() {
   state.voice.discoEnabled = state.voice.discoEnabled === false;
   [document.getElementById("discoGrooveButton"), document.getElementById("leaderboardMusicButton")].forEach((btn) => {
@@ -4308,9 +4337,10 @@ function toggleDiscoGroove() {
   });
   if (state.voice.discoEnabled) {
     if (state.voice.muted) setHypeLevel("full");
-    startDiscoHouseGroove();
+    startScreenMusic();
   } else {
     stopDiscoHouseGroove();
+    stopChallengeTrack();
   }
 }
 
@@ -4332,6 +4362,7 @@ function renderMusicStreamEmbed(rawUrl) {
   }
   if (input && rawUrl) input.value = rawUrl;
   stopDiscoHouseGroove();
+  stopChallengeTrack();
   host.innerHTML = `<iframe src="${embedUrl}" width="100%" height="84" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:12px;border:1px solid rgba(69,234,255,0.35);"></iframe>`;
 }
 
@@ -4412,7 +4443,7 @@ function navigateTo(screen) {
       speakDeckIntro(state.language);
     }
   } else if (screen === "welcome" || screen === "instructions" || screen === "camera" || screen === "timer" || screen === "results" || screen === "leaderboard") {
-    startDiscoHouseGroove();
+    startScreenMusic();
   }
   const activeScreenEl = document.getElementById(`${screen}Screen`);
   if (activeScreenEl) {
