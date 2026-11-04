@@ -694,3 +694,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - WIPE & RETAKE CTA removed everywhere (untouched findings now use CLEAN & TAKE NEW PHOTO); remaining-objects directive made actionable without wipe/retake language; probe green on untouched + wrong-area states.
 - Asset refs v26. Evidence: node --check, tap-advance CDP (0→1), motif unit test + 6 inspected renders, probe 0 failures.
 - Blockers: none.
+
+## 2026-11-04 — Fixture branch repair + cache-bust v27 — DONE
+- Advisory catch: fixture SVG was overwritten by the fallback 9-ZONE block (missing else) — restored; all 6 motif renders visually inspected.
+- Bumped app.js to v27 so the fixture/copy fixes actually reach returning clients.
+- Evidence: node --check; motif screenshots inspected; tree clean.
+- Blockers: none.
