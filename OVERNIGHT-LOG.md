@@ -663,3 +663,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Real CDP verification (autoplay on, muted Chrome): timer → playing looped @0.5; speakHost clip → 0.12 during, 0.5 after end; deck → stopped (null); back to timer → playing; all with zero errors.
 - Evidence: node --check clean; CDP state dump above.
 - Blockers: none.
+
+## 2026-11-04 — Daily-deck music + correct/incorrect verdict voice — DONE
+- Deck screen now loops user-supplied `assets/audio/daily-deck.mp3` (62s, -18 LUFS, 44.1 kHz stereo) via generalized timer/deck screen-track router (groove stays elsewhere); ducked under host voice, stopped on leave/mute.
+- Deck answer voice now announces the verdict: `deck-correct.mp3` / `deck-wrong.mp3` × EN/ES/PL (Correct!/Incorrect!, ¡Correcto!/¡Incorrecto!, Dobrze!/Źle!) instead of echoing agree/disagree; removed 6 superseded agree/disagree clips. Asset refs v24.
+- Evidence: CDP — deck nav requests daily-deck.mp3 + playing looped (ducked 0.12 under intro); wrong pick on right-answer card requests deck-wrong.mp3 with correct count unchanged; node --check clean.
+- Blockers: none.

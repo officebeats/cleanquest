@@ -1,13 +1,13 @@
  > **Status (shipped):** 715 trilingual neural MP3s under `assets/audio/<lang>/` —
  > 235 EN (Kokoro-82M `af_heart`: all HOST_LINES game-show beats + `welcome-intro` /
- > `deck-intro` / `camera-explain` / `deck-agree` / `deck-disagree` + `num` / `glue` /
+ > `deck-intro` / `camera-explain` / `deck-correct` / `deck-wrong` + `num` / `glue` /
  > `nudge`), 247 ES (`es_MX-claude-high`), 233 PL (`pl_PL-gosia-medium`) — all
  > 24 kHz mono. Every EN clip shares one voice + one broadcast chain
  > (`asetrate=24000*1.03`, 3.2 kHz presence EQ, compressor, `-18 LUFS` loudnorm;
  > `welcome-intro` −18.7 dB ≈ `consent-00` −18.8 dB), played at exact 1.0x via
  > `playHostClip()` with `?v=FEATURE_MUSIC.version` cache-busting. ES/PL keep
  > their pinned Piper VITS voices. Unrecorded IDs stay silent (neural-only).
- > The plan below is the original research/spec record. Challenge-run music is a single looped track, `assets/audio/time-trial.mp3` (user-supplied time-trial song, -18 LUFS, 44.1 kHz stereo, looped on the timer screen, ducked to 0.12 under host voice); the WebAudio synth groove remains on all other screens.
+ > The plan below is the original research/spec record. Screen music: `assets/audio/time-trial.mp3` on the timer screen + `assets/audio/daily-deck.mp3` on the deck (user-supplied songs, -18 LUFS, 44.1 kHz stereo, looped per screen, ducked to 0.12 under host voice); the WebAudio synth groove remains on all other screens.
 
 # AUDIO PLAN — CleanQuest voice clips + SFX (research, no installs, no audio generated yet)
 

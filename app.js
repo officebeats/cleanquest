@@ -2992,10 +2992,10 @@ function playHostClip(url, fallbackText, prosody, beat = "start", onDone = null)
     audio.playbackRate = 1.0;
     audio.volume = 1.0;
     attachBroadcastStudioChain(audio);
-    duckChallengeTrack();
+    duckScreenTrack();
     const cleanup = () => {
       activeVoiceAudios.delete(audio);
-      unduckChallengeTrack();
+      unduckScreenTrack();
       try { (audio._cqNodes || []).forEach((n) => n.disconnect()); } catch {}
       if (state.voice.currentAudio === audio) state.voice.currentAudio = null;
     };
@@ -3821,7 +3821,7 @@ function setHypeLevel(level, persist = true) {
   if (state.voice.muted) {
     stopSpeech();
     stopDiscoHouseGroove();
-    stopChallengeTrack();
+    stopScreenTrack();
   } else if (state.voice.discoEnabled !== false && ["welcome", "deck", "instructions", "camera", "timer", "results", "leaderboard"].includes(state.screen)) {
     startScreenMusic();
   }
@@ -4303,31 +4303,36 @@ function startDiscoHouseGroove() {
    document.body?.classList?.remove("music-playing", "music-beat-thump");
  }
 
- function challengeTrackVolume() { return activeVoiceAudios.size > 0 ? 0.12 : 0.5; }
- function duckChallengeTrack() { try { if (challengeTrackAudio) challengeTrackAudio.volume = 0.12; } catch {} }
- function unduckChallengeTrack() { try { if (challengeTrackAudio) challengeTrackAudio.volume = challengeTrackVolume(); } catch {} }
- let challengeTrackAudio = null;
- function startChallengeTrack() {
+ function screenTrackVolume() { return activeVoiceAudios.size > 0 ? 0.12 : 0.5; }
+ function duckScreenTrack() { try { if (screenTrackAudio) screenTrackAudio.volume = 0.12; } catch {} }
+ function unduckScreenTrack() { try { if (screenTrackAudio) screenTrackAudio.volume = screenTrackVolume(); } catch {} }
+ let screenTrackAudio = null;
+ let screenTrackName = "";
+ const SCREEN_TRACKS = { timer: "time-trial.mp3", deck: "daily-deck.mp3" };
+ function playScreenTrack(name) {
    if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) return;
    stopDiscoHouseGroove();
-   if (challengeTrackAudio && !challengeTrackAudio.ended) {
-     try { challengeTrackAudio.volume = challengeTrackVolume(); const p = challengeTrackAudio.play(); if (p && typeof p.catch === "function") p.catch(() => {}); } catch {}
+   if (screenTrackAudio && !screenTrackAudio.ended && screenTrackName === name) {
+     try { screenTrackAudio.volume = screenTrackVolume(); const p = screenTrackAudio.play(); if (p && typeof p.catch === "function") p.catch(() => {}); } catch {}
      return;
    }
+   try { screenTrackAudio?.pause(); } catch {}
    try {
-     const audio = new Audio(`assets/audio/time-trial.mp3?v=${FEATURE_MUSIC.version}`);
+     const audio = new Audio(`assets/audio/${name}?v=${FEATURE_MUSIC.version}`);
      audio.loop = true;
      audio.preload = "auto";
-     audio.volume = challengeTrackVolume();
-     challengeTrackAudio = audio;
+     audio.volume = screenTrackVolume();
+     screenTrackAudio = audio;
+     screenTrackName = name;
      const p = audio.play();
      if (p && typeof p.catch === "function") p.catch(() => {});
    } catch {}
  }
- function stopChallengeTrack() { try { challengeTrackAudio?.pause(); } catch {} challengeTrackAudio = null; }
+ function stopScreenTrack() { try { screenTrackAudio?.pause(); } catch {} screenTrackAudio = null; screenTrackName = ""; }
  function startScreenMusic() {
-   if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) { stopDiscoHouseGroove(); stopChallengeTrack(); return; }
-   if (state.screen === "timer") { startChallengeTrack(); } else { stopChallengeTrack(); startDiscoHouseGroove(); }
+   if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) { stopDiscoHouseGroove(); stopScreenTrack(); return; }
+   const track = SCREEN_TRACKS[state.screen];
+   if (track) { playScreenTrack(track); } else { stopScreenTrack(); startDiscoHouseGroove(); }
  }
 function toggleDiscoGroove() {
   state.voice.discoEnabled = state.voice.discoEnabled === false;
@@ -4340,7 +4345,7 @@ function toggleDiscoGroove() {
     startScreenMusic();
   } else {
     stopDiscoHouseGroove();
-    stopChallengeTrack();
+    stopScreenTrack();
   }
 }
 
@@ -4362,7 +4367,7 @@ function renderMusicStreamEmbed(rawUrl) {
   }
   if (input && rawUrl) input.value = rawUrl;
   stopDiscoHouseGroove();
-  stopChallengeTrack();
+  stopScreenTrack();
   host.innerHTML = `<iframe src="${embedUrl}" width="100%" height="84" frameBorder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" style="border-radius:12px;border:1px solid rgba(69,234,255,0.35);"></iframe>`;
 }
 
@@ -10853,12 +10858,11 @@ function answerDeck(pick) {
   }
 
   playDeckAnswerSfx(hit);
-  // Voice the player's actual choice (agree/disagree), not generic hype.
+  // Voice the verdict: correct or incorrect — never just the player's pick.
   if (!SELFTEST_MODE && !state.voice.muted) {
     const deckLang = state.language === "es" || state.language === "pl" ? state.language : "en";
-    const agreed = pick !== "miss";
-    const deckFallback = deckLang === "es" ? (agreed ? "De acuerdo." : "En desacuerdo.") : deckLang === "pl" ? (agreed ? "Zgadzam się." : "Nie zgadzam się.") : (agreed ? "Agreed." : "Disagreed.");
-    playHostClip(`assets/audio/${deckLang}/deck-${agreed ? "agree" : "disagree"}.mp3?v=${FEATURE_MUSIC.version}`, deckFallback, { rate: 1.0, pitch: 1.0 }, "deck-verdict");
+    const deckFallback = deckLang === "es" ? (hit ? "¡Correcto!" : "¡Incorrecto!") : deckLang === "pl" ? (hit ? "Dobrze!" : "Źle!") : (hit ? "Correct!" : "Incorrect!");
+    playHostClip(`assets/audio/${deckLang}/deck-${hit ? "correct" : "wrong"}.mp3?v=${FEATURE_MUSIC.version}`, deckFallback, { rate: 1.0, pitch: 1.0 }, "deck-verdict");
   }
   triggerDeckParticleBurst(hit);
   if (els.deckFeedback) {
@@ -16206,7 +16210,7 @@ window.cleaningChallenge = {
   selectCleaningSpot,
   sampleLiveRunActivity,
   openEvidenceLightbox,
-  challengeTrackState: () => (challengeTrackAudio ? { src: (challengeTrackAudio.currentSrc || challengeTrackAudio.src || "").split("/").pop().split("?")[0], paused: challengeTrackAudio.paused, loop: challengeTrackAudio.loop, volume: Number(challengeTrackAudio.volume.toFixed(2)) } : null),
+  screenTrackState: () => (screenTrackAudio ? { src: (screenTrackAudio.currentSrc || screenTrackAudio.src || "").split("/").pop().split("?")[0], paused: screenTrackAudio.paused, loop: screenTrackAudio.loop, volume: Number(screenTrackAudio.volume.toFixed(2)) } : null),
   setEvidenceLightboxMode,
   closeEvidenceLightbox,
   parseAreaQrPayload,

@@ -36,7 +36,7 @@ Providers: on-device vision always runs. Cloud verification works out-of-the-box
    `hurry-final`, `scoring-wait`); every gameplay clip plays through
    `playHostClip()` at 1.0x; `clipUrlFor()` appends `?v=FEATURE_MUSIC.version`
    so re-rendered clips bust cache. Audio: 715 MP3s under
-   `assets/audio/<lang>/` (235 EN Kokoro-82M `af_heart` incl. intro/deck/camera/agree/disagree + `num`/`glue`/`nudge`, 247 ES `es_MX-claude-high`, 233 PL `pl_PL-gosia-medium`; all 24 kHz mono, one EN pitch/EQ/loudness chain). Unscored-run policy: `scorable=false` → hero `NOT SCORED` + `unscorableReason()`, badge hidden, breakdown/dispute/result-grid hidden, CTA retakes photos.
+   `assets/audio/<lang>/` (235 EN Kokoro-82M `af_heart` incl. intro/deck/camera/correct/wrong + `num`/`glue`/`nudge`, 247 ES `es_MX-claude-high`, 233 PL `pl_PL-gosia-medium`; all 24 kHz mono, one EN pitch/EQ/loudness chain). Unscored-run policy: `scorable=false` → hero `NOT SCORED` + `unscorableReason()`, badge hidden, breakdown/dispute/result-grid hidden, CTA retakes photos.
  `announceGameVerdict()` routes through `selectVerdictBeat()` + `speakHost()` (hushed gate on directive/unscored runs: no rank badge, no praise voice/confetti) + `speakScoreNumber()` (weighted total). Loop-era anchors: QR `parseAreaQrPayload`/`openQrScannerModal`
  (CQ-QR-<LEAGUE>-<AREA>[-<SPOTSLUG>], decodable V2-L encoder
   `encodeQrVersion2L`), `ensureActiveCrew`+`recordCrewRun` in
