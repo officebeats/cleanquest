@@ -4,6 +4,47 @@ CleanQuest turns cleaning quality into a game anyone can verify — powered by M
 
 CleanQuest scores visible cleanliness and technique only — it never claims to verify sanitation, and a benchmark time is never a certification.
 
+## Project description
+
+**THE PROBLEM**
+Commercial cleaning employs 2.4 million individual cleaners in the U.S. CleanQuest uses AI to gamify validating that work: clean, time, technique. Crews see where better products and better training make them more efficient and productive.
+- Most crews get the bare minimum: minimal feedback, recognition, or proof of work.
+- Companies lose accounts over "they didn't clean" disputes they cannot settle.
+
+**HOW IT WORKS — AI AT EVERY STEP**
+1. Check in: pick a language (English, Spanish, Polish), tap dropdowns — site, sector, area, spot. Zero typing.
+   - Consent reads aloud: faces never identified; scores never used for discipline.
+   - The before photo is captured in-app. No gallery uploads.
+   - On-device MediaPipe (EfficientDet-Lite) rejects wrong-room and person-in-photo shots on the spot.
+2. Run: a locked 90-second timer — "Quality first. Time second."
+   - A neural host hypes the cleaner every 6–8 seconds, in their language. Encouragement only, never coaching.
+   - 715 pre-rendered neural clips (Kokoro-82M + native ES/PL voices) ship in-app; host works offline.
+   - One tap on COMPLETE CHALLENGE captures the after photo.
+3. Get scored by Muse Spark Open (Meta open weights), run on hackathon partner credits:
+   - Baseten ($100 credits + 2M TPM) serves the model; Fireworks AI ($100 credits) fails over, via a serverless proxy. Zero user keys.
+   - Meta Model API credits ($150) funded Muse Spark 1.3 + Muse Wonder usage during the build.
+   - The model grades every surface in the photo pair: clean, partly clean, missed.
+   - It counts objects cleared vs. objects remaining; the app weights the verdict:
+      - Clean 50% · Technique 25% · Time 25% (the timer supplies Time).
+   - SAM 3.1 segmentation (own key) or Muse box_2d outlines each surface on their photos.
+   - The system scores. Nobody can edit a score.
+   - Settings proves it live: run log + telemetry test, verified on both providers (98% - 1,405 tokens; 96% - 1,695 tokens).
+   - Optional own key unlocks Muse Spark 1.3 scoring and Muse Voice Transcribe.
+   - Can't judge fairly? NOT SCORED + one plain reason (too dark, glare, camera moved) + a retake button.
+4. Train and compete:
+   - Daily Deck: tap-through training cards, AGREE / DISAGREE, day streaks.
+   - Dual leaderboards: Shift Challenge + Daily Deck (Quality / Time / Style).
+   - Personal bests, streaks, a 13-week consistency meter, a breakroom spectator board.
+   - A built-in Judge Demo replays a sample run: 93%, S-Rank, in seconds.
+
+**HOW IT MAKES MONEY**
+- Free for cleaners, forever. Sponsors fund the game.
+- The market: ~$100B U.S. commercial cleaning revenue, 63,000+ firms.
+- Brands pay $15K-$55K per package to reach crews via shows and associations.
+- Associations and brands sponsor by category: one per category.
+- Companies pay to use an earned credential commercially, never to earn it.
+- Money never touches scoring: no say over scores, training answers, or rankings.
+
 ## Who it serves & core value propositions
 
  1. **The cleaner (Visibility & Fair Recognition)** — Night-shift commercial cleaners prove quality in under 3 minutes with two photos, zero typing, 44px glove-friendly controls, and full trilingual support (**English, Mexican Spanish, and Polish**). Every run builds an exportable **verified inspection record** (one-tap JSON backup + CSV spreadsheet) that travels with them job to job, while the **Daily Swipe Deck** teaches real technique one card at a time. (Passport/crew/supervisor panes are code-kept and hidden for the hackathon — not demoed, not judged.)
