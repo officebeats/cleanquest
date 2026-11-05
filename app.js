@@ -4296,31 +4296,85 @@ function startDiscoHouseGroove() {
  }
 
  function screenTrackVolume() { return activeVoiceAudios.size > 0 ? 0.12 : 0.5; }
- function duckScreenTrack() { try { if (screenTrackAudio) screenTrackAudio.volume = 0.12; } catch {} }
- function unduckScreenTrack() { try { if (screenTrackAudio) screenTrackAudio.volume = screenTrackVolume(); } catch {} }
+ function screenTrackGainApply(volume, timeConstant = 0.08) {
+   try {
+     const handle = screenTrackAudio;
+     if (!handle) return;
+     if (handle.gain && handle.ctx) handle.gain.gain.setTargetAtTime(volume, handle.ctx.currentTime, timeConstant);
+     else if (handle.el) handle.el.volume = volume;
+   } catch {}
+ }
+ function duckScreenTrack() { screenTrackWantsVolume = 0.12; screenTrackGainApply(0.12); }
+ function unduckScreenTrack() { screenTrackWantsVolume = screenTrackVolume(); screenTrackGainApply(screenTrackWantsVolume); }
  let screenTrackAudio = null;
  let screenTrackName = "";
+ let screenTrackWantsVolume = 0.5;
+ let screenTrackGen = 0;
  const SCREEN_TRACKS = { timer: "time-trial.mp3", deck: "daily-deck.mp3" };
  function playScreenTrack(name) {
    if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) return;
    stopDiscoHouseGroove();
-   if (screenTrackAudio && !screenTrackAudio.ended && screenTrackName === name) {
-     try { screenTrackAudio.volume = screenTrackVolume(); const p = screenTrackAudio.play(); if (p && typeof p.catch === "function") p.catch(() => {}); } catch {}
+   if (screenTrackAudio && screenTrackName === name && screenTrackAudio.playing) {
+     screenTrackWantsVolume = screenTrackVolume();
+     screenTrackGainApply(screenTrackWantsVolume);
      return;
    }
-   try { screenTrackAudio?.pause(); } catch {}
-   try {
-     const audio = new Audio(`assets/audio/${name}?v=${FEATURE_MUSIC.version}`);
-     audio.loop = true;
-     audio.preload = "auto";
-     audio.volume = screenTrackVolume();
-     screenTrackAudio = audio;
-     screenTrackName = name;
-     const p = audio.play();
-     if (p && typeof p.catch === "function") p.catch(() => {});
-   } catch {}
+   try { if (screenTrackAudio && screenTrackAudio.stop) screenTrackAudio.stop(); } catch {}
+   screenTrackAudio = null;
+   screenTrackName = "";
+   const myGen = ++screenTrackGen;
+   const url = `assets/audio/${name}?v=${FEATURE_MUSIC.version}`;
+   // Gapless path: decode once, loop the raw PCM buffer sample-accurately.
+   // decodeAudioData strips encoder padding, so loopStart/loopEnd wrap with
+   // zero gap — the file's exact loop points are honored, no re-fades.
+   (async () => {
+     try {
+       const Ctx = window.AudioContext || window.webkitAudioContext;
+       if (!Ctx) throw new Error("no-webaudio");
+       if (!discoCtx || discoCtx.state === "closed") discoCtx = new Ctx();
+       const ctx = discoCtx;
+       if (ctx.state === "suspended") { try { await ctx.resume(); } catch {} }
+       if (!discoMaster) { try { discoMaster = ctx.createGain(); discoMaster.connect(ctx.destination); } catch {} }
+       const resp = await fetch(url, { cache: "force-cache" });
+       if (!resp.ok) throw new Error("track-fetch");
+       const raw = await resp.arrayBuffer();
+       const decoded = await new Promise((res, rej) => ctx.decodeAudioData(raw.slice(0), res, rej));
+       if (myGen !== screenTrackGen) return;
+       const src = ctx.createBufferSource();
+       src.buffer = decoded;
+       src.loop = true;
+       src.loopStart = 0;
+       src.loopEnd = decoded.duration;
+       const g = ctx.createGain();
+       screenTrackWantsVolume = screenTrackVolume();
+       g.gain.value = screenTrackWantsVolume;
+       src.connect(g);
+       g.connect(discoMaster || ctx.destination);
+       const handle = { playing: true, gain: g, ctx, src, el: null,
+         stop() { try { this.playing = false; src.stop(); } catch {} try { src.disconnect(); g.disconnect(); } catch {} } };
+       src.onended = () => { if (screenTrackAudio === handle) screenTrackAudio = null; };
+       screenTrackAudio = handle;
+       screenTrackName = name;
+       try { src.start(0); } catch (err) { if (screenTrackAudio === handle) screenTrackAudio = null; throw err; }
+     } catch {
+       if (myGen !== screenTrackGen) return;
+       // Fallback: plain element loop (may gap on some browsers).
+       try {
+         const audio = new Audio(url);
+         audio.loop = true;
+         audio.preload = "auto";
+         audio.volume = screenTrackVolume();
+         const handle = { playing: true, el: audio, gain: null, ctx: null,
+           stop() { try { this.playing = false; audio.pause(); } catch {} } };
+         screenTrackAudio = handle;
+         screenTrackName = name;
+         const p = audio.play();
+         if (p && typeof p.catch === "function") p.catch(() => { if (screenTrackAudio === handle) screenTrackAudio = null; });
+       } catch {}
+     }
+   })();
  }
- function stopScreenTrack() { try { screenTrackAudio?.pause(); } catch {} screenTrackAudio = null; screenTrackName = ""; }
+ function stopScreenTrack() { screenTrackGen++; try { if (screenTrackAudio && screenTrackAudio.stop) screenTrackAudio.stop(); } catch {} screenTrackAudio = null; screenTrackName = ""; }
  function startScreenMusic() {
    if (SELFTEST_MODE || state.voice.muted || state.voice.discoEnabled === false) { stopDiscoHouseGroove(); stopScreenTrack(); return; }
    const track = SCREEN_TRACKS[state.screen];
@@ -16263,7 +16317,7 @@ window.cleaningChallenge = {
   selectCleaningSpot,
   sampleLiveRunActivity,
   openEvidenceLightbox,
-  screenTrackState: () => (screenTrackAudio ? { src: (screenTrackAudio.currentSrc || screenTrackAudio.src || "").split("/").pop().split("?")[0], paused: screenTrackAudio.paused, loop: screenTrackAudio.loop, volume: Number(screenTrackAudio.volume.toFixed(2)) } : null),
+  screenTrackState: () => (screenTrackAudio ? { src: screenTrackName || "track", paused: !screenTrackAudio.playing, loop: true, volume: Number((screenTrackAudio.gain ? screenTrackAudio.gain.gain.value : (screenTrackAudio.el ? screenTrackAudio.el.volume : screenTrackWantsVolume)).toFixed(2)) } : null),
   setEvidenceLightboxMode,
   closeEvidenceLightbox,
   parseAreaQrPayload,

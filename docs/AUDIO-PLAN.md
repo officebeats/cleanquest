@@ -7,7 +7,7 @@
  > `welcome-intro` −18.7 dB ≈ `consent-00` −18.8 dB), played at exact 1.0x via
  > `playHostClip()` with `?v=FEATURE_MUSIC.version` cache-busting. ES/PL keep
  > their pinned Piper VITS voices. Unrecorded IDs stay silent (neural-only).
- > The plan below is the original research/spec record. Screen music: `assets/audio/time-trial.mp3` on the timer screen + `assets/audio/daily-deck.mp3` on the deck (user-supplied songs, -18 LUFS, 44.1 kHz stereo, looped per screen, ducked to 0.12 under host voice); all other screens are silent (synth groove retired). Short WebAudio SFX (beeps, stings, fanfares) remain.
+ > The plan below is the original research/spec record. Screen music: `assets/audio/time-trial.mp3` on the timer screen + `assets/audio/daily-deck.mp3` on the deck (user-supplied songs, -18 LUFS, 44.1 kHz stereo, looped gaplessly per screen via a decoded-PCM WebAudio buffer loop — no element restarts, exact file loop points honored; ducked to 0.12 under host voice); all other screens are silent (synth groove retired). Short WebAudio SFX (beeps, stings, fanfares) remain.
 
 # AUDIO PLAN — CleanQuest voice clips + SFX (research, no installs, no audio generated yet)
 

@@ -7372,10 +7372,11 @@ body #resultsScreen .results-cta-bar {
   padding: 2px 8px !important;
 }
 
-#settingsScreen #providerLogList {
-  max-height: 52px !important;
-  overflow-y: auto !important;
-}
+ #settingsScreen #providerLogList {
+   max-height: 30dvh !important;
+   min-height: 120px !important;
+   overflow-y: auto !important;
+ }
 
 #recordsScreen #inspectionLogList {
   max-height: 48px !important;

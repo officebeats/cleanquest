@@ -706,3 +706,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Time bar no longer mentions review anywhere user-facing (detail copy ×3, dropped the REVIEW suffix; internal flag kept for self-test).
 - Evidence: CDP wrong-answer run at 360×640 — card in frame, sponsor above fold; screenshot inspected.
 - Blockers: none.
+
+## 2026-11-04 — Gapless music loops + scrollable in-app provider log — DONE
+- Screen tracks now loop gaplessly: decode once to PCM, loop the AudioBuffer sample-accurately (loopStart 0 / loopEnd = duration; decodeAudioData strips encoder padding), gain-automated ducking (0.5 ↔ 0.12), element-loop fallback only if WebAudio/decode fails.
+- Provider run log is now a real scrollable list in Settings (was a 52px slit): max-height 30dvh + 120px min so judges can scroll runs in-app.
+- Asset refs v29/v26. Evidence: CDP — zero <audio> elements for music (buffer path won), timer/deck playing looped, welcome null, duck/restore via gain.
+- Blockers: none.
