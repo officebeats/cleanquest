@@ -80,3 +80,7 @@ No build step required — open `index.html` in any modern browser.
  - **On-Device Vision & Audio:** MediaPipe EfficientDet-Lite0 + Pose Landmarker Lite + 9-zone luminance/edge analyzer; 715 trilingual neural voice MP3s (235 EN Kokoro-82M `af_heart`, 247 ES `es_MX-claude-high`, 233 PL `pl_PL-gosia-medium`, all 24 kHz mono) + user-supplied per-screen music (time-trial song on the timer, daily-deck song on the deck; other screens silent). Every EN clip shares one Kokoro-82M `af_heart` voice + broadcast pitch/EQ/loudness chain, cache-busted via `FEATURE_MUSIC.version`.
 - **Cloud AI & Open Weights:** Meta Model API (`muse-spark-1.3`, `sam-3.1`, `muse-voice-transcribe-1.0`) + Serverless `Muse Spark Open` primary/failover engine on **Baseten** (`meta-models/muse-spark-open`) and **Fireworks AI** (`accounts/fireworks/models/muse-spark-open`) with live token telemetry and exportable JSON audit logs.
 - **Automated Verification:** 6/6 hermetic self-test + 11/11 end-to-end persona suite + 100% mobile/desktop above-the-fold CTA compliance.
+
+## Disclosure
+
+CleanQuest began as a crude, non-cloud, local-only proof of concept with local voice and local image recognition. Everything in this repository was built during the Meta Global AI Developer Hackathon, October 26 – November 4, 2026.
