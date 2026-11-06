@@ -7305,35 +7305,35 @@ const VERIFIED_SURFACES = new Set([
   "fixture"
 ]);
 
-function loadCloudSettings() {
-  const empty = { metaKey: "", basetenKey: "", provider: "baseten", openRouterModel: "auto" };
+ function loadCloudSettings() {
+   const empty = { metaKey: "", basetenKey: "", provider: "baseten", cloudModel: "auto" };
 
-  try {
-    const raw = localStorage.getItem(CLOUD_SETTINGS_KEY);
-    if (!raw) return empty;
+   try {
+     const raw = localStorage.getItem(CLOUD_SETTINGS_KEY);
+     if (!raw) return empty;
 
-    const parsed = JSON.parse(raw);
+     const parsed = JSON.parse(raw);
+     const legacyModel = typeof parsed.openRouterModel === "string" && parsed.openRouterModel ? parsed.openRouterModel : "";
+     const stored = typeof parsed.cloudModel === "string" && parsed.cloudModel ? parsed.cloudModel : legacyModel;
 
-    return {
-      metaKey: typeof parsed.metaKey === "string" ? parsed.metaKey : "",
-      basetenKey: typeof parsed.basetenKey === "string" ? parsed.basetenKey : "",
-      provider: parsed.provider === "meta" ? "meta" : "baseten",
-      openRouterModel: typeof parsed.openRouterModel === "string" && parsed.openRouterModel
-        ? parsed.openRouterModel
-        : "auto"
-    };
-  } catch {
-    return empty;
-  }
-}
+     return {
+       metaKey: typeof parsed.metaKey === "string" ? parsed.metaKey : "",
+       basetenKey: typeof parsed.basetenKey === "string" ? parsed.basetenKey : "",
+       provider: parsed.provider === "meta" ? "meta" : "baseten",
+       cloudModel: ["auto", "baseten", "fireworks", "dual"].includes(stored) ? stored : "auto"
+     };
+   } catch {
+     return empty;
+   }
+ }
 
 function refreshSettingsInputs() {
   const settings = loadCloudSettings();
 
   if (els.metaApiKey) els.metaApiKey.value = settings.metaKey;
   if (els.basetenApiKey) els.basetenApiKey.value = settings.basetenKey;
-  const modelSel = document.getElementById("openRouterModelSelect");
-  if (modelSel) modelSel.value = settings.openRouterModel || "google/gemini-2.5-flash";
+  const modelSel = document.getElementById("cloudModelSelect");
+  if (modelSel) modelSel.value = settings.cloudModel || "auto";
 
   document
     .querySelectorAll('input[name="inferenceProvider"]')
@@ -7358,15 +7358,15 @@ function closeSettings() {
   navigateTo(state.settingsReturn || "welcome");
 }
 
-function saveSettingsKeys() {
-  const modelSel = document.getElementById("openRouterModelSelect");
-  const next = {
-    metaKey: els.metaApiKey?.value.trim() || "",
-    basetenKey: els.basetenApiKey?.value.trim() || "",
-    provider: document.querySelector('input[name="inferenceProvider"]:checked')?.value === "baseten"
-      ? "baseten"
-      : "meta",
-    openRouterModel: modelSel?.value || "google/gemini-2.5-flash"
+ function saveSettingsKeys() {
+   const modelSel = document.getElementById("cloudModelSelect");
+   const next = {
+     metaKey: els.metaApiKey?.value.trim() || "",
+     basetenKey: els.basetenKey?.value.trim() || "",
+     provider: document.querySelector('input[name="inferenceProvider"]:checked')?.value === "baseten"
+       ? "baseten"
+       : "meta",
+     cloudModel: modelSel?.value || "auto"
   };
   try {
     localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(next));
@@ -7376,19 +7376,19 @@ function saveSettingsKeys() {
   if (els.basetenApiKey) els.basetenApiKey.value = next.basetenKey;
   els.settingsSavedNote?.classList.remove("hidden");
 }
-function saveRoutingSelection() {
-  try {
-    const modelSel = document.getElementById("openRouterModelSelect");
-    if (!modelSel) return;
-    const current = loadCloudSettings();
-    const next = {
-      ...current,
-      openRouterModel: modelSel.value || "auto"
-    };
-    localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(next));
-    modelSel.value = next.openRouterModel;
-  } catch {}
-}
+ function saveRoutingSelection() {
+   try {
+     const modelSel = document.getElementById("cloudModelSelect");
+     if (!modelSel) return;
+     const current = loadCloudSettings();
+     const next = {
+       ...current,
+       cloudModel: modelSel.value || "auto"
+     };
+     localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(next));
+     modelSel.value = next.cloudModel;
+   } catch {}
+ }
 
 function clearSettingsKeys() {
   try {
@@ -8099,133 +8099,25 @@ async function verifyLiveTelemetry() {
   }
 }
 
-function detectProviderFromKey(rawKey) {
-  const k = String(rawKey || "").trim();
-  if (!k) return "meta";
-  if (k.startsWith("AIza")) return "gemini";
-  if (k.startsWith("sk-ant-")) return "anthropic";
-  if (k.startsWith("sk-or-")) return "openrouter";
-  if (k.startsWith("gsk_")) return "groq";
-  if (k.startsWith("sk-proj-") || k.startsWith("sk-svcacct-") || /^sk-[A-Za-z0-9]{20,}/.test(k)) return "openai";
-  return "meta";
-}
+ function getScorecardTarget(settings) {
+   if (settings.provider === "baseten") {
+     return {
+       provider: "baseten",
+       url: CONFIG.cloud.baseten.endpoint,
+       model: CONFIG.cloud.baseten.model,
+       key: settings.basetenKey,
+       role: "system"
+     };
+   }
+   return {
+     provider: "meta",
+     url: CONFIG.cloud.endpoint,
+     model: CONFIG.cloud.model,
+     key: settings.metaKey,
+     role: "developer"
+   };
+ }
 
-function getScorecardTarget(settings) {
-  if (settings.provider === "baseten") {
-    return {
-      provider: "baseten",
-      url: CONFIG.cloud.baseten.endpoint,
-      model: CONFIG.cloud.baseten.model,
-      key: settings.basetenKey,
-      role: "system"
-    };
-  }
-  const detected = detectProviderFromKey(settings.metaKey);
-  if (detected === "gemini") {
-    return {
-      provider: "gemini",
-      url: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
-      model: "gemini-2.5-flash",
-      key: settings.metaKey,
-      role: "system"
-    };
-  }
-  if (detected === "openai") {
-    return {
-      provider: "openai",
-      url: "https://api.openai.com/v1/chat/completions",
-      model: "gpt-4o-mini",
-      key: settings.metaKey,
-      role: "system"
-    };
-  }
-  if (detected === "anthropic") {
-    return {
-      provider: "anthropic",
-      url: "https://api.anthropic.com/v1/messages",
-      model: "claude-sonnet-4-20250514",
-      key: settings.metaKey,
-      role: "user"
-    };
-  }
-  if (detected === "groq") {
-    return {
-      provider: "groq",
-      url: "https://api.groq.com/openai/v1/chat/completions",
-      model: "meta-llama/llama-4-scout-17b-16e-instruct",
-      key: settings.metaKey,
-      role: "system"
-    };
-  }
-  if (detected === "openrouter") {
-    return {
-      provider: "openrouter",
-      url: "https://openrouter.ai/api/v1/chat/completions",
-      model: settings.openRouterModel || "google/gemini-2.5-flash",
-      key: settings.metaKey,
-      role: "system"
-    };
-  }
-  return {
-    provider: "meta",
-    url: CONFIG.cloud.endpoint,
-    model: CONFIG.cloud.model,
-    key: settings.metaKey,
-    role: "developer"
-  };
-}
-
-async function startOpenRouterOAuth() {
-  try {
-    const array = new Uint8Array(32);
-    crypto.getRandomValues(array);
-    const codeVerifier = btoa(String.fromCharCode(...array))
-      .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    const hashBuffer = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(codeVerifier));
-    const codeChallenge = btoa(String.fromCharCode(...new Uint8Array(hashBuffer)))
-      .replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
-    sessionStorage.setItem("cleanquest.openrouter.verifier", codeVerifier);
-    const callbackUrl = window.location.origin + window.location.pathname;
-    const authUrl = new URL("https://openrouter.ai/auth");
-    authUrl.searchParams.set("callback_url", callbackUrl);
-    authUrl.searchParams.set("code_challenge", codeChallenge);
-    authUrl.searchParams.set("code_challenge_method", "S256");
-    window.location.href = authUrl.toString();
-  } catch {}
-}
-
-async function handleOpenRouterCallbackIfPresent() {
-  try {
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-    if (!code) return;
-    const codeVerifier = sessionStorage.getItem("cleanquest.openrouter.verifier");
-    sessionStorage.removeItem("cleanquest.openrouter.verifier");
-    const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
-    window.history.replaceState({}, document.title, cleanUrl);
-    const resp = await fetch("https://openrouter.ai/api/v1/auth/keys", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code,
-        code_verifier: codeVerifier || undefined,
-        code_challenge_method: codeVerifier ? "S256" : undefined
-      })
-    });
-    if (resp.ok) {
-      const data = await resp.json();
-      if (data?.key) {
-        const current = loadCloudSettings();
-        localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify({
-          metaKey: data.key,
-          basetenKey: current.basetenKey || "",
-          provider: "meta"
-        }));
-        refreshSettingsInputs();
-      }
-    }
-  } catch {}
-}
 
 async function getVerifiedScore(aiResult, before, after) {
   const offline = { status: "offline" };
@@ -8265,8 +8157,8 @@ async function getVerifiedScore(aiResult, before, after) {
     }
 
     const runPartnerDualFallback = async (modeOverride) => {
-      const partnerMode = modeOverride || (["auto", "baseten", "fireworks", "dual"].includes(settings.openRouterModel)
-        ? settings.openRouterModel
+      const partnerMode = modeOverride || (["auto", "baseten", "fireworks", "dual"].includes(settings.cloudModel)
+        ? settings.cloudModel
         : "auto");
       const proxyResp = await callPartnerBackendProxy({
         provider: partnerMode,
@@ -8337,38 +8229,7 @@ async function getVerifiedScore(aiResult, before, after) {
     let response;
 
     try {
-      if (target.provider === "anthropic") {
-        const b64Before = String(smallBefore).replace(/^data:[^;]+;base64,/, "");
-        const b64After = String(smallAfter).replace(/^data:[^;]+;base64,/, "");
-        response = await fetch(target.url, {
-          method: "POST",
-          headers: {
-            "x-api-key": target.key,
-            "anthropic-version": "2023-06-01",
-            "anthropic-dangerous-direct-browser-access": "true",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: target.model,
-            max_tokens: 512,
-            system: CLOUD_SCORING_PROMPT,
-            messages: [
-              {
-                role: "user",
-                content: [
-                  { type: "text", text: "BEFORE photo first, AFTER photo second. Score the visible change." },
-                  { type: "image", source: { type: "base64", media_type: "image/jpeg", data: b64Before } },
-                  { type: "image", source: { type: "base64", media_type: "image/jpeg", data: b64After } }
-                ]
-              }
-            ]
-          }),
-          signal: controller.signal
-        });
-      } else {
-        const extraHeaders = target.provider === "openrouter"
-          ? { "HTTP-Referer": window.location.origin, "X-Title": "CleanQuest" }
-          : {};
+      {
         const buildOaiBody = (modelId) => JSON.stringify({
           model: modelId,
           messages: [
@@ -8385,8 +8246,7 @@ async function getVerifiedScore(aiResult, before, after) {
         });
         const reqHeaders = {
           Authorization: `Bearer ${target.key}`,
-          "Content-Type": "application/json",
-          ...extraHeaders
+          "Content-Type": "application/json"
         };
         response = await fetch(target.url, {
           method: "POST",
@@ -8424,9 +8284,7 @@ async function getVerifiedScore(aiResult, before, after) {
     const data = await response.json().catch(() => null);
     const usage = data?.usage || {};
     const totalTok = Number(usage.total_tokens) || 0;
-    const rawText = target.provider === "anthropic"
-      ? data?.content?.[0]?.text
-      : data?.choices?.[0]?.message?.content;
+    const rawText = data?.choices?.[0]?.message?.content;
     const parsed = sanitizeScorecard(extractScorecardJSON(rawText));
 
     if (!parsed) {
@@ -8458,7 +8316,7 @@ async function getVerifiedScore(aiResult, before, after) {
       task: "vision-scorecard",
       mock: false
     });
-    if (target.provider === "baseten" && settings.openRouterModel === "dual") {
+    if (target.provider === "baseten" && settings.cloudModel === "dual") {
       void runPartnerDualFallback("fireworks");
     }
     return verified;
@@ -9852,47 +9710,6 @@ async function transcribeVoiceNote(blob) {
 
     const wav = await voiceBlobToWav(blob);
     if (!wav) return null;
-    const detected = detectProviderFromKey(settings.metaKey);
-    if (detected === "openai" || detected === "groq") {
-      const form = new FormData();
-      form.append("file", wav, "note.wav");
-      form.append("model", detected === "groq" ? "whisper-large-v3-turbo" : "whisper-1");
-      const endpoint = detected === "groq"
-        ? "https://api.groq.com/openai/v1/audio/transcriptions"
-        : "https://api.openai.com/v1/audio/transcriptions";
-      const r = await fetch(endpoint, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${settings.metaKey}` },
-        body: form
-      });
-      if (!r.ok) return null;
-      const j = await r.json().catch(() => null);
-      return j?.text?.trim() || null;
-    }
-    if (detected === "gemini") {
-      const buf = new Uint8Array(await wav.arrayBuffer());
-      let bin = "";
-      for (let i = 0; i < buf.length; i += 1) bin += String.fromCharCode(buf[i]);
-      const b64 = btoa(bin);
-      const r = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(settings.metaKey)}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            contents: [{
-              parts: [
-                { text: "Transcribe this spoken cleaning inspection note verbatim. Return only the transcript." },
-                { inlineData: { mimeType: "audio/wav", data: b64 } }
-              ]
-            }]
-          })
-        }
-      );
-      if (!r.ok) return null;
-      const j = await r.json().catch(() => null);
-      return j?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || null;
-    }
     const controller = new AbortController();
     const timeout = setTimeout(
       () => controller.abort(),
@@ -15400,7 +15217,7 @@ function bindEvents() {
   if (els.settingsDone) {
     els.settingsDone.addEventListener("click", closeSettings);
   }
-  const routingSel = document.getElementById("openRouterModelSelect");
+  const routingSel = document.getElementById("cloudModelSelect");
   if (routingSel) {
     routingSel.addEventListener("change", saveRoutingSelection);
   }
@@ -16004,12 +15821,6 @@ function bindEvents() {
       renderMusicStreamEmbed(val);
     });
   }
-  const openRouterBtn = document.getElementById("openRouterSsoButton");
-  if (openRouterBtn) {
-    openRouterBtn.addEventListener("click", () => {
-      void startOpenRouterOAuth();
-    });
-  }
   const deckAiBonusBtn = document.getElementById("deckAiBonusButton");
   if (deckAiBonusBtn) {
     deckAiBonusBtn.addEventListener("click", () => {
@@ -16146,7 +15957,6 @@ function initializeApp() {
   renderAdminDashboard();
   renderCheckinSites();
   initializeSelfTestUI();
-  void handleOpenRouterCallbackIfPresent();
   if (SPECTATOR_MODE) {
     initializeSpectatorMode();
     return;

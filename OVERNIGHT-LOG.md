@@ -712,3 +712,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Provider run log is now a real scrollable list in Settings (was a 52px slit): max-height 30dvh + 120px min so judges can scroll runs in-app.
 - Asset refs v29/v26. Evidence: CDP — zero <audio> elements for music (buffer path won), timer/deck playing looped, welcome null, duck/restore via gain.
 - Blockers: none.
+
+## 2026-11-05 — Competitor-model scrub (Meta-only) — DONE
+- Removed every non-Meta model path: OpenRouter provider + OAuth/SSO flow + callback, Gemini/OpenAI/Anthropic/Groq scorecard targets + key-prefix detection, Anthropic message-format branch, OpenAI/Groq/Gemini transcription routes, 4 competitor dropdown options (select is now Meta-partner routing only). Settings field renamed cloudModel with legacy-key migration; zero user-facing OpenRouter/Gemini/GPT/Claude references remain in code, markup, or docs.
+- Asset refs v30. Evidence: repo-wide grep clean (only intentional legacy-key migration read), node --check clean, full QA suite below.
+- Blockers: none.

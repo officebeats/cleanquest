@@ -1219,15 +1219,11 @@
         <details id="advancedCloudPanel" class="advanced-cloud-panel">
           <summary class="advanced-cloud-summary">⚙️ ADVANCED · Cloud routing (server-funded)</summary>
         <div class="identity-panel hologram-card">
-          <select id="openRouterModelSelect" class="area-select" aria-label="OpenRouter / Cloud Model">
+          <select id="cloudModelSelect" class="area-select" aria-label="Cloud routing model">
             <option value="auto" selected>Partner Cloud: Baseten Primary → Fireworks Failover (Token-Efficient Default)</option>
             <option value="baseten">Partner Cloud: Baseten Only (meta-models/muse-spark-open-1026)</option>
             <option value="fireworks">Partner Cloud: Fireworks AI Only (accounts/fireworks/models/muse-spark-open)</option>
             <option value="dual">Partner Cloud: Dual Parallel (Baseten + Fireworks Benchmark)</option>
-            <option value="google/gemini-2.5-flash">OpenRouter: Gemini 2.5 Flash</option>
-            <option value="openai/gpt-4o-mini">OpenRouter: OpenAI GPT-4o Mini</option>
-            <option value="anthropic/claude-sonnet-4">OpenRouter: Anthropic Claude Sonnet 4</option>
-            <option value="meta-llama/llama-4-maverick">OpenRouter: Meta Llama 4 Maverick</option>
           </select>
         </div>
         </details>
@@ -1484,6 +1480,6 @@
   <div id="screenTransitionPortal" class="screen-transition-portal" aria-hidden="true"></div>
   <div id="buttonSparkleLayer" class="button-sparkle-layer" aria-hidden="true"></div>
   <script src="deck.js?v=20261103-25"></script>
-  <script src="app.js?v=20261103-29"></script>
+  <script src="app.js?v=20261103-30"></script>
 </body>
 </html>
