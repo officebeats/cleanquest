@@ -717,3 +717,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Removed every non-Meta model path: OpenRouter provider + OAuth/SSO flow + callback, Gemini/OpenAI/Anthropic/Groq scorecard targets + key-prefix detection, Anthropic message-format branch, OpenAI/Groq/Gemini transcription routes, 4 competitor dropdown options (select is now Meta-partner routing only). Settings field renamed cloudModel with legacy-key migration; zero user-facing OpenRouter/Gemini/GPT/Claude references remain in code, markup, or docs.
 - Asset refs v30. Evidence: repo-wide grep clean (only intentional legacy-key migration read), node --check clean, full QA suite below.
 - Blockers: none.
+
+## 2026-11-05 — Settings save preserves stored keys — DONE
+- saveSettingsKeys now merges with stored settings instead of blanking keys when inputs are absent (inputs were removed from the markup); provider falls back to stored value. Verified end-to-end with dummy keys: TEST & LOG TELEMETRY preserves both keys + provider, persists selected cloud model across reload.
+- Asset refs v31.
+- Blockers: none.

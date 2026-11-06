@@ -7360,22 +7360,22 @@ function closeSettings() {
 
  function saveSettingsKeys() {
    const modelSel = document.getElementById("cloudModelSelect");
+   const current = loadCloudSettings();
+   const pickedProvider = document.querySelector('input[name="inferenceProvider"]:checked')?.value;
    const next = {
-     metaKey: els.metaApiKey?.value.trim() || "",
-     basetenKey: els.basetenKey?.value.trim() || "",
-     provider: document.querySelector('input[name="inferenceProvider"]:checked')?.value === "baseten"
-       ? "baseten"
-       : "meta",
-     cloudModel: modelSel?.value || "auto"
-  };
-  try {
-    localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(next));
-  } catch {}
+     metaKey: els.metaApiKey ? els.metaApiKey.value.trim() : current.metaKey,
+     basetenKey: els.basetenApiKey ? els.basetenApiKey.value.trim() : current.basetenKey,
+     provider: pickedProvider === "baseten" ? "baseten" : pickedProvider === "meta" ? "meta" : current.provider,
+     cloudModel: modelSel?.value || current.cloudModel || "auto"
+   };
+   try {
+     localStorage.setItem(CLOUD_SETTINGS_KEY, JSON.stringify(next));
+   } catch {}
 
   if (els.metaApiKey) els.metaApiKey.value = next.metaKey;
   if (els.basetenApiKey) els.basetenApiKey.value = next.basetenKey;
   els.settingsSavedNote?.classList.remove("hidden");
-}
+ }
  function saveRoutingSelection() {
    try {
      const modelSel = document.getElementById("cloudModelSelect");
