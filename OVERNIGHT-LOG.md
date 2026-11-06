@@ -726,3 +726,9 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 ## 2026-11-05 — Honest model provenance in docs — DONE
 - README tech summary + AUDIO-PLAN header now state: cloud scoring is Meta-only (Muse Spark family); on-device perception is Google MediaPipe (EfficientDet-Lite0, Pose Landmarker Lite); shipped voice clips were synthesized offline with non-Meta TTS (Kokoro-82M EN, Piper VITS ES/PL).
 - Blockers: none.
+
+## 2026-11-06 — Independent review applied: remnant sweep + qualified claims — DONE
+- Reviewer found 3 missed remnants: dead #openRouterModelSelect + .sso-quick-bar CSS selectors (removed), legacy openRouterModel localStorage migration read (kept intentionally — sanitizes old values to auto/baseten/fireworks/dual, honors stored "dual", never routes to a competitor).
+- Claim qualified per review: code + markup + user docs contain zero competitor-model references; the build diary (OVERNIGHT-LOG) intentionally retains historical mentions of the removed paths, and the migration read above is the single intentional exception.
+- Evidence: repo-wide grep clean except annotated exceptions; node --check clean.
+- Blockers: none.

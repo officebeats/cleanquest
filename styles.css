@@ -6314,13 +6314,6 @@ button.btn-pop-active::before {
   border: 0 !important;
 }
 
-.sso-quick-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 6px;
-  margin-bottom: 8px;
-}
 /* Competitive Leaderboard HUD, 3-Pillar Podium Stage, Rival Chase Meter, YOU Badge & Music Beat Pulse */
 .leaderboard-top-hud {
   display: flex;
@@ -6699,8 +6692,6 @@ body.music-beat-thump #leaderboardScreen #playAgainButton {
   #resultsScreen .score-bar-detail,
   #leaderboardScreen .leaderboard-rival-banner,
   #leaderboardScreen .leaderboard-podium-stage,
-  #settingsScreen .sso-quick-bar,
-  #settingsScreen #openRouterModelSelect,
   #settingsScreen .music-streaming-bar,
   #settingsScreen .music-stream-drawer,
   #deckScreen .deck-illustration,
