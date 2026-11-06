@@ -722,3 +722,7 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - saveSettingsKeys now merges with stored settings instead of blanking keys when inputs are absent (inputs were removed from the markup); provider falls back to stored value. Verified end-to-end with dummy keys: TEST & LOG TELEMETRY preserves both keys + provider, persists selected cloud model across reload.
 - Asset refs v31.
 - Blockers: none.
+
+## 2026-11-05 — Honest model provenance in docs — DONE
+- README tech summary + AUDIO-PLAN header now state: cloud scoring is Meta-only (Muse Spark family); on-device perception is Google MediaPipe (EfficientDet-Lite0, Pose Landmarker Lite); shipped voice clips were synthesized offline with non-Meta TTS (Kokoro-82M EN, Piper VITS ES/PL).
+- Blockers: none.

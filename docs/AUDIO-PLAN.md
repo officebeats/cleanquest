@@ -1,12 +1,12 @@
- > **Status (shipped):** 715 trilingual neural MP3s under `assets/audio/<lang>/` —
+ > **Status (shipped):** 715 trilingual neural MP3s under `assets/audio/<lang>/` — all synthesized offline with non-Meta TTS (not Meta models):
  > 235 EN (Kokoro-82M `af_heart`: all HOST_LINES game-show beats + `welcome-intro` /
  > `deck-intro` / `camera-explain` / `deck-correct` / `deck-wrong` + `num` / `glue` /
- > `nudge`), 247 ES (`es_MX-claude-high`), 233 PL (`pl_PL-gosia-medium`) — all
- > 24 kHz mono. Every EN clip shares one voice + one broadcast chain
+ > `nudge`), 247 ES (`es_MX-claude-high` Piper VITS), 233 PL (`pl_PL-gosia-medium` Piper VITS) — all
+ > 24 kHz mono. Every EN clip shares one Kokoro voice + one broadcast chain
  > (`asetrate=24000*1.03`, 3.2 kHz presence EQ, compressor, `-18 LUFS` loudnorm;
  > `welcome-intro` −18.7 dB ≈ `consent-00` −18.8 dB), played at exact 1.0x via
- > `playHostClip()` with `?v=FEATURE_MUSIC.version` cache-busting. ES/PL keep
- > their pinned Piper VITS voices. Unrecorded IDs stay silent (neural-only).
+ > `playHostClip()` with `?v=FEATURE_MUSIC.version` cache-busting. Unrecorded IDs stay silent (neural-only).
+ > Meta models used in this project: cloud scoring only (Muse Spark family via the Baseten/Fireworks proxy + direct Meta Model API keys). On-device perception uses Google MediaPipe models.
  > The plan below is the original research/spec record. Screen music: `assets/audio/time-trial.mp3` on the timer screen + `assets/audio/daily-deck.mp3` on the deck (user-supplied songs, -18 LUFS, 44.1 kHz stereo, looped gaplessly per screen via a decoded-PCM WebAudio buffer loop — no element restarts, exact file loop points honored; ducked to 0.12 under host voice); all other screens are silent (synth groove retired). Short WebAudio SFX (beeps, stings, fanfares) remain.
 
 # AUDIO PLAN — CleanQuest voice clips + SFX (research, no installs, no audio generated yet)
