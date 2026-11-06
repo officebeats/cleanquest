@@ -732,3 +732,8 @@ One entry per step/chunk: letter, start/finish (HH:MM CT), result, evidence, dec
 - Claim qualified per review: code + markup + user docs contain zero competitor-model references; the build diary (OVERNIGHT-LOG) intentionally retains historical mentions of the removed paths, and the migration read above is the single intentional exception.
 - Evidence: repo-wide grep clean except annotated exceptions; node --check clean.
 - Blockers: none.
+
+## 2026-11-06 — Season prefix stripped from deck feedback too — DONE
+- Advisor QA supplement flagged "Season #83 (Pantry & Workstation Reset):" still visible in answer feedback: stripSeasonBracketPrefix required a leading 🗓️ emoji and was not called on `why`. Made the emoji optional, allowed the parenthesized theme form, and applied the stripper to `why` at render time.
+- Asset ref v32. Evidence: unit test + live CDP run (question + feedback both `hasSeason: false`).
+- Blockers: none.

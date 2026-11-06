@@ -7611,12 +7611,12 @@ function getBiWeeklySeasonMeta() {
   return { seasonNum, daysLeft };
 }
 
-function stripSeasonBracketPrefix(str) {
-  return String(str || "")
-    .replace(/^🗓️\s*\[[ST]\d+\s*·[^\]]+\]\s*/i, "")
-    .replace(/^🗓️\s*(?:Season|Temporada|Sezon)\s*#\d+\s*[:—-]\s*/i, "")
-    .trim();
-}
+ function stripSeasonBracketPrefix(str) {
+   return String(str || "")
+     .replace(/^(?:🗓️\s*)?\[[ST]\d+\s*·[^\]]+\]\s*/i, "")
+     .replace(/^(?:🗓️\s*)?(?:Season|Temporada|Sezon)\s*#\d+\s*(\([^)]*\)\s*)?[:—-]\s*/i, "")
+     .trim();
+ }
 
 function localizeSeasonTheme(rawTheme, lang = "en", areaKey = "breakroom") {
   if (rawTheme && typeof rawTheme === "object") {
@@ -10787,7 +10787,7 @@ function answerDeck(pick) {
   if (els.deckFeedback) {
     const productType = localizedDeckField(card, "productType");
     const productNote = productType ? ` · ${t("productTypePrefix")} ${productType}.` : "";
-    els.deckFeedback.textContent = `${hit ? "✔" : "✘"} “${(pick !== "miss" ? t("deckPickAgree") : t("deckPickDisagree"))}” — ${localizedDeckField(card, "why")}${productNote}`;
+    els.deckFeedback.textContent = `${hit ? "✔" : "✘"} “${(pick !== "miss" ? t("deckPickAgree") : t("deckPickDisagree"))}” — ${stripSeasonBracketPrefix(localizedDeckField(card, "why"))}${productNote}`;
     els.deckFeedback.className = `deck-feedback ${hit ? "is-correct" : "is-wrong"}`;
   }
 
