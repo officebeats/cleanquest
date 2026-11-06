@@ -7370,7 +7370,8 @@ body #resultsScreen .results-cta-bar {
  }
 
 #recordsScreen #inspectionLogList {
-  max-height: 48px !important;
+  max-height: 42dvh !important;
+  min-height: 160px !important;
   overflow-y: auto !important;
 }
 

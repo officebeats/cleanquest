@@ -170,9 +170,10 @@ async function runPass(mode) {
   await send("Page.navigate", { url: `http://127.0.0.1:${PORT}/index.html?fresh=${Date.now()}` });
   await sleep(2000);
   await clickText("DAILY DECK");
-  await sleep(1500);
+  await sleep(1200);
+  await evaluate(`(() => { const b = document.getElementById("deckRight"); if (b) b.click(); return !!b; })()`);
+  await sleep(900);
   await shot(P("12-deck"));
-  // Judge demo -> loading + scored results
   await evaluate(`(() => { const b = document.querySelector('[aria-label="Go back"]'); if (b) b.click(); return !!b; })()`);
   await sleep(1000);
   await clickText("ACCEPT THE CHALLENGE");
@@ -202,14 +203,40 @@ async function runPass(mode) {
     return ai.scorable === false ? "unscorable-ok" : "STILL-SCORABLE";
   })()`);
   await shot(P("28-noscored"));
-  // Leaderboard / records / settings
-  await clickText("VIEW LEADERBOARD|LEADERBOARD");
+  // Seed realistic leaderboard, inspection-log, and provider-log records for tour screenshots
+  await evaluate(`(() => {
+    const now = Date.now();
+    const lb = [
+      { id: "tour-1", name: "Maria R.", cleanliness: 96, techniqueScore: 94, timeMs: 74000, styleScore: 9.2, areaKey: "breakroom", assignedSpot: "Sink & counter", siteSize: "10k-50k", prizeEligible: true, timestamp: new Date(now - 3600000).toISOString() },
+      { id: "tour-2", name: "Jan K.", cleanliness: 93, techniqueScore: 91, timeMs: 79000, styleScore: 8.8, areaKey: "restroom", assignedSpot: "Mirror, glass & handles", siteSize: "10k-50k", prizeEligible: true, timestamp: new Date(now - 7200000).toISOString() },
+      { id: "tour-3", name: "Devon T.", cleanliness: 89, techniqueScore: 88, timeMs: 83000, styleScore: 8.5, areaKey: "breakroom", assignedSpot: "Tabletop & appliance front", siteSize: "10k-50k", prizeEligible: true, timestamp: new Date(now - 10800000).toISOString() }
+    ];
+    window.cleaningChallenge.saveLeaderboard(lb);
+    const logs = [
+      { id: "log-1", who: "Maria R.", when: new Date(now - 3600000).toISOString(), where: { shared: true, lat: 41.882, lon: -87.628, accuracyM: 12 }, scores: { cleanliness: 96, timeMs: 74000, styleScore: 9.2 }, provider: "baseten · meta-models/muse-spark-open", note: { text: "Counter & basin cleared; fixtures wiped top-to-bottom." } },
+      { id: "log-2", who: "Jan K.", when: new Date(now - 7200000).toISOString(), where: { shared: true, lat: 41.882, lon: -87.628, accuracyM: 15 }, scores: { cleanliness: 93, timeMs: 79000, styleScore: 8.8 }, provider: "fireworks · accounts/fireworks/models/muse-spark-open", note: { text: "Streak-free mirror and chrome handles." } },
+      { id: "log-3", who: "Devon T.", when: new Date(now - 10800000).toISOString(), where: { shared: true, lat: 41.879, lon: -87.635, accuracyM: 18 }, scores: { cleanliness: 89, timeMs: 83000, styleScore: 8.5 }, provider: "baseten · meta-models/muse-spark-open", note: { text: "Appliance fronts and tabletop wiped clean." } }
+    ];
+    localStorage.setItem("cleanquest.inspection-log", JSON.stringify(logs));
+    const pLogs = [
+      { status: "verified", provider: "baseten", model: "meta-models/muse-spark-open", overall: 96, tokens: 1609, promptTokens: 1420, completionTokens: 189, task: "vision-scorecard", mock: false, when: new Date(now - 180000).toISOString() },
+      { status: "verified", provider: "fireworks", model: "accounts/fireworks/models/muse-spark-open", overall: 94, tokens: 1742, promptTokens: 1530, completionTokens: 212, task: "vision-scorecard", mock: false, when: new Date(now - 120000).toISOString() },
+      { status: "telemetry", provider: "baseten", model: "meta-models/muse-spark-open", overall: 95, tokens: 1580, promptTokens: 1390, completionTokens: 190, task: "season-pack-14d", mock: false, when: new Date(now - 60000).toISOString() },
+      { status: "verified", provider: "baseten", model: "meta-models/muse-spark-open", overall: 92, tokens: 1688, promptTokens: 1490, completionTokens: 198, task: "vision-scorecard", mock: false, when: new Date(now - 20000).toISOString() }
+    ];
+    localStorage.setItem("cleanquest.provider-log", JSON.stringify(pLogs));
+    const cc = window.cleaningChallenge;
+    cc.state.leaderboardMode = "shift";
+    cc.navigateTo("leaderboard");
+    cc.renderLeaderboard();
+    return "seeded";
+  })()`);
   await sleep(1200);
   await shot(P("08-leaderboard"));
   await clickText("RECORDS|INSPECTION");
   await sleep(1200);
   await shot(P("09-records"));
-  await evaluate(`(() => { window.cleaningChallenge.navigateTo("settings"); return "nav-settings"; })()`);
+  await evaluate(`(() => { const b = document.getElementById("settingsButton"); if (b) b.click(); else window.cleaningChallenge.navigateTo("settings"); return "settings"; })()`);
   await sleep(1200);
   await shot(P("11-settings"));
   if (mobile) {

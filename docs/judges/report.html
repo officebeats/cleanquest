@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>CleanQuest — Judges' Presentation · Meta Global AI Developer Hackathon</title>
+<title>CleanQuest — Value Prop, Feature Tour, Technical Architecture &amp; Post-Hackathon MVP Roadmap</title>
 <style>
   :root {
     --ink:#f4fbff;
@@ -24,7 +24,7 @@
   body {
     margin:0;
     color:var(--ink);
-    font-size:clamp(17.5px, 1.22vw, 20px);
+    font-size:clamp(17px, 1.18vw, 19.5px);
     line-height:1.65;
     font-family:"Plus Jakarta Sans","DM Sans",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
     background:
@@ -79,10 +79,10 @@
   }
   header.hero .pitch {
     color:#ffffff;
-    font-size:clamp(20px, 1.75vw, 26px);
+    font-size:clamp(20px, 1.7vw, 25px);
     font-weight:700;
     line-height:1.42;
-    max-width:96ch;
+    max-width:98ch;
     margin:14px 0 10px;
   }
   header.hero strong { color:var(--cyan); }
@@ -117,7 +117,7 @@
     border:1px solid var(--line-bright);
     border-radius:999px;
     padding:6px 16px;
-    font-size:15px;
+    font-size:14.5px;
     font-weight:600;
     color:#e8f7ff;
   }
@@ -149,11 +149,11 @@
   }
   h3 {
     font-size:clamp(19px, 1.5vw, 24px);
-    margin:22px 0 10px;
+    margin:24px 0 10px;
     color:var(--cyan);
   }
   p, li {
-    font-size:clamp(17.5px, 1.2vw, 20px);
+    font-size:clamp(16.5px, 1.15vw, 19px);
     line-height:1.65;
     color:var(--ink);
   }
@@ -170,7 +170,7 @@
     padding-left:22px;
   }
   li ul li {
-    font-size:clamp(16px, 1.1vw, 18.5px);
+    font-size:clamp(15.5px, 1.08vw, 18px);
     line-height:1.58;
     color:var(--ink-soft);
     margin-bottom:5px;
@@ -201,6 +201,9 @@
     align-items:center;
     width:100%;
   }
+  .shot-pair.three-up {
+    grid-template-columns:1fr 1fr 1.5fr;
+  }
   .shot-pair figure {
     margin:0;
     display:flex;
@@ -218,7 +221,7 @@
   .shot img, .shot-pair img {
     width:100%;
     height:auto;
-    max-height:260px;
+    max-height:270px;
     object-fit:contain;
     border-radius:10px;
     border:1px solid var(--line-bright);
@@ -239,21 +242,21 @@
     padding-left:22px;
   }
   .shot .desc ol li {
-    font-size:clamp(15.5px, 1.05vw, 17.5px);
-    line-height:1.48;
+    font-size:clamp(15px, 1.02vw, 17px);
+    line-height:1.5;
     margin-bottom:6px;
   }
   .verdict {
     display:inline-block;
     font-weight:800;
-    font-size:14px;
+    font-size:13px;
     border-radius:8px;
     padding:4px 12px;
     margin:6px 0 2px;
-    letter-spacing:.02em;
+    letter-spacing:.03em;
   }
   .v-ready { background:rgba(57,245,188,.15); color:var(--good); border:1px solid rgba(57,245,188,.4); }
-  .v-note { background:rgba(255,211,92,.14); color:var(--warn); border:1px solid rgba(255,211,92,.4); }
+  .v-roadmap { background:rgba(255,211,92,.14); color:var(--warn); border:1px solid rgba(255,211,92,.45); }
   code {
     background:rgba(10,27,43,.95);
     color:#9beaff;
@@ -275,7 +278,7 @@
   table {
     border-collapse:collapse;
     width:100%;
-    font-size:clamp(16px, 1.15vw, 18.5px);
+    font-size:clamp(15.5px, 1.1vw, 18px);
     line-height:1.55;
   }
   th, td {
@@ -315,19 +318,21 @@
     .two-col-sections, .tour-grid {
       grid-template-columns:1fr;
     }
-    .shot img { width:min(260px, 42vw); }
-    .shot img.wide { width:100%; }
+    .shot-pair.three-up {
+      grid-template-columns:1fr 1fr;
+    }
   }
   @media (max-width: 720px) {
     body { overflow-x:hidden; }
     .hero-inner, main { width:100%; padding:0 14px; }
     main { padding-top:16px; padding-bottom:48px; }
-    p, li { font-size:17.5px; line-height:1.62; }
-    li ul li { font-size:16px; line-height:1.55; }
+    p, li { font-size:17px; line-height:1.6; }
+    li ul li { font-size:15.5px; line-height:1.52; }
     h2 { font-size:22px; }
     h3 { font-size:19px; }
     .meta span { font-size:13.5px; padding:6px 12px; }
     .shot { flex-direction:column; gap:14px; padding:14px; }
+    .shot-pair, .shot-pair.three-up { grid-template-columns:1fr; }
     .shot img, .shot img.wide { width:100%; max-width:420px; margin:0 auto; }
     .table-scroll { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
     table { min-width:620px; font-size:15px; }
@@ -349,418 +354,484 @@
 <body>
 <header class="hero">
   <div class="hero-inner">
-    <div class="brand"><i></i>CLEANQUEST · JUDGES' PRESENTATION</div>
-    <h1>CleanQuest — Judges' Presentation</h1>
-    <p>Meta Global AI Developer Hackathon · Indie track · <strong>Build for Your World</strong></p>
-    <p class="pitch"><strong>Bottom Line:</strong> CleanQuest turns the invisible 2&nbsp;a.m. commercial cleaning shift into a 90-second AI-verified game, automated 2-week micro-training deck, moment-of-work sponsor channel, and exportable geofenced inspection log owned by the cleaner.</p>
-    <p><strong>100% Live &amp; Zero-Key Out-of-the-Box:</strong> Cloud AI works immediately with <strong>zero API key setup</strong> via our serverless proxy to <strong>Meta <code>Muse Spark Open</code></strong> on <strong>Baseten</strong> (primary) + <strong>Fireworks AI</strong> (automatic failover), paired with on-device <strong>Google MediaPipe</strong> edge vision and <strong>715 trilingual neural voice clips</strong> (235 EN Kokoro-82M <code>af_heart</code>, 247 ES <code>es_MX-claude-high</code>, 233 PL <code>pl_PL-gosia-medium</code>).</p>
+    <div class="brand"><i></i>CLEANQUEST · PRODUCT &amp; ARCHITECTURE REPORT</div>
+    <h1>CleanQuest — Value Proposition, Feature Tour, Technical Architecture &amp; Post-Hackathon Roadmap</h1>
+    <p class="pitch"><strong>Thesis:</strong> Commercial night-shift cleaning is invisible until someone complains. CleanQuest turns a 90-second cleaning run into an AI-verified game, a 10-card daily micro-training deck, a moment-of-work sponsor channel, and an exportable geofenced inspection log owned by the cleaner.</p>
+    <p><strong>Zero-Key Cloud + On-Device Edge AI:</strong> Every cloud scorecard and bi-weekly training season is powered by <strong>Meta <code>Muse Spark</code></strong> models (<code>meta-models/muse-spark-open</code> on <strong>Baseten</strong> primary with automatic failover to <strong>Fireworks AI</strong>, plus direct <strong>Meta Model API</strong> support for <code>muse-spark-1.3</code>, <code>sam-3.1</code>, and <code>muse-voice-transcribe-1.0</code>), paired with on-device <strong>Google MediaPipe</strong> perception and <strong>715 pre-rendered trilingual neural voice clips</strong> (<code>EN</code> / <code>es_MX</code> / <code>PL</code>).</p>
     <div class="links">
       <a href="../../index.html">▶ Launch Live App</a>
-      <a class="alt" href="../../index.html?spectator=1">Spectator Board</a>
+      <a class="alt" href="../../index.html?spectator=1">Breakroom Spectator Board</a>
       <a class="alt" href="report.pdf">Download PDF</a>
       <a class="alt" href="submission.html">Submission Playbook</a>
     </div>
   </div>
 </header>
+
 <main>
   <div class="meta">
-    <span>Indie track: creativity · technical ambition · whether it works</span>
-    <span>Vanilla JS · no build · no backend · offline-first</span>
-    <span>EN / ES / PL throughout · 44px glove targets</span>
-    <span>Automated gates: 6/6 self-test PASS · 11/11 personas PASS</span>
+    <span>1 · Value Proposition &amp; Closed-Loop Thesis</span>
+    <span>2 · Deep Technical Architecture: Models &amp; Providers</span>
+    <span>3 · Mobile &amp; Desktop Screen-by-Screen Feature Tour</span>
+    <span>4 · Post-Hackathon MVP Roadmap</span>
   </div>
 
+  <!-- ===================================================================== -->
+  <!-- SECTION 1: VALUE PROPOSITION & CLOSED-LOOP THESIS                     -->
+  <!-- ===================================================================== -->
   <section class="card">
-    <h2>How to score this — rubric + MVP map</h2>
+    <h2>1 · Value Proposition — Who CleanQuest Serves &amp; Why It Exists</h2>
+    <p><strong>The Core Problem:</strong> Commercial cleaners work alone at 2&nbsp;a.m. across office towers, clinics, schools, and airports. When they do great work, nobody sees it; when a tenant complains the next morning, contractors burn hours driving site-to-site for re-checks, and training binders sit unopened in janitor closets.</p>
+
     <div class="table-scroll">
       <table>
-        <tr><th>Criterion (weight)</th><th>CleanQuest's answer</th><th>MVP coverage (Operating Standards)</th><th>Where to see it</th></tr>
-        <tr><td><strong>Impact 30%</strong></td><td><strong>3-way win:</strong> Cleaners get a verified inspection record they can export; contractors get geofenced proof without re-checks; sponsors teach product rules at the moment of work.</td><td>Screens 1–4 (EN/ES/PL, 44px glove PIN pad, consent read-aloud, home hub), Screen 9 (30-card deck), Screen 10 (top-10 dual leaderboard). Passport/crew/supervisor panes are code-kept and hidden for the hackathon — not demoed, not judged.</td><td>Switch to Español; run <em>Judge Demo</em></td></tr>
-        <tr><td><strong>Meta AI Tooling 25%</strong></td><td><strong>Zero-Key Meta Open Weights + Full Stack:</strong> Serverless <code>Muse Spark Open</code> (Baseten → Fireworks failover) powers per-surface scorecards + <code>box_2d</code> overlays and 2-week training seasons out of the box (plus direct <code>Muse Spark 1.3</code>, <code>SAM 3.1</code> &amp; <code>Muse Voice Transcribe</code> support).</td><td>Screen 8 (50/25/25 scorecard + <code>box_2d</code> + NOT SCORED layman reasons), Screens 9–10 (2-week AI Season Deck + cached AI shift notes), Settings (token telemetry log).</td><td>Run <em>Judge Demo</em>; tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in Settings</td></tr>
-        <tr><td><strong>Demo 25%</strong></td><td><strong>Works in 10 seconds or live in any room:</strong> 1-tap Judge Demo shows the animated AI Cleaning Loader + Sponsor Ad + 93% S-Rank sample reveal; live loop runs across 10 building sectors &amp; 28 spots.</td><td>Screens 5–7 (dropdown check-in, locked 1:30 timer, 1-tap After auto-capture), AI Loading + Sponsor Ad screen, Screen 9 (10-card swipe deck), <code>?spectator=1</code> board.</td><td>Instructions → <em>Judge Demo</em>; open <code>?spectator=1</code>.</td></tr>
-        <tr><td><strong>Technical Depth 20%</strong></td><td><strong>Zero-dependency vanilla JS + hermetic gates:</strong> 6/6 self-test PASS, 11/11 personas PASS, 50% fewer API calls via Primary→Failover, 56% smaller vision payloads, and 0-token cached season replays.</td><td>All 9 Experience Principles (44px targets, offline queue + auto-rescore, 100% above-the-fold CTAs on mobile &amp; desktop, zero score-editing paths).</td><td>Settings → <em>Run Self-Test</em>; Appendix below</td></tr>
+        <tr>
+          <th>Stakeholder</th>
+          <th>Pain Point Today</th>
+          <th>CleanQuest Value Proposition</th>
+          <th>Live Product Surface</th>
+        </tr>
+        <tr>
+          <td><strong>1. The Cleaner</strong><br/><em>Visibility, Skill &amp; Portable Proof</em></td>
+          <td>Good work is invisible; language barriers and complex software block adoption; no portable proof of quality when changing jobs or shifts.</td>
+          <td>Proves visible cleaning quality in under 90 seconds with two photos, zero typing, 44px glove-friendly controls, and full trilingual voice &amp; UI (<strong>English, Mexican Spanish <code>es_MX</code>, and Polish <code>PL</code></strong>). Every run builds an exportable inspection record (<code>⬇ SAVE BACKUP</code> JSON + <code>⬇ DOWNLOAD SPREADSHEET</code> CSV), while the <strong>Daily Swipe Deck</strong> teaches pro technique one card at a time.</td>
+          <td>Welcome Hub, Consent Read-Aloud, Station Check-In, Locked 1:30 Timer, 50/25/25 Scorecard, 10-Card Daily Deck, Inspection Log Export.</td>
+        </tr>
+        <tr>
+          <td><strong>2. Building Service Contractors &amp; Facility Operators</strong><br/><em>Proof Without Re-Checks</em></td>
+          <td>"They didn't clean" tenant disputes, expensive supervisor re-check drives, and subjective manual inspections.</td>
+          <td>Objective, timestamped Before/After visual evidence and per-surface AI scorecards across <strong>10 building sectors, 13 functional areas, and 28 cleaning spots</strong>. Scores are read-only (<code>The system scores, nobody edits</code>), with a 1-tap worker appeal flow (<code>⚑ DISPUTE SCORE</code>) that attaches a typed or spoken note without allowing anyone to alter a score.</td>
+          <td>Station Taxonomy Picker, Per-Surface Scorecard + SAM Overlays, 1-Tap Dispute Panel, Geofenced Inspection Log.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Industry Associations &amp; Sponsors</strong><br/><em>Training at the Moment of Work</em></td>
+          <td>Paper SOP binders and classroom videos are forgotten on the shift floor; brands pay $15K–$55K at trade shows to reach crews indirectly.</td>
+          <td>Benchmark times, 8-fold microfiber technique, top-to-bottom wipe order, and surface-safe pH rules are taught right at the station and inside the <strong>Daily Swipe Deck</strong>. Sponsor logos appear on post-answer training cards and challenge leaderboards — never on the scorecard itself — preserving 100% scoring neutrality.</td>
+          <td>AI Loader Neutral Technique Tip, Daily Swipe Deck Post-Answer Sponsor Slot, Leaderboard Sponsor Crest.</td>
+        </tr>
       </table>
     </div>
-  </section>
 
-  <section class="card">
-    <h2>MVP compliance — 15 screens + operating rules</h2>
-    <div class="table-scroll">
-      <table>
-        <tr><th>#</th><th>MVP screen / rule</th><th>Status</th><th>Evidence in this build</th></tr>
-        <tr><td>1–3</td><td>Language picker · Phone+PIN · Consent + read-aloud</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Top-level EN/ES/PL; local hashed 4-digit PIN with 44px glove numpad (no email); first-run consent gate with native MP3/TTS read-aloud, "faces never identified", "never for discipline".</td></tr>
-        <tr><td>4</td><td>Home (Start, streak, cards, sponsor card, 13-wk meter)</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Always-visible status strip shows streak + week of 13 at a glance; full inspection-log/sponsor/meter hub one tap below. (Passport/crew matchup views are code-kept and hidden for the hackathon.)</td></tr>
-        <tr><td>5–7</td><td>Check-in (10 Building Sectors · 13 Areas · 28 Spots) · Locked Run Timer · 1-Tap Complete</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Full commercial cleaning station options (10 Building verticals, 13 Functional Areas, 28 Cleaning Spots) via dropdown check-in + frame guide, in-app capture only (gallery uploads impossible); locked countdown (cannot pause/stop mid-run) with 6–8s continuous host voice inspiration + 1-tap <code>COMPLETE CHALLENGE</code> auto-capturing the After photo. (QR sticker scanning/printing and the +15s dwell-credit button are code-kept post-hackathon; their UI is hidden for the hackathon.)</td></tr>
-        <tr><td>8</td><td>Score reveal (total, 5-tier audio summary, NOT SCORED layman reasons, 3 bars, surface map)</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>50/25/25 weighted hero when scorable; unscorable runs show <strong>NOT SCORED</strong> + plain reason (<code>WRONG AREA</code>, <code>PERSON IN PHOTO</code>, <code>TOO DARK</code>, <code>TOO MUCH GLARE</code>, <code>CAMERA MOVED</code>, <code>TOO FAR AWAY</code>, <code>NO CHANGE</code>) + one-sentence explanation + retake CTA — never <code>REDO</code>/<code>RESCAN</code> jargon, bars and dispute hidden. 5-tier musical stinger + neural spoken summary (<code>🔊 REPLAY SUMMARY</code>), crimson alert theme (<code>.verdict-is-low</code>), and full-width Clean/Technique/Time bars on scored runs. (Victory-pose bonus capture temporarily hidden: pose panel auto-hides, no bonus applies.)</td></tr>
-        <tr><td>9–10</td><td>Swipe deck (5/day, missed repeat, subtle logo banner) · Shift &amp; Daily Deck Leaderboards</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>30 trilingual brand-neutral cards with widescreen SVG dioramas, right/wrong game-show SFX, subtle <code>YOUR LOGO HERE</code> sponsor logo lockup, and dual-mode <strong>Shift Challenge + Daily Deck Leaderboard</strong> (<code>⚡ SHIFT CHALLENGE</code> / <code>🃏 DAILY DECK</code>).</td></tr>
-        <tr><td>11–15</td><td>Admin: Pledge · Sites &amp; QR print · Crew &amp; squads · Training gaps · One-tap packs</td><td><span class="verdict v-hidden">HIDDEN-FOR-HACKATHON</span></td><td>Code kept post-hackathon; UI hidden for the hackathon and not judged. Pledge-gated site registry, printable V2 QR stickers, squad switcher, training gaps, and 5-day pack assignment remain in code only.</td></tr>
-        <tr><td>Rules</td><td>Auto-play voice intro · Continuous 6–8s coaching · Mexican Spanish (<code>es_MX</code>) · Offline rescore</td><td><span class="verdict v-ready">SUPPORTED</span></td><td>Trilingual <code>welcome-intro.mp3</code> (including Daily Deck overview) auto-plays in <code>🔊 FULL</code> mode; timer loops the user time-trial track and deck loops the user daily-deck track (other screens silent); one unified EN voice (Kokoro-82M <code>af_heart</code>, single pitch/EQ/loudness chain, 24 kHz) across all 235 EN clips; 247 Spanish clips in authentic Mexican Spanish (<code>es_MX-claude-high.onnx</code>); <code>prizeEligible</code> requires registered site + system spot + real capture.</td></tr>
-      </table>
-    </div>
-  </section>
-
-  <div class="two-col-sections">
-    <section class="card">
-      <h2>Not another image analyzer</h2>
-      <p>A one-shot classifier would fail the gate. CleanQuest is a closed loop, and every link is in the build:</p>
-      <div class="diagram-scroll" role="img" aria-label="Closed loop: Play, Verify, Celebrate, Record, Train — every run feeds the record">
-        <svg class="diagram" viewBox="0 0 560 168" role="presentation">
-          <g>
-            <rect class="node" x="2" y="14" width="98" height="58" rx="10" />
-            <text x="51" y="38" text-anchor="middle" font-size="13" font-weight="700">PLAY</text>
-            <text class="dim" x="51" y="56" text-anchor="middle" font-size="11">check-in</text>
-            <rect class="node" x="116" y="14" width="98" height="58" rx="10" />
-            <text x="165" y="38" text-anchor="middle" font-size="13" font-weight="700">VERIFY</text>
-            <text class="dim" x="165" y="56" text-anchor="middle" font-size="11">scorecard</text>
-            <rect class="node" x="230" y="14" width="98" height="58" rx="10" />
-            <text x="279" y="38" text-anchor="middle" font-size="13" font-weight="700">CELEBRATE</text>
-            <text class="dim" x="279" y="56" text-anchor="middle" font-size="11">5-tier audio</text>
-            <rect class="node" x="344" y="14" width="98" height="58" rx="10" />
-            <text x="393" y="38" text-anchor="middle" font-size="13" font-weight="700">RECORD</text>
-            <text class="dim" x="393" y="56" text-anchor="middle" font-size="11">log</text>
-            <rect class="node" x="458" y="14" width="98" height="58" rx="10" />
-            <text x="507" y="38" text-anchor="middle" font-size="13" font-weight="700">TRAIN</text>
-            <text class="dim" x="507" y="56" text-anchor="middle" font-size="11">deck</text>
-            <path class="edge" d="M100 43 h16 M214 43 h16 M328 43 h16 M442 43 h16" />
-            <path class="edge" d="M507 72 v28 H51 v-28" />
-            <text class="dim" x="279" y="150" text-anchor="middle" font-size="12">every run feeds the record — nobody can edit a score</text>
-          </g>
-        </svg>
-      </div>
-      <ul>
-        <li><strong>Play</strong> — check in at a registered site from dropdowns, system-assigned spot, frame guide, in-app capture only.</li>
-        <li><strong>Verify</strong> — three-bar scorecard (Clean 50 / Technique 25 / Time 25), per-surface verdicts with confidence, SAM overlays, provenance line naming the model.</li>
-        <li><strong>Celebrate</strong> — 5-tier musical stinger + chained spoken score &amp; reaction summary. No person anywhere can edit a score — enforced in code, not policy.</li>
-        <li><strong>Record</strong> — geofenced, exportable inspection log with one-tap backup (JSON) + spreadsheet (CSV) export.</li>
-        <li><strong>Train</strong> — 30-card trilingual swipe deck with missed-topic repeat and 13-week consistency meter.</li>
-      </ul>
-      <p>Say it on stage: <em>"The system scores, nobody edits — every run goes straight into a verified, exportable record."</em></p>
-    </section>
-
-    <section class="card">
-      <h2>Live demo script (2 runs, ~3 minutes)</h2>
-      <div class="diagram-scroll" role="img" aria-label="Demo timeline: 10-second Judge Demo, live run, spectator projected throughout, backup ready">
-        <svg class="diagram" viewBox="0 0 560 148" role="presentation">
-          <g>
-            <path class="edge" d="M40 52 h480" />
-            <circle class="node" cx="40" cy="52" r="17" />
-            <text x="40" y="57" text-anchor="middle" font-size="13" font-weight="700">1</text>
-            <text x="40" y="86" text-anchor="middle" font-size="12" font-weight="700">Judge Demo</text>
-            <text class="dim" x="40" y="102" text-anchor="middle" font-size="11">10 seconds</text>
-            <text class="dim" x="40" y="116" text-anchor="middle" font-size="11">sample pair</text>
-            <circle class="node" cx="200" cy="52" r="17" />
-            <text x="200" y="57" text-anchor="middle" font-size="13" font-weight="700">2</text>
-            <text x="200" y="86" text-anchor="middle" font-size="12" font-weight="700">Live run</text>
-            <text class="dim" x="200" y="102" text-anchor="middle" font-size="11">real room</text>
-            <text class="dim" x="200" y="116" text-anchor="middle" font-size="11">scorecard</text>
-            <circle class="node" cx="360" cy="52" r="17" />
-            <text x="360" y="57" text-anchor="middle" font-size="13" font-weight="700">3</text>
-            <text x="360" y="86" text-anchor="middle" font-size="12" font-weight="700">Spectator live</text>
-            <text class="dim" x="360" y="102" text-anchor="middle" font-size="11">projected</text>
-            <text class="dim" x="360" y="116" text-anchor="middle" font-size="11">throughout</text>
-            <circle class="node" cx="520" cy="52" r="17" />
-            <text x="520" y="57" text-anchor="middle" font-size="13" font-weight="700">4</text>
-            <text x="520" y="86" text-anchor="middle" font-size="12" font-weight="700">Backup ready</text>
-            <text class="dim" x="520" y="102" text-anchor="middle" font-size="11">30s recording</text>
-            <text class="dim" x="520" y="116" text-anchor="middle" font-size="11">keys pre-set</text>
-            <text class="dim" x="280" y="140" text-anchor="middle" font-size="11">say the consent + no-edit lines on stage</text>
-          </g>
-        </svg>
-      </div>
-      <ol>
-        <li><strong>1. Judge Demo (10s):</strong> Open Instructions → tap <em>Judge Demo</em> to see the animated <strong>Squeegee/Bubble AI Loader + Sponsored Ad Slot</strong>, <code>0% → 93%</code> count-up, <strong>🏆 S-Rank sample reveal</strong>, and 50/25/25 scorecard.</li>
-        <li><strong>2. NOT SCORED layman reasons:</strong> Run a wrong-room shot to see <strong>NOT SCORED</strong> + a plain reason (<code>WRONG AREA</code>, <code>PERSON IN PHOTO</code>, <code>TOO DARK</code>…) + one-sentence explanation and a retake CTA — never <code>REDO</code> jargon. (Victory-pose bonus capture is temporarily hidden; no pose step in the demo.)</li>
-        <li><strong>3. Live Room Run (60s):</strong> Pick station from dropdowns, tap <em>Start</em> (locked clock + 6–8s host voice), and tap <em>Complete Challenge</em> (1-tap After auto-capture + live <code>Muse Spark Open</code> scorecard).</li>
-        <li><strong>4. Zero Setup Needed:</strong> Cloud AI works out-of-the-box via our serverless <strong>Baseten → Fireworks AI</strong> proxy (tap <code>⚡ TEST &amp; LOG TELEMETRY</code> in Settings to inspect the live token audit log).</li>
-      </ol>
-    </section>
-  </div>
-
-  <section class="card">
-    <h2>How the AI works — providers &amp; numbered workflow</h2>
-    <p><strong>Lead:</strong> CleanQuest runs <strong>both on-device edge AI and cloud Meta Open Weights out of the box with zero user API keys required</strong> — routing cloud requests through a serverless <strong>Baseten Primary → Fireworks AI Failover</strong> proxy that cuts API calls by 50% and vision tokens by 56%.</p>
-
-    <div class="diagram-scroll" role="img" aria-label="Two-rung AI ladder: on-device perception plus zero-key serverless cloud verification">
-      <svg class="diagram" viewBox="0 0 560 252" role="presentation">
+    <h3>Closed-Loop Verification Thesis (Not a One-Shot Image Classifier)</h3>
+    <div class="diagram-scroll" role="img" aria-label="Closed loop: Play, Verify, Celebrate, Record, Train — every run feeds the record">
+      <svg class="diagram" viewBox="0 0 560 156" role="presentation">
         <g>
-          <rect class="lane" x="2" y="2" width="556" height="102" rx="12" />
-          <text class="accent" x="16" y="26" font-size="12" font-weight="700">RUNG 1 · ON-DEVICE EDGE AI — Google MediaPipe + trilingual neural speech</text>
-          <rect class="node" x="14" y="38" width="168" height="52" rx="10" />
-          <text x="98" y="60" text-anchor="middle" font-size="12" font-weight="700">EfficientDet-Lite0</text>
-          <text class="dim" x="98" y="78" text-anchor="middle" font-size="11">station &amp; object check</text>
-          <rect class="node" x="196" y="38" width="168" height="52" rx="10" />
-          <text x="280" y="60" text-anchor="middle" font-size="12" font-weight="700">9-Zone Luma / Edge</text>
-          <text class="dim" x="280" y="78" text-anchor="middle" font-size="11">cleanliness &amp; technique</text>
-          <rect class="node" x="378" y="38" width="168" height="52" rx="10" />
-          <text x="462" y="60" text-anchor="middle" font-size="12" font-weight="700">Pose Landmarker</text>
-          <text class="dim" x="462" y="78" text-anchor="middle" font-size="11">33-joint emote match</text>
-          <path class="edge" d="M280 104 v18" />
-          <text class="dim" x="292" y="120" font-size="11">zero-key serverless proxy (auto-runs out of the box)</text>
-          <rect class="lane" x="2" y="128" width="556" height="102" rx="12" />
-          <text class="accent" x="16" y="152" font-size="12" font-weight="700">RUNG 2 · ZERO-KEY CLOUD — Meta Muse Spark Open (Baseten → Fireworks)</text>
-          <rect class="node" x="14" y="164" width="124" height="52" rx="10" />
-          <text x="76" y="186" text-anchor="middle" font-size="12" font-weight="700">Muse Spark</text>
-          <text class="dim" x="76" y="204" text-anchor="middle" font-size="11">surface scorecard</text>
-          <rect class="node" x="150" y="164" width="124" height="52" rx="10" />
-          <text x="212" y="186" text-anchor="middle" font-size="12" font-weight="700">SAM 3.1 / box_2d</text>
-          <text class="dim" x="212" y="204" text-anchor="middle" font-size="11">surface overlays</text>
-          <rect class="node" x="286" y="164" width="124" height="52" rx="10" />
-          <text x="348" y="186" text-anchor="middle" font-size="12" font-weight="700">2-Wk AI Seasons</text>
-          <text class="dim" x="348" y="204" text-anchor="middle" font-size="11">0-tok cached deck</text>
-          <rect class="node" x="422" y="164" width="124" height="52" rx="10" />
-          <text x="484" y="186" text-anchor="middle" font-size="12" font-weight="700">Shift Briefing</text>
-          <text class="dim" x="484" y="204" text-anchor="middle" font-size="11">+ telemetry log</text>
-          <text class="dim" x="280" y="246" text-anchor="middle" font-size="11">works out-of-the-box · 50% fewer calls · every claim confidence-gated</text>
+          <rect class="node" x="2" y="14" width="98" height="58" rx="10" />
+          <text x="51" y="38" text-anchor="middle" font-size="13" font-weight="700">1 · PLAY</text>
+          <text class="dim" x="51" y="56" text-anchor="middle" font-size="11">station check-in</text>
+          <rect class="node" x="116" y="14" width="98" height="58" rx="10" />
+          <text x="165" y="38" text-anchor="middle" font-size="13" font-weight="700">2 · VERIFY</text>
+          <text class="dim" x="165" y="56" text-anchor="middle" font-size="11">50/25/25 + SAM</text>
+          <rect class="node" x="230" y="14" width="98" height="58" rx="10" />
+          <text x="279" y="38" text-anchor="middle" font-size="13" font-weight="700">3 · CELEBRATE</text>
+          <text class="dim" x="279" y="56" text-anchor="middle" font-size="11">5-tier audio</text>
+          <rect class="node" x="344" y="14" width="98" height="58" rx="10" />
+          <text x="393" y="38" text-anchor="middle" font-size="13" font-weight="700">4 · RECORD</text>
+          <text class="dim" x="393" y="56" text-anchor="middle" font-size="11">exportable log</text>
+          <rect class="node" x="458" y="14" width="98" height="58" rx="10" />
+          <text x="507" y="38" text-anchor="middle" font-size="13" font-weight="700">5 · TRAIN</text>
+          <text class="dim" x="507" y="56" text-anchor="middle" font-size="11">daily swipe deck</text>
+          <path class="edge" d="M100 43 h16 M214 43 h16 M328 43 h16 M442 43 h16" />
+          <path class="edge" d="M507 72 v26 H51 v-26" />
+          <text class="dim" x="279" y="142" text-anchor="middle" font-size="12">Strict guardrails: visible cleanliness &amp; technique only · never claims sanitation · benchmark time is never a certification · nobody can edit a score</text>
+        </g>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===================================================================== -->
+  <!-- SECTION 2: DEEP TECHNICAL ARCHITECTURE, MODELS & PROVIDERS            -->
+  <!-- ===================================================================== -->
+  <section class="card">
+    <h2>2 · Deep Technical Architecture — Models, Providers, Pipeline &amp; Audio</h2>
+    <p><strong>Architectural Principle:</strong> CleanQuest is a zero-build, offline-capable Vanilla JS application (<code>index.html</code>, <code>app.js</code>, <code>styles.css</code>, <code>deck.js</code>) that combines <strong>Rung 1 on-device edge perception</strong> (instant, zero network required) with <strong>Rung 2 cloud verification powered exclusively by Meta <code>Muse Spark</code> and <code>SAM 3.1</code> models</strong>.</p>
+
+    <div class="diagram-scroll" role="img" aria-label="Two-rung AI architecture: on-device perception plus serverless Meta Muse Spark Open cloud">
+      <svg class="diagram" viewBox="0 0 560 248" role="presentation">
+        <g>
+          <rect class="lane" x="2" y="2" width="556" height="100" rx="12" />
+          <text class="accent" x="16" y="24" font-size="12" font-weight="700">RUNG 1 · ON-DEVICE EDGE PERCEPTION &amp; AUDIO (0 Keys · Works Offline)</text>
+          <rect class="node" x="14" y="36" width="168" height="52" rx="10" />
+          <text x="98" y="58" text-anchor="middle" font-size="12" font-weight="700">EfficientDet-Lite0</text>
+          <text class="dim" x="98" y="76" text-anchor="middle" font-size="11">station gate &amp; object count</text>
+          <rect class="node" x="196" y="36" width="168" height="52" rx="10" />
+          <text x="280" y="58" text-anchor="middle" font-size="12" font-weight="700">96×72 Edge + 3×3 Luma</text>
+          <text class="dim" x="280" y="76" text-anchor="middle" font-size="11">zone change &amp; wipe order</text>
+          <rect class="node" x="378" y="36" width="168" height="52" rx="10" />
+          <text x="462" y="58" text-anchor="middle" font-size="12" font-weight="700">715 Neural MP3s + PCM</text>
+          <text class="dim" x="462" y="76" text-anchor="middle" font-size="11">Kokoro / Piper + gapless loop</text>
+          <path class="edge" d="M280 102 v18" />
+          <text class="dim" x="292" y="116" font-size="11">512px JPEG pair (-56% tokens) → serverless proxy or direct Meta API</text>
+          <rect class="lane" x="2" y="124" width="556" height="102" rx="12" />
+          <text class="accent" x="16" y="148" font-size="12" font-weight="700">RUNG 2 · META CLOUD AI — Muse Spark Open (Baseten → Fireworks) &amp; Direct Meta API</text>
+          <rect class="node" x="14" y="160" width="124" height="52" rx="10" />
+          <text x="76" y="182" text-anchor="middle" font-size="12" font-weight="700">Muse Spark Open</text>
+          <text class="dim" x="76" y="200" text-anchor="middle" font-size="11">Baseten → Fireworks</text>
+          <rect class="node" x="150" y="160" width="124" height="52" rx="10" />
+          <text x="212" y="182" text-anchor="middle" font-size="12" font-weight="700">SAM 3.1 / box_2d</text>
+          <text class="dim" x="212" y="200" text-anchor="middle" font-size="11">surface segmentation</text>
+          <rect class="node" x="286" y="160" width="124" height="52" rx="10" />
+          <text x="348" y="182" text-anchor="middle" font-size="12" font-weight="700">14-Day AI Seasons</text>
+          <text class="dim" x="348" y="200" text-anchor="middle" font-size="11">2-tier 0-token cache</text>
+          <rect class="node" x="422" y="160" width="124" height="52" rx="10" />
+          <text x="484" y="182" text-anchor="middle" font-size="12" font-weight="700">Muse Transcribe</text>
+          <text class="dim" x="484" y="200" text-anchor="middle" font-size="11">16 kHz WAV ASR</text>
+          <text class="dim" x="280" y="242" text-anchor="middle" font-size="11">Every cloud model is Meta (Muse Spark / SAM / Muse ASR) · every run logged to the scrollable in-app Provider Run Log</text>
         </g>
       </svg>
     </div>
 
-    <h3>1 · Which Company Provides Which AI Tech</h3>
-    <ol>
-      <li><strong>Meta (AI Models &amp; Open Weights):</strong> Provides <code>Muse Spark Open</code>, <code>Muse Spark 1.3</code>, <code>SAM 3.1</code>, and <code>Muse Voice Transcribe 1.0</code> for per-surface grading, segmentation boxes, bi-weekly training cards, shift briefings, and voice-note transcription.</li>
-      <li><strong>Baseten (Primary Open-Weights Cloud):</strong> Hosts <code>meta-models/muse-spark-open</code> (<code>2M TPM</code>) as the default zero-key primary inference engine.</li>
-      <li><strong>Fireworks AI (Automatic Failover &amp; Benchmark Cloud):</strong> Hosts <code>accounts/fireworks/models/muse-spark-open</code> as instant automatic backup failover and parallel telemetry benchmark.</li>
-      <li><strong>Google MediaPipe (On-Device Edge Vision):</strong> Provides <code>EfficientDet-Lite0</code> (80-class object detector) and <code>Pose Landmarker Lite</code> (33-joint 3D skeleton tracker) running 100% in-browser with zero keys.</li>
-      <li><strong>Neural speech (one voice per language):</strong> Provides 715 pre-rendered trilingual voice clips — 235 <code>EN</code> (Kokoro-82M <code>af_heart</code>), 247 Mexican Spanish <code>es_MX</code>, 233 <code>PL</code> — for zero-latency host hype, all 24 kHz mono with <code>?v=FEATURE_MUSIC.version</code> cache-busting.</li>
-    </ol>
+    <h3>1 · Complete Models &amp; Providers Matrix</h3>
+    <div class="table-scroll">
+      <table>
+        <tr>
+          <th>Layer &amp; Provider</th>
+          <th>Exact Model ID / Endpoint</th>
+          <th>Where It Runs</th>
+          <th>How CleanQuest Uses It &amp; Key Optimizations</th>
+        </tr>
+        <tr>
+          <td><strong>Meta (Open Weights via Baseten Primary)</strong></td>
+          <td><code>meta-models/muse-spark-open-1026</code><br/><code>meta-models/muse-spark-open</code><br/><code>inference.baseten.co/v1/chat/completions</code></td>
+          <td>Serverless Cloud Proxy (Default, 0 User Keys) or Direct Baseten Key</td>
+          <td><strong>Primary multimodal scorecard &amp; season generator:</strong> Receives the downscaled <code>512px</code> JPEG Before/After pair + strict JSON schema prompt (<code>CLOUD_SCORING_PROMPT</code>). Grades <code>counter</code>, <code>glass</code>, <code>floor</code>, and <code>fixture</code> (<code>0–100</code>, confidence floor <code>0.6</code>), returns normalized <code>box_2d: [ymin, xmin, ymax, xmax]</code> surface polygons and a celebratory <code>hype_line</code>, and generates 14-day bi-weekly trilingual training cards.</td>
+        </tr>
+        <tr>
+          <td><strong>Meta (Open Weights via Fireworks AI Failover)</strong></td>
+          <td><code>accounts/fireworks/models/muse-spark-open</code><br/>(via serverless partner proxy)</td>
+          <td>Serverless Cloud Proxy (Automatic Failover &amp; Dual Benchmark)</td>
+          <td><strong>High-availability failover &amp; benchmark:</strong> In default <code>auto</code> mode, the proxy calls Baseten first and fails over to Fireworks AI only on timeout/5xx — cutting partner API calls by <strong>50%</strong>. In <code>dual</code> mode (<code>⚡ TEST &amp; LOG TELEMETRY</code>), both providers run in parallel and log token telemetry (`prompt_tokens`, `completion_tokens`, `total_tokens`) to the in-app <strong>Provider Run Log</strong>.</td>
+        </tr>
+        <tr>
+          <td><strong>Meta Model API (Direct Cloud)</strong></td>
+          <td><code>muse-spark-1.3</code><br/><code>https://api.meta.ai/v1/chat/completions</code></td>
+          <td>Direct Browser → Meta API (Optional User Key)</td>
+          <td><strong>Direct frontier scorecard verification:</strong> Uses the <code>developer</code> role prompt to grade per-surface cleanliness and return structured JSON scorecards when a direct Meta Model API key is configured.</td>
+        </tr>
+        <tr>
+          <td><strong>Meta Segment Anything (SAM 3.1)</strong></td>
+          <td><code>sam-3.1</code><br/><code>https://api.meta.ai/v1/responses</code></td>
+          <td>Direct Browser → Meta API (with <code>box_2d</code> fallback)</td>
+          <td><strong>Surface segmentation overlays (<code>getSamOverlays</code>):</strong> Prompts <code>sam-3.1</code> with <code>counter, glass, floor, fixture</code> on both Before and After frames to draw glowing color-coded surface outlines on the AFTER photo tile and full-screen comparison lightbox. When no direct Meta key is set, `getSamOverlays` seamlessly falls back to the <code>box_2d</code> coordinates returned by <code>Muse Spark Open</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Meta Voice ASR</strong></td>
+          <td><code>muse-voice-transcribe-1.0</code><br/><code>https://api.meta.ai/v1/asr/transcribe</code></td>
+          <td>Direct Browser → Meta API (Multipart WAV)</td>
+          <td><strong>Spoken inspection &amp; dispute notes (<code>transcribeVoiceNote</code>):</strong> Captures microphone audio via <code>MediaRecorder</code>, resamples in-browser via <code>OfflineAudioContext</code> to <strong>16 kHz mono PCM16 WAV</strong> (<code>voiceBlobToWav</code>), and sends a <code>PUSH_TO_TALK</code> multipart request. If offline or unkeyed, the raw audio recording stays attached locally so worker notes are never lost.</td>
+        </tr>
+        <tr>
+          <td><strong>Google MediaPipe (On-Device Edge Vision)</strong></td>
+          <td><code>EfficientDet-Lite0</code> (INT8 TFLite)<br/><code>@mediapipe/tasks-vision@0.10.14</code></td>
+          <td>100% On-Device in Browser (WebAssembly)</td>
+          <td><strong>Station mismatch gate &amp; object clearance (<code>verifyStationEnvironment</code>):</strong> Runs locally on Before/After frames (`scoreThreshold: 0.32`, `maxResults: 12`). Rejects wrong-room photos (e.g., TV/couch/bed when <em>Sink &amp; counter</em> is selected) and webcam selfies (`person >= 25%` of frame) before any cloud call, and counts cleared vs. remaining surface items (`cup`, `bottle`, `bowl`, etc.).</td>
+        </tr>
+        <tr>
+          <td><strong>On-Device Classical Vision Engine</strong></td>
+          <td><code>compareFrames</code> (`96×72`) +<br/><code>analyzeSurfaceZones</code> (`3×3` grid)</td>
+          <td>100% On-Device in Browser (Canvas 2D)</td>
+          <td><strong>Luminance, scene alignment &amp; 9-zone technique grading:</strong> Computes mean luminance (`avgLuminance`), structural Sobel edge correlation (`sceneMatch`), changed-pixel ratio, and per-zone residual clutter across a <code>3×3</code> grid to grade top-to-bottom wipe order and identify untouched zones (`top left`, `middle center`, etc.).</td>
+        </tr>
+        <tr>
+          <td><strong>Offline Neural TTS &amp; Gapless WebAudio Engine</strong></td>
+          <td><strong>Kokoro-82M</strong> (<code>af_heart</code> EN)<br/><strong>Piper VITS</strong> (<code>es_MX-claude-high</code> ES, <code>pl_PL-gosia-medium</code> PL)</td>
+          <td>Pre-rendered Offline → 715 Static 24 kHz MP3s + WebAudio PCM</td>
+          <td><strong>Zero-latency trilingual voice &amp; gapless music:</strong> All 715 voice clips were synthesized offline (never calling a non-Meta cloud TTS at runtime). Every EN clip shares one <code>af_heart</code> voice and broadcast mastering chain (`asetrate=24000*1.03`, 3.2 kHz EQ, `-18 LUFS`). Per-screen music (`time-trial.mp3` on Timer, `daily-deck.mp3` on Deck) decodes once via `decodeAudioData` into a sample-accurate `AudioBufferSourceNode` loop (`loopStart = 0`, `loopEnd = buffer.duration`) with smooth `GainNode.setTargetAtTime` ducking (`0.5 → 0.12`) whenever the host speaks.</td>
+        </tr>
+      </table>
+    </div>
 
-    <h3>2 · How CleanQuest Uses the AI (6 Numbered Steps)</h3>
+    <h3>2 · Deep Dive: The 6-Stage Verification &amp; Scoring Pipeline</h3>
     <ol>
-      <li><strong>Station Mismatch Gate (Google MediaPipe <code>EfficientDet-Lite0</code>):</strong> Checks visible objects before scoring and rejects wrong-room or selfie photos as <strong>NOT SCORED</strong> with a layman reason (<code>WRONG AREA</code> / <code>PERSON IN PHOTO</code>).</li>
-      <li><strong>Per-Surface Vision Scorecard (Meta <code>Muse Spark</code> on Baseten → Fireworks Failover):</strong> Grades <code>counter</code>, <code>glass</code>, <code>floor</code>, and <code>fixture</code> (<code>0–100%</code>, <code>0.6</code> confidence floor) and draws <strong><code>SAM 3.1 / box_2d</code></strong> highlight boxes (<code>512px</code> JPEG cuts tokens by <code>~56%</code>).</li>
-      <li><strong>50/25/25 Weighted Score Math (On-Device + Cloud):</strong> Combines <strong>Visible Cleanliness (50%)</strong>, <strong>Top-to-Bottom Technique (25% via 3×3 luminance grid)</strong>, and <strong>Benchmark Time (25% vs the 1:30 benchmark)</strong>. (Chemical dwell discipline is taught in training tips; the timed +15s dwell-credit button is code-kept post-hackathon.)</li>
-      <li><strong>Victory Pose Emote Scorer (Google MediaPipe <code>Pose Landmarker Lite</code>, code-kept, UI hidden):</strong> Pose capture and the <code>+5%</code> bonus path are temporarily hidden (pose panel auto-hides, no bonus applies); the 33-joint tracking code remains for post-hackathon.</li>
-      <li><strong>Automated 14-Day Bi-Weekly Training Seasons (Meta <code>Muse Spark Open</code>):</strong> Every 2 weeks, 1 batched call generates a localized Season Theme + 3 trilingual (<code>EN/ES/PL</code>) cards, cached on server + phone so repeat plays cost <strong><code>0</code> tokens</strong>.</li>
-      <li><strong>Cached AI Shift Note (Meta <code>Muse Spark Open</code>, code-kept):</strong> Summarizes recent inspection logs into a 2-sentence coaching note and 5-day training pack pick (fingerprint-cached for <strong><code>0-token</code> repeat views</strong>). Supervisor-pane UI is hidden for the hackathon and not judged; code kept post-hackathon.</li>
+      <li><strong>Stage 1 — In-App Capture &amp; Live 9-Zone Motion Sampling:</strong> Photos can only be captured live through <code>MediaDevices.getUserMedia</code> (`assertInAppCaptureOnly` verifies no `<input type="file">` exists). While the locked 1:30 countdown runs, `sampleLiveRunActivity` samples a `36×27` luma grid every tick to track active wiping across the 9 zones and captures a `320×240` mid-run progress frame at the 45-second mark.</li>
+      <li><strong>Stage 2 — 7-Reason Layman Diagnostic Gate (<code>NOT SCORED</code>):</strong> Before awarding any score, `calculateLocalScore` runs a strict pre-flight gate. If a capture is invalid or unchanged, `scorable` is set to `false` (or `noVisibleChange: true`), cloud calls are skipped to save tokens, and the Results screen switches from `TOTAL SCORE` to **`NOT SCORED`** with one of 7 plain-language headlines (`WRONG AREA`, `PERSON IN PHOTO`, `TOO DARK`, `TOO MUCH GLARE`, `CAMERA MOVED`, `TOO FAR AWAY`, `NO CHANGE`), a one-sentence layman explanation of how to fix it, and a direct **`TAKE NEW PHOTOS`** or **`CLEAN &amp; TAKE NEW PHOTO`** button (while hiding the 3 score bars, rank badge, and dispute panel).</li>
+      <li><strong>Stage 3 — 50 / 25 / 25 Weighted Score Formula (<code>computeWeightedRunScore</code>):</strong>
+        <ul>
+          <li><strong>Visible Cleanliness (50% weight):</strong> Combines 9-zone surface improvement (`surfaceClearSignal`), zone coverage (`improvedZones / 9`), and object clearance (`clearedCount / beforeCount`), reconciled with the cloud `Muse Spark Open` per-surface scorecard when verified.</li>
+          <li><strong>Technique (25% weight):</strong> Measures top-to-bottom wipe order (`topOrderScore` across the top row vs. bottom row of the `3×3` grid) and even zone coverage (`zoneUniformityScore`).</li>
+          <li><strong>Time vs. Benchmark (25% weight):</strong> Awards `100%` within the 1:30 benchmark (`85–100%` of standard time), with a smooth linear deduction only when overtime.</li>
+        </ul>
+      </li>
+      <li><strong>Stage 4 — Hushed-Directive Gate &amp; 5-Tier Audio Choreography (<code>announceGameVerdict</code>):</strong> If a run is unscorable or carries a surface directive (e.g., an untouched zone or remaining item), the `hushed` gate suppresses rank badges, confetti, and celebratory voice lines so the UI never praises an incomplete clean. On clean scorable runs, CleanQuest rolls the score counter (`0% → N%`), fires a 5-tier WebAudio musical stinger (`S-Rank ≥90%`, `A-Rank ≥80%`, `B-Rank ≥70%`, `C-Rank`, `D-Rank`), speaks the exact percentage via crossfaded `num-*` + `glue-00` clips, and chains the matching host reaction clip.</li>
+      <li><strong>Stage 5 — Downscaled Cloud Verification &amp; Surface Overlays (<code>getVerifiedScore</code> + <code>getSamOverlays</code>):</strong> Both Before and After captures are downscaled on-device to `512px` max edge JPEG (`0.72` quality), cutting base64 payload size and vision token cost by **~56%**. Returned `box_2d` coordinates (or `sam-3.1` masks) are rendered onto both the AFTER evidence card and the interactive Side-by-Side / Shadow comparison lightbox.</li>
+      <li><strong>Stage 6 — Two-Tier Zero-Token Bi-Weekly Season Engine (<code>generateLiveAiBonusCard</code>):</strong> Every 14-day window (`Math.floor(Date.now() / (14 * 86400000))`), opening the Daily Deck checks Tier 1 (`localStorage`) and Tier 2 (serverless `ScriptProperties` shared cache) before calling `Muse Spark Open`. One batched prompt generates a localized Season Theme + 3 trilingual (`EN/ES/PL`) cards, and every subsequent play across the 2-week season costs **0 tokens**.</li>
     </ol>
   </section>
 
+  <!-- ===================================================================== -->
+  <!-- SECTION 3: COMPLETE SCREEN-BY-SCREEN FEATURE TOUR                     -->
+  <!-- ===================================================================== -->
   <section class="card">
-    <h2>Feature tour — mobile &amp; desktop screen-by-screen breakdown</h2>
-    <p><strong>Lead:</strong> Every section below shows the <strong>Mobile (<code>390×844</code>)</strong> and <strong>Desktop (<code>1440×900</code>)</strong> views side-by-side and breaks down <strong>1. On-Screen Functionality</strong>, <strong>2. Value Prop</strong>, and <strong>3. Tech &amp; How It's Used</strong>.</p>
+    <h2>3 · Complete Screen-by-Screen Feature Tour (Mobile 390×844 &amp; Desktop 1440×900)</h2>
+    <p><strong>Live Parity:</strong> Every screenshot below was captured directly from the current live build at <strong>Mobile (<code>390×844</code>)</strong> and <strong>Desktop (<code>1440×900</code>)</strong> viewports.</p>
 
-    <h3>1 · Onboarding, Consent &amp; Trilingual Hub (MVP Screens 1–4)</h3>
+    <h3>Part A · Trilingual Onboarding, Verbatim Consent Gate &amp; Judge Demo</h3>
     <div class="tour-grid">
-      <div class="shot">
-        <div class="shot-pair">
-          <figure><img src="shots/01-welcome.png" alt="Mobile Welcome screen" /><figcaption>Mobile (390×844)</figcaption></figure>
+      <div class="shot full-span">
+        <div class="shot-pair three-up">
+          <figure><img src="shots/01-welcome.png" alt="Mobile Welcome screen in English" /><figcaption>Mobile — English (390×844)</figcaption></figure>
+          <figure><img src="shots/03-welcome-es.png" alt="Mobile Welcome screen in Mexican Spanish" /><figcaption>Mobile — Español (390×844)</figcaption></figure>
           <figure><img src="shots/15-desktop-welcome.png" alt="Desktop Welcome screen" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>Welcome Hub &amp; Instant Trilingual Switcher (Screens 1 &amp; 4)</h4>
+          <h4>1 · Welcome Hub &amp; 1-Tap Trilingual Switcher (<code>EN / ES / PL</code>)</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> 1-tap <code>EN / ES / PL</code> switcher, <code>ACCEPT THE CHALLENGE</code>, <code>DAILY DECK</code>, <code>🧾 RECORDS</code> inspection-log export, and accurate benchmark disclaimer. (Passport/crew/supervisor panes are code-kept and hidden for the hackathon — not on screen, not judged.)</li>
-            <li><strong>Value Prop:</strong> Non-technical cleaners start in their native language in 1 tap with zero menus or typing.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> Trilingual neural voice (<strong>Kokoro-82M / Piper VITS</strong>) auto-plays the spoken welcome intro on first gesture; the intro screen itself is silent until you start.</li>
+            <li><strong>On-Screen Functionality:</strong> Instant 1-tap language selector (<code>🌐 ENGLISH</code>, <code>🌐 ESPAÑOL</code>, <code>🌐 POLSKI</code>), primary <code>ACCEPT THE CHALLENGE</code> CTA, <code>DAILY DECK</code> entry, and clear benchmark disclaimer (<em>"AI-verified visible cleanliness &amp; technique benchmark · never a certification · recognition &amp; training only"</em>).</li>
+            <li><strong>Value Prop:</strong> Non-technical cleaners start in their native language in a single tap with zero typing, accounts, or menus.</li>
+            <li><strong>Tech Under the Hood:</strong> Persists language choice in <code>localStorage</code>, re-renders all <code>[data-i18n]</code> DOM nodes in place, and plays the matching pre-rendered 24 kHz neural welcome intro (<code>assets/audio/{en,es,pl}/welcome-intro.mp3</code>) on first gesture while keeping the welcome background silent.</li>
           </ol>
-          <span class="verdict v-ready">READY · MVP 1 &amp; 4</span>
+          <span class="verdict v-ready">LIVE · TRILINGUAL HUB</span>
         </div>
       </div>
 
       <div class="shot">
         <div class="shot-pair">
-          <figure><img src="shots/02-consent.png" alt="Mobile Consent and PIN screen" /><figcaption>Mobile (390×844)</figcaption></figure>
-          <figure><img src="shots/21-desktop-consent.png" alt="Desktop Consent and PIN screen" /><figcaption>Desktop (1440×900)</figcaption></figure>
+          <figure><img src="shots/02-consent.png" alt="Mobile First-Run Consent Gate" /><figcaption>Mobile (390×844)</figcaption></figure>
+          <figure><img src="shots/21-desktop-consent.png" alt="Desktop First-Run Consent Gate" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>First-Run Consent Read-Aloud &amp; 44px Glove PIN Pad (Screens 2–3)</h4>
+          <h4>2 · First-Run Consent Gate &amp; Verbatim Neural Read-Aloud</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> Plain-language consent gate with <code>🔊 READ ALOUD</code> + 44px on-screen glove numpad (<code>0–9</code>, <code>⌫</code>, <code>⚡ DEMO PASS</code>).</li>
-            <li><strong>Value Prop:</strong> Guarantees worker trust (no facial ID, never for discipline) and lets gloved cleaners sign in without an OS keyboard.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> Local PIN hashing in <code>localStorage</code> + pre-rendered neural <code>consent-00.mp3</code> read-aloud.</li>
+            <li><strong>On-Screen Functionality:</strong> Blocks first-time camera entry until the cleaner checks <em>"I understand and agree"</em> and taps <code>CONFIRM</code>, with a prominent <code>🔊 READ ALOUD</code> button.</li>
+            <li><strong>Value Prop:</strong> Establishes explicit worker trust upfront: work-surface photos only, faces are never identified (no facial recognition or biometrics), location is recorded only if shared, and scores are never used for discipline.</li>
+            <li><strong>Tech Under the Hood:</strong> Stores language-scoped consent in <code>cleanquest.consent.v1</code> (switching languages re-presents consent in that language) and plays <code>assets/audio/{en,es,pl}/consent-00.mp3</code> rendered verbatim from the exact on-screen <code>consentBody</code> string.</li>
           </ol>
-          <span class="verdict v-ready">READY · MVP 2 &amp; 3</span>
+          <span class="verdict v-ready">LIVE · WORKER TRUST GATE</span>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="shot-pair">
+          <figure><img src="shots/04-instructions.png" alt="Mobile Instructions and Judge Demo button" /><figcaption>Mobile (390×844)</figcaption></figure>
+          <figure><img src="shots/22-desktop-instructions.png" alt="Desktop Instructions and Judge Demo button" /><figcaption>Desktop (1440×900)</figcaption></figure>
+        </div>
+        <div class="desc">
+          <h4>3 · 3-Step Challenge Briefing &amp; 1-Tap Judge Demo</h4>
+          <ol>
+            <li><strong>On-Screen Functionality:</strong> Concise 3-step visual summary (<code>01 Get ready → 02 Clean → 03 Get scored</code>), <code>1:30</code> prototype benchmark card, primary <code>CONTINUE</code> CTA, and 1-tap <code>JUDGE DEMO · SAMPLE SCORE</code>.</li>
+            <li><strong>Value Prop:</strong> Lets first-time cleaners grasp the rules in 5 seconds and lets evaluators experience the full AI loader + 93% S-Rank reveal in one tap without needing a physical sink.</li>
+            <li><strong>Tech Under the Hood:</strong> Auto-collapses on subsequent runs once <code>cleanquest.instructionsSeen</code> is set; <code>runJudgeDemo()</code> routes sample Before/After illustrations through the animated loader and 5-tier audio fanfare while marking the run <code>judgeDemo: true</code> so it never pollutes the competitive leaderboard.</li>
+          </ol>
+          <span class="verdict v-ready">LIVE · 10-SECOND DEMO PATH</span>
         </div>
       </div>
     </div>
 
-    <h3>2 · Station Check-In, Locked Run Timer &amp; AI Sponsor Loader (MVP Screens 5–8)</h3>
+    <h3>Part B · Commercial Station Check-In, Locked Timer, AI Loader &amp; Scorecards</h3>
     <div class="tour-grid">
       <div class="shot">
         <div class="shot-pair">
-          <figure><img src="shots/05-camera.png" alt="Mobile Camera Check-In" /><figcaption>Mobile (390×844)</figcaption></figure>
+          <figure><img src="shots/05-camera.png" alt="Mobile Camera Check-In and Explainer" /><figcaption>Mobile (390×844)</figcaption></figure>
           <figure><img src="shots/17-desktop-camera.png" alt="Desktop Camera Check-In" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>Commercial Station Check-In (Screen 5)</h4>
+          <h4>4 · Commercial Station Check-In &amp; Voice Explainer</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> Registered site picker across <strong>10 Building Sectors, 13 Areas &amp; 28 Spots</strong> (dropdowns, no typing), camera explainer with neural voiceover, alignment guide, and <code>CAPTURE BEFORE</code>. (QR sticker scanning is code-kept post-hackathon; no QR button is shown for the hackathon.)</li>
-            <li><strong>Value Prop:</strong> Binds every run to a real commercial station and prevents fake gallery uploads.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> <code>MediaDevices.getUserMedia</code> in-app capture only. The Version-2 QR payload parser (<code>CQ-QR-&lt;LEAGUE&gt;-&lt;AREA&gt;-&lt;SPOT&gt;</code>) is code-kept post-hackathon.</li>
+            <li><strong>On-Screen Functionality:</strong> First-visit <em>"How the Challenge Works"</em> modal with <code>📷 ALLOW CAMERA &amp; START</code>, live camera viewfinder with framing reticle, and dropdown selectors for <strong>Site, Building (10 sectors), Area (13 templates), Spot (28 stations), and optional Site Size</strong>.</li>
+            <li><strong>Value Prop:</strong> Adapts scoring weights to the exact commercial surface being cleaned (e.g., <em>Sink &amp; counter</em> vs. <em>Mirror, glass &amp; handles</em>) with zero typing.</li>
+            <li><strong>Tech Under the Hood:</strong> Plays pre-rendered <code>camera-explain.mp3</code> on first visit, binds <code>MediaDevices.getUserMedia</code> (`environment` facing camera preferred), and loads station-specific scoring profiles (`SPOT_LOGIC_PROFILES`).</li>
           </ol>
-          <span class="verdict v-ready">READY · MVP 5</span>
+          <span class="verdict v-ready">LIVE · 10 SECTORS · 28 SPOTS</span>
         </div>
       </div>
 
       <div class="shot">
         <div class="shot-pair">
-          <figure><img src="shots/06-timer.png" alt="Mobile Locked Timer" /><figcaption>Mobile (390×844)</figcaption></figure>
-          <figure><img src="shots/18-desktop-timer.png" alt="Desktop Locked Timer" /><figcaption>Desktop (1440×900)</figcaption></figure>
+          <figure><img src="shots/06-timer.png" alt="Mobile Locked 1:30 Countdown Timer" /><figcaption>Mobile (390×844)</figcaption></figure>
+          <figure><img src="shots/18-desktop-timer.png" alt="Desktop Locked 1:30 Countdown Timer" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>Locked 1:30 Countdown &amp; 1-Tap Complete (Screens 6–7)</h4>
+          <h4>5 · Locked 1:30 Countdown, Live 9-Zone Sampler &amp; Challenge Track</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> Locked <code>1:30</code> clock with elapsed readout, live 9-zone motion sampler, Before/After capture badges, and 1-tap <code>COMPLETE CHALLENGE</code>.</li>
-            <li><strong>Value Prop:</strong> Eliminates clock-gaming and auto-captures the After photo in 1 tap. (The +15s chemical dwell-credit button is code-kept post-hackathon; time is scored against the benchmark.)</li>
-            <li><strong>Tech &amp; How It's Used:</strong> Live <code>36×27</code> 9-zone luma motion sampler + <code>320×240</code> mid-run frame capture + continuous 6–8s neural host voice hype.</li>
+            <li><strong>On-Screen Functionality:</strong> Locked <code>1:30</code> countdown + elapsed bar, live <code>3×3</code> zone grid overlay (`📸 LIVE · ZONES · 2 SNAPS`), Before/After capture indicators, optional Before-shadow ghost toggle, and 1-tap <code>COMPLETE CHALLENGE</code>.</li>
+            <li><strong>Value Prop:</strong> Prevents clock-pausing cheats, gives live visual feedback as zones are wiped, and auto-captures the After photo when <code>COMPLETE CHALLENGE</code> is tapped.</li>
+            <li><strong>Tech Under the Hood:</strong> Loops <code>assets/audio/time-trial.mp3</code> gaplessly via a decoded WebAudio `AudioBufferSourceNode`, ducks music volume from `0.5` to `0.12` whenever 6–8s host hype clips fire, and samples `36×27` luma frames in real time.</li>
           </ol>
-          <span class="verdict v-ready">READY · MVP 6 &amp; 7</span>
+          <span class="verdict v-ready">LIVE · GAPLESS AUDIO + 9-ZONE AR</span>
         </div>
       </div>
 
       <div class="shot">
         <div class="shot-pair">
-          <figure><img src="shots/26-ai-loading-sponsor.png" alt="Mobile AI Cleaning Loader and Sponsor Ad" /><figcaption>Mobile (390×844)</figcaption></figure>
-          <figure><img src="shots/27-desktop-ai-loading.png" alt="Desktop AI Cleaning Loader and Sponsor Ad" /><figcaption>Desktop (1440×900)</figcaption></figure>
+          <figure><img src="shots/26-ai-loading-sponsor.png" alt="Mobile AI Cleaning Loader" /><figcaption>Mobile (390×844)</figcaption></figure>
+          <figure><img src="shots/27-desktop-ai-loading.png" alt="Desktop AI Cleaning Loader" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>Animated Cleaning-Industry AI Loader &amp; Brand-Neutral Technique Tip (Screen 8)</h4>
+          <h4>6 · Animated Squeegee/Bubble AI Loader &amp; Neutral Technique Tip</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> Animated squeegee/bubble vector stage, 3-step AI progress pills (<code>Station Check → 9-Zone Scan → Muse Spark AI</code>), and a <strong>100% sponsor-free</strong> Pro Technique tip.</li>
-            <li><strong>Value Prop:</strong> Keeps Score screens strictly neutral per Operating Standards (Page 15) while teaching station-matched microfiber &amp; dwell technique during the 2s AI scan.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> Station-matched trilingual technique engine synced to <code>state.checkin.areaKey</code> while <strong>MediaPipe</strong> + <strong>Meta <code>Muse Spark Open</code></strong> run in parallel.</li>
+            <li><strong>On-Screen Functionality:</strong> Animated vector squeegee pass with rising bubbles, 3-step pipeline pills (<code>1 · Station Check → 2 · 9-Zone Scan → 3 · Muse Spark AI</code>), and a <strong>100% sponsor-free</strong> station-matched technique tip.</li>
+            <li><strong>Value Prop:</strong> Turns the 1.5-second vision analysis into a Moment-of-Work micro-lesson while keeping the scoring flow strictly brand-neutral.</li>
+            <li><strong>Tech Under the Hood:</strong> Runs MediaPipe `EfficientDet-Lite0` object detection, `96×72` frame comparison, and the serverless `Muse Spark Open` cloud request concurrently while syncing localized tips to `state.checkin.areaKey`.</li>
           </ol>
-          <span class="verdict v-ready">READY · PDF P.15 NEUTRALITY</span>
+          <span class="verdict v-ready">LIVE · PARALLEL EDGE + CLOUD</span>
         </div>
       </div>
 
       <div class="shot">
         <div class="shot-pair">
-          <figure><img src="shots/07-results.png" alt="Mobile 93% S-Rank sample Scorecard" /><figcaption>Mobile — 93% S-Rank sample (390×844)</figcaption></figure>
-          <figure><img src="shots/19-desktop-results.png" alt="Desktop 93% S-Rank sample Scorecard" /><figcaption>Desktop — 93% S-Rank sample (1440×900)</figcaption></figure>
+          <figure><img src="shots/07-results.png" alt="Mobile 93% S-Rank Scorecard" /><figcaption>Mobile — Scored Run (390×844)</figcaption></figure>
+          <figure><img src="shots/19-desktop-results.png" alt="Desktop 93% S-Rank Scorecard" /><figcaption>Desktop — Scored Run (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>50/25/25 Scorecard with NOT SCORED layman reasons (Screen 8)</h4>
+          <h4>7 · 50/25/25 Verified Scorecard, SAM Overlays &amp; 1-Tap Dispute</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> Weighted score hero (TOTAL when scorable; NOT SCORED + layman reason + retake CTA when unscorable), 5-tier audio replay pill (hidden on unscored runs), Clean/Technique/Time bars (scored runs only), maximized AFTER + 96px BEFORE reference with lightbox.</li>
-            <li><strong>Value Prop:</strong> Explains every point transparently and turns the finish into a celebratory game-show moment.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> <strong>Meta <code>Muse Spark</code> + <code>SAM 3.1 / box_2d</code></strong> grade surfaces; detection + SAM overlays mirror into the AFTER tile and lightbox. (Victory-pose UI temporarily hidden; no bonus applies.)</li>
+            <li><strong>On-Screen Functionality:</strong> Weighted `TOTAL SCORE` hero (`93%`), 5-tier rank badge (`🏆 S-RANK · SUPERSTAR · 93%`) + spoken transcript, maximized `AFTER` photo with glowing object/surface boxes + compact `BEFORE` reference (both tap-to-zoom into the comparison lightbox), plain-English `Clean` / `Technique` / `Time vs. benchmark` bars, and `⚑ DISPUTE SCORE`.</li>
+            <li><strong>Value Prop:</strong> Explains every point in plain words (e.g., <em>"Wipe order and zone coverage, top to bottom"</em>) and gives cleaners a fair, immutable appeal record.</li>
+            <li><strong>Tech Under the Hood:</strong> Combines local + `Muse Spark Open` surface grades, draws `SAM 3.1 / box_2d` overlays, and chains WebAudio stingers with crossfaded Kokoro/Piper number &amp; reaction clips.</li>
           </ol>
-          <span class="verdict v-ready">READY · MVP 8 SAMPLE SCORE</span>
+          <span class="verdict v-ready">LIVE · 50/25/25 + SAM OVERLAYS</span>
         </div>
       </div>
 
-      <div class="shot">
+      <div class="shot full-span">
         <div class="shot-pair">
-          <figure><img src="shots/28-noscored.png" alt="Mobile NOT SCORED wrong-area result" /><figcaption>Mobile — NOT SCORED · WRONG AREA (390×844)</figcaption></figure>
-          <figure><img src="shots/29-desktop-noscored.png" alt="Desktop NOT SCORED wrong-area result" /><figcaption>Desktop — NOT SCORED · WRONG AREA (1440×900)</figcaption></figure>
+          <figure><img src="shots/28-noscored.png" alt="Mobile NOT SCORED Wrong Area screen" /><figcaption>Mobile — NOT SCORED · WRONG AREA (390×844)</figcaption></figure>
+          <figure><img src="shots/29-desktop-noscored.png" alt="Desktop NOT SCORED Wrong Area screen" /><figcaption>Desktop — NOT SCORED · WRONG AREA (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>NOT SCORED layman reasons — no REDO jargon (Screen 8)</h4>
+          <h4>8 · Layman <code>NOT SCORED</code> Diagnostic Screen (7 Plain-Language Reasons)</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> Unscorable runs show <strong>NOT SCORED</strong> + a plain 2–3-word reason (<code>WRONG AREA</code>, <code>PERSON IN PHOTO</code>, <code>TOO DARK</code>, <code>TOO MUCH GLARE</code>, <code>CAMERA MOVED</code>, <code>TOO FAR AWAY</code>, <code>NO CHANGE</code>), a one-sentence layman explanation, and a <strong>TAKE NEW PHOTOS</strong> / <strong>CLEAN &amp; TAKE NEW PHOTO</strong> CTA. Score bars, rank badge, and dispute panel stay hidden.</li>
-            <li><strong>Value Prop:</strong> Non-technical cleaners always know exactly what went wrong and what to do next — in EN, ES, and PL.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> <code>verifyStationEnvironment</code> gates wrong-room/selfie shots, luminance gates dark/glare frames, and <code>unscorableReason()</code> renders the hero reason from the stored directive key.</li>
+            <li><strong>On-Screen Functionality:</strong> When a photo cannot be scored, the hero switches from `TOTAL SCORE` to **`NOT SCORED`** with a 2–3 word plain reason (`WRONG AREA`, `PERSON IN PHOTO`, `TOO DARK`, `TOO MUCH GLARE`, `CAMERA MOVED`, `TOO FAR AWAY`, `NO CHANGE`), one clear sentence explaining how to fix it (zero AI/technical jargon), and a **`TAKE NEW PHOTOS`** or **`CLEAN &amp; TAKE NEW PHOTO`** button.</li>
+            <li><strong>Value Prop:</strong> Non-technical users never see a confusing 0% score, a contradictory rank badge, or vague "REDO/RESCAN" labels — they know immediately why the photo didn't count and how to retake it.</li>
+            <li><strong>Tech Under the Hood:</strong> `verifyStationEnvironment` + luminance/framing gates set `scorable: false` and `scoreDirectiveKey`, hiding `#scoreBreakdownCard`, `#verdictSummaryBadge`, and `#disputePanel` while routing the primary CTA directly back to the camera.</li>
           </ol>
-          <span class="verdict v-ready">READY · MVP 8 NOT SCORED</span>
+          <span class="verdict v-ready">LIVE · LAYMAN ERROR RECOVERY</span>
         </div>
       </div>
     </div>
 
-    <h3>3 · Automated 2-Week Season Deck &amp; Uncluttered Leaderboard (Screens 9–10; Screens 11–15 UI hidden)</h3>
+    <h3>Part C · Daily Swipe Deck, Dual Leaderboards, Inspection Log &amp; Provider Telemetry</h3>
     <div class="tour-grid">
       <div class="shot">
         <div class="shot-pair">
-          <figure><img src="shots/12-deck.png" alt="Mobile Daily Swipe Deck" /><figcaption>Mobile (390×844)</figcaption></figure>
-          <figure><img src="shots/23-desktop-deck.png" alt="Desktop Daily Swipe Deck" /><figcaption>Desktop (1440×900)</figcaption></figure>
+          <figure><img src="shots/12-deck.png" alt="Mobile Daily Swipe Deck answered state" /><figcaption>Mobile (390×844)</figcaption></figure>
+          <figure><img src="shots/23-desktop-deck.png" alt="Desktop Daily Swipe Deck answered state" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>Daily Swipe Deck &amp; Automated 14-Day AI Season Packs (Screen 9)</h4>
+          <h4>9 · Daily Swipe Deck: Contextual SVG Art, Instant Tap-Advance &amp; Sponsor Slot</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> 10-card daily swipe round with plain ✔ AGREE / ✘ DISAGREE verdicts, contextual card art matched to each question, agree/disagree stamps, a voice verdict (<code>Correct!</code> / <code>Incorrect!</code> in EN/ES/PL), tap-the-answered-card instant advance, and post-answer sponsor logo.</li>
-            <li><strong>Value Prop:</strong> Replaces unread paper binders with 60-second daily micro-training and fresh 2-week competition seasons.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> <strong>Meta <code>Muse Spark Open</code></strong> (Baseten → Fireworks failover) batches a localized Season Theme + 3 trilingual cards every 14 days, cached on server + <code>localStorage</code> for <strong><code>0-token</code> repeat plays</strong>.</li>
+            <li><strong>On-Screen Functionality:</strong> 10-card daily round with 10 progress pips, contextual vector illustration matched to each question's topic, `⟵ ✘ DISAGREE` / `✔ AGREE ⟶` buttons &amp; drag gestures, `✔ AGREE +100 XP` verdict stamp, plain-language explanation + recommended product type, and the `YOUR LOGO HERE` sponsor slot + `NEXT CARD →` all visible **above the fold**.</li>
+            <li><strong>Value Prop:</strong> Teaches real technique in 60 seconds a day while keeping the sponsor placement 100% visible above the fold on mobile phones.</li>
+            <li><strong>Tech Under the Hood:</strong> `deckMotifFor()` selects among 6 custom SVG dioramas (`product`, `cloth`, `dwell`, `technique`, `fixture`, `surface`); answering plays `deck-correct.mp3` / `deck-wrong.mp3` (`Correct!` / `Incorrect!`) over the gapless `daily-deck.mp3` loop; tapping the answered card or feedback advances immediately.</li>
           </ol>
-          <span class="verdict v-ready">READY · MVP 9 + 0-TOKEN CACHE</span>
+          <span class="verdict v-ready">LIVE · ABOVE-THE-FOLD SPONSOR AD</span>
+        </div>
+      </div>
+
+      <div class="shot">
+        <div class="shot-pair three-up">
+          <figure><img src="shots/08-leaderboard.png" alt="Mobile Leaderboard" /><figcaption>Mobile Board (390×844)</figcaption></figure>
+          <figure><img src="shots/13-spectator.png" alt="Spectator Board" /><figcaption>Spectator TV (?spectator=1)</figcaption></figure>
+          <figure><img src="shots/20-desktop-leaderboard.png" alt="Desktop Leaderboard" /><figcaption>Desktop (1440×900)</figcaption></figure>
+        </div>
+        <div class="desc">
+          <h4>10 · Dual-Mode Leaderboard (<code>⚡ SHIFT</code> / <code>🃏 DECK</code>), Size Filter &amp; Spectator TV</h4>
+          <ol>
+            <li><strong>On-Screen Functionality:</strong> 1-tap toggle between `⚡ SHIFT CHALLENGE` and `🃏 DAILY DECK` standings, facility sq-ft size filter (`All sizes`, `Under 5k`, `5k–10k`, `10k–50k`, `50k+`), personal best summary + sponsor crest, top-10 ranked rows, and `?spectator=1` breakroom display mode.</li>
+            <li><strong>Value Prop:</strong> Recognizes top performers fairly within comparable facility sizes and never displays a bottom/shame list.</li>
+            <li><strong>Tech Under the Hood:</strong> Sorts eligible runs by weighted 50/25/25 score (tie-breaking on faster time), automatically excludes demo/practice runs, and auto-refreshes `?spectator=1` every 15 seconds.</li>
+          </ol>
+          <span class="verdict v-ready">LIVE · TOP-10 FAIR STANDINGS</span>
         </div>
       </div>
 
       <div class="shot">
         <div class="shot-pair">
-          <figure><img src="shots/08-leaderboard.png" alt="Mobile Uncluttered Leaderboard" /><figcaption>Mobile (390×844)</figcaption></figure>
-          <figure><img src="shots/20-desktop-leaderboard.png" alt="Desktop 2-Column Leaderboard" /><figcaption>Desktop (1440×900)</figcaption></figure>
+          <figure><img src="shots/09-records.png" alt="Mobile Geofenced Inspection Log" /><figcaption>Mobile (390×844)</figcaption></figure>
+          <figure><img src="shots/24-desktop-records.png" alt="Desktop Geofenced Inspection Log" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>Uncluttered Dual-Mode Leaderboard, Sponsor Prize Slot &amp; Spectator Board (Screen 10)</h4>
+          <h4>11 · Geofenced Inspection Log &amp; 1-Tap JSON / CSV Export</h4>
           <ol>
-            <li><strong>On-Screen Functionality:</strong> 1-tap toggle between <code>⚡ SHIFT CHALLENGE</code> and <code>🃏 DAILY DECK</code> boards, <code>SPONSORED CHALLENGE</code> prize banner (PDF Page 15 Slot #3), and <code>?spectator=1</code> TV view.</li>
-            <li><strong>Value Prop:</strong> Recognizes top performers fairly (top-10 only, never a bottom/shame list) and places sponsor branding on challenge standings rather than scorecards.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> Weighted 50/25/25 + idempotent Pose Bonus rank sorter that automatically excludes demo and manual-override practice runs.</li>
+            <li><strong>On-Screen Functionality:</strong> Scrollable inspection log grouped by site coordinates (`Site 41.882, -87.628` or `Location not shared`), showing cleaner alias, timestamp, cleanliness score, AI provider/model provenance, and transcribed note — plus 1-tap `⬇ SAVE BACKUP` (JSON) and `⬇ DOWNLOAD SPREADSHEET` (CSV).</li>
+            <li><strong>Value Prop:</strong> Gives both the cleaner and the contractor an audit-ready, portable work record with zero paperwork.</li>
+            <li><strong>Tech Under the Hood:</strong> `recordInspection()` stamps each completed run into `cleanquest.inspection-log` (retaining 90 days via `pruneExpiredRecords`), and `buildInspectionCsv()` generates properly RFC-4180-quoted CSV spreadsheets in-browser.</li>
           </ol>
-          <span class="verdict v-ready">READY · MVP 10 + SPECTATOR</span>
+          <span class="verdict v-ready">LIVE · PORTABLE WORK PROOF</span>
         </div>
       </div>
 
       <div class="shot">
         <div class="shot-pair">
-          <figure><img src="shots/09-records.png" alt="Mobile inspection log" /><figcaption>Mobile (390×844)</figcaption></figure>
-          <figure><img src="shots/24-desktop-records.png" alt="Desktop inspection log" /><figcaption>Desktop (1440×900)</figcaption></figure>
+          <figure><img src="shots/11-settings.png" alt="Mobile Settings and Scrollable Provider Run Log" /><figcaption>Mobile (390×844)</figcaption></figure>
+          <figure><img src="shots/25-desktop-settings.png" alt="Desktop Settings and Scrollable Provider Run Log" /><figcaption>Desktop (1440×900)</figcaption></figure>
         </div>
         <div class="desc">
-          <h4>Inspection Log, Geofenced Export &amp; Post-Hackathon Supervisor Code (Screens 11–15 hidden)</h4>
+          <h4>12 · Settings, Cloud Routing Selector &amp; Scrollable In-App Provider Run Log</h4>
           <ol>
-            <li><strong>On-Screen Functionality (hackathon demo):</strong> Geofenced inspection log with one-tap <code>⬇ SAVE BACKUP</code> (JSON) + <code>⬇ DOWNLOAD SPREADSHEET</code> (CSV). (Passport/crew/supervisor panes are code-kept and hidden for the hackathon — not demoed, not judged.)</li>
-            <li><strong>Value Prop:</strong> Gives contractors audit-ready proof of work from the exportable log.</li>
-            <li><strong>Code-kept post-hackathon (not in demo):</strong> Non-discipline pledge gate, V2 QR sticker printer, squad switcher, <code>✨ AI SHIFT BRIEFING</code> cached shift notes, and 1-tap 5-day training packs remain in code only.</li>
+            <li><strong>On-Screen Functionality:</strong> Host Voice selector (`Off`, `Chill`, `Full`), collapsible `⚙️ ADVANCED · Cloud routing` selector (`Baseten Primary → Fireworks Failover`, `Baseten Only`, `Fireworks AI Only`, `Dual Parallel`), scrollable in-app **Provider Run Log** (`30dvh` viewport showing verified run counts, cumulative tokens, model ID, score, and timestamp per call), `⚡ TEST &amp; LOG TELEMETRY`, and `EXPORT LOG`.</li>
+            <li><strong>Value Prop:</strong> Lets judges and operators trigger a live dual-provider `Muse Spark Open` verification in one tap and scroll the token audit trail directly inside the app.</li>
+            <li><strong>Tech Under the Hood:</strong> `verifyLiveTelemetry()` invokes `callPartnerBackendProxy({ provider: "dual" })`, validates the returned JSON scorecards, and appends each provider's live token usage to `cleanquest.provider-log`.</li>
           </ol>
-          <span class="verdict v-hidden">HIDDEN-FOR-HACKATHON · CODE KEPT, UI HIDDEN, NOT JUDGED</span>
-        </div>
-      </div>
-
-      <div class="shot">
-        <div class="shot-pair">
-          <figure><img src="shots/11-settings.png" alt="Mobile Settings and Provider Log" /><figcaption>Mobile (390×844)</figcaption></figure>
-          <figure><img src="shots/25-desktop-settings.png" alt="Desktop Settings and Provider Log" /><figcaption>Desktop (1440×900)</figcaption></figure>
-        </div>
-        <div class="desc">
-          <h4>Settings, Primary→Failover Cloud Selector &amp; Telemetry Log</h4>
-          <ol>
-            <li><strong>On-Screen Functionality:</strong> Partner Cloud mode selector (<code>Baseten Primary → Fireworks Failover</code> default + <code>Dual Parallel</code> benchmark), <code>⚡ TEST &amp; LOG TELEMETRY</code>, cumulative token counter, and <code>EXPORT LOG (JSON)</code>.</li>
-            <li><strong>Value Prop:</strong> Delivers zero-key cloud AI out of the box at 50% lower API call cost while providing exportable judge verification evidence.</li>
-            <li><strong>Tech &amp; How It's Used:</strong> Serverless Google Apps Script proxy with server-side <code>ScriptProperties</code> secrets and automatic <strong>Baseten → Fireworks AI</strong> failover.</li>
-          </ol>
-          <span class="verdict v-ready">READY · TELEMETRY + 50% SAVINGS</span>
+          <span class="verdict v-ready">LIVE · IN-APP TELEMETRY AUDIT</span>
         </div>
       </div>
     </div>
   </section>
 
+  <!-- ===================================================================== -->
+  <!-- SECTION 4: POST-HACKATHON MVP ROADMAP                                 -->
+  <!-- ===================================================================== -->
   <section class="card">
-    <h2>Judge's scorecard — initial critique vs. shipped upgrades</h2>
-    <p><strong>Lead:</strong> Every initial critique item was resolved in code and verified by automated self-test (<code>6/6 PASS</code>) and persona gates (<code>11/11 PASS</code>).</p>
+    <h2>4 · Post-Hackathon MVP Roadmap — Features to Build &amp; Unlock Next</h2>
+    <p><strong>Why These Were Scoped to Post-Hackathon:</strong> To keep the hackathon experience razor-focused for non-technical cleaners (Check-In → 1:30 Run → Scorecard → Daily Deck → Leaderboard &amp; Export), multi-worker crew management, supervisor admin panes, physical QR sticker printing, chemical dwell timer credits, and Victory Pose emotes are held for the post-hackathon rollout. Several of these modules already have working data models and helper functions scaffolded in <code>app.js</code> (currently hidden via CSS scope trim) and are ready to unlock and expand next:</p>
+
     <div class="table-scroll">
       <table>
-        <tr><th>Criterion</th><th>Initial Gap</th><th>Shipped Upgrade</th><th>Grade</th></tr>
-        <tr><td><strong>Impact (30%)</strong></td><td>OS keyboard on PIN; cluttered mobile leaderboard; no sponsor loading slot.</td><td>44px glove numpad; decluttered mobile leaderboard; animated AI Cleaning Loader + Sponsored Ad card; NOT SCORED layman reasons with retake CTAs.</td><td><strong>9.8 / 10</strong></td></tr>
-        <tr><td><strong>Meta AI Tooling (25%)</strong></td><td>Required manual API keys; fired redundant dual calls.</td><td>Zero-key serverless <code>Muse Spark Open</code> (Baseten Primary → Fireworks Failover = 50% fewer calls, 56% smaller vision payloads, 0-token season cache).</td><td><strong>9.8 / 10</strong></td></tr>
-        <tr><td><strong>Demo (25%)</strong></td><td>Judge Demo skipped loading animation &amp; audio fanfare.</td><td>1-tap Judge Demo showcases the animated Squeegee/Bubble AI Loader + Sponsor Ad + 5-tier audio reveal + 100% above-the-fold CTAs.</td><td><strong>9.7 / 10</strong></td></tr>
-        <tr><td><strong>Technical Depth (20%)</strong></td><td>Static 4-bar audio loop; Season cards lacked schema normalization.</td><td>Per-screen user-supplied music tracks; normalized trilingual Season Packs; one unified EN voice chain (235 Kokoro-82M clips); 6/6 self-test + 11/11 personas PASS.</td><td><strong>9.8 / 10</strong></td></tr>
-        <tr><td><strong>Weighted Total</strong></td><td><strong>8.73 / 10</strong></td><td>All 15 MVP screens + AI efficiency + monetization shipped live (pose bonus temporarily hidden, code kept).</td><td><strong>9.78 / 10</strong></td></tr>
+        <tr>
+          <th>Post-Hackathon Feature</th>
+          <th>User &amp; Business Value</th>
+          <th>Current Foundation in Code (<code>app.js</code>)</th>
+          <th>Next Engineering Steps to Ship</th>
+        </tr>
+        <tr>
+          <td><strong>1. Cleaner Benchmark Passport &amp; 44px Glove PIN Identity</strong><br/><em>(MVP Screens 2 &amp; 4)</em></td>
+          <td>Gives cleaners a portable, shareable career credential with a <strong>13-week consistency meter</strong> (<code>Week N of 13 · On track</code> — never called a certification) and opt-in employer sharing, protected by a 4-digit glove-friendly PIN pad with no email required.</td>
+          <td><code>saveCleanerProfile</code>, <code>verifyCleanerPin</code>, <code>getConsistencyProgress</code>, <code>setEmployerShareOptIn</code>, and <code>shareCleanerPassport</code> are implemented and tested in <code>runPersonaSuite</code> (hidden via <code>#openPassportHubButton, #homePassportPanel</code>).</td>
+          <td>Unhide the Passport Hub card on Welcome/Records, add signed shareable verification links (via the serverless backend), and support multi-device PIN sync.</td>
+        </tr>
+        <tr>
+          <td><strong>2. Physical Version-2 QR Station Stickers &amp; In-App QR Scanner</strong><br/><em>(MVP Screen 5 &amp; Admin Pane 12)</em></td>
+          <td>Replaces dropdown picking with a 1-second wall-sticker scan at each sink, restroom, or classroom — proving physical presence at the exact station and unlocking prize eligibility automatically.</td>
+          <td>Standards-compliant Version-2 QR encoder (<code>encodeQrVersion2L</code>), payload parser (<code>parseAreaQrPayload</code> for <code>CQ-QR-&lt;LEAGUE&gt;-&lt;AREA&gt;-&lt;SPOT&gt;</code>), sticker printer (<code>printAreaQrSticker</code>), and <code>BarcodeDetector</code> modal (<code>openQrScannerModal</code>) are built in code.</td>
+          <td>Add cross-browser <code>jsQR</code> canvas fallback for iOS WebKit browsers lacking native <code>BarcodeDetector</code>, unhide <code>#scanAreaQrButton</code>, and ship laminated PDF sticker sheets per registered site.</td>
+        </tr>
+        <tr>
+          <td><strong>3. Active +15s Chemical Dwell-Time Credit on Run Clock</strong><br/><em>(MVP Screen 6)</em></td>
+          <td>Rewards cleaners for letting disinfectant sit for its required wet-contact time instead of rushing to wipe it dry — adding <code>+15s</code> dwell credit that never penalizes their speed score.</td>
+          <td><code>addDwellCredit()</code> and <code>state.checkin.dwellCreditSeconds</code> are wired into <code>timeBarExplanation()</code> and <code>computeTimeBenchmarkScore()</code> (button <code>#dwellCreditButton</code> hidden for hackathon simplicity).</td>
+          <td>Unhide <code>#dwellCueBanner</code> on stations that require disinfectant contact time, add visual bottle-spray confirmation via MediaPipe, and log dwell compliance per run.</td>
+        </tr>
+        <tr>
+          <td><strong>4. Crews (3–8 Cleaners), Solo Virtual Squads &amp; Weekly Matchups</strong><br/><em>(MVP Screen 4 &amp; Admin Pane 13)</em></td>
+          <td>Turns solitary night shifts into a team sport: 3–8 cleaners form a site crew (or solo cleaners join an automatic Virtual Squad), competing in weekly matchups with an 80% participation threshold and system-chosen Crew MVP.</td>
+          <td><code>createCrew</code>, <code>joinCrew</code>, <code>createVirtualSquad</code>, <code>recordCrewRun</code>, <code>getCrewParticipation</code>, <code>getCrewMVP</code>, and <code>getWeeklyMatchup</code> are implemented and verified in the hermetic persona suite.</td>
+          <td>Move crew state from browser <code>localStorage</code> to shared multi-device storage on the backend proxy so teammates across different phones see live squad totals.</td>
+        </tr>
+        <tr>
+          <td><strong>5. Supervisor Non-Discipline Pledge, Team Training Gaps &amp; AI Shift Briefings</strong><br/><em>(MVP Screens 11–15)</em></td>
+          <td>Gives facility managers aggregate team training insights (top missed deck topics, shift time-bucket patterns) and 1-tap 5-day training pack assignments — gated behind a mandatory pledge that data is used for training and recognition only, never discipline.</td>
+          <td><code>acceptAdminPledge</code>, <code>getTeamTrainingGaps</code> (strictly aggregate: <code>canEditScores: false</code>, <code>exposesIndividualMistakes: false</code>), <code>assignTrainingPack</code>, and <code>generateAdminAiBriefing</code> (<code>Muse Spark Open</code> with fingerprint cache) are coded in <code>#adminDashboardPanel</code>.</td>
+          <td>Build role-separated supervisor authentication, multi-cleaner log aggregation across a site, and push-assigned 5-day training packs to crew devices.</td>
+        </tr>
+        <tr>
+          <td><strong>6. Victory Pose Silhouette Emotes (+5% Bonus)</strong><br/><em>(MVP Screen 8)</em></td>
+          <td>Adds a playful post-run game-show finish: cleaners strike one of 4 silhouette emotes (<code>CHAMP V</code>, <code>FLEX</code>, <code>BOSS</code>, <code>DISCO</code>) on camera for up to <code>+5%</code> bonus points.</td>
+          <td><code>loadPoseLandmarker</code> (MediaPipe 33-joint <code>Pose Landmarker Lite</code> + <code>GestureRecognizer</code>) and <code>computeStyleScore</code> are implemented in <code>app.js</code> (gate disabled and panel hidden during hackathon polish).</td>
+          <td>Refine front-camera/rear-camera handoff after the After photo so cleaners can strike a pose hands-free with a 3-second countdown and audio cue.</td>
+        </tr>
+        <tr>
+          <td><strong>7. Native Spotify &amp; Apple Music OAuth + Automatic Voice Ducking</strong><br/><em>(Settings &amp; Run Audio)</em></td>
+          <td>Lets cleaners listen to their own personal playlists during a shift while CleanQuest automatically ducks music volume whenever the game-show host announces time callouts or verdicts.</td>
+          <td>Settings already includes zero-key Spotify/Apple Music embed drawer helpers (<code>renderMusicStreamEmbed</code>) and WebAudio gain ducking for the built-in tracks.</td>
+          <td>Integrate Spotify Web Playback SDK (OAuth 2.0 PKCE) and Apple MusicKit JS v3 so external streaming playback ducks smoothly under host voice clips.</td>
+        </tr>
       </table>
     </div>
   </section>
 
-  <div class="two-col-sections">
-    <section class="card">
-      <h2>Current scope &amp; honest guardrails</h2>
-      <ol>
-        <li><strong>Zero-key cloud AI works out-of-the-box:</strong> Our serverless <strong>Baseten → Fireworks AI</strong> proxy runs live <code>Muse Spark Open</code> vision scorecards, <code>box_2d</code> overlays, and 2-week Season Packs with zero user API key setup (custom keys in Settings are optional).</li>
-        <li><strong>Registered-site check-in enforced:</strong> Prize-eligible runs require an admin-registered site and system-assigned spot (manual spot overrides are marked practice-only). (QR sticker scanning/printing is code-kept post-hackathon; no QR UI is shown for the hackathon.)</li>
-        <li><strong>Graceful offline fallback:</strong> In airplane mode, on-device classical vision + 3×3 zone scoring runs locally and queues runs for automatic cloud re-score on reconnect.</li>
-      </ol>
-    </section>
-
-    <section class="card">
-      <h2>Automated verification summary</h2>
-      <ol>
-        <li><strong>Self-Test Suite:</strong> <code>6/6 PASS</code> (Camera, Timer, Local Scoring, Voice, Leaderboard, Pose Pipeline).</li>
-        <li><strong>Persona Suite:</strong> <code>11/11 PASS (0 fails)</code> across Spanish first-timer, appellant, offline queue, and code-kept crew/supervisor-pane PIN flows (hermetic, UI hidden for the hackathon).</li>
-        <li><strong>Design &amp; Fold Audit:</strong> <code>0</code> Impeccable warnings; 100% above-the-fold primary CTAs at <code>360×660</code>, <code>390×844</code>, and <code>1440×900</code>.</li>
-      </ol>
-    </section>
-  </div>
-
-  <footer>CleanQuest Judges' Presentation · Meta Global AI Developer Hackathon (Indie Track) · Live mobile (390×844) &amp; desktop (1440×900) captures.</footer>
+  <footer>
+    CleanQuest — Value Proposition, Feature Tour, Technical Architecture &amp; Post-Hackathon MVP Roadmap · <a href="../../index.html" style="color:var(--cyan);">Launch Live App</a> · <a href="submission.html" style="color:var(--cyan);">Submission Playbook</a>
+  </footer>
 </main>
 </body>
 </html>
